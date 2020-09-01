@@ -409,3 +409,66 @@ Still gives me same slurm error message when I try to run, may need to:
 ```
 Can't locate MAKER/ConfigData.pm in @INC (you may need to install the MAKER::ConfigData module) (@INC contains: /var/spool/slurmd/job1689783/../perl/lib /var/spool/slurmd/job1689783/../lib /var/spool/slurmd/job1689783/../src/inc/perl/lib /opt/software/BioPerl/1.7.2-intel-2019b-Perl-5.30.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/BioPerl/1.7.2-intel-2019b-Perl-5.30.0/lib/perl5/site_perl/5.30.0 /opt/software/BioPerl/1.7.2-intel-2019b-Perl-5.30.0 /opt/software/XML-LibXML/2.0132-GCCcore-8.3.0-Perl-5.30.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/XML-LibXML/2.0132-GCCcore-8.3.0-Perl-5.30.0/lib/perl5/site_perl/5.30.0 /opt/software/XML-LibXML/2.0132-GCCcore-8.3.0-Perl-5.30.0 /opt/slurm/lib64/perl5/ /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0 /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0) at /var/spool/slurmd/job1689783/slurm_script line 41.
 ```
+
+May have because my paths to files were not correct also?? Not correct above.
+
+But very confused overall. Going to just try to do it from the basics of the basics. Using Campbell et al. 2015 paper that explained various ways to use maker. Once I do that, I'll work more into Ross code.
+
+~~~~~~~~
+
+#### 1) generate control files 
+```
+maker -CTL
+```
+#### 2) Edit maker opts file to specify genome, transcript, and protein path
+
+```
+# in maker_opts.ctl: 
+genome=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
+est=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_transcripts.fasta
+protein=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_proteins.fasta
+
+# remove / before beginning of path
+```
+#### 3) Run maker 
+```
+maker 2> maker.error
+```
+
+Didnt work...Gave me this error
+```
+STATUS: Parsing control files...
+STATUS: Processing and indexing input FASTA files...
+ERROR: SplitDB not created correctly
+
+ at /opt/software/maker/3.01.03/bin/../lib/GI.pm line 1178.
+        GI::split_db("/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_prote"..., "protein", 10, "/data/putnamlab/jillashey/pdam-genome/JA/maker_test/pdam_scaf"..., "C") called at /opt/software/maker/3.01.03/bin/maker line 531
+--> rank=NA, hostname=bluewaves.uri.edu
+```
+
+SplitDB not created correctly ? 
+Maybe its something to do with the reef genomics files??
+
+```
+nano maker_round0.sh
+
+#!/bin/bash
+#SBATCH --job-name="maker"
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=250GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="maker0_out_error"
+#SBATCH --output="maker0_out"
+
+module load maker/3.01.03
+
+maker maker_exe.ctl maker_bopts.ctl maker_opts.ctl 2> maker.error
+
+sbatch maker_round0.sh
+```
+
+No clue...gives me nonzero exit status on bluewaves. Works when I run maker on the command line without submitting a job, but that would take forever and I'd be using all the ram on the 'home' node. 
