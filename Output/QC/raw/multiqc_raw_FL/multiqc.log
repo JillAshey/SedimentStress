@@ -1,0 +1,125 @@
+[2020-08-31 15:18:38,867] multiqc                                            [DEBUG  ]  No MultiQC config found: /opt/software/MultiQC/1.7-foss-2018b-Python-2.7.15/lib/python2.7/site-packages/multiqc_config.yaml
+[2020-08-31 15:18:38,867] multiqc                                            [DEBUG  ]  No MultiQC config found: /home/jillashey/.multiqc_config.yaml
+[2020-08-31 15:18:38,869] multiqc                                            [DEBUG  ]  No MultiQC config found: multiqc_config.yaml
+[2020-08-31 15:18:38,869] multiqc                                            [DEBUG  ]  Command used: /opt/software/MultiQC/1.7-foss-2018b-Python-2.7.15/bin/multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/18_T33_Of_VLL_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/19_T33_Ac_WK_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/20_T12_Mc_PWC_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/21_T33_Mc_EOU_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/24_T12_Ac_FM_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/26_T12_Of_WCL_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/29_T23_Mc_PND_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/30_T23_Of_RPG_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/31_T22_Ac_UV_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/32_T22_Of_EVR_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/33_T43_Mc_RFV_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/34_T22_Mc_SVS_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/35_T43_Ac_MT_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/36_T43_Of_JJN_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/37_T13_Ac_ML_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/38_T23_Ac_IN_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/39_T13_Mc_FJE_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/40_T13_Of_GWS_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/47_T31_Ac_JB_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/48_T31_Of_JNO_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/49_T31_Mc_SWQ_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/50_T21_Of_YZB_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/51_T42_Of_UOF_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/52_T11_Ac_II_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/53_T21_Ac_NH_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/54_T42_Ac_JQ_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/55_T32_Mc_TWP_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/56_T42_Mc_JAW_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/57_T32_Ac_NM_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/58_T21_Mc_EAH_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/59_T11_Of_TQP_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/60_T32_Of_WXY_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/61_T11_Mc_RAP_fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw
+[2020-08-31 15:18:40,867] multiqc                                            [WARNING]  MultiQC Version v1.9 now available!
+[2020-08-31 15:18:40,867] multiqc                                            [INFO   ]  This is MultiQC v1.7
+[2020-08-31 15:18:40,867] multiqc                                            [DEBUG  ]  Command     : /opt/software/MultiQC/1.7-foss-2018b-Python-2.7.15/bin/multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/18_T33_Of_VLL_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/19_T33_Ac_WK_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/20_T12_Mc_PWC_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/21_T33_Mc_EOU_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/24_T12_Ac_FM_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/26_T12_Of_WCL_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/29_T23_Mc_PND_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/30_T23_Of_RPG_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/31_T22_Ac_UV_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/32_T22_Of_EVR_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/33_T43_Mc_RFV_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/34_T22_Mc_SVS_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/35_T43_Ac_MT_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/36_T43_Of_JJN_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/37_T13_Ac_ML_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/38_T23_Ac_IN_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/39_T13_Mc_FJE_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/40_T13_Of_GWS_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/47_T31_Ac_JB_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/48_T31_Of_JNO_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/49_T31_Mc_SWQ_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/50_T21_Of_YZB_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/51_T42_Of_UOF_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/52_T11_Ac_II_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/53_T21_Ac_NH_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/54_T42_Ac_JQ_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/55_T32_Mc_TWP_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/56_T42_Mc_JAW_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/57_T32_Ac_NM_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/58_T21_Mc_EAH_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/59_T11_Of_TQP_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/60_T32_Of_WXY_fastqc.zip /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/61_T11_Mc_RAP_fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw
+[2020-08-31 15:18:40,868] multiqc                                            [DEBUG  ]  Working dir : /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw
+[2020-08-31 15:18:40,868] multiqc                                            [INFO   ]  Template    : default
+[2020-08-31 15:18:40,868] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/18_T33_Of_VLL_fastqc.zip'
+[2020-08-31 15:18:40,868] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/19_T33_Ac_WK_fastqc.zip'
+[2020-08-31 15:18:40,868] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/20_T12_Mc_PWC_fastqc.zip'
+[2020-08-31 15:18:40,868] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/21_T33_Mc_EOU_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/24_T12_Ac_FM_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/26_T12_Of_WCL_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/29_T23_Mc_PND_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/30_T23_Of_RPG_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/31_T22_Ac_UV_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/32_T22_Of_EVR_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/33_T43_Mc_RFV_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/34_T22_Mc_SVS_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/35_T43_Ac_MT_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/36_T43_Of_JJN_fastqc.zip'
+[2020-08-31 15:18:40,869] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/37_T13_Ac_ML_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/38_T23_Ac_IN_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/39_T13_Mc_FJE_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/40_T13_Of_GWS_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/47_T31_Ac_JB_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/48_T31_Of_JNO_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/49_T31_Mc_SWQ_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/50_T21_Of_YZB_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/51_T42_Of_UOF_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/52_T11_Ac_II_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/53_T21_Ac_NH_fastqc.zip'
+[2020-08-31 15:18:40,870] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/54_T42_Ac_JQ_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/55_T32_Mc_TWP_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/56_T42_Mc_JAW_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/57_T32_Ac_NM_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/58_T21_Mc_EAH_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/59_T11_Of_TQP_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/60_T32_Of_WXY_fastqc.zip'
+[2020-08-31 15:18:40,871] multiqc                                            [INFO   ]  Searching '/data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/61_T11_Mc_RAP_fastqc.zip'
+[2020-08-31 15:18:40,872] multiqc                                            [DEBUG  ]  Analysing modules: custom_content, conpair, peddy, methylQA, phantompeakqualtools, qualimap, preseq, quast, qorts, rna_seqc, rsem, rseqc, busco, goleft_indexcov, disambiguate, supernova, deeptools, sargasso, verifybamid, mirtrace, happy, homer, macs2, theta2, snpeff, gatk, htseq, bcftools, featureCounts, dedup, damageprofiler, picard, prokka, samblaster, samtools, bamtools, jellyfish, vcftools, longranger, stacks, bbmap, bismark, biscuit, hicexplorer, hicup, hicpro, salmon, kallisto, slamdunk, star, hisat2, tophat, bowtie2, bowtie1, kat, leehom, adapterRemoval, clipandmerge, cutadapt, flexbar, trimmomatic, skewer, sortmerna, biobloomtools, fastq_screen, afterqc, fastp, fastqc, minionqc, clusterflow, bcl2fastq, interop, flash
+[2020-08-31 15:18:40,872] multiqc                                            [DEBUG  ]  Using temporary directory for creating report: /tmp/tmpiy4Bj6
+[2020-08-31 15:18:41,434] multiqc                                            [DEBUG  ]  No samples found: custom_content
+[2020-08-31 15:18:41,441] multiqc                                            [DEBUG  ]  No samples found: conpair
+[2020-08-31 15:18:41,447] multiqc                                            [DEBUG  ]  No samples found: peddy
+[2020-08-31 15:18:41,453] multiqc                                            [DEBUG  ]  No samples found: methylQA
+[2020-08-31 15:18:41,459] multiqc                                            [DEBUG  ]  No samples found: phantompeakqualtools
+[2020-08-31 15:18:41,467] multiqc                                            [DEBUG  ]  No samples found: qualimap
+[2020-08-31 15:18:41,473] multiqc                                            [DEBUG  ]  No samples found: preseq
+[2020-08-31 15:18:41,479] multiqc                                            [DEBUG  ]  No samples found: quast
+[2020-08-31 15:18:41,486] multiqc                                            [DEBUG  ]  No samples found: qorts
+[2020-08-31 15:18:41,491] multiqc                                            [DEBUG  ]  No samples found: rna_seqc
+[2020-08-31 15:18:41,497] multiqc                                            [DEBUG  ]  No samples found: rsem
+[2020-08-31 15:18:41,506] multiqc                                            [DEBUG  ]  No samples found: rseqc
+[2020-08-31 15:18:41,512] multiqc                                            [DEBUG  ]  No samples found: busco
+[2020-08-31 15:18:41,518] multiqc                                            [DEBUG  ]  No samples found: goleft_indexcov
+[2020-08-31 15:18:41,523] multiqc                                            [DEBUG  ]  No samples found: disambiguate
+[2020-08-31 15:18:41,529] multiqc                                            [DEBUG  ]  No samples found: supernova
+[2020-08-31 15:18:41,538] multiqc                                            [DEBUG  ]  No samples found: deeptools
+[2020-08-31 15:18:41,544] multiqc                                            [DEBUG  ]  No samples found: sargasso
+[2020-08-31 15:18:41,550] multiqc                                            [DEBUG  ]  No samples found: verifybamid
+[2020-08-31 15:18:41,556] multiqc                                            [DEBUG  ]  No samples found: mirtrace
+[2020-08-31 15:18:41,562] multiqc                                            [DEBUG  ]  No samples found: happy
+[2020-08-31 15:18:41,569] multiqc                                            [DEBUG  ]  No samples found: homer
+[2020-08-31 15:18:41,575] multiqc                                            [DEBUG  ]  No samples found: macs2
+[2020-08-31 15:18:41,581] multiqc                                            [DEBUG  ]  No samples found: theta2
+[2020-08-31 15:18:41,587] multiqc                                            [DEBUG  ]  No samples found: snpeff
+[2020-08-31 15:18:41,595] multiqc                                            [DEBUG  ]  No samples found: gatk
+[2020-08-31 15:18:41,629] multiqc                                            [DEBUG  ]  No samples found: htseq
+[2020-08-31 15:18:41,637] multiqc                                            [DEBUG  ]  No samples found: bcftools
+[2020-08-31 15:18:41,649] multiqc                                            [DEBUG  ]  No samples found: featureCounts
+[2020-08-31 15:18:41,656] multiqc                                            [DEBUG  ]  No samples found: dedup
+[2020-08-31 15:18:41,662] multiqc                                            [DEBUG  ]  No samples found: damageprofiler
+[2020-08-31 15:18:41,672] multiqc                                            [DEBUG  ]  No samples found: picard
+[2020-08-31 15:18:41,679] multiqc                                            [DEBUG  ]  No samples found: prokka
+[2020-08-31 15:18:41,684] multiqc                                            [DEBUG  ]  No samples found: samblaster
+[2020-08-31 15:18:41,692] multiqc                                            [DEBUG  ]  No samples found: samtools
+[2020-08-31 15:18:41,698] multiqc                                            [DEBUG  ]  No samples found: bamtools
+[2020-08-31 15:18:41,703] multiqc                                            [DEBUG  ]  No samples found: jellyfish
+[2020-08-31 15:18:41,710] multiqc                                            [DEBUG  ]  No samples found: vcftools
+[2020-08-31 15:18:41,716] multiqc                                            [DEBUG  ]  No samples found: longranger
+[2020-08-31 15:18:41,722] multiqc                                            [DEBUG  ]  No samples found: stacks
+[2020-08-31 15:18:41,731] multiqc                                            [DEBUG  ]  No samples found: bbmap
+[2020-08-31 15:18:41,738] multiqc                                            [DEBUG  ]  No samples found: bismark
+[2020-08-31 15:18:41,744] multiqc                                            [DEBUG  ]  No samples found: biscuit
+[2020-08-31 15:18:41,753] multiqc                                            [DEBUG  ]  No samples found: hicexplorer
+[2020-08-31 15:18:41,760] multiqc                                            [DEBUG  ]  No samples found: hicup
+[2020-08-31 15:18:41,766] multiqc                                            [DEBUG  ]  No samples found: hicpro
+[2020-08-31 15:18:41,772] multiqc                                            [DEBUG  ]  No samples found: salmon
+[2020-08-31 15:18:41,777] multiqc                                            [DEBUG  ]  No samples found: kallisto
+[2020-08-31 15:18:41,784] multiqc                                            [DEBUG  ]  No samples found: slamdunk
+[2020-08-31 15:18:41,790] multiqc                                            [DEBUG  ]  No samples found: star
+[2020-08-31 15:18:41,797] multiqc                                            [DEBUG  ]  No samples found: hisat2
+[2020-08-31 15:18:41,803] multiqc                                            [DEBUG  ]  No samples found: tophat
+[2020-08-31 15:18:41,808] multiqc                                            [DEBUG  ]  No samples found: bowtie2
+[2020-08-31 15:18:41,814] multiqc                                            [DEBUG  ]  No samples found: bowtie1
+[2020-08-31 15:18:41,820] multiqc                                            [DEBUG  ]  No samples found: kat
+[2020-08-31 15:18:41,826] multiqc                                            [DEBUG  ]  No samples found: leehom
+[2020-08-31 15:18:41,832] multiqc                                            [DEBUG  ]  No samples found: adapterRemoval
+[2020-08-31 15:18:41,838] multiqc                                            [DEBUG  ]  No samples found: clipandmerge
+[2020-08-31 15:18:41,844] multiqc                                            [DEBUG  ]  No samples found: cutadapt
+[2020-08-31 15:18:41,850] multiqc                                            [DEBUG  ]  No samples found: flexbar
+[2020-08-31 15:18:41,856] multiqc                                            [DEBUG  ]  No samples found: trimmomatic
+[2020-08-31 15:18:41,862] multiqc                                            [DEBUG  ]  No samples found: skewer
+[2020-08-31 15:18:41,868] multiqc                                            [DEBUG  ]  No samples found: sortmerna
+[2020-08-31 15:18:41,875] multiqc                                            [DEBUG  ]  No samples found: biobloomtools
+[2020-08-31 15:18:41,888] multiqc                                            [DEBUG  ]  No samples found: fastq_screen
+[2020-08-31 15:18:41,896] multiqc                                            [DEBUG  ]  No samples found: afterqc
+[2020-08-31 15:18:41,903] multiqc                                            [DEBUG  ]  No samples found: fastp
+[2020-08-31 15:18:46,456] multiqc.modules.fastqc.fastqc                      [INFO   ]  Found 33 reports
+[2020-08-31 15:18:47,967] multiqc                                            [DEBUG  ]  No samples found: minionqc
+[2020-08-31 15:18:47,974] multiqc                                            [DEBUG  ]  No samples found: clusterflow
+[2020-08-31 15:18:47,981] multiqc                                            [DEBUG  ]  No samples found: bcl2fastq
+[2020-08-31 15:18:47,988] multiqc                                            [DEBUG  ]  No samples found: interop
+[2020-08-31 15:18:47,996] multiqc                                            [DEBUG  ]  No samples found: flash
+[2020-08-31 15:18:48,057] multiqc                                            [INFO   ]  Compressing plot data
+[2020-08-31 15:18:49,818] multiqc                                            [INFO   ]  Report      : ../../multiqc_results/raw/multiqc_report.html
+[2020-08-31 15:18:49,819] multiqc                                            [INFO   ]  Data        : ../../multiqc_results/raw/multiqc_data
+[2020-08-31 15:18:49,931] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpiy4Bj6/multiqc_data/multiqc_sources.txt' to '/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/multiqc_data'
+[2020-08-31 15:18:49,974] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpiy4Bj6/multiqc_data/multiqc_general_stats.txt' to '/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/multiqc_data'
+[2020-08-31 15:18:50,020] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpiy4Bj6/multiqc_data/multiqc_data.json' to '/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/multiqc_data'
+[2020-08-31 15:18:50,066] multiqc                                            [DEBUG  ]  Moving data file from '/tmp/tmpiy4Bj6/multiqc_data/multiqc_fastqc.txt' to '/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/multiqc_data'
+[2020-08-31 15:18:51,012] multiqc                                            [INFO   ]  MultiQC complete
