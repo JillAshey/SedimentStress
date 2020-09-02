@@ -165,15 +165,16 @@ module load MultiQC/1.7-foss-2018b-Python-2.7.15
 multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw
 ```
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_sequence_counts_plot.png?token=APHKO32WXRFGOWEOOB7GK4S7JXJTU)
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_sequence_counts_plot.png?token=APHKO34QJ2M3FJUIXHSFO3C7J72OU)
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_sequence_gc_content_plot.png?token=APHKO3ZF2KKDAHO3YOSUG4S7JXJRG)
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_base_sequence_quality_plot.png?token=APHKO33J7GUAQSUGQ75LGW27JXJO6)
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_sequence_gc_content_plot.png?token=APHKO32U5Q4QGJDBDF4K2OS7J72TM)
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_overrepresented_sequencesi_plot.png?token=APHKO33KBAXH42LTQTUCNCC7JXJNS)
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_base_sequence_quality_plot.png?token=APHKO337A3DIJYZWAJWWJK27J72U4)
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_adapter_content_plot.png?token=APHKO32ATSLZDK5WULLAVYK7JXJHM)
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_overrepresented_sequencesi_plot.png?token=APHKO36757WLQVUOXQ5AHV27J72WE)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_adapter_content_plot.png?token=APHKO3352RTTC2C3GQBEU3C7J72XG)
 
 c) Copy MultiQC files to local computer
 
