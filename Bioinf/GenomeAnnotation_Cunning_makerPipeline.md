@@ -472,3 +472,32 @@ sbatch maker_round0.sh
 ```
 
 No clue...gives me nonzero exit status on bluewaves. Works when I run maker on the command line without submitting a job, but that would take forever and I'd be using all the ram on the 'home' node. 
+
+~~
+
+Going to attempt to use repeatMasker 
+
+```
+module load RepeatMasker/4.0.9-p2-gompi-2019b-HMMER
+
+sbatch RepeatMasker -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
+
+Can't locate EMBL.pm in @INC (you may need to install the EMBL module) (@INC contains: /var/spool/slurmd/job1692505 /opt/slurm/lib64/perl5/ /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0 /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0) at /var/spool/slurmd/job1692505/slurm_script line 307.
+
+
+```
+
+Putting in -e argument
+
+```
+sbatch RepeatMasker -e ncbi -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
+
+# same error as above 
+Can't locate EMBL.pm in @INC (you may need to install the EMBL module) (@INC contains: /var/spool/slurmd/job1692506 /opt/slurm/lib64/perl5/ /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0 /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0) at /var/spool/slurmd/job1692506/slurm_script line 307.
+
+
+```
+
+Adding path to repeatMasker in software 
+
+sbatch /opt/software/RepeatMasker/4.0.9-p2-gompi-2019b-HMMER/RepeatMasker -e ncbi -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta

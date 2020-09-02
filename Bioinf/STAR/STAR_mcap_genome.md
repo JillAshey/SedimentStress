@@ -242,3 +242,51 @@ sbatch star_align_batch_script_mcap.sh
 ```
 Submitted batch job 1671808
 
+Error:
+
+```
+Aug 14 12:13:46 ..... started STAR run
+Aug 14 12:13:48 ..... loading genome
+Aug 14 12:16:12 ..... started 1st pass mapping
+Aug 14 12:16:12 ..... finished 1st pass mapping
+Aug 14 12:16:13 ..... inserting junctions into the genome indices
+Aug 14 12:16:36 ..... started mapping
+/var/spool/slurmd/job1671808/slurm_script: line 8:   728 Segmentation fault      (core dumped) STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/output/STAR/${FILENAME}_TMP --readFilesIn /data/putnamlab/jillashey/Francois_data/data/trimmed/${FILENAME} --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_mcap_all_exons_no_spaces/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix /data/putnamlab/jillashey/Francois_data/output/STAR/staralign_mcap_noGFF_all_exons_no_spaces/${FILENAME}.
+
+```
+This is essentially the same error I have been getting the whole time. Not sure what the significance of 'Segmentation fault' is. 
+
+
+
+
+Trying another star variety
+
+```
+ln -s /data/putnamlab/jillashey/Francois_data/Hawaii/data/trimmed/*trim.fq .
+
+nano AlignReads_mcap.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_mcap_out_error"
+#SBATCH --output="Align_mcap_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/staralign_mcap_noGFF_all_exons_no_spaces
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcap_all_exons_no_spaces --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_mcap.sh 
+```
+Submitted batch job 1692293

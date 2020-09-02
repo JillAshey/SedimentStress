@@ -487,6 +487,7 @@ done
 
 sbatch test_align_script.sh 
 ```
+Submitted batch job 1691569
 This seems to have worked. Issues with the paths I think
 
 #### A. cerv
@@ -513,11 +514,6 @@ STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillas
 
 ```
 
-
-
-
-
-
 b) Align reads to genome
 
 ```
@@ -525,7 +521,7 @@ mkdir AlignReads_Acerv
 cd AlignReads_Acerv
 ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/*trim.fq .
 
-nano Align_script.sh
+nano AlignReads_acerv.sh
 
 #!/bin/bash
 #SBATCH -t 100:00:00
@@ -535,19 +531,83 @@ nano Align_script.sh
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=jillashey@uri.edu
 #SBATCH --account=putnamlab
-#SBATCH --error="Align_Ofav_out_error"
-#SBATCH --output="Align_Ofav_out"
+#SBATCH --error="Align_Acerv_out_error"
+#SBATCH --output="Align_Acerv_out"
 
 module load STAR/2.5.3a-foss-2016b
 
-F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Ofav
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Acerv
 
 array1=($(ls $F/*trim.fq))
 for i in ${array1[@]}
 do
-STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Ofav --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Acerv --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
 done 
 
-sbatch test_align_script.sh 
+sbatch AlignReads_acerv.sh 
 ```
 
+Submitted batch job 1691808
+
+#### M. cav
+
+a) Generate genome index
+
+Might have to do some gff fixing for this gff file
+
+```
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav --genomeFastaFiles /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_July2018.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3
+
+```
+Error: terminate called after throwing an instance of 'std::out_of_range'
+  what():  vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
+Aborted
+
+Need to go fix gff in r. 
+
+Added transcript_id to gene col. Should work now
+
+```
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav --genomeFastaFiles /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_July2018.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3
+
+```
+
+b) Align reads to genome
+
+```
+mkdir AlignReads_Mcav
+cd AlignReads_Mcav
+ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/*trim.fq .
+
+nano AlignReads_mcav.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_Acerv_out_error"
+#SBATCH --output="Align_Acerv_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Mcav
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_mcav.sh 
+```
+Submitted batch job 1691816
+
+I am interested to trying --quantMode GeneCounts in the STAR align reads step. 
