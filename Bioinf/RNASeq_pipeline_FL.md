@@ -700,7 +700,12 @@ for i in ${array1[@]}; do
 	stringtie -G /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -e -o ${i}.gtf ${i}
 	echo "${i}"
 done
+
+sbatch stringTie_ofav_assemble.sh
 ```
+
+Submitted batch job 1692965
+
 
 c) Merge stringTie gtf results 
 
@@ -723,6 +728,10 @@ d) Assess assembly quality
 module load gffcompare/0.11.5-foss-2018b
 
 gffcompare -r /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -o Ofav.merged stringtie_ofav_merged.gtf
+
+37786 reference transcripts loaded.
+  5 duplicate reference transcripts discarded.
+  37781 query transfrags loaded.
 ```
 
 e) Re-estimate assembly 
@@ -758,6 +767,7 @@ sbatch stringTie_ofav_re-assemble.sh
 
 mv *merge.gtf ../GTF_merge
 ```
+Submitted batch job 1692972
 
 f) Create gene matrix
 
@@ -822,7 +832,11 @@ for i in ${array1[@]}; do
 	stringtie -G /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -e -o ${i}.gtf ${i}
 	echo "${i}"
 done
+
+sbatch stringTie_acerv_assemble.sh
+
 ```
+Submitted batch job 1692969
 
 c) Merge stringTie gtf results 
 
@@ -845,6 +859,9 @@ d) Assess assembly quality
 module load gffcompare/0.11.5-foss-2018b
 
 gffcompare -r /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -o Acerv.merged stringtie_acerv_merged.gtf
+
+  48478 reference transcripts loaded.
+  48478 query transfrags loaded.
 ```
 
 e) Re-estimate assembly 
@@ -880,6 +897,8 @@ sbatch stringTie_acerv_re-assemble.sh
 
 mv *merge.gtf ../GTF_merge
 ```
+Submitted batch job 1692973
+
 
 f) Create gene matrix
 
@@ -941,10 +960,18 @@ F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/BAM/
 
 array1=($(ls $F/*bam))
 for i in ${array1[@]}; do
-	stringtie -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -e -o ${i}.gtf ${i}
+	stringtie -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -e -o ${i}.gtf ${i}
 	echo "${i}"
 done
+
+sbatch stringTie_mcav_assemble.sh
+
 ```
+
+Submitted batch job 1693008
+
+Submitted batch job 1693022 -- have to rerun bc accidently ran it with the original gff file instead of the one I fixed and that I used in STAR 
+
 
 c) Merge stringTie gtf results 
 
@@ -958,15 +985,24 @@ module load StringTie/2.1.1-GCCcore-7.3.0
 module load gffcompare/0.11.5-foss-2018b
 module load Python/2.7.15-foss-2018b
 
-stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o stringtie_mcav_merged.gtf mcav_mergelist.txt
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -o stringtie_mcav_merged.gtf mcav_mergelist.txt
 ```
+
+For rows that were only mRNA or gene, I got this error: 
+
+```
+Error: invalid feature coordinates (end<start!) at line:
+Sc0000079	maker	mRNA	734362	719	.	-	.	ID=Mcavernosa02687-RA;Parent=Mcavernosa02687;Name=Mcavernosa02687-RA;Alias=maker-NewChr8-snap-gene-61.20-mRNA-1;_AED=0.01;_QI=0|0.4|0.33|0.83|0.4|0.5|6|2976|639;_eAED=0.01;
+
+```
+
 
 d) Assess assembly quality
 
 ```
 module load gffcompare/0.11.5-foss-2018b
 
-gffcompare -r /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o Mcav.merged stringtie_mcav_merged.gtf
+gffcompare -r /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -o Mcav.merged stringtie_mcav_merged.gtf
 ```
 
 e) Re-estimate assembly 
@@ -994,7 +1030,7 @@ F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/BAM/
 array1=($(ls $F/*bam))
 for i in ${array1[@]}
 do
-stringtie -e -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o ${i}.merge.gtf ${i}
+stringtie -e -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -o ${i}.merge.gtf ${i}
 echo "${i}"
 done
 
