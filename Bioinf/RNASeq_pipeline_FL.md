@@ -303,6 +303,18 @@ scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Flori
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/multiqc_report.html /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/trimmed
 ```
 
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/trimmed/fastqc_sequence_counts_plot.png?token=APHKO32IMCD4U5AQOXNGYMS7J726W)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/trimmed/fastqc_per_sequence_gc_content_plot.png?token=APHKO37KY2NCDO56RVLUQPC7J73CC)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/trimmed/fastqc_per_base_sequence_quality_plot.png?token=APHKO32JTY6U2JJXCY2J3U27J73JW)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/trimmed/fastqc_overrepresented_sequencesi_plot.png?token=APHKO33VGTBNNZAGIKCKSD27J73OY)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/trimmed/fastqc_adapter_content_plot.png?token=APHKO334NFOXWGH7KFVQZRK7J73PY)
+
+Adapter content looks kinda weird...maybe because Francois may have already trimmed some of the samples? But not sure about that yet
+
 ### 6) Align reads with STAR
 
 #### O. fav
@@ -611,4 +623,408 @@ sbatch AlignReads_mcav.sh
 ```
 Submitted batch job 1691816
 
-I am interested to trying --quantMode GeneCounts in the STAR align reads step. 
+I am interested to trying --quantMode GeneCounts in the STAR align reads step. Going to try with an Ofav sample and see what the output is.
+
+```
+mkdir test_quantMode
+cp 32_T22_Of_EVR.fastq.trim.fq test_quantMode
+cd test_quantMode
+
+nano AlignReads_ofav_32_test.sh
+
+#!/bin/bash
+#SBATCH -t 48:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_Ofav_out_error"
+#SBATCH --output="Align_Ofav_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runMode alignReads --quantMode GeneCounts TranscriptomeSAM --outTmpDir 32_T22_Of_EVR.fastq.trim.fq_TMP --readFilesIn 32_T22_Of_EVR.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Ofav --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 32_T22_Of_EVR.fastq.trim.fq.
+
+sbatch AlignReads_ofav_32_test.sh 
+```
+Submitted batch job 1692813
+
+### 6) Perform gene counts with stringTie
+
+#### O. fav
+
+```
+mkdir stringTie 
+cd stringTie
+mkdir Acerv Mcav Ofav
+
+# in each species folder 
+mkdir BAM GTF GTF_merge
+```
+
+a) Move BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Ofav
+mv *Aligned.sortedByCoord.out.bam ../../../stringTie/Ofav/BAM
+```
+
+b) Assemble and estimate reads 
+
+```
+cd stringTie/Ofav/BAM
+
+nano stringTie_ofav_assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_ofav_out_error"
+#SBATCH --output="assemble_ofav_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Ofav/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+	stringtie -G /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -e -o ${i}.gtf ${i}
+	echo "${i}"
+done
+```
+
+c) Merge stringTie gtf results 
+
+```
+mv *gtf ../GTFfiles/
+
+ls *gtf > ofav_mergelist.txt
+cat ofav_mergelist.txt
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -o stringtie_ofav_merged.gtf ofav_mergelist.txt
+```
+
+d) Assess assembly quality
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -o Ofav.merged stringtie_ofav_merged.gtf
+```
+
+e) Re-estimate assembly 
+
+```
+nano stringTie_ofav_re-assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_ofav_out_error"
+#SBATCH --output="re-assemble_ofav_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Ofav/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_ofav_re-assemble.sh
+
+mv *merge.gtf ../GTF_merge
+```
+
+f) Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Ofav/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_ofav.txt
+done
+
+python prepDE.py -g gene_count_ofav_matrix.csv -i sample_list_ofav.txt
+```
+
+g) Secure-copy gene counts onto local computer
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Ofav/GTF_merge/gene_count_ofav_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/
+```
+
+#### A. cerv
+
+a) Move BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Acerv
+mv *Aligned.sortedByCoord.out.bam ../../../stringTie/Acerv/BAM
+```
+
+b) Assemble and estimate reads 
+
+```
+cd stringTie/Acerv/BAM
+
+nano stringTie_acerv_assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_acerv_out_error"
+#SBATCH --output="assemble_acerv_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Acerv/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+	stringtie -G /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -e -o ${i}.gtf ${i}
+	echo "${i}"
+done
+```
+
+c) Merge stringTie gtf results 
+
+```
+mv *gtf ../GTFfiles/
+
+ls *gtf > acerv_mergelist.txt
+cat acerv_mergelist.txt
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -o stringtie_acerv_merged.gtf acerv_mergelist.txt
+```
+
+d) Assess assembly quality
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -o Acerv.merged stringtie_acerv_merged.gtf
+```
+
+e) Re-estimate assembly 
+
+```
+nano stringTie_acerv_re-assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_acerv_out_error"
+#SBATCH --output="re-assemble_acerv_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Acerv/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.gff3 -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_acerv_re-assemble.sh
+
+mv *merge.gtf ../GTF_merge
+```
+
+f) Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Acerv/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_acerv.txt
+done
+
+python prepDE.py -g gene_count_acerv_matrix.csv -i sample_list_acerv.txt
+```
+
+g) Secure-copy gene counts onto local computer
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Acerv/GTF_merge/gene_count_acerv_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/
+```
+
+#### M. cav
+
+a) Move BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Mcav
+mv *Aligned.sortedByCoord.out.bam ../../../stringTie/Mcav/BAM
+```
+
+b) Assemble and estimate reads 
+
+```
+cd stringTie/Mcav/BAM
+
+nano stringTie_mcav_assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_mcav_out_error"
+#SBATCH --output="assemble_mcav_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+	stringtie -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -e -o ${i}.gtf ${i}
+	echo "${i}"
+done
+```
+
+c) Merge stringTie gtf results 
+
+```
+mv *gtf ../GTFfiles/
+
+ls *gtf > mcav_mergelist.txt
+cat mcav_mergelist.txt
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o stringtie_mcav_merged.gtf mcav_mergelist.txt
+```
+
+d) Assess assembly quality
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o Mcav.merged stringtie_mcav_merged.gtf
+```
+
+e) Re-estimate assembly 
+
+```
+nano stringTie_mcav_re-assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_mcav_out_error"
+#SBATCH --output="re-assemble_mcav_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/BAM/
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.coding.gff3 -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_mcav_re-assemble.sh
+
+mv *merge.gtf ../GTF_merge
+```
+
+f) Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_mcav.txt
+done
+
+python prepDE.py -g gene_count_mcav_matrix.csv -i sample_list_mcav.txt
+```
+
+g) Secure-copy gene counts onto local computer
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/GTF_merge/gene_count_mcav_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/
+```
+

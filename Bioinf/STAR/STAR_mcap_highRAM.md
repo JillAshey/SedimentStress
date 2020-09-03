@@ -69,3 +69,11 @@ sbatch AlignReads_mcap_40_2_highRAM.sh
 ```
 
 Submitted batch job 1692785 -- may take a while because needs lots of resources to run
+
+Submitted batch job 1692812 -- also submitted job with only 100G mem
+
+Trying to see if I could use 100G to run it instead of 250G, as my job w/ 250G is still pending 
+
+100G ran in like 20 mins, but it still did not finish, exits the same as previous runs (segmentation fault). Now just waiting for 250G but its been pending for a while. 
+
+Submitted batch job 1692821 - 250G job failed bc coultn create temp directory?
