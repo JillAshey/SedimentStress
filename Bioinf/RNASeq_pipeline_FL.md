@@ -988,7 +988,7 @@ module load Python/2.7.15-foss-2018b
 stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -o stringtie_mcav_merged.gtf mcav_mergelist.txt
 ```
 
-For rows that were only mRNA or gene, I got this error: 
+When running with original Mcav gff file: for rows that were only mRNA or gene, I got this error: 
 
 ```
 Error: invalid feature coordinates (end<start!) at line:
@@ -996,6 +996,124 @@ Sc0000079	maker	mRNA	734362	719	.	-	.	ID=Mcavernosa02687-RA;Parent=Mcavernosa026
 
 ```
 
+When running with fixed Mcav gff file: I got weird NA lines and still errors around mRNA and gene
+
+```
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+Error: invalid feature coordinates (end<start!) at line:
+Sc0000070	maker	gene	801834	5681	.	-	.	ID=Mcavernosa17287;Name=Mcavernosa17287;Alias=augustus_masked-NewChr7-processed-gene-107.6;
+Error: invalid feature coordinates (end<start!) at line:
+Sc0000070	maker	mRNA	801834	5681	.	-	.	ID=Mcavernosa17287-RA;Parent=Mcavernosa17287;Name=Mcavernosa17287-RA;Alias=augustus_masked-NewChr7-processed-gene-107.6-mRNA-1;_AED=0.21;_QI=403|0.6|0.66|0.83|0.6|0.5|6|0|480;_eAED=0.21;;transcript_id=Mcavernosa17287-RA
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+Warning: invalid start coordinate at line:
+
+```
+
+Not sure what this means...Seems like new gtf file only has exons and transcripts. The error about end<start seems like something is up with the stop and start coords. 
+
+Figured out that some of the gene lengths in the Mcav gff file were negative, which doesn't make any sense because how can a gene be a negative length? So I saved the positive gene lengths only into new Mcav gff file, which I'm now going to run STAR and stringTie on to see if I can fix the errors I was getting above.
+
+
+### 6-repeat) Align reads with STAR - Mcav only
+
+a) Generate genome index
+
+```
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav_gene.diff.Pos --genomeFastaFiles /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_July2018.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_gene.diff.Pos.gff3
+
+```
+Fatal INPUT FILE error, no exon lines in the GTF file: /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_gene.diff.Pos.gff3
+Solution: check the formatting of the GTF file, it must contain some lines with exon in the 3rd column.
+          Make sure the GTF file is unzipped.
+          If exons are marked with a different word, use --sjdbGTFfeatureExon .
+
+But the gff has exons...........confused. Going to use the --sjdbGTFfeatureExon .
+
+
+```
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav_gene.diff.Pos --genomeFastaFiles /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_July2018.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_gene.diff.Pos.gff3 --sjdbGTFfeatureExon .
+
+```
+
+same error.......idk
+
+
+
+
+
+
+
+
+
+
+
+
+b) Align reads to genome
+
+```
+mkdir AlignReads_Mcav_gene.diff.Pos
+cd AlignReads_Mcav_gene.diff.Pos
+ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/*trim.fq .
+
+nano AlignReads_gene.diff.Pos_mcav.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_gene.diff.Pos_mav_out_error"
+#SBATCH --output="Align_gene.diff.Pos_mcav_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Mcav_gene.diff.Pos
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav_gene.diff.Pos --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_gene.diff.Pos_mcav.sh 
+```
+
+Fatal INPUT FILE error, no exon lines in the GTF file: /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_gene.diff.Pos.gff3
+Solution: check the formatting of the GTF file, it must contain some lines with exon in the 3rd column.
+          Make sure the GTF file is unzipped.
+          If exons are marked with a different word, use --sjdbGTFfeatureExon .
+
+But the gff has exons...........confused. Going to use the --sjdbGTFfeatureExon .
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+For now, continuing on with gff that still has - gene lengths 
 
 d) Assess assembly quality
 
@@ -1003,6 +1121,14 @@ d) Assess assembly quality
 module load gffcompare/0.11.5-foss-2018b
 
 gffcompare -r /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcav.gff.annotations.fixed_transcript.gff3 -o Mcav.merged stringtie_mcav_merged.gtf
+
+
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+Warning: invalid start coordinate at line:
+###			NA	NA				;transcript_id=
+ 25605 reference transcripts loaded.
+  25605 query transfrags loaded.
 ```
 
 e) Re-estimate assembly 
@@ -1038,6 +1164,9 @@ sbatch stringTie_mcav_re-assemble.sh
 
 mv *merge.gtf ../GTF_merge
 ```
+
+Submitted batch job 1693072
+
 
 f) Create gene matrix
 
