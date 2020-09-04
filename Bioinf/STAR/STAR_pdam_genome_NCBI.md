@@ -621,3 +621,60 @@ sbatch star_align_pdam_1_2_test_noGFF.sh
 Submitted batch job 1669003
 
 Same output as STAR alignment with the GTF file, good sign
+
+
+
+
+
+### Fixed GFF file with GO terms
+
+I recently did some fancy manuvering and adding GO terms to the NCBI gff file (it had none before, only the reef genomics file included them, but the RG file had some discrepancies in gene counts). The R script for the GO-term additions is [here](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/AddAnnotations_NCBI_pdam.R). Now I'm going to use the fixed gff file to run STAR with pdam. 
+
+a) Generate genome index
+
+```
+mkdir GenomeIndex_pdam_NCBI_GOterms
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runThreadN 10 \
+--runMode genomeGenerate \
+-- genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pdam_NCBI_GOterms/ \
+--genomeFastaFiles /data/putnamlab/jillashey/genome/Pdam/NCBI/GCF_003704095.1_ASM370409v1_genomic.fna \
+--sjdbGTFfile /data/putnamlab/jillashey/genome/Pdam/NCBI/pdam_NCBI_annotation_fixed_GOterms.gff
+```
+
+b) Align reads with NCBI gff file with GO terms added (by me)
+
+```
+mkdir AlignReads_pdam_NCBI_GOterms
+cd AlignReads_pdam_NCBI_GOterms
+ln -s /data/putnamlab/jillashey/Francois_data/Hawaii/data/trimmed/*trim.fq .
+
+nano AlignReads_pdam_NCBI_GOterms.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_pdam_NCBI_GOterms_out_error"
+#SBATCH --output="Align_pdam_NCBI_GOterms_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pdam_NCBI_GOterms
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pdam_NCBI_GOterms --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_pdam_NCBI_GOterms.sh 
+``` 
+
+Submitted batch job 1693077
