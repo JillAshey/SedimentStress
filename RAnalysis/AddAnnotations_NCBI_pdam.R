@@ -23,7 +23,7 @@ library("clusterProfiler")
 library("DataCombine")
 
 ## NCBI gff comparing to NCBI Pdam gene data
-pdamgff3_NCBI <- read.csv("Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff", header=FALSE, sep="\t", skip=6) # read in gff from NCBI
+pdamgff3_NCBI <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff", header=FALSE, sep="\t", skip=6) # read in gff from NCBI
 colnames(pdamgff3_NCBI) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
 dim(pdamgff3_NCBI) # 516,693 x 9
 # pdamgff3_NCBI <- na.omit(pdamgff3_NCBI) # remove NAs
@@ -36,7 +36,7 @@ pdamgff3_NCBI$Symbol <- gsub(";.*", "", pdamgff3_NCBI$Symbol) # removing everyth
 length(unique(pdamgff3_NCBI$Symbol)) # 22800 unique LOC terms in gff file
 
 # I have isolated the LOC terms in the NCBI gff file into Symbol colymn. Now I'm going to compare those LOC terms with the LOC terms in the NCBI pdam gene data
-geneResult <- read.csv("Desktop/gene_result.csv", header=TRUE) # read in NCBI pdam gene data
+geneResult <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/gene_result_pdam_NCBI.csv", header=TRUE) # read in NCBI pdam gene data
 geneResult <- select(geneResult, c(Org_name, GeneID, Symbol, Aliases, description)) # getting rid of some extra cols that im not interested in rn
 dim(geneResult) # 22968 x 5
 length(unique(geneResult$Symbol)) # 22702 unique LOC terms in geneResult file
@@ -58,7 +58,7 @@ length(unique(geneResult_pdam$Aliases)) # checking to make sure all pdam terms w
 length(unique(geneResult_pdam$Symbol)) # checking to make sure all LOC terms were unique 
 
 # Compare LOC terms in pdamgff3_NCBI and geneResult_pdam by LOC to find similarities
-pdam_LOC_compare <- pdamgff3_NCBI[pdamgff3_NCBI$Symbol %in% geneResult_pdam$Symbol]
+pdam_LOC_compare <- pdamgff3_NCBI[pdamgff3_NCBI$Symbol %in% geneResult_pdam$Symbol,]
 dim(pdam_LOC_compare) # 400523 x 11
 length(unique(pdam_LOC_compare$Symbol)) # 15689 unique LOC terms
 # I guess comparing pdamgff3_NCBI and geneResult above was redundant. Well, I now have df with pdam-term filtered LOC terms that match both pdamgff3_NCBI and geneResult_pdam
@@ -67,10 +67,10 @@ length(unique(pdam_LOC_compare$Symbol)) # 15689 unique LOC terms
 # Okay so I have df with the LOC terms in it that match both the NCBI gff file and the gene results file. Time to deal with pdam terms 
 
 # I got both pdam_universal and pdam_gene_GOterms lists from Connelly github. now sure how he generated them, but he were using pdam terms 
-pdam_universal <- read.csv("Desktop/pdam_universal.csv", header = FALSE) # list of all pdam terms that Connelly used in his analysis (?)
+pdam_universal <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/universal_pdam_Connelly.csv", header = FALSE) # list of all pdam terms that Connelly used in his analysis (?)
 dim(pdam_universal) # 12702 x 1
 colnames(pdam_universal) <- "Aliases"
-pdam_gene_GOterms <- read.csv("Desktop/pdam_gene_GOterms.csv", header = FALSE) # List of pdam terms that Connelly used in analysis and their associated GO terms. Again, not sure how he got this data
+pdam_gene_GOterms <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/gene_GOterms_pdam_Connelly.csv", header = FALSE) # List of pdam terms that Connelly used in analysis and their associated GO terms. Again, not sure how he got this data
 dim(pdam_gene_GOterms) # 12702 x 15
 colnames(pdam_gene_GOterms) <- c("Aliases", "GO1", "GO2", "GO3", "GO4", "GO5", "GO6", "GO7", "GO8", "GO9", "GO10", "GO11", "GO12", "GO13", "GO14")
 list_compare <- pdam_universal[pdam_universal$Aliases %in% pdam_gene_GOterms$Aliases,] # check to see if they matched one another, they do
@@ -87,14 +87,38 @@ length(unique(pdam_term_compare$Aliases)) # 10050 unique pdam terms
 newtable <- merge(geneResult, pdam_gene_GOterms, by = "Aliases", all.x=TRUE)
 # Then I can merge the pdamgff3_NCBI with newtable by Symbol
 finaltable <- merge(pdamgff3_NCBI, newtable, by = "Symbol", all.x=TRUE) # yay!! final table! ugly, but info is there
+finaltable <- subset(finaltable, select = -Symbol)
+finaltable <- finaltable %>% 
+  filter(!str_detect(scaffold, '##'))
+finaltable <- finaltable %>% 
+  unite(finaltable, Aliases:description, sep = ";", remove = TRUE, na.rm = TRUE)
+finaltable <- finaltable %>% mutate_all(na_if,"")
+
+finaltable <- finaltable %>% 
+  paste(Aliases, "Alias", finaltable$Aliases)
+  
+  
+  
+  mutate(gene = ifelse(id != "gene", paste0(gene, ";transcript_id=", Plut.gff$transcript_id),  paste0(gene)))
+
+
+
+
+
+
+
+
+
+
+
+finaltable <- finaltable %>% 
+  unite(finaltable, gene:finaltable, sep = ";", remove = TRUE, na.rm = TRUE)
+
+
+
+
 write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed.gff", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
 write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed.txt", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
-
-
-# Looking at the character(0) symbol
-character <- subset(finaltable, Symbol == "character(0)")
-unique(character$id) # no genes, no GO terms
-
 
 
 
