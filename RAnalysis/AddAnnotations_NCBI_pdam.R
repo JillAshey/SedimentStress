@@ -87,40 +87,26 @@ length(unique(pdam_term_compare$Aliases)) # 10050 unique pdam terms
 newtable <- merge(geneResult, pdam_gene_GOterms, by = "Aliases", all.x=TRUE)
 # Then I can merge the pdamgff3_NCBI with newtable by Symbol
 finaltable <- merge(pdamgff3_NCBI, newtable, by = "Symbol", all.x=TRUE) # yay!! final table! ugly, but info is there
-finaltable <- subset(finaltable, select = -Symbol)
+
+# Cleaning up table so it fits gff format
+finaltable <- subset(finaltable, select = -Symbol) # removing symbol column
 finaltable <- finaltable %>% 
-  filter(!str_detect(scaffold, '##'))
+  filter(!str_detect(scaffold, '##')) # removing empty rows
 finaltable <- finaltable %>% 
-  unite(finaltable, Aliases:description, sep = ";", remove = TRUE, na.rm = TRUE)
+  unite(finaltable, Aliases:description, sep = ";", remove = TRUE, na.rm = TRUE) # unite columns with ; separator 
 finaltable <- finaltable %>% mutate_all(na_if,"")
-
 finaltable <- finaltable %>% 
-  paste(Aliases, "Alias", finaltable$Aliases)
-  
-  
-  
-  mutate(gene = ifelse(id != "gene", paste0(gene, ";transcript_id=", Plut.gff$transcript_id),  paste0(gene)))
-
-
-
-
-
-
-
-
-
-
-
+  unite(finaltable, gene:finaltable, sep = ";", remove = TRUE, na.rm = TRUE) # unite cols with ; separator 
+names(finaltable)[names(finaltable) == "finaltable"] <- "gene"
+finaltable <- finaltable %>% 
+  unite(finaltable, GO1:GO14, sep = "", remove = TRUE, na.rm = TRUE)
 finaltable <- finaltable %>% 
   unite(finaltable, gene:finaltable, sep = ";", remove = TRUE, na.rm = TRUE)
 
-
-
-
-write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed.gff", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
+write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms.gff", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
 write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed.txt", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
 
-
+dim(finaltable)
 
 
 
