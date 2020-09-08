@@ -149,14 +149,14 @@ python prepDE.py -g gene_count_pdam_matrix.csv -i /data/putnamlab/jillashey/Fran
 
 python prepDE.py -g gene_count_pdam_matrix.csv -i sample_list_pdam.txt
 ```
+
 Not working
 
 Error: line should have a sample ID and a file path:
 /data/putnamlab/jillashey/Francois_data/stringTie/pdam/GTFfiles_merged/10_2.fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf
 
 
-
-
+```
 F=/data/putnamlab/jillashey/Francois_data/stringTie/pdam/GTFfiles_merged/
 
 array2=($(ls *merge.gtf))
@@ -176,7 +176,7 @@ do
 
 test_path = {$file //“$path””10_2.fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf”}
 
-sample_id= {10_2.fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf//$end} 
+sample_id= {10_2.fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf//$end} ```
 
 Straight from my connelly script that worked
 
@@ -207,5 +207,46 @@ done
 python prepDE.py -g gene_count_pdam_matrix.csv -i sample_list_connelly_stringTie_example_script_pleasework.txt
 
 python prepDE.py -g gene_count_pdam_matrix.csv -i sample_list_connelly_stringTie_example_script.txt
+```
+
+
+### Fixed GFF file with GO terms
+
+I recently did some fancy manuvering and adding GO terms to the NCBI gff file (it had none before, only the reef genomics file included them, but the RG file had some discrepancies in gene counts). The R script for the GO-term additions is [here](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/AddAnnotations_NCBI_pdam.R). Now I'm going to use the fixed gff file to run STAR with pdam. 
+
+a) Assemble reads with genome annotation
 
 ```
+nano stringTie_assemble_pdam_GOterms.sh
+
+#!/bin/bash
+#SBATCH -t 48:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/jillashey/Francois_data/scripts
+#SBATCH --error="stringTie_pdam_GOterms_out_error"
+#SBATCH --output="stringTie_pdam_GOterms_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+# StringTie to assemble transcripts for each sample with the annotation file
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pdam_GOterms/BAM
+
+array1=($(ls $F/*Aligned.sortedByCoord.out.bam))
+for i in ${array1[@]}
+do
+stringtie -G /data/putnamlab/jillashey/genome/Pdam/NCBI/pdam_NCBI_annotation_fixed_GOterms.gff -o ${i}.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_assemble_pdam_GOterms.sh
+``` 
+
+Submitted batch job 1698712

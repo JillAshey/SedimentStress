@@ -678,3 +678,37 @@ sbatch AlignReads_pdam_NCBI_GOterms.sh
 ``` 
 
 Submitted batch job 1693077
+
+Stopped before it could finish last sample, will run last sample by itself 
+
+```
+nano AlignReads_9_2_pdam_NCBI_GOterms.sh
+
+#!/bin/bash
+#SBATCH -t 24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_9_2_pdam_NCBI_GOterms_out_error"
+#SBATCH --output="Align_9_2_pdam_NCBI_GOterms_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pdam_NCBI_GOterms
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir  9_2.fastq.trim.fq_TMP --readFilesIn 9_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pdam_NCBI_GOterms --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix  9_2.fastq.trim.fq.
+
+sbatch AlignReads_9_2_pdam_NCBI_GOterms.sh 
+``` 
+
+Submitted batch job 1694516
+
+c) Move bam files to new file for stringTie analysis 
+
+```
+mv /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pdam_GOterms
+
+```
