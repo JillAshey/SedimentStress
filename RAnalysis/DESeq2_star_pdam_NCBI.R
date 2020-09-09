@@ -25,12 +25,18 @@ library("VennDiagram")
 
 
 # Load gene count matrix
-countdata <- read.csv("Desktop/PutnamLab/Repositories/Tufts_URI_RNAseq/Tufts_URI_CSM_RNASeq/Seneca/STAR_pipeline/Output/DESeq2/star/gene_count_pdam_star_matrix.csv", header = TRUE, row.names = "gene_id")
+countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/gene_count_pdam_NCBI_star_matrix.csv", header = TRUE)
 dim(countdata) # 37630 x 64
 head(countdata)
 
+count_gene <- countdata[grep("MSTRG", countdata$gene_id, invert = TRUE), ]
+
+
+
+
+
 # Load metadata 
-metadata <- read.csv("Desktop/PutnamLab/Repositories/Tufts_URI_RNAseq/Tufts_URI_CSM_RNASeq/Seneca/STAR_pipeline/Data/sediment_metadata_allSamples_raw.csv", header = TRUE)
+metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_HI_metadata_raw.csv", header = TRUE)
 head(metadata)
 # Renaming specific columns
 names(metadata)[names(metadata) == "File.Name.fastq"] <- "SampleID" 
@@ -44,9 +50,10 @@ metadata$SampleID <- gsub(".fastq.gz", "", metadata$SampleID)
 metadata$SampleID <- paste0("X", metadata$SampleID) # add X to front so it matches countdata and isnt treated like a numerical variable 
 metadata$Days <- gsub("7", "seven" ,metadata$Days)
 metadata$Days <- gsub("4", "four" ,metadata$Days)
-metadata$Treatment <- gsub("<NA>", "unknown", metadata$Treatment)
+# metadata$Treatment <- gsub("<NA>", "unknown", metadata$Treatment)
 rownames(metadata) <- metadata$SampleID # make sampleID the row names 
 metadata <- metadata[-65,] # remove random blank space at the end
+metadata <- na.omit(metadata) # removing rows with NAs
 # Select mcap species only 
 metadata_pdam <- subset(metadata, Species=="Pocillopora damicornis")
 
@@ -68,7 +75,7 @@ gfilt # gives T or F for which genes have < 5 counts
 
 # Id genes to keep by count filter
 gkeep <- count_pdam[gfilt,]  
-dim(gkeep) # 20995 genes left after filtering
+dim(gkeep) # 21369 genes left after filtering
 
 # List names of genes that passed filtering 
 gn.keep <- rownames(gkeep)
@@ -76,7 +83,7 @@ gn.keep <- rownames(gkeep)
 # gene count data that was filtered in PoverA (P percent of samples that have counts over A) + gene names 
 gcount_filt <- as.data.frame(count_pdam[which(rownames(count_pdam) %in% gn.keep),]) # only keep gene names that are in gn.keep
 head(gcount_filt)
-dim(gcount_filt) # 968 x 17 -- only 968 genes kept after filtering 
+dim(gcount_filt) # 21369 x 12 -- only 21369 genes kept after filtering 
 
 # Write treatment, gene and transcript count files with corrected column and row headers
 write.csv(metadata_pdam, "~/Desktop/metadata_pdam_filtered.csv")
