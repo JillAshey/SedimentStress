@@ -227,7 +227,6 @@ nano stringTie_assemble_pdam_GOterms.sh
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=jillashey@uri.edu
 #SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/jillashey/Francois_data/scripts
 #SBATCH --error="stringTie_pdam_GOterms_out_error"
 #SBATCH --output="stringTie_pdam_GOterms_out"
 
@@ -249,4 +248,123 @@ done
 sbatch stringTie_assemble_pdam_GOterms.sh
 ``` 
 
-Submitted batch job 1698712
+Submitted batch job 1701979
+
+b) Merge stringTie gtf results 
+
+```
+mv *gtf ../GTFfiles/
+
+ls *gtf > pdam_GOterms_mergelist.txt
+cat pdam_GOterms_mergelist.txt
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Pdam/NCBI/pdam_NCBI_annotation_fixed_GOterms.gff -o stringtie_pdam_GOterms_merged.gtf pdam_GOterms_mergelist.txt
+```
+
+Lots of errors that look like this: 
+
+```
+Error: discarding overlapping duplicate gene feature (378199-378285) with ID=gene-Trnay-gua-10
+Error: discarding overlapping duplicate gene feature (378199-378285) with ID=gene-Trnay-gua-10
+Error: discarding overlapping duplicate gene feature (378199-378285) with ID=gene-Trnay-gua-10
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+Error: discarding overlapping duplicate gene feature (5307-5379) with ID=gene-Trnay-gua-4
+```
+
+c) Assess assembly quality
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Pdam/NCBI/pdam_NCBI_annotation_fixed_GOterms.gff -o pdam_GOterms.merged stringtie_pdam_GOterms_merged.gtf
+
+```
+
+Gave me these errors: 
+
+```
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+Error: discarding overlapping duplicate transcript feature (269346-269419) with ID=rna-Trnat-agu-15
+```
+
+d) Re-estimate assembly 
+
+```
+nano stringTie_assemble_pdam_GOterms_re-assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_pdam_GOterms_out_error"
+#SBATCH --output="re-assemble_pdam_GOterms_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pdam_GOterms/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Pdam/NCBI/pdam_NCBI_annotation_fixed_GOterms.gff -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_assemble_pdam_GOterms_re-assemble.sh
+
+mv *merge.gtf ../GTF_merge
+```
+
+Submitted batch job 1702705
+
+e) Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pdam_GOterms/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_pdam_GOterms.txt
+done
+
+python prepDE.py -g gene_count_pdam_GOterms_matrix.csv -i sample_list_pdam_GOterms.txt
+```
+
+f) Secure-copy gene counts onto local computer
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pdam_GOterms/GTF_merge/gene_count_pdam_GOterms_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/
+```
