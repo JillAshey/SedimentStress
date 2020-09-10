@@ -29,11 +29,7 @@ countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentS
 dim(countdata) # 37630 x 64
 head(countdata)
 
-count_gene <- countdata[grep("MSTRG", countdata$gene_id, invert = TRUE), ]
-
-
-
-
+# count_gene <- countdata[grep("MSTRG", countdata$gene_id, invert = TRUE), ]
 
 # Load metadata 
 metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_HI_metadata_raw.csv", header = TRUE)
