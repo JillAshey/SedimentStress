@@ -1198,7 +1198,7 @@ ls -1 | wc -l
 b) Verify data integrity with md5sum
 
 ```
-sbatch md5sum *.fastq.gz > checkmd5.md5
+md5sum *.fastq.gz > checkmd5.md5
 md5sum -c checkmd5.md5
 ```
 Should output 'OK' next to each file name 
@@ -1208,7 +1208,230 @@ c) Count number of reads per file
 Some files have different @___. There are: HISEQ, HWI
 
 ```
-sbatch zgrep -c "HISEQ" *txt.gz
+sbatch zgrep -c "HISEQ" *fastq.gz
 sbatch zgrep -c "HWI" *txt.gz
 ```
-Submitted batch job 1689855 - for HISEQ2 and 1689856 - for HWI
+Submitted batch job 1717762 - for HISEQ and 
+
+```
+17_ctl2_Of_ZTH_1.fastq.gz:16862085
+17_ctl2_Of_ZTH_2.fastq.gz:16862085
+22_ctl2_Mc_TWF_1.fastq.gz:9492297
+22_ctl2_Mc_TWF_2.fastq.gz:9492297
+23_ctl1_Of_CTX_1.fastq.gz:9890631
+23_ctl1_Of_CTX_2.fastq.gz:9890631
+25_ctl1_Ac_GF_1.fastq.gz:14630151
+25_ctl1_Ac_GF_2.fastq.gz:14630151
+27_ctl2_Ac_YG_1.fastq.gz:15708593
+27_ctl2_Ac_YG_2.fastq.gz:15708593
+28_ctl1_Mc_GBM_1.fastq.gz:18832994
+28_ctl1_Mc_GBM_2.fastq.gz:18832994
+41_ctl3_Ac_RN_1.fastq.gz:16449541
+41_ctl3_Ac_RN_2.fastq.gz:16449541
+42_ctl3_Mc_MGR_1.fastq.gz:16522574
+42_ctl3_Mc_MGR_2.fastq.gz:16522574
+43_ctl3_Of_JVP_1.fastq.gz:16107263
+43_ctl3_Of_JVP_2.fastq.gz:16107263
+44_T41_Of_PVT_1.fastq.gz:14566583
+44_T41_Of_PVT_2.fastq.gz:14566583
+45_T41_Ac_SC_1.fastq.gz:20233577
+45_T41_Ac_SC_2.fastq.gz:20233577
+46_T41_Mc_QYH_1.fastq.gz:13610746
+46_T41_Mc_QYH_2.fastq.gz:13610746
+```
+
+Interesting...files 1 and 2 have same # of lines. Does this mean they are just the same files?
+
+```
+22
+@HISEQ-H454:145:CAL3CANXX:3:1101:4861:1998 1:N:0:AGTCAA
+@HISEQ-H454:145:CAL3CANXX:3:1101:4861:1998 2:N:0:AGTCAA
+
+44
+@HISEQ-H454:145:CAL3CANXX:3:1101:8803:1999 1:N:0:TAGCTT
+@HISEQ-H454:145:CAL3CANXX:3:1101:8803:1999 2:N:0:TAGCTT
+```
+
+Appears that it is the same file for each sample just duplicated for some reason. Going to proceed with *_1.fastq.gz samples
+
+### 2) Run FastQC
+
+a) Write script for checking quality with FastQC 
+
+```
+nano fastqc_raw_include.sh
+
+#!/bin/bash
+#SBATCH -t 24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/jillashey/Francois_data/Florida/scripts
+#SBATCH --error="fastqc_out_raw_include_error"
+#SBATCH --output="fastqc_out_raw_include"
+
+module load FastQC/0.11.8-Java-1.8 
+
+# These samples are the second batch that Francois uploaded to server
+
+for file in /data/putnamlab/jillashey/Francois_data/Florida/data/raw/raw_include/*1.fastq.gz
+do
+fastqc $file --outdir /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/raw_include
+done
+
+sbatch fastqc_raw_include.sh
+```
+Submitted batch job 1717764
+
+b) Make sure all files were processed
+
+```
+cd fastqc_results/raw/raw_include
+ls -1 | wc -l 
+```
+
+### 3) Run MultiQC
+
+a) Make folders for raw MultiWC results
+
+```
+cd Francois_data/Florida
+mkdir multiqc_results/raw/raw_include
+```
+
+b) Run MultiQC. Pretty fast, so don't need to submit job for it 
+
+```
+module load MultiQC/1.7-foss-2018b-Python-2.7.15
+multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw/raw_include/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/raw_include
+```
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_sequence_counts_plot_raw_include.png?token=APHKO37I5RUTC3HB24IQL6C7MA7X2)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_sequence_gc_content_plot_raw_include.png?token=APHKO3452UVGI7MZ3TDBQQ27MA7ZW)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_per_base_sequence_quality_plot_raw_include.png?token=APHKO36RJRHJPWLL74JI6NK7MA74C)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_overrepresented_sequencesi_plot_raw_include.png?token=APHKO33JUOMCTUU2PQKMSVS7MA75U)
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/QC/raw/FL/fastqc_adapter_content_plot_raw_include.png?token=APHKO32GKQCOCEJEPO724LS7MA764)
+
+c) Copy files to local computer 
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/raw_include/multiqc_report.html /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/raw 
+
+scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/raw/raw_include/multiqc_data/ /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/raw
+```
+
+### 4) Trim reads with Trimmomatic 
+
+a) Make trimmed reads folder in all other results folders 
+
+```
+cd Francois_data/Florida
+mkdir data/trimmed/trim_include fastqc_results/trimmed/trim_include multiqc_results/trimmed/trim_include
+```
+
+b) Unzip fastqc files 
+
+Trimmomatic can't process zipped files 
+
+```
+cd data/raw/raw_include 
+sbatch gunzip *1.fastq.gz
+```
+Submitted batch job 1717770
+
+
+c) Write script for Trimmomatic and run on bluewaves
+
+```
+cd scripts
+nano trimmomatic_include.sh
+
+#!/bin/bash
+#SBATCH -t 48:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/jillashey/Francois_data/Florida/scripts
+#SBATCH --error="trimmomatic_include_out_error"
+#SBATCH --output="trimmomatic_include_out"
+
+module load Trimmomatic/0.38-Java-1.8
+
+for file in /data/putnamlab/jillashey/Francois_data/Florida/data/raw/raw_include/*1.fastq
+do
+        java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar SE -phred33 $file $file.trim.fq ILLUMINACLIP:/data/putnamlab/jillashey/Francois_data/Florida/data/Illumina_adapter_reads_PE_SE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:20 >> TrimmedAmount_include.txt
+done
+
+sbatch trimmomatic.sh
+```
+Submitted batch job 1717772
+
+d) Move trimmed files to their own folder 
+
+```
+mv *trim.fq ../trimmed/trim_include
+```
+
+### 5) Check quality of trimmed files 
+
+a) Check number of files 
+
+```
+ls -1 | wc -l
+```
+
+b) Check number of reads
+
+```
+sbatch zgrep -c "HISEQ" *trim.fq
+```
+Submitted batch job 1690400 for HISEQ and 1690401 for HWI
+
+c) Run FastQC on trimmed data
+
+```
+nano fastqc_trim_include.sh
+
+#!/bin/bash
+#SBATCH -t 24:00:00
+#SBATCH --nodes=1 --ntasks-per-node=1
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH -D /data/putnamlab/jillashey/Francois_data/Florida/scripts
+#SBATCH --error="fastqc_out_trim_include_error"
+#SBATCH --output="fastqc_out_trim_include"
+
+module load FastQC/0.11.8-Java-1.8 
+
+for file in /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/trim_include/*trim.fq
+do
+fastqc $file --outdir /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/trimmed/trim_include
+done
+
+sbatch fastqc_trim_include.sh
+```
+
+d) Run MultiQC on trimmed data and moved files 
+
+```
+module load MultiQC/1.7-foss-2018b-Python-2.7.15
+multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/trimmed/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed
+
+scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/multiqc_data /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/trimmed
+
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/multiqc_report.html /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/trimmed
+```
+
