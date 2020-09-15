@@ -1,0 +1,13 @@
+Sample	adapter_content	Sequences flagged as poor quality	sequence_duplication_levels	avg_sequence_length	Encoding	per_base_sequence_quality	sequence_length_distribution	Sequence length	File type	basic_statistics	per_sequence_gc_content	Total Sequences	per_base_n_content	per_base_sequence_content	overrepresented_sequences	%GC	total_deduplicated_percentage	Filename	per_tile_sequence_quality	per_sequence_quality_scores
+17_ctl2_Of_ZTH_1	warn	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	16862085.0	pass	fail	warn	42.0	45.334992063	17_ctl2_Of_ZTH_1.fastq.gz	warn	pass
+22_ctl2_Mc_TWF_1	warn	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	fail	9492297.0	pass	fail	fail	40.0	46.3111077696	22_ctl2_Mc_TWF_1.fastq.gz	warn	pass
+23_ctl1_Of_CTX_1	pass	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	warn	9890631.0	pass	fail	fail	44.0	40.5745751025	23_ctl1_Of_CTX_1.fastq.gz	warn	pass
+25_ctl1_Ac_GF_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	14630151.0	pass	fail	pass	43.0	53.1963472756	25_ctl1_Ac_GF_1.fastq.gz	warn	pass
+27_ctl2_Ac_YG_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	15708593.0	pass	fail	pass	43.0	52.8117824387	27_ctl2_Ac_YG_1.fastq.gz	warn	pass
+28_ctl1_Mc_GBM_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	warn	18832994.0	pass	fail	pass	44.0	53.8442582827	28_ctl1_Mc_GBM_1.fastq.gz	warn	pass
+41_ctl3_Ac_RN_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	16449541.0	pass	fail	pass	43.0	50.5287899541	41_ctl3_Ac_RN_1.fastq.gz	warn	pass
+42_ctl3_Mc_MGR_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	fail	16522574.0	pass	fail	warn	47.0	57.3248769632	42_ctl3_Mc_MGR_1.fastq.gz	warn	pass
+43_ctl3_Of_JVP_1	warn	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	16107263.0	pass	fail	fail	41.0	49.7066658576	43_ctl3_Of_JVP_1.fastq.gz	warn	pass
+44_T41_Of_PVT_1	warn	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	14566583.0	pass	fail	warn	41.0	49.8440764765	44_T41_Of_PVT_1.fastq.gz	warn	pass
+45_T41_Ac_SC_1	warn	0.0	fail	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	pass	20233577.0	pass	fail	pass	43.0	48.6011198582	45_T41_Ac_SC_1.fastq.gz	warn	pass
+46_T41_Mc_QYH_1	warn	0.0	warn	125.0	Sanger / Illumina 1.9	pass	pass	125.0	Conventional base calls	pass	fail	13610746.0	pass	fail	warn	49.0	58.9294013553	46_T41_Mc_QYH_1.fastq.gz	warn	pass
