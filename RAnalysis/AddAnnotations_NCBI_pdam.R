@@ -87,6 +87,7 @@ length(unique(pdam_term_compare$Aliases)) # 10050 unique pdam terms
 newtable <- merge(geneResult, pdam_gene_GOterms, by = "Aliases", all.x=TRUE)
 # Then I can merge the pdamgff3_NCBI with newtable by Symbol
 finaltable <- merge(pdamgff3_NCBI, newtable, by = "Symbol", all.x=TRUE) # yay!! final table! ugly, but info is there
+write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms_raw.gff", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
 
 # Cleaning up table so it fits gff format
 finaltable <- subset(finaltable, select = -Symbol) # removing symbol column
@@ -100,6 +101,9 @@ finaltable <- finaltable %>%
 names(finaltable)[names(finaltable) == "finaltable"] <- "gene"
 finaltable <- finaltable %>% 
   unite(finaltable, GO1:GO14, sep = "", remove = TRUE, na.rm = TRUE)
+names(finaltable)[names(finaltable) == "finaltable"] <- "GOterms"
+write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms_sepcol.gff", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
+write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms_sepcol.csv")
 finaltable <- finaltable %>% 
   unite(finaltable, gene:finaltable, sep = ";", remove = TRUE, na.rm = TRUE)
 

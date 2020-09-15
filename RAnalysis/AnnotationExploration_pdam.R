@@ -8,19 +8,63 @@
 
 # Goal: look for differences between the Pdam annotation files from NCBI and Reef Genomics. 
 
+# Load packages
+library("tidyverse")
+library("dplyr")
+library("genefilter")
+library("ggplot2")
+library("spdep") 
+library("clusterProfiler")
+library("DataCombine")
+
 ## Reef Genomics
 # Load gff 
-pdamgff3_rg <- read.csv("Desktop/GFFs/pdam_annotation.gff3", header=FALSE, sep="\t", skip=2)
+pdamgff3_rg <- read.csv("~/Desktop/GFFs/pdam_annotation.gff3", header=FALSE, sep="\t", skip=2)
 colnames(pdamgff3_rg) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
 dim(pdamgff3_rg) # 835,524 x 9
+file.size("~/Desktop/GFFs/pdam_annotation.gff3")
 
-# Identify the unique parts
+length(unique(pdamgff3_rg$scaffold))
+
+# Identify the unique parts -- gene predict
+unique(pdamgff3_rg$Gene.Predict)
+# [1] "maker"           "snap_masked"     "augustus_masked" ""                "repeatmasker"    "blastn"         
+# [7] "est2genome"      "tblastx"         "cdna2genome"     "blastx"          "protein2genome"  "."              
+# [13] "repeatrunner" 
+# Find out many of each unique part is in the annotation file
+G.P_maker_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="maker")
+dim(G.P_maker_pdamgff_rg) # 29372 rows
+G.P_snap_masked_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="snap_masked")
+dim(G.P_snap_masked_pdamgff_rg) # 17795 rows
+G.P_augustus_masked_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="augustus_masked")
+dim(G.P_augustus_masked_pdamgff_rg) # 11521 rows
+G.P_blank_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="")
+dim(G.P_blank_pdamgff_rg) # 500 rows
+G.P_repeatmasker_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="repeatmasker")
+dim(G.P_repeatmasker_pdamgff_rg) # 5850 rows
+G.P_blastn_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="blastn")
+dim(G.P_blastn_pdamgff_rg) # 29216 rows
+G.P_est2genome_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="est2genome")
+dim(G.P_est2genome_pdamgff_rg) # 25691 rows
+G.P_tblastx_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="tblastx")
+dim(G.P_tblastx_pdamgff_rg) # 5049 rows
+G.P_cdna2genome_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="cdna2genome")
+dim(G.P_cdna2genome_pdamgff_rg) # 1572 rows
+G.P_blastx_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="blastx")
+dim(G.P_blastx_pdamgff_rg) # 423427 rows
+G.P_protein2genome_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="protein2genome")
+dim(G.P_protein2genome_pdamgff_rg) # 285177 rows
+G.P_._pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict==".")
+dim(G.P_._pdamgff_rg) # 336 rows
+G.P_repeatrunner_pdamgff_rg <- subset(pdamgff3_rg, Gene.Predict=="repeatrunner")
+dim(G.P_repeatrunner_pdamgff_rg) # 18 rows
+
+# Identify the unique parts -- ids
 unique(pdamgff3_rg$id)
 # [1] "gene"                        "mRNA"                        "exon"                        "five_prime_UTR"             
 # [5] "CDS"                         "three_prime_UTR"             "match"                       "match_part"                 
 # [9] ""                            "expressed_sequence_match"    "translated_nucleotide_match" "protein_match"              
 # [13] "contig"
-
 # Find out many of each unique part is in the annotation file
 gene_pdamgff_rg <- subset(pdamgff3_rg, id=="gene")
 dim(gene_pdamgff_rg) # 1675 rows
@@ -61,15 +105,32 @@ dim(gene_GO_pdamgff_rg) # 794 rows - which is half of 1588. So only 794 genes ha
 
 ## NCBI
 # Load gff
-pdamgff3_NCBI <- read.csv("Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff", header=FALSE, sep="\t", skip=6)
+pdamgff3_NCBI <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff", header=FALSE, sep="\t", skip=6)
 colnames(pdamgff3_NCBI) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
 dim(pdamgff3_NCBI) # 516,693 x 9
 
-# Identify the unique parts
+length(unique(pdamgff3_NCBI$scaffold))
+
+# Identify the unique parts -- gene predict 
+unique(pdamgff3_NCBI$Gene.Predict)
+# [1] ""            "RefSeq"      "Gnomon"      "tRNAscan-SE" "cmsearch"   
+# Find out many of each unique part is in the annotation file
+G.P_blank_pdamgff_NCBI <- subset(pdamgff3_NCBI, Gene.Predict=="")  
+dim(G.P_blank_pdamgff_NCBI) # 8787 rows
+G.P_RefSeq_pdamgff_NCBI <- subset(pdamgff3_NCBI, Gene.Predict=="RefSeq")  
+dim(G.P_RefSeq_pdamgff_NCBI) # 23494 rows
+G.P_Gnomon_pdamgff_NCBI <- subset(pdamgff3_NCBI, Gene.Predict=="Gnomon")  
+dim(G.P_Gnomon_pdamgff_NCBI) # 483246 rows
+G.P_tRNAscanSE_pdamgff_NCBI <- subset(pdamgff3_NCBI, Gene.Predict=="tRNAscan-SE")  
+dim(G.P_tRNAscanSE_pdamgff_NCBI) # 1013 rows
+G.P_cmsearch_pdamgff_NCBI <- subset(pdamgff3_NCBI, Gene.Predict=="cmsearch")  
+dim(G.P_cmsearch_pdamgff_NCBI) # 153 rows
+
+
+# Identify the unique parts -- ids
 unique(pdamgff3_NCBI$id)
 # [1] ""           "region"     "gene"       "mRNA"       "exon"       "CDS"        "pseudogene" "lnc_RNA"    "tRNA"       "cDNA_match" "transcript"
 # [12] "snRNA"      "snoRNA"     "guide_RNA"  "rRNA"       "intron"
-
 # Find out many of each unique part is in the annotation file
 blank_pdamgff_NCBI <- subset(pdamgff3_NCBI, id=="")  
 dim(blank_pdamgff_NCBI) # 8787 rows
@@ -141,6 +202,11 @@ dim(pdamgff3_NCBI) # 507,906 rows
 
 
 
+### Looking at genome files for Pdam
+pdamfasta_rg <- read.csv("~/Desktop/GFFs/pdam_scaffolds.fasta", header=FALSE, sep="\t")
+dim(pdamfasta_rg) # 3,912,153 x 1
+GO_pdamgff_rg <- filter(pdamgff3_rg, grepl("GO:", gene)) # only contains genes and mRNAs
+
 
 
 
@@ -194,12 +260,6 @@ pdam_original_GO_tmpfile <- tmp_original.gff3 %>%
   filter(str_detect(gene, "GO:"))
 dim(pdam_original_GO_tmpfile)
 duplicated(pdam_original_GO_tmpfile$gene)
-
-
-
-
-
-
 write.table(pdam.gff_fixed_transcript_genes_only, file="~/Desktop/GFFs/pdam.gff_fixed_transcript_genes_only.gff3", sep="\t", col.names = FALSE, row.names=FALSE, quote=FALSE)
 
 
@@ -209,10 +269,31 @@ write.table(pdam.gff_fixed_transcript_genes_only, file="~/Desktop/GFFs/pdam.gff_
 
 
 
+### Looking at fasta files 
+length(unique(pdamgff3_NCBI$scaffold)) # 8788
+length(unique(pdamgff3_rg$scaffold)) # 338
+# Both of these numbers dont really make sense to me. The # of unique scaffolds in NCBI is greater than the scaffolds in its genome and the # of unique scaffolds is really low in RG
 
 
-andy chan rna-seq
-fun-annotate - github, uses augusuts 
+## NCBI fasta scaffolds
+scaffolds_NCBI <- read.csv(file="~/Desktop/scaffold_NCBI_name.txt", header=FALSE)
+colnames(scaffolds_NCBI) <- c("scaffold", "RG_scaffold", "Kind")
+head(scaffolds_NCBI)
+dim(scaffolds_NCBI) # 4393 x 3
+scaffolds_NCBI$scaffold <- gsub("Pocillopora damicornis isolate RSMAS unplaced genomic scaffold", "", scaffolds_NCBI$scaffold)
+scaffolds_NCBI$length <- sub(":.*", "", scaffolds_NCBI$scaffold)
+scaffolds_NCBI$scaffold <- gsub(".*>", "", scaffolds_NCBI$scaffold)
+scaffolds_NCBI$RG_scaffold <- gsub("ASM370409v1 ", "", scaffolds_NCBI$RG_scaffold)
+length(unique(scaffolds_NCBI$scaffold))
+length(unique(scaffolds_NCBI$RG_scaffold))
+# I have a list associating the NCBI scaffolds with the Reef Genomics scaffolds 
+
+# Clean up NCBI gff
+pdamgff3_NCBI <- pdamgff3_NCBI %>%
+  filter(str_detect(scaffold, "##", negate = TRUE))
+length(unique(pdamgff3_NCBI$scaffold)) # 4393 - aha! once I removed the blanks, the unique scaffold # in gff file now == unique scaffold # in fasta file  
+
+merge_NCBI <- merge(scaffolds_NCBI, pdamgff3_NCBI, by = "scaffold", all=TRUE)
 
 
 
