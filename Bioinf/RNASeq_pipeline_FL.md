@@ -1098,21 +1098,6 @@ Solution: check the formatting of the GTF file, it must contain some lines with 
 
 But the gff has exons...........confused. Going to use the --sjdbGTFfeatureExon .
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 For now, continuing on with gff that still has - gene lengths 
 
 d) Assess assembly quality
@@ -1193,3 +1178,37 @@ g) Secure-copy gene counts onto local computer
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/stringTie/Mcav/GTF_merge/gene_count_mcav_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/
 ```
 
+________________________________________
+
+I did not have all the samples to analyze, but Francois recently uploaded them to Tufts server. I copied them over to Bluewaves and I'm going to put those samples through the pipeline. 
+
+```
+scp jashey@linux.eecs.tufts.edu:/r/corals/Jill/Sediment_FL/*fastq.gz jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/data/raw/raw_include
+```
+
+
+### 1) Check file integrity 
+
+a) Count all files to make sure all downloaded
+
+```
+ls -1 | wc -l
+```
+
+b) Verify data integrity with md5sum
+
+```
+sbatch md5sum *.fastq.gz > checkmd5.md5
+md5sum -c checkmd5.md5
+```
+Should output 'OK' next to each file name 
+
+c) Count number of reads per file 
+
+Some files have different @___. There are: HISEQ, HWI
+
+```
+sbatch zgrep -c "HISEQ" *txt.gz
+sbatch zgrep -c "HWI" *txt.gz
+```
+Submitted batch job 1689855 - for HISEQ2 and 1689856 - for HWI

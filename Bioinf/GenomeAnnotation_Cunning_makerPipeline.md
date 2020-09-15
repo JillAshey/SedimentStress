@@ -186,6 +186,10 @@ maker -CTL # generates files to use with maker
 I'm going to do a test run of maker before doing Ross code. Also need to find some parts to truly replicate his code 
 
 ```
+## This is the control file that I edit to include genome, prediction, transcript, protein, etc information
+
+nano maker_opts.ctl
+
 #-----Genome (these are always required)
 genome=data/putnamlab/jillashey/genome/Pdam/pdam_scaffolds.fasta #genome sequence (fasta file or fasta embeded in GFF3 file)
 organism_type=eukaryotic #eukaryotic or prokaryotic. Default is eukaryotic
@@ -310,6 +314,7 @@ tar -xvf maker-3.01.03.tar
 
 
 Use INSTALL file for installation instructions
+
 ```
 cd src
 perl Build.PL
@@ -417,26 +422,24 @@ But very confused overall. Going to just try to do it from the basics of the bas
 ~~~~~~~~
 
 #### 1) generate control files 
-```
+
 maker -CTL
-```
+
+
 #### 2) Edit maker opts file to specify genome, transcript, and protein path
 
-```
 # in maker_opts.ctl: 
 genome=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
 est=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_transcripts.fasta
 protein=/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_proteins.fasta
 
 # remove / before beginning of path
-```
+
 #### 3) Run maker 
-```
+
 maker 2> maker.error
-```
 
 Didnt work...Gave me this error
-```
 STATUS: Parsing control files...
 STATUS: Processing and indexing input FASTA files...
 ERROR: SplitDB not created correctly
@@ -444,12 +447,10 @@ ERROR: SplitDB not created correctly
  at /opt/software/maker/3.01.03/bin/../lib/GI.pm line 1178.
         GI::split_db("/data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_prote"..., "protein", 10, "/data/putnamlab/jillashey/pdam-genome/JA/maker_test/pdam_scaf"..., "C") called at /opt/software/maker/3.01.03/bin/maker line 531
 --> rank=NA, hostname=bluewaves.uri.edu
-```
 
 SplitDB not created correctly ? 
 Maybe its something to do with the reef genomics files??
 
-```
 nano maker_round0.sh
 
 #!/bin/bash
@@ -469,7 +470,6 @@ module load maker/3.01.03
 maker maker_exe.ctl maker_bopts.ctl maker_opts.ctl 2> maker.error
 
 sbatch maker_round0.sh
-```
 
 No clue...gives me nonzero exit status on bluewaves. Works when I run maker on the command line without submitting a job, but that would take forever and I'd be using all the ram on the 'home' node. 
 
@@ -477,7 +477,6 @@ No clue...gives me nonzero exit status on bluewaves. Works when I run maker on t
 
 Going to attempt to use repeatMasker 
 
-```
 module load RepeatMasker/4.0.9-p2-gompi-2019b-HMMER
 
 sbatch RepeatMasker -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
@@ -485,19 +484,12 @@ sbatch RepeatMasker -species "Pocillopora damicornis" -dir . -a /data/putnamlab/
 Can't locate EMBL.pm in @INC (you may need to install the EMBL module) (@INC contains: /var/spool/slurmd/job1692505 /opt/slurm/lib64/perl5/ /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0 /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0) at /var/spool/slurmd/job1692505/slurm_script line 307.
 
 
-```
 
 Putting in -e argument
 
-```
 sbatch RepeatMasker -e ncbi -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
 
 # same error as above 
 Can't locate EMBL.pm in @INC (you may need to install the EMBL module) (@INC contains: /var/spool/slurmd/job1692506 /opt/slurm/lib64/perl5/ /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/site_perl/5.30.0 /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0/x86_64-linux-thread-multi /opt/software/Perl/5.30.0-GCCcore-8.3.0/lib/perl5/5.30.0) at /var/spool/slurmd/job1692506/slurm_script line 307.
 
-
-```
-
-Adding path to repeatMasker in software 
-
-sbatch /opt/software/RepeatMasker/4.0.9-p2-gompi-2019b-HMMER/RepeatMasker -e ncbi -species "Pocillopora damicornis" -dir . -a /data/putnamlab/jillashey/genome/Pdam/ReefGenomics/pdam_scaffolds.fasta
+Not sure what EMBL module is or how I should install it. Shouldn't these things come preloaded with maker, especially if I'm using them through bluewaves?
