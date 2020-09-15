@@ -378,8 +378,6 @@ sbatch staralign_Ofav.sh
 Submitted batch job 1690404 not working
 
 
-
-
 to isolate name
 
 ```
@@ -1423,15 +1421,148 @@ done
 
 sbatch fastqc_trim_include.sh
 ```
+Submitted batch job 1717848
 
 d) Run MultiQC on trimmed data and moved files 
 
 ```
 module load MultiQC/1.7-foss-2018b-Python-2.7.15
-multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/trimmed/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed
+multiqc /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/trimmed/trim_include/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/trim_include 
 
 scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/multiqc_data /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/trimmed
 
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/multiqc_results/trimmed/multiqc_report.html /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/trimmed
 ```
+
+### 6) Align reads to genome with STAR
+
+####O. fav
+
+a) Generate genome index - already done from above 
+
+```
+# This is the genome index I'll be using 
+--genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Ofav
+```
+
+b) Align reads to genome
+
+```
+mkdir AlignReads_Ofav_include
+cd AlignReads_Ofav_include
+ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/trim_include/*trim.fq .
+
+nano AlignReads_ofav_include.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_Ofav_include_out_error"
+#SBATCH --output="Align_Ofav_include_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Ofav_include
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Ofav --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_ofav_include.sh 
+```
+Submitted batch job 1717853
+
+####A. cerv
+
+a) Generate genome index - already done from above 
+
+```
+# This is the genome index I'll be using 
+--genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Acerv 
+```
+
+b) Align reads to genome
+
+```
+mkdir AlignReads_Acerv_include
+cd AlignReads_Acerv_include
+ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/trim_include/*trim.fq .
+
+nano AlignReads_acerv_include.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_Acerv_include_out_error"
+#SBATCH --output="Align_Acerv_include_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Acerv_include
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Acerv --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_acerv_include.sh 
+```
+Submitted batch job 1717851
+
+####M. cav
+
+a) Generate genome index - already done from above 
+
+```
+# This is the genome index I'll be using 
+--genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav
+```
+
+b) Align reads to genome
+
+```
+mkdir AlignReads_Mcav_include
+cd AlignReads_Mcav_include
+ln -s /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/trim_include/*trim.fq .
+
+nano AlignReads_mcav_include.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_Mcav_include_out_error"
+#SBATCH --output="Align_Mcav_include_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Florida/output/STAR/AlignReads_Mcav_include
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Florida/output/STAR/GenomeIndex_Mcav --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch AlignReads_mcav_include.sh 
+```
+
+Submitted batch job 1717855
 
