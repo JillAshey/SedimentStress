@@ -38,9 +38,9 @@ pdam_DEG_control_vs_high <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentS
 pdam_DEG_mid_vs_high <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/pdam_DEGs.mid_vs_high.csv", header = TRUE)
 # NCBI annotation file edited to include pdam_xx terms and GO terms
 # pdam_annotations <- read.table("~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms_sepcol.csv", header = TRUE) need to find way to save final table raw with GO terms so it actually splits by col
-finaltable # this came from the file AddAnnotations_NCBI_pdam.R
+finaltable <- read.csv("~/Desktop/GFFs/finaltable.csv", header = TRUE)
 
-# control vs mid
+# control vs mid -- focus on this set first 
 ## To run GOseq, I first need to calculate probability weighting function - gives certain 'weights' to set of genes based on biased data (gene lengths) and gene status (DEG y or n)
 ## I calculate probability weighting function with nullp, which requires list of all genes examined with the DEGs labelled as 1 and other genes as 0
 ## I need a list of all genes examined and DEGs for control vs mid 
@@ -79,11 +79,15 @@ m[is.na(m)] <- 0
 DEGs_mid_control <- select(m, c("gene_id", "lfcSE", "len")) # select gene id and column with binary for gene_ids
 colnames(DEGs_mid_control) <- c("gene_id", "DEgenes", "len") # rename so I know its represented DEGs binary 
 dim(DEGs_mid_control)
-tail(DEGs_mid_control)
+dim(gene_lengths)
+head(DEGs_mid_control)
 
 # Now I can calculate pwf. Hooray
 DEGs_mid_control$DEgenes <- as.numeric(DEGs_mid_control$DEgenes) # change to numeric 
 pdam_mid_vs_control_pwf <- nullp(DEGs_mid_control$DEgenes, DEGs_mid_control$gene_id, bias.data=gene_lengths$len)
+
+pdam_mid_vs_control_pwf <- nullp(DEGs_mid_control, gene_lengths$gene_id, bias.data=gene_lengths$len)
+
 plotPWF(pdam_mid_vs_control_pwf) # doesnt look great...but not sure how to normalize 
 dim(pdam_mid_vs_control_pwf)
 
@@ -114,7 +118,7 @@ go_annots_filtered <- na.omit(go_annots)
 m_annot <- merge(go_annots_filtered, gene_lengths, by = "gene_id", all=TRUE) # merged by gene_id
 m_annot_filtered <- na.omit(m_annot)
 # Merge m_annot_filtered by DEGs_mid_control by gene_ids
-m_annot_filtered <- merge(m_annot_filtered, DEGs_mid_control, by = "gene_id", all=TRUE) # merged by gene_id
+full_annot_filtered <- merge(m_annot_filtered, DEGs_mid_control, by = "gene_id", all=TRUE) # merged by gene_id
 
 
 
@@ -128,7 +132,16 @@ m_annot_filtered <- merge(m_annot_filtered, DEGs_mid_control, by = "gene_id", al
 LPS_goseq_res <- goseq(LPS_pwf, names(gene_lengths), gene2cat = annotation_df, method="Wallenius", use_genes_without_cat=TRUE)
 
 
+## from manual 
+# Need to obtain two vectors, one containing all genes assayed and one containing all DE genes 
+de.genes <- pdam_DEG_control_vs_mid_names[,2]
+assayed.genes <- gene_lengths[,1] # make df with just gene id and length in it 
 
+gene.vector <- as.integer(assayed.genes%in%de.genes)
+names(gene.vector) = assayed.genes
+head(gene.vector)
+
+# First, need to quantify length bias with probability weighting function
 
 
 

@@ -23,6 +23,160 @@ library("gridExtra")
 library("clusterProfiler")
 library(stringr)
 
+# Using Hollie code from pdam tawainn experiment as a guide. my code is being weird and i want to see if different code produces the same results 
+
+# Load gene count matrix
+pdam_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/gene_count_pdam_GOterms_matrix.csv", header = TRUE, row.names = "gene_id")
+dim(pdam_counts) # 30180 x 15
+for ( col in 1:ncol(pdam_counts)){
+  colnames(pdam_counts)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(pdam_counts)[col])
+}
+for ( col in 1:ncol(pdam_counts)){
+  colnames(pdam_counts)[col] <-  gsub("X", "", colnames(pdam_counts)[col])
+}
+pdam_counts <- cbind(rownames(pdam_counts), pdam_counts)
+names(pdam_counts)[names(pdam_counts) == 'rownames(pdam_counts)'] <- 'gene'
+pdam_counts$gene <- gsub("\\|.*", "", pdam_counts$gene)
+
+# functional annotation file 
+annot <- read.csv("~/Desktop/GFFs/pdam_NCBI_annotation_fixed_GOterms_sepcol.gff", header = FALSE, sep="\t", skip=6)
+colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr", "GO")
+annot$gene <-gsub(";.*", "", annot$attr)
+annot$gene <-gsub("ID=", "", annot$gene)
+
+# Load metadata 
+metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_HI_metadata_raw.csv", header = TRUE)
+head(metadata)
+# Renaming specific columns
+names(metadata)[names(metadata) == "File.Name.fastq"] <- "SampleID" 
+names(metadata)[names(metadata) == "Treatment.in.mg.L.of.sediment"] <- "Treatment"
+names(metadata)[names(metadata) == "Time.point.in.days"] <- "Days"
+colnames(metadata)
+metadata <- select(metadata, c(Rep, Species, Treatment, Days, Location, File.Name.fastq, SampleID))
+
+
+
+# Replacing certain words/charaacters in columns
+metadata$Treatment <- gsub("400", "high", metadata$Treatment)
+metadata$Treatment <- gsub("40", "mid", metadata$Treatment)
+metadata$Treatment <- gsub("0", "control", metadata$Treatment)
+metadata$SampleID <- gsub(".fastq.gz", "", metadata$SampleID)
+metadata$SampleID <- paste0("X", metadata$SampleID) # add X to front so it matches countdata and isnt treated like a numerical variable 
+metadata$Days <- gsub("7", "seven" ,metadata$Days)
+metadata$Days <- gsub("4", "four" ,metadata$Days)
+# metadata$Treatment <- gsub("<NA>", "unknown", metadata$Treatment)
+rownames(metadata) <- metadata$SampleID # make sampleID the row names 
+metadata <- metadata[-65,] # remove random blank space at the end
+metadata <- na.omit(metadata) # removing rows with NAs
+# Select mcap species only 
+metadata_pdam <- subset(metadata, Species=="Pocillopora damicornis")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Load gene count matrix
 countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/gene_count_pdam_GOterms_matrix.csv", header = TRUE, row.names = "gene_id")

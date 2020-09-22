@@ -113,6 +113,8 @@ write.table(finaltable, file="~/Desktop/GFFs/pdam_NCBI_annotation_fixed.txt", se
 dim(finaltable)
 
 
+write.table(finaltable, file="~/Desktop/GFFs/test.txt", sep="\t", col.names = TRUE, row.names=FALSE, quote=FALSE)
+
 
 
 # The gff file from Reef Genomics 
