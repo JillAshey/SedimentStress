@@ -178,3 +178,40 @@ sbatch InterProScan_test.sh
 ```
 
 Submitted batch job 1716847
+
+BLAST RG protein against scaffolds 
+
+```
+# make database to blast against 
+makeblastdb -in /data/putnamlab/jillashey/genome/Pdam/NCBI/GCF_003704095.1_ASM370409v1_genomic.fna -dbtype nucl
+
+#Building a new DB, current time: 09/21/2020 17:25:54
+#New DB name:   /data/putnamlab/jillashey/genome/Pdam/NCBI/#GCF_003704095.1_ASM370409v1_genomic.fna
+#New DB title:  /data/putnamlab/jillashey/genome/Pdam/NCBI/
+#GCF_003704095.1_ASM370409v1_genomic.fna
+#Sequence type: Nucleotide
+#Keep MBits: T
+#Maximum file size: 1000000000B
+#Adding sequences from FASTA; added 4393 sequences in 5.21443 #seconds.
+
+# Statistically sig matches
+nano RGprot_vs_NCBInucl_pdam_blast.sig.sh
+
+#!/bin/bash
+#SBATCH --job-name="tblastn"
+#SBATCH -t 30-00:00:00
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="RGprot_vs_NCBInucl_pdam_blast_out_error"
+#SBATCH --output="RGprot_vs_NCBInucl_pdam_blast_out"
+
+module load BLAST+/2.8.1-foss-2018b 
+
+tblastn -query pdam_00005244-RA.fasta G-db CF_003704095.1_ASM370409v1_genomic.fna -out RGprot_vs_NCBInucl_pdam_blast.sig.tab -evalue 1e-5 -outfmt 7
+
+sbatch RGprot_vs_NCBInucl_pdam_blast.sig.sh
+
+# Submitted batch job 1741331
+```
