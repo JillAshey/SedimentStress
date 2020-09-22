@@ -1,0 +1,2 @@
+"","gene_id","baseMean","log2FoldChange","lfcSE","stat","pvalue","padj","contrast"
+"1","Acerv_evm.TU.Segkk1852_pilon.2",477.707991553315,3.72209662331075,0.792032734462937,4.69942271493947,2.60897930342137e-06,0.0235277753582539,"Treatment_Treatment1_vs_Treatment4"
