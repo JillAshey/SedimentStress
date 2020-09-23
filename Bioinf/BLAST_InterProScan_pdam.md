@@ -155,7 +155,7 @@ nano InterProScan_test.sh
 echo "START $(date)"
 
 # Load module
-module load InterProScan/5.44-79.0-foss-2018b
+module load InterProScan/5.44-79.0-foss-2018b 
 module load Java/11.0.2
 java -version
 
@@ -178,40 +178,89 @@ sbatch InterProScan_test.sh
 ```
 
 Submitted batch job 1716847
+Did not work 
 
-BLAST RG protein against scaffolds 
+Erin code for IPS
 
 ```
-# make database to blast against 
-makeblastdb -in /data/putnamlab/jillashey/genome/Pdam/NCBI/GCF_003704095.1_ASM370409v1_genomic.fna -dbtype nucl
+#!/bin/bash
+#SBATCH --job-name="InterProScan"
+#SBATCH -t 30-00:00:00
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=erin_chille@uri.edu
+#SBATCH -p putnamlab
 
-#Building a new DB, current time: 09/21/2020 17:25:54
-#New DB name:   /data/putnamlab/jillashey/genome/Pdam/NCBI/#GCF_003704095.1_ASM370409v1_genomic.fna
-#New DB title:  /data/putnamlab/jillashey/genome/Pdam/NCBI/
-#GCF_003704095.1_ASM370409v1_genomic.fna
-#Sequence type: Nucleotide
-#Keep MBits: T
-#Maximum file size: 1000000000B
-#Adding sequences from FASTA; added 4393 sequences in 5.21443 #seconds.
+cd /data/putnamlab/erin_chille/mcap2019/annotations/
 
-# Statistically sig matches
-nano RGprot_vs_NCBInucl_pdam_blast.sig.sh
+echo "START $(date)"
+
+# Load module
+module load InterProScan/5.46-81.0-foss-2019b
+module load Java/11.0.2
+java -version
+
+# Run InterProScan
+interproscan.sh -version
+interproscan.sh -f XML -i ../data/ref/Mcap.IPSprotein.fa -b ./Mcap.interpro.200824  -iprlookup -goterms -pa 
+interproscan.sh -mode convert -f GFF3 -i ./Mcap.interpro.200824.xml -b ./Mcap.interpro.200824
+
+# -i is the input data
+# -b is the output file base
+# -f is formats
+# -iprlookup enables mapping
+# -goterms is GO Term
+# -pa is pathway mapping
+# -version displays version number
+
+echo "DONE $(date)"
+```
+
+Going to try interproscan on Acerv protein data 
+
+```
+nano IPS_acerv.sh
 
 #!/bin/bash
-#SBATCH --job-name="tblastn"
+#SBATCH --job-name="InterProScan"
 #SBATCH -t 30-00:00:00
 #SBATCH --export=NONE
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=jillashey@uri.edu
-#SBATCH --account=putnamlab
-#SBATCH --error="RGprot_vs_NCBInucl_pdam_blast_out_error"
-#SBATCH --output="RGprot_vs_NCBInucl_pdam_blast_out"
 
-module load BLAST+/2.8.1-foss-2018b 
+cd /data/putnamlab/jillashey/annotation/InterProScan/acerv
 
-tblastn -query pdam_00005244-RA.fasta G-db CF_003704095.1_ASM370409v1_genomic.fna -out RGprot_vs_NCBInucl_pdam_blast.sig.tab -evalue 1e-5 -outfmt 7
+echo "START $(date)"
 
-sbatch RGprot_vs_NCBInucl_pdam_blast.sig.sh
+# Load module
+# module load InterProScan/5.46-81.0-foss-2019b - version erin had in her code, not on bluewaves
+module load InterProScan/5.44-79.0-foss-2018b  
+module load Java/11.0.2
+java -version
 
-# Submitted batch job 1741331
+# Run InterProScan
+interproscan.sh -version
+interproscan.sh -f XML -i Acerv_assembly_v1.0.protein.fa -b acerv.interpro -iprlookup -goterms -pa 
+interproscan.sh -mode convert -f GFF3 -i acerv.interpro.xml -b acerv.interpro
+
+echo "DONE $(date)"
+
+sbatch IPS_acerv.sh
 ```
+
+Submitted batch job 1761427 
+Error here - there were * in some of the protein sequences and InterProScan aint too happy about that 
+Have to remove the * with ```sed```
+
+```
+sed -i s/\*//g Acerv_assembly_v1.0.protein.fa
+
+i = in-place (edit file in place)
+s = substitute 
+/replacement_from_reg_exp/replacement_to_text/ = search and replace statement 
+\* = what I want to replace
+Add nothing for replacement_to_text
+g = global (replace all occurances in file)
+```
+
+Submitting acerv IPS job again after removing instances of '*' - Submitted batch job 1761429
