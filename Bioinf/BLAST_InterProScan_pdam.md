@@ -138,6 +138,42 @@ sbatch RG_vs_NCBI_pdam_protein_blast.Uniprot.sh
 Submitted batch job 1716880
 ```
 
+Want to run BLAST on acerv. I want to blast it against a bunch of protein files from different species 
+
+```
+module load BLAST+/2.8.1-foss-2018b 
+
+# protein against protein
+
+# query fasta file
+/data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.protein.fa
+
+# In this run, I'm going to try to blast it remotely. Ie don't make a db and put remote as argument 
+
+# standard
+nano acerv_protein_remote_blast.sh
+
+#!/bin/bash
+#SBATCH --job-name="blastp"
+#SBATCH -t 30-00:00:00
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="acerv_protein_remote_blast_out_error"
+#SBATCH --output="acerv_protein_remote_blast_out"
+
+module load BLAST+/2.8.1-foss-2018b 
+
+blastp -query /data/putnamlab/jillashey/genome/Acerv/Acerv_assembly_v1.0.protein.fa -remote -out acerv_protein_remote_blast.txt
+
+sbatch acerv_protein_remote_blast.sh
+```
+
+Not running, giving me this error: BLAST query/options error: Either a BLAST database or subject sequence(s) must be specified
+Please refer to the BLAST+ user manual. so im going to try to 
+
+
 
 InterProScan
 
