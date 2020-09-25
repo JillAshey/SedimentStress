@@ -171,132 +171,89 @@ sbatch acerv_protein_remote_blast.sh
 ```
 
 Not running, giving me this error: BLAST query/options error: Either a BLAST database or subject sequence(s) must be specified
-Please refer to the BLAST+ user manual. so im going to try to 
+Please refer to the BLAST+ user manual. 
 
-
-
-InterProScan
+BLAST with references. Going to use a few different protein refs from different species to see if I can compare acerv proteins to proteins in all other coral species at once 
 
 ```
-wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/704/095/GCF_003704095.1_ASM370409v1/GCF_003704095.1_ASM370409v1_protein.faa.gz
+# make database to blast against 
+makeblastdb -in /data/putnamlab/jillashey/genome/Adig/GCF_000222465.1_Adig_1.1_protein.faa /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_protein.faa -dbtype prot
 
-nano InterProScan_test.sh
+Nope cant do that. can only do one at a time. Taking out ofav and moving adig protein file here
+ln -s /data/putnamlab/jillashey/genome/Adig/GCF_000222465.1_Adig_1.1_protein.faa .
+
+makeblastdb -in GCF_000222465.1_Adig_1.1_protein.faa -dbtype prot
+
+nano acerv_adig_blastp.sh
+
 #!/bin/bash
-#SBATCH --job-name="InterProScan"
+#SBATCH --job-name="blastp"
 #SBATCH -t 30-00:00:00
 #SBATCH --export=NONE
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="acerv_adig_blastp_out_error"
+#SBATCH --output="acerv_adig_blastp_out"
 
-echo "START $(date)"
+module load BLAST+/2.8.1-foss-2018b 
 
-# Load module
-module load InterProScan/5.44-79.0-foss-2018b 
-module load Java/11.0.2
-java -version
+# Comparing Acerv proteins against Adig proteins 
 
-# Run InterProScan
-interproscan.sh -version
-interproscan.sh -f XML -i GCF_003704095.1_ASM370409v1_protein.faa -b pdam_NCBI.interpro.  -iprlookup -goterms -pa
-interproscan.sh -mode convert -f GFF3 -i pdam_NCBI.interpro.xml -b pdam_NCBI.interpro.
+blastp -query Acerv_assembly_v1.0.protein.fa -db GCF_000222465.1_Adig_1.1_protein.faa -out acerv_adig_blastp.sig.txt -evalue 1e-5 -outfmt 7
 
-# -i is the input data
-# -b is the output file base
-# -f is formats
-# -iprlookup enables mapping
-# -goterms is GO Term
-# -pa is pathway mapping
-# -version displays version number
-echo "DONE $(date)"
-
-sbatch InterProScan_test.sh
+sbatch acerv_adig_blastp.sh
 
 ```
+Submitted batch job 1761749
 
-Submitted batch job 1716847
-Did not work 
-
-Erin code for IPS
+Worked! Maybe try running against a different species? Let's try Ofav
 
 ```
-#!/bin/bash
-#SBATCH --job-name="InterProScan"
-#SBATCH -t 30-00:00:00
-#SBATCH --export=NONE
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=erin_chille@uri.edu
-#SBATCH -p putnamlab
+ln -s /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_protein.faa .
 
-cd /data/putnamlab/erin_chille/mcap2019/annotations/
+makeblastdb -in GCF_002042975.1_ofav_dov_v1_protein.faa -dbtype prot
 
-echo "START $(date)"
-
-# Load module
-module load InterProScan/5.46-81.0-foss-2019b
-module load Java/11.0.2
-java -version
-
-# Run InterProScan
-interproscan.sh -version
-interproscan.sh -f XML -i ../data/ref/Mcap.IPSprotein.fa -b ./Mcap.interpro.200824  -iprlookup -goterms -pa 
-interproscan.sh -mode convert -f GFF3 -i ./Mcap.interpro.200824.xml -b ./Mcap.interpro.200824
-
-# -i is the input data
-# -b is the output file base
-# -f is formats
-# -iprlookup enables mapping
-# -goterms is GO Term
-# -pa is pathway mapping
-# -version displays version number
-
-echo "DONE $(date)"
+Illegal instruction (core dumped) -- gives me this when I try to make the ofav protein db. Weird. Guess I need to try another species 
 ```
 
-Going to try interproscan on Acerv protein data 
+BLAST is only helpful if the protein you are blasting against are labelled already with protein names
+
+Let's try with
+
+
+
+Want to try running Diamond Blast 
 
 ```
-nano IPS_acerv.sh
+nano acerv_diamond_blastp.sh
 
 #!/bin/bash
-#SBATCH --job-name="InterProScan"
+#SBATCH --job-name="diamond-blastp"
 #SBATCH -t 30-00:00:00
 #SBATCH --export=NONE
 #SBATCH --mail-type=BEGIN,END,FAIL
 #SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --mem=100GB
+#SBATCH --error="acerv_diamond_blastp_out_error"
+#SBATCH --output="acerv_diamond_blastp_out"
 
-cd /data/putnamlab/jillashey/annotation/InterProScan/acerv
+echo "START" $(date)
+module load DIAMOND/2.0.0-GCC-8.3.0 #Load DIAMOND
 
-echo "START $(date)"
+diamond blastp -d /data/putnamlab/shared/databases/nr.dmnd -q Acerv_assembly_v1.0.protein.fa -o acerv_annot -f 100 -b20 --more-sensitive -e 0.00001 -k1
 
-# Load module
-# module load InterProScan/5.46-81.0-foss-2019b - version erin had in her code, not on bluewaves
-module load InterProScan/5.44-79.0-foss-2018b  
-module load Java/11.0.2
-java -version
+echo "Search complete... converting format to XML and tab"
 
-# Run InterProScan
-interproscan.sh -version
-interproscan.sh -f XML -i Acerv_assembly_v1.0.protein.fa -b acerv.interpro -iprlookup -goterms -pa 
-interproscan.sh -mode convert -f GFF3 -i acerv.interpro.xml -b acerv.interpro
+diamond view -a acerv_annot.daa -o acerv_annot.xml -f 5
+diamond view -a acerv_annot.daa -o acerv_annot.tab -f 6 qseqid sseqid pident length mismatch gapopen qstart qend sstart send evalue bitscore qlen slen
 
-echo "DONE $(date)"
+echo "STOP" $(date)
 
-sbatch IPS_acerv.sh
-```
-
-Submitted batch job 1761427 
-Error here - there were * in some of the protein sequences and InterProScan aint too happy about that 
-Have to remove the * with ```sed```
+sbatch acerv_diamond_blastp.sh
 
 ```
-sed -i s/\*//g Acerv_assembly_v1.0.protein.fa
+Submitted batch job 1761752
 
-i = in-place (edit file in place)
-s = substitute 
-/replacement_from_reg_exp/replacement_to_text/ = search and replace statement 
-\* = what I want to replace
-Add nothing for replacement_to_text
-g = global (replace all occurances in file)
-```
-
-Submitting acerv IPS job again after removing instances of '*' - Submitted batch job 1761429
+Maybe I could do more if I binded protein files of different species together???
