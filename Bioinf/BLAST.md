@@ -219,9 +219,6 @@ Illegal instruction (core dumped) -- gives me this when I try to make the ofav p
 
 BLAST is only helpful if the protein you are blasting against are labelled already with protein names
 
-Let's try with
-
-
 
 Want to try running Diamond Blast 
 
@@ -257,3 +254,55 @@ sbatch acerv_diamond_blastp.sh
 Submitted batch job 1761752
 
 Maybe I could do more if I binded protein files of different species together???
+
+
+Going to try Blasting Mcav proteins against Adig protein database 
+
+```
+ln -s /data/putnamlab/jillashey/genome/Adig/GCF_000222465.1_Adig_1.1_protein.faa .
+ln -s ../../../genome/Mcav/Mcavernosa_annotation/Mcavernosa.maker.proteins.fasta
+
+makeblastdb -in GCF_000222465.1_Adig_1.1_protein.faa -dbtype prot
+```
+When I try to make db with Adig for Mcav, it gives me this error: Illegal instruction (core dumped) -- gives me this when I try to make the ofav protein db. Weird. Guess I need to try another species
+
+Not sure if it's because I'm on the putnam lab node or if I need to use a different species as db. Let's try a different species
+
+```
+ln -s ../../../genome/Ofav/GCF_002042975.1_ofav_dov_v1_protein.faa
+
+makeblastdb -in GCF_002042975.1_ofav_dov_v1_protein.faa -dbtype prot
+
+```
+Same error as above. Going to get off putnam lab node and try running it on bluewaves. Starting with attempt to make Adig db again.
+
+Okay well that worked. Weird, I wonder why. Is it the putnam lab node or the URI VPN?
+
+Now blasting mcav proteins against Adig protein db
+
+```
+ln -s /data/putnamlab/jillashey/genome/Adig/GCF_000222465.1_Adig_1.1_protein.faa .
+makeblastdb -in GCF_000222465.1_Adig_1.1_protein.faa -dbtype prot
+
+nano mcav_adig_blastp.sh
+
+#!/bin/bash
+#SBATCH --job-name="blastp"
+#SBATCH -t 30-00:00:00
+#SBATCH --export=NONE
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="mcav_adig_blastp_out_error"
+#SBATCH --output="mcav_adig_blastp_out"
+
+module load BLAST+/2.8.1-foss-2018b 
+
+# Comparing Mcav proteins against Adig proteins 
+
+blastp -query Mcavernosa.maker.proteins.fasta -db GCF_000222465.1_Adig_1.1_protein.faa -out mcav_adig_blastp.sig.txt -evalue 1e-5 -outfmt 7
+
+sbatch mcav_adig_blastp.sh
+
+```
+Submitted batch job 1762811
