@@ -23,7 +23,7 @@ library("clusterProfiler")
 library(stringr)
 
 # Load gene count matrix
-mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
+mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -32,13 +32,341 @@ for ( col in 1:ncol(mcav_counts)){
 for ( col in 1:ncol(mcav_counts)){
   colnames(mcav_counts)[col] <-  gsub("X", "", colnames(mcav_counts)[col])
 }
-# In Hollie's code, she read a functional annotation file in here 
-annot <- read.csv("~/Desktop/GFFs/Mcav.gff.annotations.fixed_transcript.gff3",header = FALSE, sep="\t", skip=2)
+# functional annotation gff
+annot <- read.csv("~/Desktop/GFFs/Mcav.gff.annotations.fixed_transcript.gff3",header = FALSE, sep="\t")
 colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr")
 # annot$gene <- annot$attr
 annot <- annot[!grepl("##", annot$scaffold),]
 annot$gene <-gsub(";.*", "", annot$attr)
 annot$gene <-gsub("ID=", "", annot$gene)
+annot$gene <- gsub("-.*", "", annot$gene)
+
+# Load metadata
+metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_FL_metadata.csv", header = TRUE)
+dim(metadata) # 45 by 15
+head(metadata)
+# Selecting only the columns I need for analyses 
+metadata <- select(metadata, c(Rep, Species, Treatment.in.mg.L.of.sediment, Location, File.Name.fastq))
+# Renaming cols
+colnames(metadata) <-c("Replicate","Species", "Treatment", "Location", "SampleID")
+# Select Mcav species only 
+mcav_metadata <- subset(metadata, Species=="Montastraea cavernosa")
+
+# Renaming treatments
+mcav_metadata$Treatment <- gsub("Ctl", "control", mcav_metadata$Treatment)
+mcav_metadata$Treatment <- gsub("T1", "Treatment1", mcav_metadata$Treatment)
+mcav_metadata$Treatment <- gsub("T2", "Treatment2", mcav_metadata$Treatment)
+mcav_metadata$Treatment <- gsub("T3", "Treatment3", mcav_metadata$Treatment)
+mcav_metadata$Treatment <- gsub("T4", "Treatment4", mcav_metadata$Treatment)
+# Removing unwanted text from SampleID
+mcav_metadata$SampleID <- gsub(".txt.gz", "", mcav_metadata$SampleID)
+mcav_metadata$SampleID <- gsub(";.*", "", mcav_metadata$SampleID)
+mcav_metadata$SampleID <- gsub(".fastq.gz", "", mcav_metadata$SampleID)
+mcav_metadata$SampleID <- sub("\\.", "", mcav_metadata$SampleID)
+
+# Making sampleID as rownames in metadata 
+rownames(mcav_metadata) <- mcav_metadata$SampleID
+
+# Filter reads by proportion of samples containing cutoff value
+filt <- filterfun(pOverA(0.85, 5)) # set filter values for P over A; I used 0.85 and 5
+tfil <- genefilter(mcav_counts, filt) # create filter for counts data 
+keep <- mcav_counts[tfil,] # identify genes to keep based on filter
+gn.keep <- rownames(keep)
+mcav_counts_filt <- as.matrix(mcav_counts[which(rownames(mcav_counts) %in% gn.keep),]) 
+write.csv(mcav_counts_filt, "~/Desktop/mcav_counts_filtered.csv")
+storage.mode(mcav_counts_filt) <- "integer" # stores count data as integer 
+# Checking to make sure rownames in metadata == colnames in counts data 
+all(rownames(mcav_metadata) %in% colnames(mcav_counts_filt)) # must come out TRUE
+# Set Treatment as a factor
+mcav_metadata$Treatment <- factor(mcav_metadata$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
+data <- DESeqDataSetFromMatrix(countData = mcav_counts_filt, colData = mcav_metadata, design = ~ Treatment)
+
+# Expression visualization
+# First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. 
+# Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). 
+# Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects.
+# To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. 
+# In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
+SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+SF.data
+print(sizeFactors(SF.data)) #view size factors
+
+vst <- vst(data, blind = FALSE) 
+
+head(assay(vst), 3) # view data
+sampleDists <- dist(t(assay(vst))) # calculate distance matrix
+sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
+rownames(sampleDistMatrix) <- colnames(vst) # assign row names
+colnames(sampleDistMatrix) <- NULL # assign col names 
+colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
+pheatmap(sampleDistMatrix, # plot matrix
+         clustering_distance_rows = sampleDists, # cluster rows
+         clustering_distance_cols = sampleDists, # cluster cols
+         col=colors) # set colors
+plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
+
+# Differential gene expression analysis 
+DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
+# estimating size factors
+# estimating dispersions
+# gene-wise dispersion estimates
+# mean-dispersion relationship
+# final dispersion estimates
+# fitting model and testing
+DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p-value: Treatment Treatment4 vs control' for DEG.int.res? Is it only looking at treatment 4 and control? In DESeq object created above, it says that design is Treatment
+resultsNames(DEG.int) # view DE results 
+
+# Compare C vs T1
+DEG_control_vs_T1 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment1"))
+DEG_control_vs_T1
+DEG_control_vs_T1.sig.num <- sum(DEG_control_vs_T1$padj <0.05, na.rm = T) # identify # of significant pvalues with p< 0.05
+DEG_control_vs_T1.sig.num
+# 19 DEGs
+DEG_control_vs_T1.sig <- subset(DEG_control_vs_T1, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T1.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T1.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_control_vs_T1.sig.list)
+print(sizeFactors(SFtest))
+DEG_control_vs_T1.rsig <- varianceStabilizingTransformation(DEG_control_vs_T1.sig.list, blind = FALSE)
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+DEG_control_vs_T1.sig.list <- as.data.frame(counts(DEG_control_vs_T1.sig.list))
+DEG_control_vs_T1.sig.list["Treatment_Compare"] <- "CvsT1" # adding treatment comparison column
+write.csv(DEG_control_vs_T1.sig.list, file = "~/Desktop/mcav_control_vs_T1_DEG.csv")
+
+# Compare C vs T2
+DEG_control_vs_T2 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment2"))
+DEG_control_vs_T2
+DEG_control_vs_T2.sig.num <- sum(DEG_control_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T2.sig.num
+# 43 DEGs
+DEG_control_vs_T2.sig <- subset(DEG_control_vs_T2, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T2.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T2.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_control_vs_T2.sig.list)
+print(sizeFactors(SFtest))
+DEG_control_vs_T2.rsig <- varianceStabilizingTransformation(DEG_control_vs_T2.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+DEG_control_vs_T2.sig.list <- as.data.frame(counts(DEG_control_vs_T2.sig.list))
+DEG_control_vs_T2.sig.list["Treatment_Compare"] <- "CvsT2" # adding treatment comparison column
+write.csv(DEG_control_vs_T2.sig.list, file = "~/Desktop/mcav_control_vs_T2_DEG.csv")
+
+# Compare C vs T3
+DEG_control_vs_T3 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment3"))
+DEG_control_vs_T3
+DEG_control_vs_T3.sig.num <- sum(DEG_control_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T3.sig.num
+# 26 DEGs
+DEG_control_vs_T3.sig <- subset(DEG_control_vs_T3, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T3.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_control_vs_T3.sig.list)
+print(sizeFactors(SFtest))
+DEG_control_vs_T3.rsig <- varianceStabilizingTransformation(DEG_control_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+DEG_control_vs_T3.sig.list <- as.data.frame(counts(DEG_control_vs_T3.sig.list))
+DEG_control_vs_T3.sig.list["Treatment_Compare"] <- "CvsT3" # adding treatment comparison column
+write.csv(DEG_control_vs_T3.sig.list, file = "~/Desktop/mcav_control_vs_T3_DEG.csv")
+
+# Compare C vs T4
+DEG_control_vs_T4 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment4"))
+DEG_control_vs_T4
+DEG_control_vs_T4.sig.num <- sum(DEG_control_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T4.sig.num
+# 18 DEGs
+DEG_control_vs_T4.sig <- subset(DEG_control_vs_T4, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T4.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T4.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_control_vs_T4.sig.list)
+print(sizeFactors(SFtest))
+DEG_control_vs_T4.rsig <- varianceStabilizingTransformation(DEG_control_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+DEG_control_vs_T4.sig.list <- as.data.frame(counts(DEG_control_vs_T4.sig.list))
+DEG_control_vs_T4.sig.list["Treatment_Compare"] <- "CvsT4" # adding treatment comparison column
+write.csv(DEG_control_vs_T4.sig.list, file = "~/Desktop/mcav_control_vs_T4_DEG.csv")
+
+# Compare T1 vs T2
+DEG_T1_vs_T2 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment2"))
+DEG_T1_vs_T2
+DEG_T1_vs_T2.sig.num <- sum(DEG_T1_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T2.sig.num
+# 0 DEGs
+
+# Compare T1 vs T3
+DEG_T1_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment3"))
+DEG_T1_vs_T3
+DEG_T1_vs_T3.sig.num <- sum(DEG_T1_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T3.sig.num
+# 1 DEGs
+DEG_T1_vs_T3.sig <- subset(DEG_T1_vs_T3, padj <0.05) # identify and subset significant pvalues
+DEG_T1_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_T1_vs_T3.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_T1_vs_T3.sig.list)
+print(sizeFactors(SFtest))
+DEG_T1_vs_T3.rsig <- rlog(DEG_T1_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# Error in estimateDispersionsFit(object, fitType, quiet = TRUE) : 
+# all gene-wise dispersion estimates are within 2 orders of magnitude
+# from the minimum value, and so the standard curve fitting techniques will not work.
+# One can instead use the gene-wise estimates as final estimates:
+#   dds <- estimateDispersionsGeneEst(dds)
+# dispersions(dds) <- mcols(dds)$dispGeneEst
+# ...then continue with testing using nbinomWaldTest or nbinomLRT
+DEG_T1_vs_T3.sig.list <- as.data.frame(counts(DEG_T1_vs_T3.sig.list))
+DEG_T1_vs_T3.sig.list["Treatment_Compare"] <- "T1vsT3" # adding treatment comparison column
+write.csv(DEG_T1_vs_T3.sig.list, file = "~/Desktop/mcav_T1_vs_T3_DEG.csv")
+
+# Compare T1 vs T4
+DEG_T1_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment4"))
+DEG_T1_vs_T4
+DEG_T1_vs_T4.sig.num <- sum(DEG_T1_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T4.sig.num
+# 0 DEGs
+
+# Compare T2 vs T3
+DEG_T2_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatment3"))
+DEG_T2_vs_T3
+DEG_T2_vs_T3.sig.num <- sum(DEG_T2_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T2_vs_T3.sig.num
+# 1 DEGs
+DEG_T2_vs_T3.sig <- subset(DEG_T2_vs_T3, padj <0.05) # identify and subset significant pvalues
+DEG_T2_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_T2_vs_T3.sig)),] # subsey list of significant genes from original count data 
+SFtest <- estimateSizeFactors(DEG_T2_vs_T3.sig.list)
+print(sizeFactors(SFtest))
+DEG_T2_vs_T3.rsig <- varianceStabilizingTransformation(DEG_T2_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# Error in estimateDispersionsFit(object, fitType, quiet = TRUE) : 
+# all gene-wise dispersion estimates are within 2 orders of magnitude
+# from the minimum value, and so the standard curve fitting techniques will not work.
+# One can instead use the gene-wise estimates as final estimates:
+#   dds <- estimateDispersionsGeneEst(dds)
+# dispersions(dds) <- mcols(dds)$dispGeneEst
+# ...then continue with testing using nbinom WaldTest or nbinomLRT
+DEG_T2_vs_T3.sig.list <- as.data.frame(counts(DEG_T2_vs_T3.sig.list))
+DEG_T2_vs_T3.sig.list["Treatment_Compare"] <- "T2vsT3" # adding treatment comparison column
+write.csv(DEG_T2_vs_T3.sig.list, file = "~/Desktop/mcav_T2_vs_T3_DEG.csv")
+
+# Compare T2 vs T4
+DEG_T2_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatment4"))
+DEG_T2_vs_T4
+DEG_T2_vs_T4.sig.num <- sum(DEG_T2_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T2_vs_T4.sig.num
+# 0 DEGs
+
+# Comapre T3 vs T4
+DEG_T3_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment3", "Treatment4"))
+DEG_T3_vs_T4
+DEG_T3_vs_T4.sig.num <- sum(DEG_T3_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T3_vs_T4.sig.num
+# 0 DEGs
+
+##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT2, T1vsT3, T1vsT4, T2vsT3, T2vsT4, T3vsT4
+DEGs_CvsT1 <- as.data.frame(rownames(DEG_control_vs_T1.sig.list), DEG_control_vs_T1.sig.list$Treatment_Compare)
+colnames(DEGs_CvsT1) <- "DEGs"
+DEGs_CvsT1$Treatment_Compare <- rownames(DEGs_CvsT1)
+DEGs_CvsT2 <- as.data.frame(rownames(DEG_control_vs_T2.sig.list), DEG_control_vs_T2.sig.list$Treatment_Compare)
+colnames(DEGs_CvsT2) <- "DEGs"
+DEGs_CvsT2$Treatment_Compare <- rownames(DEGs_CvsT2)
+DEGs_CvsT3 <- as.data.frame(rownames(DEG_control_vs_T3.sig.list), DEG_control_vs_T3.sig.list$Treatment_Compare)
+colnames(DEGs_CvsT3) <- "DEGs"
+DEGs_CvsT3$Treatment_Compare <- rownames(DEGs_CvsT3)
+DEGs_CvsT4 <- as.data.frame(rownames(DEG_control_vs_T4.sig.list), DEG_control_vs_T4.sig.list$Treatment_Compare)
+colnames(DEGs_CvsT4) <- "DEGs"
+DEGs_CvsT4$Treatment_Compare <- rownames(DEGs_CvsT4)
+DEGs_T1vsT3 <- as.data.frame(rownames(DEG_T1_vs_T3.sig.list), DEG_T1_vs_T3.sig.list$Treatment_Compare)
+colnames(DEGs_T1vsT3) <- "DEGs"
+DEGs_T1vsT3$Treatment_Compare <- rownames(DEGs_T1vsT3)
+DEGs_T2vsT3 <- as.data.frame(rownames(DEG_T2_vs_T3.sig.list), DEG_T2_vs_T3.sig.list$Treatment_Compare)
+colnames(DEGs_T2vsT3) <- "DEGs"
+DEGs_T2vsT3$Treatment_Compare <- rownames(DEGs_T2vsT3)
+
+DEGs.all <- rbind(DEGs_CvsT1,
+                  DEGs_CvsT2, 
+                  DEGs_CvsT3, 
+                  DEGs_CvsT4, 
+                  DEGs_T1vsT3,
+                  DEGs_T2vsT3) 
+write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment.csv")
+DEGs.all_mcav <- DEGs.all$DEGs
+DEGs.all_mcav <- unique(DEGs.all_mcav)
+DEGs.all_mcav <- as.data.frame(DEGs.all_mcav)
+
+
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcav$DEGs), ] # subset list of sig transcripts from original count data
+write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list.csv")
+SFtest <- estimateSizeFactors(unique.sig.list)
+print(sizeFactors(SFtest))
+unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+
+# PCA.plot <- plotPCA(unique.rsig, intgroup = "Treatment") # plot PCA of all samples for DEG only 
+# PCA.plot
+# PC.info <- PCA.plot$data
+
+# PCA plot of diff-expressed genes 
+mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
+percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+mcav_DEGPCAplot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
+  geom_point(size=3) +
+  xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
+  #scale_color_manual(values = c(control="black", Treatment1="skyblue1", Treatment2="skyblue2", Treatment3="skyblue3", Treatment4="skyblue4")) +
+  #scale_color_manual(values = c(control="black", Treatment1="cadetblue3", Treatment2="palevioletred", Treatment3="darkgreen", Treatment4="orange")) +
+  scale_color_manual(values = c(control="lightpink", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+  coord_fixed() +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background
+mcav_DEGPCAplot
+# PCA plot is of differentially expressed genes only
+PC.info <- mcav_DEGPCAplot$data
+ggsave("~/Desktop/mcav_DEGs_PCA.pdf", mcav_DEGPCAplot)
+
+df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
+colnames(df) <- "Treatment"
+ann_colors <- list(Treatment = c(control="lightpink", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray"))
+list(colnames(mcav_counts))
+col.order <- c("20_T12_Mc_PWC",
+               "21_T33_Mc_EOU",
+               "22_ctl2_Mc_TWF_1",
+               "28_ctl1_Mc_GBM_1",
+               "29_T23_Mc_PND",
+               "33_T43_Mc_RFV",
+               "34_T22_Mc_SVS",
+               "39_T13_Mc_FJE", 
+               "42_ctl3_Mc_MGR_1",
+               "46_T41_Mc_QYH_1",
+               "49_T31_Mc_SWQ",
+               "55_T32_Mc_TWP",
+               "56_T42_Mc_JAW",
+               "58_T21_Mc_EAH",
+               "61_T11_Mc_RAP")
+
+unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
+unique.DEG.annot$gene <- rownames(unique.DEG.annot) # make column with gene names
+unique.DEG.annot <- merge(unique.DEG.annot, annot, by = "gene") # merge annotation file with df of sig genes by gene id
+unique.DEG.annot <- unique.DEG.annot[!duplicated(unique.DEG.annot$gene),] # remove duplicate rows
+rownames(unique.DEG.annot) <- unique.DEG.annot$gene
+write.csv(unique.DEG.annot, file = "~/Desktop/mcav_unique_DEG_annotated.csv")
+
+unique.DEG.annot <- unique.DEG.annot[,2:16]
+rownames(df) <- colnames(unique.DEG.annot)
+# unique.DEG.annot <- unique.DEG.annot[,-16]
+mat <- as.matrix(unique.DEG.annot)
+mat <- mat[,col.order]
+
+#dev.off()
+#pdf(file = "~/Desktop/Unique_Heatmap.DEG_Annotated.pdf")
+mcav_heatmap <- pheatmap(mat, 
+                         annotation_col = df,
+                         annotation_colors = ann_colors,
+                         scale = "row",
+                         show_rownames = T,
+                         fontsize_row = 4,
+                         cluster_cols = T,
+                         show_colnames = T)
+#dev.off()
+# plot has all treatment comparisons 
+ggsave("~/Desktop/mcav_DEGs_heatmap.pdf", mcav_heatmap)
 
 
 
@@ -73,12 +401,65 @@ annot$gene <-gsub("ID=", "", annot$gene)
 
 
 
+## Connecting IPS annotations to full annotations
+mcav_IPS <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/InterProScan/mcav.interpro.gff3", header = FALSE, sep="\t", skip=4)
+length(unique(mcav_IPS$V1)) # 716241
+colnames(mcav_IPS) <- c("prot", "Predict", "id", "start","stop", "pos1", "pos2","pos3", "attr")
+mcav_IPS_GO <- filter(mcav_IPS, grepl("GO:", attr)) # select only rows with GO terms
+
+# Rename annotation gff cols to merge annot and interproscan file 
+annot$gene <- paste0(annot$gene, "-RA")
+colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr", "prot")
+
+# merge annot and interproscan file by protein
+mcav_merge <- merge(annot, mcav_IPS_GO, by = "prot", all.x = TRUE)
+mcav_merge <- na.omit(mcav_merge)
+
+# subset bu Pfam predictor
+mcav_pfam_merge <- subset(mcav_merge, Predict == "Pfam")
+
+# Use prot id to merge with DEGs file with full annot file -- will give final annotation of DEGs with GO terms, etc
+colnames(DEGs.all) <- "prot"
+DEGs.all$prot <- paste0(DEGs.all$prot, "-RA")
+mcav_full_annot <- merge(DEGs.all, mcav_pfam_merge, by = "prot", all.x = TRUE)
+write.csv(mcav_full_annot, file = "~/Desktop/mcav_full_annot.csv")
 
 
 
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
+               
 
 
 

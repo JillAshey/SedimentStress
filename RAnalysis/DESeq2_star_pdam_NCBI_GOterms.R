@@ -52,42 +52,204 @@ names(metadata)[names(metadata) == "File.Name.fastq"] <- "SampleID"
 names(metadata)[names(metadata) == "Treatment.in.mg.L.of.sediment"] <- "Treatment"
 names(metadata)[names(metadata) == "Time.point.in.days"] <- "Days"
 colnames(metadata)
-metadata <- select(metadata, c(Rep, Species, Treatment, Days, Location, File.Name.fastq, SampleID))
-
-
-
-# Replacing certain words/charaacters in columns
-metadata$Treatment <- gsub("400", "high", metadata$Treatment)
-metadata$Treatment <- gsub("40", "mid", metadata$Treatment)
-metadata$Treatment <- gsub("0", "control", metadata$Treatment)
-metadata$SampleID <- gsub(".fastq.gz", "", metadata$SampleID)
-metadata$SampleID <- paste0("X", metadata$SampleID) # add X to front so it matches countdata and isnt treated like a numerical variable 
-metadata$Days <- gsub("7", "seven" ,metadata$Days)
-metadata$Days <- gsub("4", "four" ,metadata$Days)
-# metadata$Treatment <- gsub("<NA>", "unknown", metadata$Treatment)
-rownames(metadata) <- metadata$SampleID # make sampleID the row names 
-metadata <- metadata[-65,] # remove random blank space at the end
-metadata <- na.omit(metadata) # removing rows with NAs
-# Select mcap species only 
+metadata <- select(metadata, c(Rep, Species, Treatment, Days, Location, SampleID))
+# select pdam species only
 metadata_pdam <- subset(metadata, Species=="Pocillopora damicornis")
+# Replacing certain words/charaacters in columns
+metadata_pdam$Treatment <- gsub("400", "high", metadata_pdam$Treatment)
+metadata_pdam$Treatment <- gsub("40", "mid", metadata_pdam$Treatment)
+metadata_pdam$Treatment <- gsub("0", "control", metadata_pdam$Treatment)
+metadata_pdam$SampleID <- gsub(".fastq.gz", "", metadata_pdam$SampleID)
+# metadata$SampleID <- paste0("X", metadata$SampleID) # add X to front so it matches countdata and isnt treated like a numerical variable 
+metadata_pdam$Days <- gsub("7", "seven" ,metadata_pdam$Days)
+metadata_pdam$Days <- gsub("4", "four" ,metadata_pdam$Days)
+# metadata$Treatment <- gsub("<NA>", "unknown", metadata$Treatment)
+rownames(metadata_pdam) <- metadata_pdam$SampleID # make sampleID the row names 
+metadata_pdam <- na.omit(metadata_pdam) # removing rows with NAs
 
+# Subset count data for only mcap samples based on SampleID and make sure rows of metadata = cols of count data
+pdam_ID <- metadata_pdam$SampleID
+pdam_counts <- select(pdam_counts, all_of(pdam_ID))
 
+# Filter reads by proportion of samples containing cutoff value
+filt <- filterfun(pOverA(0.85, 5)) # set filter values for P over A; I used 0.85 and 5
+tfil <- genefilter(pdam_counts, filt) # create filter for counts data 
+keep <- pdam_counts[tfil,] # identify genes to keep based on filter
+gn.keep <- rownames(keep)
+pdam_counts_filt <- as.matrix(pdam_counts[which(rownames(pdam_counts) %in% gn.keep),]) 
+storage.mode(pdam_counts_filt) <- "integer" # stores count data as integer 
+# Checking to make sure rownames in metadata == colnames in counts data 
+all(rownames(metadata_pdam) %in% colnames(pdam_counts_filt)) # must come out TRUE
+# write.csv(pdam_counts_filt, file = "~/Desktop/ofav_counts_filt.csv")
+# Set Treatment as a factor
+metadata_pdam$Treatment <- factor(metadata_pdam$Treatment, levels = c("control", "mid", "high"))
+data <- DESeqDataSetFromMatrix(countData = pdam_counts_filt, colData = metadata_pdam, design = ~ Treatment)
 
+# Expression visualization
+# use rld or vst? deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE)
+# rld <- rlog(data, blind = FALSE) # apply regularized log transformation to minimize effects of small counts and normalize wrt library
+# 
+# head(assay(rld), 3) # view data
+# sampleDists <- dist(t(assay(rld))) # calculate distance matrix
+# sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
+# rownames(sampleDistMatrix) <- colnames(rld) # assign row names
+# colnames(sampleDistMatrix) <- NULL # assign col names 
+# colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
+# pheatmap(sampleDistMatrix, # plot matrix
+#          clustering_distance_rows = sampleDists, # cluster rows
+#          clustering_distance_cols = sampleDists, # cluster cols
+#          col=colors) # set colors
+# plotPCA(rld, intgroup = c("Treatment")) # plot PCA of samples with all data 
 
+vst <- vst(data, blind = FALSE) 
 
+head(assay(vst), 3) # view data
+sampleDists <- dist(t(assay(vst))) # calculate distance matrix
+sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
+rownames(sampleDistMatrix) <- colnames(vst) # assign row names
+colnames(sampleDistMatrix) <- NULL # assign col names 
+colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
+pheatmap(sampleDistMatrix, # plot matrix
+         clustering_distance_rows = sampleDists, # cluster rows
+         clustering_distance_cols = sampleDists, # cluster cols
+         col=colors) # set colors
+plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
 
+# Differential gene expression analysis 
+DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
+DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p-value: Treatment Treatment4 vs control' for DEG.int.res? Is it only looking at treatment 4 and control? In DESeq object created above, it says that design is Treatment
+resultsNames(DEG.int) # view DE results 
+# [1] "Intercept"                 "Treatment_mid_vs_control"  "Treatment_high_vs_control"
 
+DEG_control_vs_mid <- results(DEG.int, contrast = c("Treatment", "control", "mid"))
+DEG_control_vs_mid
+DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_mid.sig.num
+# 168 DEGs
+DEG_control_vs_mid.sig <- subset(DEG_control_vs_mid, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_mid.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_mid.sig)),] # subsey list of significant genes from original count data 
+DEG_control_vs_mid.rsig <- rlog(DEG_control_vs_mid.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# When I run rlog: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+# write.csv(counts(DEG_control_vs_mid.sig.list), file = "~Desktop/pdam_control_vs_mid_DEG.csv)
 
+DEG_control_vs_high <- results(DEG.int, contrast = c("Treatment", "control", "high"))
+DEG_control_vs_high
+DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_high.sig.num
+# 328 DEGs
+DEG_control_vs_high.sig <- subset(DEG_control_vs_high, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_high.sig)),] # subsey list of significant genes from original count data 
+DEG_control_vs_high.rsig <- rlog(DEG_control_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# When I run rlog: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+# write.csv(counts(DEG_control_vs_high.sig.list), file = "~Desktop/pdam_control_vs_high_DEG.csv)
 
+DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
+DEG_mid_vs_high
+DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_mid_vs_high.sig.num
+# 3 DEGs
+DEG_mid_vs_high.sig <- subset(DEG_mid_vs_high, padj <0.05) # identify and subset significant pvalues
+DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subsey list of significant genes from original count data 
+DEG_mid_vs_high.rsig <- rlog(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# When I run rlog: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+# Warning message:
+#   In lfproc(x, y, weights = weights, cens = cens, base = base, geth = geth,  :
+#               Estimated rdf < 1.0; not estimating variance
+# write.csv(counts(DEG_mid_vs_high.sig.list), file = "~Desktop/pdam_mid_vs_high_DEG.csv)
 
+##### Unique genes from intersections of DEG in CvMid, CvHigh, MidvHigh
+DEGs_CvsMid <- as.data.frame(rownames(DEG_control_vs_mid.sig.list))
+colnames(DEGs_CvsMid) <- "DEGs"
+DEGs_CvsHigh <- as.data.frame(rownames(DEG_control_vs_high.sig.list))
+colnames(DEGs_CvsHigh) <- "DEGs"
+DEGs_MidvsHigh <- as.data.frame(rownames(DEG_mid_vs_high.sig.list))
+colnames(DEGs_MidvsHigh) <- "DEGs"
 
+DEGs.all <- rbind(DEGs_CvsMid, DEGs_CvsHigh, DEGs_MidvsHigh)
+DEGs.all <- unique(DEGs.all)
+# write.csv(counts(DEGs.all), file = "~Desktop/DEG.all_unique.csv)
 
+DEG_control_vs_mid.sig.comparison <- data.frame("gene" = rownames(DEG_control_vs_mid.sig), "comparison" = "control_vs_mid")
+DEG_control_vs_high.sig.comparison <- data.frame("gene" = rownames(DEG_control_vs_high.sig), "comparison" = "control_vs_mid")
+DEG_mid_vs_high.sig.comparison <- data.frame("gene" = rownames(DEG_mid_vs_high.sig), "comparison" = "control_vs_mid")
+DEGs.all.comparison <- rbind(DEG_control_vs_mid.sig.comparison, DEG_control_vs_high.sig.comparison, DEG_mid_vs_high.sig.comparison)
+DEGs.all.comparison <- unique(DEGs.all.comparison) 
+# write.csv(counts(DEGs.all.comparison), file = "~Desktop/DEG.all.comparison_unique.csv)
+DEGs.all.comparison$gene <- gsub("\\|.*", "", DEGs.all.comparison$gene)
+DEGs.all.comparison.annot <- merge(DEGs.all.comparison, annot, by = "gene")
+# write.csv(DEGs.all.comparison.annot, file = "~/Desktop/DEG.all.comparison_unique.annot.csv")
 
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all$DEGs), ] # subset list of sig transcripts from original count data
+unique.rsig <- rlog(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# When I run rlog: -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
 
+PCA.plot <- plotPCA(unique.rsig, intgroup = "Treatment") # plot PCA of all samples for DEG only 
+PCA.plot
+PC.info <- PCA.plot$data
+# dev.off()
+# jpeg(file="Output/Unique_PCA.DEG.jpg")
+# plot(PC.info$PC1, PC.info$PC2, xlab="PC1 94%", ylab="PC2 2%", pch = c(15, 16)[as.numeric(sample.info$CO2)], col=c("gray", "black")[sample.info$Temperature], cex=1.3)
+# legend(x="bottomright", 
+#        bty="n",
+#        legend = c("ATAC", "ATHC", "HTAC", "HTHC"),
+#        pch = c(15, 16),
+#        col=c("gray", "gray", "black", "black"),
+#        cex=1)
+# dev.off()
 
+df <- as.data.frame(colData(unique.rsig) [, c("Treatment")])
+ann_colors <- list(Treatment = c(control="blue", mid="pink", high="green"))
+colnames(pdam_counts)
+col.order <- c("1_2",
+               "2_2",
+               "4_2",
+               "11_2",
+               "28_2",
+               "35_2",
+               "36_2",
+               "38_2",
+               "39_2",
+               "41_2",
+               "42_2",
+               "47_2")
 
+# Removing excess and isolating gene name              
+unique.DEG.annot <- as.data.frame(counts(unique.sig.list))
+unique.DEG.annot$gene <- rownames(unique.DEG.annot)
+unique.DEG.annot$gene <- gsub("\\|.*", "", unique.DEG.annot$gene)
 
+unique.DEG.annot <- merge(unique.DEG.annot, annot, by = "gene")
+# unique.DEG.annot <- unique.DEG.annot[!duplicated(unique.DEG.annot$gene),]
+rownames(unique.DEG.annot) <- unique.DEG.annot$gene
+# write.csv(unique.DEG.annot, file = "~/Desktop/pdam_unique_DEG_annotated.csv")
 
+unique.DEG.annot <- unique.DEG.annot[,2:13]
+rownames(df) <- colnames(unique.DEG.annot)
+# unique.DEG.annot <- unique.DEG.annot[,-16]
+mat <- as.matrix(unique.DEG.annot)
+
+mat <- mat[,col.order]
+#dev.off()
+#pdf(file = "~/Desktop/Unique_Heatmap.DEG_Annotated.pdf")
+pheatmap(mat, 
+         annotation_col = df,
+         annotation_colors = ann_colors,
+         scale = "row",
+         show_rownames = T,
+         fontsize_row = 4,
+         cluster_cols = T,
+         show_colnames = T)
+#dev.off()
+# plot has all treatment comparisons 
+               
 
 
 
