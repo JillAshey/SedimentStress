@@ -251,7 +251,7 @@ echo "STOP" $(date)
 sbatch acerv_diamond_blastp.sh
 
 ```
-Submitted batch job 1761752
+Submitted batch job 1761752 - exceeded mem
 
 Maybe I could do more if I binded protein files of different species together???
 
