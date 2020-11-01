@@ -301,4 +301,7 @@ sbatch star_align_38_2_plut_noGFF.sh
 ```
 
 Submitted batch job 1669051
-done
+
+38_2 never finished, running again 
+
+Submitted batch job 1768969...did not work

@@ -9,6 +9,10 @@ Running on the putnam lab node (need to be on uri network to use, am using uri v
 Going to try interproscan on Acerv protein data 
 
 ```
+# Check number of proteins
+zgrep -c "^>" Acerv_assembly_v1.0.protein.fa
+33322
+
 nano IPS_acerv.sh
 
 #!/bin/bash
@@ -57,11 +61,17 @@ Submitting acerv IPS job again after removing instances of '*' - Submitted batch
 
 Running on the putnam lab node (need to be on uri network to use, am using uri vpn) because it has the newest version of interproscan. Used IPS_acerv.sh code above. 
 
+Worked! Got a tab file out of it 
+
 #### Mcav
 
 Going to try running InterProScan on Mcav now. IPS seems to take a while, like weeks. but it did finish super fast on Ofav 
 
 ```
+# Check number of proteins
+zgrep -c "^>" Mcavernosa.maker.proteins.fasta
+25142
+
 nano IPS_mcav.sh
 
 #!/bin/bash
@@ -104,6 +114,10 @@ Submitted batch job 10907
 Going to try running InterProScan on Ofav now. IPS seems to take a while, like weeks. 
 
 ```
+# Check number of proteins
+zgrep -c "^>" GCF_002042975.1_ofav_dov_v1_protein.faa
+32587
+
 nano IPS_ofav.sh
 
 #!/bin/bash
@@ -146,6 +160,10 @@ Ofav finished super fast! I think it was because ofav info is on NCBI so quicker
 #### Pdam
 
 ```
+# Check number of proteins
+zgrep -c "^>" GCF_003704095.1_ASM370409v1_protein.faa.gz
+25183
+
 wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/704/095/GCF_003704095.1_ASM370409v1/GCF_003704095.1_ASM370409v1_protein.faa.gz
 
 nano InterProScan_test.sh
@@ -234,6 +252,10 @@ Worked!
 Trying IPS with plob now
 
 ```
+# Check number of proteins
+zgrep -c "^>" plut2v1.1.proteins.fasta
+31126
+
 nano IPS_plob.sh
 
 #!/bin/bash
@@ -311,7 +333,13 @@ Submitted batch job 13093
 
 #### Pcomp
 
+Remove * before running
+
 ```
+# Check number of proteins
+zgrep -c "^>" Porites_compressa_AA.fa
+74728
+
 nano IPS_pcomp.sh
 
 #!/bin/bash
@@ -369,6 +397,10 @@ Submitted batch job 13098
 #### Mcap
 
 ```
+# Check number of proteins
+zgrep -c "^>" Mcap.protein.fa
+63227
+
 nano IPS_mcap.sh
 
 #!/bin/bash
