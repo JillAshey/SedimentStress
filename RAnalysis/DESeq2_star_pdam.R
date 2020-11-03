@@ -62,7 +62,7 @@ keep <- count_pdam[tfil,] # identify genes to keep based on filter
 gn.keep <- rownames(keep)
 pdam_counts_filt <- as.matrix(count_pdam[which(rownames(count_pdam) %in% gn.keep),]) 
 storage.mode(pdam_counts_filt) <- "integer" # stores count data as integer 
-write.csv(pdam_counts_filt, "~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_counts_filt.csv")
+write.csv(pdam_counts_filt, "~/Desktop/pdam_counts_filt.csv")
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(metadata_pdam) %in% colnames(pdam_counts_filt)) # must come out TRUE
 # Set Treatment as a factor
@@ -97,6 +97,7 @@ pheatmap(sampleDistMatrix, # plot matrix
          col=colors) # set colors
 plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
 
+
 # Differential gene expression analysis 
 DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
 # estimating size factors
@@ -109,6 +110,7 @@ DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p
 resultsNames(DEG.int) # view DE results 
 # [1] "Intercept"                 "Treatment_mid_vs_control"  "Treatment_high_vs_control"
 
+# Compare C and mid 
 DEG_control_vs_mid <- results(DEG.int, contrast = c("Treatment", "control", "mid"))
 DEG_control_vs_mid
 DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
@@ -123,8 +125,11 @@ DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_m
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 # function: y = a/x + b, and a local regression fit was automatically substituted.
 # specify fitType='local' or 'mean' to avoid this message next time.
-write.csv(counts(DEG_control_vs_mid.sig.list), file = "~/Desktop/pdam_control_vs_mid_DEG.csv")
+DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list))
+DEG_control_vs_mid.sig.list["Treatment_Compare"] <- "CvsMid" # adding treatment comparison column
+write.csv(DEG_control_vs_mid.sig.list, file = "~/Desktop/pdam_control_vs_mid_DEG.csv")
 
+# Compare C and high
 DEG_control_vs_high <- results(DEG.int, contrast = c("Treatment", "control", "high"))
 DEG_control_vs_high
 DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
@@ -139,8 +144,11 @@ DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 # function: y = a/x + b, and a local regression fit was automatically substituted.
 # specify fitType='local' or 'mean' to avoid this message next time.
-write.csv(counts(DEG_control_vs_high.sig.list), file = "~/Desktop/pdam_control_vs_high_DEG.csv")
+DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list))
+DEG_control_vs_high.sig.list["Treatment_Compare"] <- "CvsHigh" # adding treatment comparison column
+write.csv(DEG_control_vs_high.sig.list, file = "~/Desktop/pdam_control_vs_high_DEG.csv")
 
+# Compare mid and high
 DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
 DEG_mid_vs_high
 DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
@@ -148,22 +156,27 @@ DEG_mid_vs_high.sig.num
 # 8 DEGs 
 DEG_mid_vs_high.sig <- subset(DEG_mid_vs_high, padj <0.05) # identify and subset significant pvalues
 DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subsey list of significant genes from original count data 
-#DEG_mid_vs_high.sig.list$contrast <- as_factor(c("Treatment_high_vs_control")) # set contrast as a factor 
+DEG_mid_vs_high.sig.list$contrast <- as_factor(c("Treatment_high_vs_control")) # set contrast as a factor 
 SFtest <- estimateSizeFactors(DEG_mid_vs_high.sig.list)
 print(sizeFactors(SFtest))
 DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
-write.csv(counts(DEG_mid_vs_high.sig.list), file = "~/Desktop/pdam_mid_vs_high_DEG.csv")
+DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list))
+DEG_mid_vs_high.sig.list["Treatment_Compare"] <- "MidsHigh" # adding treatment comparison column
+write.csv(DEG_mid_vs_high.sig.list, file = "~/Desktop/pdam_mid_vs_high_DEG.csv")
 
 ##### Unique genes from intersections of DEG 
-DEGs_CvsMid <- as.data.frame(row.names(DEG_control_vs_mid.sig.list))
-colnames(DEGs_CvsMid) <- "DEGs"
-DEGs_CvsHigh <- as.data.frame(row.names(DEG_control_vs_high.sig.list))
-colnames(DEGs_CvsHigh) <- "DEGs"
-DEGs_MidvsHigh <- as.data.frame(row.names(DEG_mid_vs_high.sig.list))
-colnames(DEGs_MidvsHigh) <- "DEGs"
+DEGs_CvsMid <- as.data.frame(DEG_control_vs_mid.sig.list)
+#colnames(DEGs_CvsMid) <- "DEGs"
+DEGs_CvsHigh <- as.data.frame(DEG_control_vs_high.sig.list)
+#colnames(DEGs_CvsHigh) <- "DEGs"
+DEGs_MidvsHigh <- as.data.frame(DEG_mid_vs_high.sig.list)
+#colnames(DEGs_MidvsHigh) <- "DEGs"
 
 DEGs.all <- rbind(DEGs_CvsMid, DEGs_CvsHigh, DEGs_MidvsHigh)
-DEGs.all <- unique(DEGs.all)
+write.csv(DEGs.all, file = "~/Desktop/pdam_DEGs.all_treatment.csv")
+DEGs.all <- select(DEGs.all, -Treatment_Compare)
+DEGs.all$DEGs <- rownames(DEGs.all)
+DEGs.all <- unique(DEGs.all) # 549 unique DEGs
 #unique.sig.num <- length(t(unique(DEGs.all)))
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all$DEGs), ] # subset list of sig transcripts from original count data
@@ -174,6 +187,7 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # function: y = a/x + b, and a local regression fit was automatically substituted.
 # specify fitType='local' or 'mean' to avoid this message next time.
 write.csv(counts(unique.sig.list), file = "~/Desktop/pdam_unique.sig.list.csv")
+
 
 # PCA plot of diff-expressed genes 
 pdam_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
