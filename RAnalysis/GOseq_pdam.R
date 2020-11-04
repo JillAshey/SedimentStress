@@ -23,7 +23,7 @@ library("gridExtra")
 
 
 # Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
-gcounts_filt_pdam <- read.csv("~/Desktop/pdam_counts_filt.csv", header = TRUE) # read data in
+gcounts_filt_pdam <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_counts_filt.csv", header = TRUE) # read data in
 dim(gcounts_filt_pdam) # 13881 rows x 13
 for ( col in 1:ncol(gcounts_filt_pdam)){
   colnames(gcounts_filt_pdam)[col] <-  gsub("X", "", colnames(gcounts_filt_pdam)[col]) # remove X in front of col names
@@ -32,7 +32,7 @@ colnames(gcounts_filt_pdam)[1] <-"gene_id" # make colnames a true column called 
 head(gcounts_filt_pdam)
 length(unique(gcounts_filt_pdam$gene_id)) # 13881 total unique gene ids
 
-DEG_pdam <- read.csv("~/Desktop/pdam_unique.sig.list.csv", header = TRUE) # read in list of significant pdam genes
+DEG_pdam <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_unique.sig.list.csv", header = TRUE) # read in list of significant pdam genes
 dim(DEG_pdam) # 549 x 13
 for ( col in 1:ncol(DEG_pdam)){
   colnames(DEG_pdam)[col] <-  gsub("X", "", colnames(DEG_pdam)[col]) # remove X in front of col names
@@ -128,7 +128,7 @@ DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector b
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/pdam_GOterms_DEGs.csv", header=TRUE)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam_GOterms_DEGs.csv", header=TRUE)
 annot_GO <- select(annot_GO, -X)
 colnames(annot_GO)[1] <-"gene_id"
 annot_GO.ref <- merge(annot_GO, ref, by = "gene_id", all.x= TRUE)
@@ -194,7 +194,7 @@ write.csv(enriched.GO.05, file = "~/Desktop/pdam_Sig_Enriched_GO.05_ALL.csv")
 # Merge GO terms and enriched list 
 colnames(GO.terms) <- c("gene_id", "category")
 enriched_GO.terms <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
-DEG_treatment <- read.csv("~/Desktop/pdam_DEGs.all_treatment.csv", header = TRUE)
+DEG_treatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_DEGs.all_treatment.csv", header = TRUE)
 colnames(DEG_treatment)[1] <-"gene_id"
 ByTreatment_GO.terms <- merge(DEG_treatment, enriched_GO.terms, by = "gene_id", all.x = TRUE)
 ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
@@ -311,8 +311,29 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
 GOplot2
 ggsave("~/Desktop/pdam_GOplot2_05.pdf", GOplot2, width = 28, height = 28, units = c("in"))
 
-
-
+# Combining all and ordering by pvalue
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/pdam_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 32, units = c("in"))
 
 
 

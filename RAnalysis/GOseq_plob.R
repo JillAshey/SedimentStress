@@ -64,7 +64,7 @@ dim(ref) # 31125 x 5 --lost a row? where did it go
 
 # Build a dataframe that links the gene IDs of expressed genes (poverA = 0.85,5), the gene ids of those genes (from the gene map), and the gene lengths (from the annotation file)
 plob_filt.map_unique <- merge(gcounts_filt_plob, map_unique, by = "gene_id", all.x = TRUE) # merge gene counts and map by gene_id
-dim(plob_filt.map_unique) # should be same # of rows as gcounts_filt_plob - it is!
+dim(plob_filt.map_unique) # should be same # of rows as gcounts_filt_plob - it is! 15369
 
 #Find gene positions (start, stop, length) in ref corresponding to expressed genes 
 plob_filt.map_unique.ref <- merge(plob_filt.map_unique, ref, by = "gene_id", all.x= TRUE) 
@@ -168,13 +168,22 @@ write.csv(enriched.GO.05, file = "~/Desktop/plob_Sig_Enriched_GO.05_ALL.csv")
 # Merge GO terms and enriched list 
 colnames(GO.terms) <- c("gene_id", "category")
 enriched_GO.terms <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
-DEG_treatment <- read.csv("~/Desktop/plob_DEGs.all_treatment.csv", header = TRUE)
+DEG_treatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob_DEGs.all_treatment.csv", header = TRUE)
 #DEG_treatment <- select(DEG_treatment, -X)
 colnames(DEG_treatment)[1] <-"gene_id"
 ByTreatment_GO.terms <- merge(DEG_treatment, enriched_GO.terms, by = "gene_id", all.x = TRUE)
 ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
 # now I have a df with DEGs gene names, treatment comparisons, GO terms, and term info
-write.csv(ByTreatment_GO.terms, file = "~/Desktop/plob_ByTreatment_GO.terms")
+MF <- subset(ByTreatment_GO.terms, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),]
+CC <- subset(ByTreatment_GO.terms, ontology=="CC")
+CC <- CC[order(-CC$numDEInCat),]
+BP <- subset(ByTreatment_GO.terms, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),]
+write.csv(ByTreatment_GO.terms, file = "~/Desktop/plob_ByTreatment_GO.terms.csv")
+write.csv(MF, file = "~/Desktop/plob_MF_Sig_Enriched_ByTreatment_GO.05.csv")
+write.csv(CC, file = "~/Desktop/plob_CC_Sig_Enriched_ByTreatment_GO.05.csv")
+write.csv(BP, file = "~/Desktop/plob_BP_Sig_Enriched_ByTreatment_GO.05.csv")
 
 # Plot terms by number of differentially expressed functions
 MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
@@ -259,7 +268,7 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
   geom_point(size=3, aes(colour = ontology)) +
   #geom_text(aes(label = over_represented_pvalue), hjust = 0, vjust = 0, size = 1) +
   coord_flip() +
-  #ylim(0,25) +
+  ylim(0,40) +
   theme(
     panel.grid.minor.y = element_blank(),
     panel.grid.major.y = element_blank(),
@@ -274,9 +283,31 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot2
-# Warning messages:
-#   1: Removed 1 rows containing missing values (geom_segment). 
-# 2: Removed 1 rows containing missing values (geom_point). 
-# 3: Removed 1 rows containing missing values (geom_text). 
-# Got rid of my protein binding rows. thats okay for now because they werent all that interesting anyway
 ggsave("~/Desktop/plot_GOplot2_05.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+
+# Combining all and ordering by pvalue
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  ylim(0,0.05) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/plob_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 28, units = c("in"))
+
+

@@ -31,7 +31,7 @@ colnames(gcounts_filt_mcav)[1] <-"gene_id"
 head(gcounts_filt_mcav)
 
 # Load DEGs
-DEG_mcav <- read.csv("~/Desktop/mcav_unique.sig.list.csv", header = TRUE)
+DEG_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_unique.sig.list.csv", header = TRUE)
 dim(DEG_mcav)
 for ( col in 1:ncol(DEG_mcav)){
   colnames(DEG_mcav)[col] <-  gsub("X", "", colnames(DEG_mcav)[col])
@@ -42,7 +42,7 @@ colnames(DEG_mcav)[1] <-"gene_id"
 map <- read.csv("~/Desktop/GFFs/Mcav.merged.annotated.gtf", header=FALSE, sep="\t")
 colnames(map) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr")
 map <- subset(map, id=="transcript") # select only transcripts
-dim(map) 
+dim(map) # 25605 x 4
 map$gene_id <- gsub(";.*", "", map$attr)
 map$gene_id <- gsub("transcript_id", "", map$gene_id)
 map$gene_id <- gsub("-.*", "", map$gene_id)
@@ -60,11 +60,11 @@ ref$gene_id <- gsub(";.*", "", ref$attr)
 ref$gene_id <- gsub("ID=", "", ref$gene_id)
 ref <- select(ref, c(scaffold, gene.start, gene.stop, gene_id))
 ref <- ref %>% mutate(ref, length = gene.stop - gene.start)
-dim(ref) # 25142 rows
+dim(ref) # 25142 x 5
 
 # Build a dataframe that links the gene IDs of expressed genes (poverA = 0.85,5), the gene ids of those genes (from the gene map), and the gene lengths (from the annotation file)
 mcav_filt.map_unique <- merge(gcounts_filt_mcav, map_unique, by = "gene_id", all.x = TRUE)
-dim(mcav_filt.map_unique) # should be same # of rows as gcounts_filt_mcav - it is!
+dim(mcav_filt.map_unique) # should be same # of rows as gcounts_filt_mcav - it is! 12873
 
 #Find gene positions in ref corresponding to expressed genes 
 mcav_filt.map_unique.ref <- merge(mcav_filt.map_unique, ref, by = "gene_id", all.x= TRUE)
@@ -98,7 +98,7 @@ DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector b
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/mcav_GOterms.csv", header=TRUE)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GOterms.csv", header=TRUE)
 annot_GO <- select(annot_GO, -X)
 colnames(annot_GO)[1] <-"gene_id"
 annot_GO$gene_id <- gsub("-.*", "", annot_GO$gene_id)
@@ -258,7 +258,7 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
   ggplot( aes(x=term, y=numDEInCat) ) +
   geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
   geom_point(size=3, aes(colour = ontology)) +
-  geom_text(aes(label = over_represented_pvalue), hjust = 0, vjust = 0, size = 1) +
+  #geom_text(aes(label = over_represented_pvalue), hjust = 0, vjust = 0, size = 1) +
   coord_flip() +
   ylim(0,15) +
   theme(
@@ -276,6 +276,44 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot2
 ggsave("~/Desktop/mcav_GOplot2_05.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+
+# Combining all and ordering by pvalue
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  ylim(0,0.05) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/mcav_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 28, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
