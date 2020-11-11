@@ -105,7 +105,7 @@ echo "DONE $(date)"
 
 sbatch IPS_mcav.sh
 ```
-Submitted batch job 10907
+Submitted batch job 10907 - finished 
 
 
 
@@ -329,7 +329,7 @@ echo "DONE $(date)"
 
 sbatch IPS_plob.sh
 ```
-Submitted batch job 13093
+Submitted batch job 13093 - finished
 
 #### Pcomp
 
@@ -392,7 +392,7 @@ g = global (replace all occurances in file)
 
 Resubmit IPS_pcomp job with ```sbatch IPS_pcomp.sh```
 
-Submitted batch job 13098
+Submitted batch job 13098 - finished
 
 #### Mcap
 
@@ -445,4 +445,4 @@ sed -i s/\*//g Mcap.protein.fa
 
 Resubmit IPS_mcap job with ```sbatch IPS_mcap.sh```
 
-Submitted batch job 13102
+Submitted batch job 13102 - finished
