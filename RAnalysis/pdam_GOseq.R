@@ -138,7 +138,7 @@ annot_GO.ref <- select(annot_GO.ref, c(gene_id, GO_term))
 
 split_GO <- strsplit(as.character(annot_GO.ref$GO_term), ",")
 GO.terms <- data.frame(v1 = rep.int(annot_GO.ref$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
-colnames(GO.terms) <- c("gene_id", "GO.ID")
+colnames(GO.terms) <- c("gene_id", "GO.ID") 
 # save df here to get gene names with one GO name per row. All GO terms still there, but listed individually 
 write.csv(GO.terms, file = "~/Desktop/pdam_GOterms_ByGene.csv")
 
