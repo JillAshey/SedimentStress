@@ -171,12 +171,11 @@ write.csv(DEG_mid_vs_high.sig.list_full, file = "~/Desktop/pdam_mid_vs_high_DEG_
 DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 
-
-##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
+##### Unique genes from intersections of DEG in CvsMid, CvsHigh, MidvsHigh
 DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full, 
                   DEG_control_vs_high.sig.list_full,
                   DEG_mid_vs_high.sig.list_full)
-write.csv(DEGs.all, file = "~/Desktop/pdam_DEGs.all_treatment.csv")
+write.csv(DEGs.all, file = "~/Desktop/plob_DEGs.all_treatment.csv")
 DEGs.all$DEGs <- rownames(DEGs.all)
 DEGs.all_pdam <- DEGs.all$DEGs
 DEGs.all_pdam <- unique(DEGs.all_pdam)

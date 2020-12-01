@@ -25,7 +25,7 @@ library("VennDiagram")
 
 
 # Load gene count matrix
-countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/gene_count_plob_only_matrix.csv")
+countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob_gene_count_matrix.csv")
 dim(countdata) # 31126 x 17
 for ( col in 1:ncol(countdata)){
   colnames(countdata)[col] <-  gsub("X", "", colnames(countdata)[col])
@@ -43,7 +43,7 @@ annot$gene_id <-gsub("ID=", "", annot$gene_id)
 # subset by gene ? not sure 
 
 # Load plob metadata
-metadata_plob <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/metadata_plob_raw_filtered.csv")
+metadata_plob <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/plob_metadata_raw_filtered.csv")
 metadata_plob <- na.omit(metadata_plob)
 metadata_plob$SampleID <- gsub("X", "", metadata_plob$SampleID)
 rownames(metadata_plob) <- metadata_plob$SampleID
@@ -104,72 +104,67 @@ DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p
 resultsNames(DEG.int) # view DE results 
 # [1] "Intercept"                 "Treatment_mid_vs_control"  "Treatment_high_vs_control"
 
-# Compare C vs mid
+# Compare C and mid 
 DEG_control_vs_mid <- results(DEG.int, contrast = c("Treatment", "control", "mid"))
 DEG_control_vs_mid
-DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with p< 0.05
+DEG_control_vs_mid <- as.data.frame(DEG_control_vs_mid) # make full results into a df
+DEG_control_vs_mid["Treatment_Compare"] <- "CvsMid" # add treatment comparison col
+write.csv(DEG_control_vs_mid, file = "~/Desktop/plob_control_vs_mid_all_genes.csv") # maybe include gene counts too?
+DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_mid.sig.num
 # 109 DEGs
 DEG_control_vs_mid.sig <- subset(DEG_control_vs_mid, padj <0.05) # identify and subset significant pvalues
-DEG_control_vs_mid.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_mid.sig)),] # subsey list of significant genes from original count data 
-SFtest <- estimateSizeFactors(DEG_control_vs_mid.sig.list)
-print(sizeFactors(SFtest))
-DEG_control_vs_mid.rsig <- varianceStabilizingTransformation(DEG_control_vs_mid.sig.list, blind = FALSE)
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-# function: y = a/x + b, and a local regression fit was automatically substituted.
-# specify fitType='local' or 'mean' to avoid this message next time.
-DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list))
-DEG_control_vs_mid.sig.list["Treatment_Compare"] <- "CvsMid" # adding treatment comparison column
-write.csv(DEG_control_vs_mid.sig.list, file = "~/Desktop/plob_control_vs_mid_DEG.csv")
+DEG_control_vs_mid.sig["Treatment_Compare"] <- "CvsMid" # adding treatment comparison column
+DEG_control_vs_mid.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_mid.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list)) # make list of sig gene counts into a df
+DEG_control_vs_mid.sig.list_full <- cbind(DEG_control_vs_mid.sig, DEG_control_vs_mid.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_mid.sig.list_full, file = "~/Desktop/plob_control_vs_mid_DEG_full.csv") # write out csv
+DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_mid.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
-# Compare C vs high
+# Compare C and high
 DEG_control_vs_high <- results(DEG.int, contrast = c("Treatment", "control", "high"))
 DEG_control_vs_high
-DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with p< 0.05
+DEG_control_vs_high <- as.data.frame(DEG_control_vs_high) # make full results into a df
+DEG_control_vs_high["Treatment_Compare"] <- "CvsHigh" # add treatment comparison col
+write.csv(DEG_control_vs_high, file = "~/Desktop/plob_control_vs_high_all_genes.csv") # maybe include gene counts too?
+DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_high.sig.num
 # 92 DEGs
 DEG_control_vs_high.sig <- subset(DEG_control_vs_high, padj <0.05) # identify and subset significant pvalues
-DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_high.sig)),] # subsey list of significant genes from original count data 
-SFtest <- estimateSizeFactors(DEG_control_vs_high.sig.list)
-print(sizeFactors(SFtest))
-DEG_control_vs_high.rsig <- varianceStabilizingTransformation(DEG_control_vs_high.sig.list, blind = FALSE)
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-# function: y = a/x + b, and a local regression fit was automatically substituted.
-# specify fitType='local' or 'mean' to avoid this message next time.
-DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list))
-DEG_control_vs_high.sig.list["Treatment_Compare"] <- "CvsHigh" # adding treatment comparison column
-write.csv(DEG_control_vs_high.sig.list, file = "~/Desktop/plob_control_vs_high_DEG.csv")
+DEG_control_vs_high.sig["Treatment_Compare"] <- "CvsHigh" # adding treatment comparison column
+DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_high.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list)) # make list of sig gene counts into a df
+DEG_control_vs_high.sig.list_full <- cbind(DEG_control_vs_high.sig, DEG_control_vs_high.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_high.sig.list_full, file = "~/Desktop/plob_control_vs_high_DEG_full.csv") # write out csv
+DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
-# Compare mid vs high
+# Compare mid and high
 DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
 DEG_mid_vs_high
-DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with p< 0.05
+DEG_mid_vs_high <- as.data.frame(DEG_mid_vs_high) # make full results into a df
+DEG_mid_vs_high["Treatment_Compare"] <- "MidvsHigh" # add treatment comparison col
+write.csv(DEG_mid_vs_high, file = "~/Desktop/plob_mid_vs_high_all_genes.csv") # maybe include gene counts too?
+DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_mid_vs_high.sig.num
 # 18 DEGs
 DEG_mid_vs_high.sig <- subset(DEG_mid_vs_high, padj <0.05) # identify and subset significant pvalues
-DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subsey list of significant genes from original count data 
-SFtest <- estimateSizeFactors(DEG_mid_vs_high.sig.list)
-print(sizeFactors(SFtest))
-DEG_mid_vs_high.rsig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE)
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-# function: y = a/x + b, and a local regression fit was automatically substituted.
-# specify fitType='local' or 'mean' to avoid this message next time.
-DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list))
-DEG_mid_vs_high.sig.list["Treatment_Compare"] <- "MidvsHigh" # adding treatment comparison column
-write.csv(DEG_mid_vs_high.sig.list, file = "~/Desktop/plob_mid_vs_high_DEG.csv")
+DEG_mid_vs_high.sig["Treatment_Compare"] <- "MidvsHigh" # adding treatment comparison column
+DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subset list of significant genes from original count data 
+DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list)) # make list of sig gene counts into a df
+DEG_mid_vs_high.sig.list_full <- cbind(DEG_mid_vs_high.sig, DEG_mid_vs_high.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_mid_vs_high.sig.list_full, file = "~/Desktop/plob_mid_vs_high_DEG_full.csv") # write out csv
+DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
-##### Unique genes from intersections of DEG 
-DEGs_CvsMid <- as.data.frame(DEG_control_vs_mid.sig.list)
-#colnames(DEGs_CvsMid) <- "DEGs"
-DEGs_CvsHigh <- as.data.frame(DEG_control_vs_high.sig.list)
-#colnames(DEGs_CvsHigh) <- "DEGs"
-DEGs_MidvsHigh <- as.data.frame(DEG_mid_vs_high.sig.list)
-#colnames(DEGs_MidvsHigh) <- "DEGs"
 
-DEGs.all <- rbind(DEGs_CvsMid, DEGs_CvsHigh, DEGs_MidvsHigh)
+##### Unique genes from intersections of DEG in CvsMid, CvsHigh, MidvsHigh
+DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full, 
+                  DEG_control_vs_high.sig.list_full,
+                  DEG_mid_vs_high.sig.list_full)
 write.csv(DEGs.all, file = "~/Desktop/plob_DEGs.all_treatment.csv")
-DEGs.all <- unique(DEGs.all) # 153 unique DEGs
-unique.sig.num <- length(t(unique(DEGs.all)))
+DEGs.all$DEGs <- rownames(DEGs.all)
+DEGs.all_plob <- DEGs.all$DEGs
+DEGs.all_plob <- unique(DEGs.all_plob)
+DEGs.all_plob <- as.data.frame(DEGs.all_plob) # 219 unique DEGs among treatment comparisons
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all$DEGs), ] # subset list of sig transcripts from original count data
 SFtest <- estimateSizeFactors(unique.sig.list)
@@ -179,6 +174,7 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # function: y = a/x + b, and a local regression fit was automatically substituted.
 # specify fitType='local' or 'mean' to avoid this message next time.
 write.csv(counts(unique.sig.list), file = "~/Desktop/plob_unique.sig.list.csv")
+
 
 # PCA plot of diff-expressed genes 
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)

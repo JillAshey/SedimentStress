@@ -69,7 +69,7 @@ dim(plob_filt.map_unique) # should be same # of rows as gcounts_filt_plob - it i
 #Find gene positions (start, stop, length) in ref corresponding to expressed genes 
 plob_filt.map_unique.ref <- merge(plob_filt.map_unique, ref, by = "gene_id", all.x= TRUE) 
 plob_filt.map_unique.ref <- select(plob_filt.map_unique.ref, -c(scaffold.x, gene.start.x, gene.stop.x))
-
+dim(plob_filt.map_unique.ref)
 
 #### Build GOSEQ vector 
 #GOseq requires a vector of all genes and all differentially expressed genes. 
@@ -115,6 +115,7 @@ split_GO <- strsplit(as.character(annot_GO.ref$GO_term), ",")
 GO.terms <- data.frame(v1 = rep.int(annot_GO.ref$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
 colnames(GO.terms) <- c("gene_id", "GO.ID")
 # save df here to get gene names with one GO name per row. All GO terms still there, but listed individually 
+write.csv(GO.terms, file = "~/Desktop/plob_GOterms_ByGene.csv")
 
 GO.terms <- merge(plob_filt.map_unique.ref, GO.terms, by.x = "gene_id")
 dim(GO.terms) # 53388 x 18
@@ -146,6 +147,7 @@ class(GO.wall)
 head(GO.wall)
 tail(GO.wall)
 nrow(GO.wall)
+
 #Find only enriched GO terms that are statistically significant at cutoff - 0.05
 enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
 enriched.GO.05<-data.frame(enriched.GO.05.a)

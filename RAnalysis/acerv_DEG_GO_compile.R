@@ -203,11 +203,6 @@ write.csv(final_DEG_T1vsT4, file = "~/Desktop/acerv_T1_vs_T4_DEG_GO_all.csv")
 
 
 
-# Sig enriched GO terms for acerv DEGs
-enriched_GO <- read.csv("~/Desktop/acerv_Sig_Enriched_GO.05_ALL.csv", header = TRUE)
-
-
-
 
 
 
