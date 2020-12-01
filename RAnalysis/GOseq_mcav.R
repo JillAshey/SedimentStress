@@ -20,6 +20,8 @@ library("adegenet")
 library("goseq")
 library("forcats")
 library("gridExtra")
+library("gapminder")
+
 
 # Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
 gcounts_filt_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_counts_filtered.csv", header = TRUE)
@@ -115,11 +117,12 @@ colnames(GO.terms) <- c("gene_id", "GO.ID")
 GO.terms <- merge(mcav_filt.map_unique.ref, GO.terms, by.x = "gene_id")
 dim(GO.terms) 
 
-GO.terms <- select(GO.terms, c(gene_id, GO.ID))
+GO.terms <- select(GO.terms, gene_id, GO.ID)
 GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
 dim(GO.terms)
 GO.terms[GO.terms == 0] <- "unknown"
 GO.terms <- unique(GO.terms)
+write.csv(GO.terms, file = "~/Desktop/mcav_GOterms.unique.csv")
 GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
 GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
 GO.terms$gene_id <- as.factor(GO.terms$gene_id)
@@ -135,6 +138,8 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/mcav_GO_ALL.csv")
+
 
 #Subset enriched GO terms by category and save as csv
 #How many enriched GO terms do we have
@@ -278,14 +283,18 @@ GOplot2
 ggsave("~/Desktop/mcav_GOplot2_05.pdf", GOplot2, width = 28, height = 28, units = c("in"))
 
 # Combining all and ordering by pvalue
-GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+enriched.GO.05$term <- factor(enriched.GO.05$term, levels = enriched.GO.05$term[order(enriched.GO.05$over_represented_pvalue)])
+
+
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = reorder(term, over_represented_pvalue)) %>%
   mutate(term = fct_reorder(term, ontology)) %>%
-  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  ggplot( aes(x=reorder(term, -over_represented_pvalue), y=over_represented_pvalue) ) +
   geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
-  geom_point(size=3, aes(colour = ontology)) +
+  geom_point(size=3, aes(colour = ontology), stat = "identity") +
   geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
   coord_flip() +
   ylim(0,0.05) +
+  #scale_y_continuous(limits = rev(levels(as.factor(enriched.GO.05$term)))) +
   theme(
     panel.grid.minor.y = element_blank(),
     panel.grid.major.y = element_blank(),
@@ -303,8 +312,47 @@ GOplot2_pvalue
 ggsave("~/Desktop/mcav_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 28, units = c("in"))
 
 
+# year = ontology
+# country = term
+# lifeExp = over_represented_pvalue
 
+# countries_sorted %>%
+#   group_by(year) %>%
+#   top_n(-10) %>%
+#   ungroup() %>%
+#   mutate(year=as.factor(year),
+#          country=fct_reorder(country,lifeExp)) %>%
+#   ggplot(aes(x=country,y=lifeExp, fill=year)) +
+#   geom_col(show.legend = FALSE) +
+#   facet_wrap(~year, scales="free_y")+
+#   coord_flip()
 
+test_ggplot <- enriched.GO.05 %>% 
+                group_by(ontology) %>%
+                ungroup() %>% 
+                mutuate(ontology = as.factor(ontology), 
+                        term = fct_reorder(term, over_represented_pvalue)) %>%                
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology), stat = "identity") +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  ylim(0,0.05) +
+  #scale_y_continuous(limits = rev(levels(as.factor(enriched.GO.05$term)))) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes  
+test_ggplot
 
 
 

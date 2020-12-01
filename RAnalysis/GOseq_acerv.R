@@ -149,6 +149,7 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Warning message:
 #   In goseq(DEG.pwf, ID_vector, gene2cat = GO.terms, method = "Wallenius",  :
 #              Missing length data for 56% of genes.  Accuarcy of GO test will be reduced.
+write.csv(GO.wall, file = "~/Desktop/acerv_GO_ALL.csv")
 
 
 #### Explore enriched GO terms
@@ -183,9 +184,9 @@ colnames(GO.terms) <- c("gene_id","category")
 GO.terms_gene_ids <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
 GO.terms_gene_ids <- unique(GO.terms_gene_ids)
 GO.terms_gene_ids.acerv_genes.map_unique.ref <- merge(acerv_genes.map_unique.ref, GO.terms_gene_ids, by = "gene_id", all.x = TRUE)
-GO.terms_gene_ids.acerv_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.acerv_genes.map_unique.ref)
+#GO.terms_gene_ids.acerv_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.acerv_genes.map_unique.ref)
 GO.terms_gene_ids.acerv_genes.map_unique.ref <- select(GO.terms_gene_ids.acerv_genes.map_unique.ref, -transcript_id)
-GO.terms_gene_ids.acerv_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.acerv_genes.map_unique.ref)
+#GO.terms_gene_ids.acerv_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.acerv_genes.map_unique.ref)
 write.csv(GO.terms_gene_ids.acerv_genes.map_unique.ref, file = "~/Desktop/acerv_GOterms_gene_ids.csv")
 
 # Merge GO terms and enriched list 
@@ -461,3 +462,17 @@ GOplot2 <- enriched.GO.1 %>% drop_na(ontology) %>% mutate(term = fct_reorder(ter
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot2
 ggsave("~/Desktop/GOplot2_1.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+

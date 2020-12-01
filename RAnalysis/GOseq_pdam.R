@@ -336,4 +336,88 @@ GOplot2_pvalue
 ggsave("~/Desktop/pdam_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 32, units = c("in"))
 
 
+# Combining all and ordering by pvalue -- BP
+GOplot2_pvalue <- BP %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/pdam_BP_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 32, units = c("in"))
+
+# Combining all and ordering by pvalue -- CC
+GOplot2_pvalue <- CC %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/pdam_CC_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 32, units = c("in"))
+
+# Combining all and ordering by pvalue -- MF
+GOplot2_pvalue <- MF %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/pdam_MF_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, height = 32, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
 
