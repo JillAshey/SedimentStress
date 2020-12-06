@@ -1,6 +1,8 @@
-# Title: Sediment stress - acerv file compilation
+# Title: Acerv functional annotation
 # Author: Jill Ashey
-# date: 11/17/20
+# date: 12/05/20
+
+
 
 library("tidyverse")
 library("ggplot2")
@@ -8,7 +10,6 @@ library("gplots")
 library("RColorBrewer")
 library("gridExtra")
 library("unpivotr")
-
 
 # Compiling files by treatment comparison so all the info (GO terms, counts, pvalues, etc) is in one place 
 

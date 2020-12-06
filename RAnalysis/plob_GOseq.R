@@ -140,6 +140,8 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/plob_GO_ALL.csv")
+
 
 #Subset enriched GO terms by category and save as csv
 #How many enriched GO terms do we have?

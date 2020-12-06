@@ -180,67 +180,160 @@ write.csv(counts(unique.sig.list), file = "~/Desktop/plob_unique.sig.list.csv")
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=3) +
+  geom_point(size=8) +
+  #geom_text(aes(label=name), hjust=0, vjust=0) +
   xlab(paste0("PC1: ",percentVar_pca_plob[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_plob[2],"% variance")) +
-  scale_color_manual(values = c(control="black", mid = "pink", high = "darkgreen")) +
+  scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
   coord_fixed() +
+  #ggtitle("P. lobata") +
   theme_bw() + #Set background color
-  theme(panel.border = element_blank(), # Set border
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size=25),
+        #title = element_text(size=30),
+        legend.position = "none",
+        panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background
 plob_DEGPCAplot
 # PCA plot is of differentially expressed genes only
-PC.info <- plob_DEGPCAplot$data
-ggsave("~/Desktop/plob_DEGs_PCA.pdf", plob_DEGPCAplot)
+#PC.info <- plob_DEGPCAplot$data
+ggsave("~/Desktop/plob_DEGs_PCA.png", plob_DEGPCAplot, width = 30, height = 20,, units = "cm")
 
-df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
-colnames(df) <- "Treatment"
-colnames(count_plob)
+
+
+
+
+## Heatmap of DEGs
+# This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side
+# Also taking out legend 
+
+# Need a file with counts, gene names, GO IDs, term, and ontology
+
+# To get a file with gene names associated with GO terms, I have to look at pdam_GOterms_ByGene
+# This file is pdam genes with GO terms associated with them. One GO term per line, so multiple pdam gene names sometimes if genes have multiple GO terms
+# This file includes all gene names and GO IDs
+plob_sig <- read.csv("~/Desktop/plob_GOterms_ByGene.csv", header = TRUE)
+plob_sig <- select(plob_sig, -X)
+colnames(plob_sig)[1] <-"gene"
+head(plob_sig)
+
+# Getting col order to order unique counts data
+list(metadata_plob)
+list <- metadata_plob[order(metadata_plob$Treatment),] # need to order them so it will group by treatment in plot
+list(list$SampleID) # look at sample IDs and use that list to make col.order
 col.order <- c("6_1",
-               "7_1",
-               "8_1",
                "9_1",
-               "21_1",
-               "22_1",
-               "23_1",
                "25_1",
                "26_1",
-               "27_1",
+               "8_1",
+               "21_1",
                "29_1",
-               "34_1")
-ann_colors <- list(Treatment = c(control="black", mid = "pink", high = "darkgreen"))
+               "34_1",
+               "7_1",
+               "22_1",
+               "23_1",
+               "27_1")
+  
+# Now I will order the counts data so the samples will group by treatment
+unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
+list(colnames(unique.DEG.annot))
+unique.DEG.annot2 <- unique.DEG.annot[, col.order]
+unique.DEG.annot2$gene <- rownames(unique.DEG.annot2)
 
-# Removing excess and isolating gene name              
-unique.DEG.annot <- as.data.frame(counts(unique.sig.list))
-unique.DEG.annot$gene_id <- rownames(unique.DEG.annot)
-unique.DEG.annot <- merge(unique.DEG.annot, annot, by = "gene_id")
-#rownames(unique.DEG.annot) <- unique.DEG.annot$gene_id
-write.csv(unique.DEG.annot, file = "~/Desktop/plob_unique_DEG_annotated.csv")
+# Now we will take the unique.DEG.annot2 and merge it with acerv_sig
+# The unique.DEG.annot2 file includes gene names for DEGs and counts data
+test_merge <- merge(unique.DEG.annot2, plob_sig, by = "gene", all.x = TRUE)
+# test_merge now holds gene names for DEGs, counts data, and GO.IDs
 
-unique.DEG.annot <- unique.DEG.annot[,1:13]
-unique.DEG.annot <- unique(unique.DEG.annot)
-rownames(unique.DEG.annot)<- unique.DEG.annot$gene_id
-unique.DEG.annot <- select(unique.DEG.annot, -gene_id)
-rownames(df) <- colnames(unique.DEG.annot)
-mat <- as.matrix(unique.DEG.annot)
+# Now we need info about term and ontology 
+GO_all <- read.csv("~/Desktop/plob_GO_ALL.csv", header = TRUE) 
+GO_all <- select(GO_all, -X)
+colnames(GO_all)[1] <-"GO.ID"
+GO_merge <- merge(test_merge, GO_all, by = "GO.ID", all.x = T)
+# Great! GO_merge now contains GO IDs, gene names for DEGs, counts data, over and under represented pvalue, numCat, term, and ontology.
+# All of the genes are in there (sometimes duplicated because multple GO/term/ontology info per gene) and some don't have any GO/term/ontology info. 
+# *** I could also just plot GO_merge, but have duplicate genes for some that have multiple multple GO/term/ontology info per gene. Probably not the best idea tho
 
-mat <- mat[,col.order]
-#dev.off()
-#pdf(file = "~/Desktop/Unique_Heatmap.DEG_Annotated.pdf")
+# Trying to aggregate based on GO terms. Hopefully this works because I also want the term and ontology to also aggregate but i think they may just go.
+# Well maybe I could aggregate multiple times and then bind them? Lets see
+agg_GO <- aggregate(GO_merge$GO.ID, list(GO_merge$gene), paste, collapse = ",") # aggregate GO terms 
+colnames(agg_GO) <- c("gene", "GO.ID")
+agg_term <- aggregate(GO_merge$term, list(GO_merge$gene), paste, collapse = ",") # aggregate term
+colnames(agg_term) <- c("gene", "term")
+agg_ont <- aggregate(GO_merge$ontology, list(GO_merge$gene), paste, collapse = ",") # aggregate ontology
+colnames(agg_ont) <- c("gene", "ontology")
+agg_over <- aggregate(GO_merge$over_represented_pvalue, list(GO_merge$gene), paste, collapse = ",")
+colnames(agg_over) <- c("gene", "over_represented_pvalue")
+
+# Now I'll merge them all together!
+merge_all <- merge(agg_GO, agg_term, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, agg_ont, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, agg_over, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, unique.DEG.annot2, by = "gene", all.x = TRUE)
+write.csv(merge_all, file = "~/Desktop/plob_GO_DEG.csv") # maybe include gene counts too?
+
+
+
+## Hooray! Now I have a lovely file with counts, gene names, GO IDs, term, and ontology 
+# Now I must put it in the heatmap...........
+
+# First, lets make a matrix of gene counts 
+rownames(merge_all) <- merge_all$gene
+mat <- select(merge_all, -c("gene", "GO.ID", "term", "ontology", "over_represented_pvalue"))
+mat <- as.matrix(mat) 
+
+# Now lets make df of only treatment and sample ID
+#df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
+#colnames(df) <- "Treatment"
+#df <- df[order(df$Treatment),]
+#df <- as.data.frame(df)
+#colnames(df) <- "Treatment"
+df <- select(metadata_plob, c("Treatment"))
+#df <- df[order(df$Treatment),]
+# probably just easier to take treatment info straight from metadata file
+
+# Now lets make a df of only gene names 
+df_gene <- as.data.frame(merge_all$gene)
+colnames(df_gene) <- "DEG"
+rownames(df_gene) <- df_gene$DEG
+
+# Some genes have multiple terms, so I am going to select the first term for every gene 
+merge_all$term2 <- merge_all$term
+merge_all$term <- gsub(",.*", "", merge_all$term)
+
+# Some genes have NAs, so subbing blank for NA to see the actual terms
+merge_all[is.na(merge_all$term)] <- " "
+
+#Set colors for treatment
+ann_colors <- list(Treatment = c(control="gray", mid = "darksalmon", high = "darkred"))
+
+
+## Plot heatmap
 plob_heatmap <- pheatmap(mat, 
                          annotation_col = df,
+                         #annotation_row = df_gene,
                          annotation_colors = ann_colors,
-                         scale = "row",
+                         annotation_legend = F,
+                         cluster_rows = F,
                          show_rownames = T,
-                         fontsize_row = 4,
-                         cluster_cols = T,
-                         show_colnames = T)
-#dev.off()
-# plot has all treatment comparisons 
-ggsave("~/Desktop/plob_DEGs_heatmap.pdf", plob_heatmap)
+                         cluster_cols = F,
+                         show_colnames = T,
+                         scale = "row",
+                         fontsize_row = 8,
+                         labels_row = merge_all$term)
+plob_heatmap
+ggsave("~/Desktop/plob_heatmap.png", plob_heatmap, width = 30, height = 20,, units = "cm")
+
+
+
+
+
+
+
+
 
 
 
