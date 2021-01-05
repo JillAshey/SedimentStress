@@ -100,21 +100,21 @@ DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector b
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GOterms.csv", header=TRUE)
-annot_GO <- select(annot_GO, -X)
-colnames(annot_GO)[1] <-"gene_id"
-annot_GO$gene_id <- gsub("-.*", "", annot_GO$gene_id)
-annot_GO.ref <- merge(annot_GO, ref, by = "gene_id", all.x= TRUE)
+annot_GO2 <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GOterms.csv", header=TRUE)
+annot_GO2 <- select(annot_GO2, -X)
+colnames(annot_GO2)[1] <-"gene_id"
+annot_GO2$gene_id <- gsub("-.*", "", annot_GO2$gene_id)
+annot_GO2 <- merge(annot_GO2, ref, by = "gene_id", all.x= TRUE)
 
-annot_GO.ref <- unique(annot_GO.ref)
-annot_GO.ref <- select(annot_GO.ref, c(gene_id, Predict, GO_term))
+annot_GO2 <- unique(annot_GO2)
+annot_GO2 <- select(annot_GO2, c(gene_id, GO_term))
 
-split_GO <- strsplit(as.character(annot_GO.ref$GO_term), ",")
-GO.terms <- data.frame(v1 = rep.int(annot_GO.ref$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
+split_GO <- strsplit(as.character(annot_GO2$GO_term), ",")
+GO.terms <- data.frame(v1 = rep.int(annot_GO2$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
 colnames(GO.terms) <- c("gene_id", "GO.ID")
 # save df here to get gene names with one GO name per row. All GO terms still there, but listed individually 
 
-GO.terms <- merge(mcav_filt.map_unique.ref, GO.terms, by.x = "gene_id")
+GO.terms <- merge(mcav_filt.map_unique.ref, GO.terms, by = "gene_id")
 dim(GO.terms) 
 
 GO.terms <- select(GO.terms, gene_id, GO.ID)
