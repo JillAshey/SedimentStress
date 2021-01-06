@@ -20,29 +20,32 @@ library("adegenet")
 library("goseq")
 library("forcats")
 library("gridExtra")
+library("GO.db")
 
 
 # Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
 gcounts_filt_pdam <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_counts_filt.csv", header = TRUE) # read data in
 dim(gcounts_filt_pdam) # 13881 rows x 13
-for ( col in 1:ncol(gcounts_filt_pdam)){
-  colnames(gcounts_filt_pdam)[col] <-  gsub("X", "", colnames(gcounts_filt_pdam)[col]) # remove X in front of col names
-}
+#for ( col in 1:ncol(gcounts_filt_pdam)){
+# colnames(gcounts_filt_pdam)[col] <-  gsub("X", "", colnames(gcounts_filt_pdam)[col]) # remove X in front of col names
+#}
 colnames(gcounts_filt_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
 head(gcounts_filt_pdam)
 length(unique(gcounts_filt_pdam$gene_id)) # 13881 total unique gene ids
 
+# Import file with DEGs for pdam
 DEG_pdam <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam_unique.sig.list.csv", header = TRUE) # read in list of significant pdam genes
 dim(DEG_pdam) # 549 x 13
-for ( col in 1:ncol(DEG_pdam)){
-  colnames(DEG_pdam)[col] <-  gsub("X", "", colnames(DEG_pdam)[col]) # remove X in front of col names
-}
+#for ( col in 1:ncol(DEG_pdam)){
+#   colnames(DEG_pdam)[col] <-  gsub("X", "", colnames(DEG_pdam)[col]) # remove X in front of col names
+# }
 colnames(DEG_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
 head(DEG_pdam)
 length(unique(DEG_pdam$gene_id)) # 549 total unique gene ids 
 
-#Import merged annotated gtf file
-map <- read.csv("~/Desktop/GFFs/Pdam.merged.annotated.gtf", header=FALSE, sep="\t") # read in merged annotated pdam file created with stringTie
+### I dont think i actually need to use the merged file at all...all the info I need to merge with gcounts_filt is in ref (gene id and length)
+#Import merged annotated gtf file. This was created with stringTie and merged all info about genes expressed in pdam for all samples
+map <- read.csv("~/Desktop/GFFs/Pdam.merged.annotated.gtf", header=FALSE, sep="\t") # merged annotated pdam file created with stringTie
 colnames(map) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr") # name columns
 map <- map[!grepl("#", map$scaffold),] # remove rows that have a # in scaffold col
 map <- map[grep("LOC", map$attr), ] # select all rows that have LOC in attr col
@@ -50,16 +53,16 @@ map$gene_id <- regmatches(map$attr, gregexpr("(?<=gene_name).*", map$attr, perl 
 map$gene_id <- gsub(";.*", "", map$gene_id) # remove everything after ;
 map$gene_id <- gsub(" ", "", map$gene_id) # remove any blank spaces
 map <- subset(map, id=="transcript") # select only transcripts
-map <- select(map, c(scaffold, gene.start, gene.stop, gene_id)) # keep only specified cols
-map_unique <- unique(map) 
+map <- select(map, c(gene_id)) # keep only gene id col
+map_unique <- unique(map) # keep unique rows only
 dim(map_unique) # 26139 x 4
 length(unique(map_unique$gene_id)) # 22734 unique geneids
+# # in this map file, there are 22734 unique gene ids. 
 
-
-# read in reference annotation gff file
-ref <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff",header = FALSE, sep="\t", skip=6)
+# Import reference annotation gff file. This is from NCBI
+ref <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff",header = FALSE, sep="\t", skip=6) # ref file from NCBI
 colnames(ref) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr") # name cols
-ref <- ref[!grepl("##", ref$scaffold),] # remove rows that have a # in scaffold col
+ref <- ref[!grepl("##sequence", ref$scaffold),] # remove rows that have a # in scaffold col
 #ref <- subset(ref, id == "gene") # select only genes -- skipping this for now because I am having some issues with using nullp and lengths of vectors 
 #ref <- ref[grep("XP", ref$attr), ] # isolate XP protein name
 #ref$prot <- gsub(";.*", "", ref$attr)
@@ -71,90 +74,122 @@ ref <- ref[!grepl("character", ref$gene_id),] # remove rows that have 'character
 ref <- select(ref, c(scaffold, gene.start, gene.stop, id, gene_id)) # select only certain cols
 ref <- ref %>% mutate(ref, length = gene.stop - gene.start) # calculate gene length
 dim(ref) # 484440 x 6
-length(unique(ref$gene_id)) # 22799
-ref <- unique(ref)
+length(unique(ref$gene_id)) # 22799 
+ref <- unique(ref) 
+dim(ref) # 388598 x 6
 ref <- subset(ref, id == "gene") # select only genes -- maybe i do need to do this step??
 dim(ref) # 21837 x 6
-#ref <- unique(ref)
+length(unique(ref$gene_id)) # 21562 
+# in this ref file, there are 21562 unique gene ids 
+# Strange that the map file (created by me with stringTie) has more unique gene ids that the ref file (from NCBI). It could be because star/stringTie created 'novel' genes based on 
+# exons splicing in different ways.
+# I only need gene id and length...going to keep just those and throw out scaffold and gene start/stop
+ref <- select(ref, c(length, gene_id)) # select only certain cols
 
-# Build a dataframe that links the gene IDs of expressed genes (poverA = 0.85,5), the gene ids of those genes (from the gene map), and the gene lengths (from the annotation file)
-pdam_filt.map_unique <- merge(map_unique, gcounts_filt_pdam, by = "gene_id", all.x = TRUE) # merge gcounts_filt_pdam and map_unique by gene_id
-dim(pdam_filt.map_unique) # should be same # of rows as gcounts_filt_pdam ?? but it is not... dim is 26139 x 16
+# Build a df that merges gene IDs of expressed genes (poverA) from gcounts_filt_pdam and gene length from ref
+# pdam_filt_ref <- merge(ref, gcounts_filt_pdam, by = "gene_id", all.x = TRUE)
+# pdam_filt_ref <- na.omit(pdam_filt_ref)
+# dim(pdam_filt_ref) # 13568 x 14
+# I thought it supposed to be = to the number of expressed genes (13381), but some genes had no length (and so had NAs)
+# Not going to keep them around because goseq needs gene length to do proper calculations
+# Let's see if its okay that pdam_filt_ref = 13568 unique gene ids
+
+# Build a dataframe that links the gene IDs of expressed genes (poverA = 0.85,5; gcounts_filt_pdam) and the gene IDs of those genes in the merged annotation file (from the gene map; map_unique)
+pdam_filt.map_unique <- merge(gcounts_filt_pdam, map_unique, by = "gene_id", all.x = TRUE, all.y = TRUE) # merge gene counts and map by gene_id
 pdam_filt.map_unique <- na.omit(pdam_filt.map_unique)
-dim(pdam_filt.map_unique) # 16516 rows...still not same as gcounts_filt_pdam
-length(unique(pdam_filt.map_unique$gene_id)) # so there are correct number of ids...maybe I have to remove scaffold?
-pdam_filt.map_unique <- select(pdam_filt.map_unique, -scaffold)
-pdam_filt.map_unique <- unique(pdam_filt.map_unique)
-dim(pdam_filt.map_unique) # still the same...16516
-pdam_filt.map_unique <- select(pdam_filt.map_unique, -c(gene.start, gene.stop)) # remove gene start and stop? idk trying to get number down to match gcounts_filt_pdam
-pdam_filt.map_unique <- unique(pdam_filt.map_unique) # okay finally at 13881! But i will probably need gene lengths......
-# well maybe I wont need gene lengths because i calculate gene lengths in ref above 
+length(unique(pdam_filt.map_unique$gene_id))
+dim(pdam_filt.map_unique)
+# This seems to merely confirm that there are 13881 DEGs that were actually identified in stringTie
 
 #Find gene positions in ref corresponding to expressed genes 
 pdam_filt.map_unique.ref <- merge(pdam_filt.map_unique, ref, by = "gene_id", all.x= TRUE) # merge pdam_filt.map_unique and ref by gene_idpdam_filt.map_unique.ref <- select(pdam_filt.map_unique.ref, -c(scaffold.x, gene.start.x, gene.stop.x)) # remove specified cols
-pdam_filt.map_unique.ref <- select(pdam_filt.map_unique.ref, -c(scaffold, gene.start, gene.stop))
-dim(pdam_filt.map_unique.ref) # 13881 x 18
-#pdam_filt.map_unique.ref <- na.omit(pdam_filt.map_unique.ref) # remove NAs - not sure
-  
+#pdam_filt.map_unique.ref <- na.omit(pdam_filt.map_unique.ref) 
+#not going to omit NAs right now because some genes do not have a length (and thus have NAs)
+#even though the genes that not have lengths will most likely not be used, still want to keep them around for now
+dim(pdam_filt.map_unique.ref) # 13881 x 14
 
 #### Build GOSEQ vector 
 #GOseq requires a vector of all genes and all differentially expressed genes. 
 #Make gene vector
 DEG <- filter(pdam_filt.map_unique.ref, gene_id%in%DEG_pdam$gene_id) #make vector of differentially expressed genes
-dim(DEG) #should be 549 - yes
+dim(DEG) #should be 549 - nope its 520. its because some of the lengths were NAs and those genes then got excluded
 DEG <- DEG$gene_id # I believe I only need the gene ids here 
 DEG <- unique(DEG) # okay unique DEGs # is 549
-DEG_names <- as.vector(DEG)
+DEG_names <- as.vector(DEG) # turn values in vector to be used in goseq
 
 #Make vector of all expressed genes (poverA = 0.85,5) with
 #non-differentially expressed genes as 0 and differentially expressed genes as 1
-gene_vector=as.integer(pdam_filt.map_unique.ref$gene_id%in%DEG_names)
-names(gene_vector)=unique(pdam_filt.map_unique.ref$gene_id)
-length(unique(names(gene_vector))) # 13881
+gene_vector=as.integer(pdam_filt.map_unique.ref$gene_id%in%DEG_names) # assign 0 and 1s
+names(gene_vector)=unique(pdam_filt.map_unique.ref$gene_id) # give gene ids as names in veector
+length(unique(names(gene_vector))) # 13568
 head(gene_vector)
 
 #Make ID vector
-ID_vector <- pdam_filt.map_unique.ref$gene_id
+ID_vector <- pdam_filt.map_unique.ref$gene_id # isolate gene ids
 head(ID_vector)
-ID_vector <- unique(ID_vector)
+ID_vector <- unique(ID_vector) # make sure unique gene ids only 
 
 #Make length vector
-length_vector <- pdam_filt.map_unique.ref$length
+length_vector <- pdam_filt.map_unique.ref$length # isolate gene lengths 
 head(length_vector)
 
 #Calculate Probability Weighting Function
-DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector by length of gene
+DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector (w/ gene names) by length of gene
+# what should plot look like?
+
+
+
 
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam_GOterms_DEGs.csv", header=TRUE)
-annot_GO <- select(annot_GO, -X)
-colnames(annot_GO)[1] <-"gene_id"
-annot_GO.ref <- merge(annot_GO, ref, by = "gene_id", all.x= TRUE)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam_GOterms_DEGs.csv", header=TRUE) # this is the file that contains the pdam genes that were assigned GO terms by InterProScan
+annot_GO <- select(annot_GO, -X) # remove random X col
 
-annot_GO.ref <- unique(annot_GO.ref)
-annot_GO.ref <- select(annot_GO.ref, c(gene_id, GO_term))
-
-split_GO <- strsplit(as.character(annot_GO.ref$GO_term), ",")
-GO.terms <- data.frame(v1 = rep.int(annot_GO.ref$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
+# Build a df that shows individual GO terms assigned with gene (ie one GO term per row)
+split_GO <- strsplit(as.character(annot_GO$GO_term), ",")
+GO.terms <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(split_GO, length)), v2 = unlist(split_GO)) #list all genes with each of their GO terms in a single row
 colnames(GO.terms) <- c("gene_id", "GO.ID") 
-# save df here to get gene names with one GO name per row. All GO terms still there, but listed individually 
-write.csv(GO.terms, file = "~/Desktop/pdam_GOterms_ByGene.csv")
-
-GO.terms <- merge(pdam_filt.map_unique.ref, GO.terms, by.x = "gene_id")
+# write csv to save gene names with one GO name per row. All GO terms still there, but listed individually 
+write.csv(GO.terms, file = "~/Desktop/pdam_GOterms_ByGeneOnly.csv")
+# merge pdam_filt.map_unique.ref and GO terms so that there will be a df with individual go terms, gene lengths, gene names, etc
+GO.terms <- merge(pdam_filt_ref, GO.terms, by.x = "gene_id")
 dim(GO.terms) # 1072 x 19
-
-GO.terms <- select(GO.terms, c(gene_id, GO.ID))
-GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
-dim(GO.terms)
-GO.terms[GO.terms == 0] <- "unknown"
-GO.terms <- unique(GO.terms)
-GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
-GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
-GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+# Write csv to save file with gene names, one GO term per row, gene length, and gene counts
+write.csv(GO.terms, file = "~/Desktop/pdam_GOterms_ByGene.csv")
+GO.terms <- select(GO.terms, c(gene_id, GO.ID)) # select only gene id and GO.ID
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID) # make GO.ID a character variable
+dim(GO.terms) 
+GO.terms[GO.terms == 0] <- "unknown" # make terms that = 0 are replaced with the word 'unknown'
+GO.terms <- unique(GO.terms) 
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown") # replace word 'unknown' with NAs
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID) # make GO.ID a factor variable
+GO.terms$gene_id <- as.factor(GO.terms$gene_id) # make gene id a factor variable
 head(GO.terms, 10)
 tail(GO.terms, 10)
+dim(GO.terms) # 686 x 2
+
+
+
+gcount <- select(gcounts_filt_pdam, "gene_id")
+merge <- merge(gcount, annot_GO, by = "gene_id", all.x = T)
+write.csv(merge, file = "~/Desktop/merge_pdam_check.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### Perform GOseq
@@ -164,13 +199,13 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
-
 #Subset enriched GO terms by category and save as csv
-#How many enriched GO terms do we have
-class(GO.wall)
+write.csv(GO.wall, file = "~/Desktop/pdam_GO_ALL.csv")
+class(GO.wall) #data.frame
 head(GO.wall)
 tail(GO.wall)
-nrow(GO.wall)
+#How many enriched GO terms?
+nrow(GO.wall) # 253
 
 #Find only enriched GO terms that are statistically significant at cutoff - 0.05
 enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
@@ -414,8 +449,9 @@ ggsave("~/Desktop/pdam_MF_GOplot2_pvalue_05.pdf", GOplot2_pvalue, width = 28, he
 
 
 
-
-
+for(go in enriched.GO.05.a[1:25]){
+  print(GOTERM[[go]]) 
+  }
 
 
 

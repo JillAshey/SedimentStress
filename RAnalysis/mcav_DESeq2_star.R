@@ -23,7 +23,7 @@ library("clusterProfiler")
 library(stringr)
 
 # Load gene count matrix
-mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
+mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -42,7 +42,7 @@ annot$gene <-gsub("ID=", "", annot$gene)
 annot$gene <- gsub("-.*", "", annot$gene)
 
 # Load metadata
-metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_FL_metadata.csv", header = TRUE)
+metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/FL_sediment_metadata.csv", header = TRUE)
 dim(metadata) # 45 by 15
 head(metadata)
 # Selecting only the columns I need for analyses 
@@ -277,7 +277,7 @@ DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full,
 write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment.csv")
 DEGs.all$DEGs <- rownames(DEGs.all)
 DEGs.all_mcav <- DEGs.all$DEGs
-DEGs.all_mcav <- unique(DEGs.all_acerv)
+DEGs.all_mcav <- unique(DEGs.all_mcav)
 DEGs.all_mcav <- as.data.frame(DEGs.all_mcav) # 89 unique DEGs among treatment comparisons
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcav$DEGs), ] # subset list of sig transcripts from original count data
@@ -297,71 +297,155 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 mcav_DEGPCAplot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=3) +
-  geom_text(aes(label=name), hjust=0, vjust=0) +
+  geom_point(size=8) +
+  #geom_text(aes(label=name), hjust=0, vjust=0) +
   xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
   #scale_color_manual(values = c(control="black", Treatment1="skyblue1", Treatment2="skyblue2", Treatment3="skyblue3", Treatment4="skyblue4")) +
   #scale_color_manual(values = c(control="black", Treatment1="cadetblue3", Treatment2="palevioletred", Treatment3="darkgreen", Treatment4="orange")) +
-  scale_color_manual(values = c(control="lightpink", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
+  #ggtitle("M. cavernosa") +
   theme_bw() + #Set background color
-  theme(panel.border = element_blank(), # Set border
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size=25),
+        #title = element_text(size=30),
+        legend.position = "none",
+        panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background
 mcav_DEGPCAplot
 # PCA plot is of differentially expressed genes only
-PC.info <- mcav_DEGPCAplot$data
-ggsave("~/Desktop/mcav_DEGs_PCA.pdf", mcav_DEGPCAplot)
+#PC.info <- mcav_DEGPCAplot$data
+ggsave("~/Desktop/mcav_DEGs_PCA.png", mcav_DEGPCAplot, width = 30, height = 20,, units = "cm")
 
-df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
-colnames(df) <- "Treatment"
-ann_colors <- list(Treatment = c(control="lightpink", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray"))
-list(colnames(mcav_counts))
-col.order <- c("20_T12_Mc_PWC",
-               "21_T33_Mc_EOU",
-               "22_ctl2_Mc_TWF_1",
+
+
+
+## Heatmap of DEGs
+# This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side
+# Also taking out legend 
+
+# Need a file with counts, gene names, GO IDs, term, and ontology 
+# This file is acerv genes with GO terms associated with them. One GO term per line, so multiple acerv gene names sometimes if genes have multiple GO terms
+# This file includes all gene names and GO IDs
+mcav_sig <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GOterms.unique.csv", header = TRUE)
+mcav_sig <- select(mcav_sig, -X)
+colnames(mcav_sig)[1] <-"gene"
+head(mcav_sig)
+
+# Getting col order to order unique counts data
+list(mcav_metadata)
+list <- mcav_metadata[order(mcav_metadata$Treatment),] # need to order them so it will group by treatment in plot
+list(list$SampleID) # look at sample IDs and use that list to make col.order
+col.order <- c("22_ctl2_Mc_TWF_1",
                "28_ctl1_Mc_GBM_1",
-               "29_T23_Mc_PND",
-               "33_T43_Mc_RFV",
-               "34_T22_Mc_SVS",
-               "39_T13_Mc_FJE", 
                "42_ctl3_Mc_MGR_1",
-               "46_T41_Mc_QYH_1",
+               "20_T12_Mc_PWC",
+               "39_T13_Mc_FJE",
+               "61_T11_Mc_RAP",
+               "29_T23_Mc_PND",
+               "34_T22_Mc_SVS",
+               "58_T21_Mc_EAH",
+               "21_T33_Mc_EOU",
                "49_T31_Mc_SWQ",
                "55_T32_Mc_TWP",
-               "56_T42_Mc_JAW",
-               "58_T21_Mc_EAH",
-               "61_T11_Mc_RAP")
-
+               "33_T43_Mc_RFV",
+               "46_T41_Mc_QYH_1",
+               "56_T42_Mc_JAW") 
+  
+# Now I will order the counts data so the samples will group by treatment
 unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
-unique.DEG.annot$gene <- rownames(unique.DEG.annot) # make column with gene names
-unique.DEG.annot <- merge(unique.DEG.annot, annot, by = "gene") # merge annotation file with df of sig genes by gene id
-unique.DEG.annot <- unique.DEG.annot[!duplicated(unique.DEG.annot$gene),] # remove duplicate rows
-rownames(unique.DEG.annot) <- unique.DEG.annot$gene
-write.csv(unique.DEG.annot, file = "~/Desktop/mcav_unique_DEG_annotated.csv")
+list(colnames(unique.DEG.annot))
+unique.DEG.annot2 <- unique.DEG.annot[, col.order]
+unique.DEG.annot2$gene <- rownames(unique.DEG.annot2)
 
-unique.DEG.annot <- unique.DEG.annot[,2:16]
-rownames(df) <- colnames(unique.DEG.annot)
-# unique.DEG.annot <- unique.DEG.annot[,-16]
-mat <- as.matrix(unique.DEG.annot)
-mat <- mat[,col.order]
+# Now we will take the unique.DEG.annot2 and merge it with acerv_sig
+# The unique.DEG.annot2 file includes gene names for DEGs and counts data
+test_merge <- merge(unique.DEG.annot2, mcav_sig, by = "gene", all.x = TRUE)
+# test_merge now holds gene names for DEGs, counts data, and GO.IDs
 
-#dev.off()
-#pdf(file = "~/Desktop/Unique_Heatmap.DEG_Annotated.pdf")
-mcav_heatmap <- pheatmap(mat, 
-                         annotation_col = df,
-                         annotation_colors = ann_colors,
-                         scale = "row",
-                         show_rownames = T,
-                         fontsize_row = 4,
-                         cluster_cols = T,
-                         show_colnames = T)
-#dev.off()
-# plot has all treatment comparisons 
-ggsave("~/Desktop/mcav_DEGs_heatmap.pdf", mcav_heatmap)
+# Now we need info about term and ontology 
+GO_all <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GO_ALL.csv", header = TRUE) 
+GO_all <- select(GO_all, -X)
+colnames(GO_all)[1] <-"GO.ID"
+GO_merge <- merge(test_merge, GO_all, by = "GO.ID", all.x = T)
+# Great! GO_merge now contains GO IDs, gene names for DEGs, counts data, over and under represented pvalue, numCat, term, and ontology.
+# All of the genes are in there (sometimes duplicated because multple GO/term/ontology info per gene) and some don't have any GO/term/ontology info. 
+# *** I could also just plot GO_merge, but have duplicate genes for some that have multiple multple GO/term/ontology info per gene. Probably not the best idea tho
+
+# Trying to aggregate based on GO terms. Hopefully this works because I also want the term and ontology to also aggregate but i think they may just go.
+# Well maybe I could aggregate multiple times and then bind them? Lets see
+agg_GO <- aggregate(GO_merge$GO.ID, list(GO_merge$gene), paste, collapse = ",") # aggregate GO terms 
+colnames(agg_GO) <- c("gene", "GO.ID")
+agg_term <- aggregate(GO_merge$term, list(GO_merge$gene), paste, collapse = ",") # aggregate term
+colnames(agg_term) <- c("gene", "term")
+agg_ont <- aggregate(GO_merge$ontology, list(GO_merge$gene), paste, collapse = ",") # aggregate ontology
+colnames(agg_ont) <- c("gene", "ontology")
+agg_over <- aggregate(GO_merge$over_represented_pvalue, list(GO_merge$gene), paste, collapse = ",")
+colnames(agg_over) <- c("gene", "over_represented_pvalue")
+
+# Now I'll merge them all together!
+merge_all <- merge(agg_GO, agg_term, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, agg_ont, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, agg_over, by = "gene", all.x = TRUE)
+merge_all <- merge(merge_all, unique.DEG.annot2, by = "gene", all.x = TRUE)
+write.csv(merge_all, file = "~/Desktop/mcav_GO_DEG.csv") # maybe include gene counts too?
+
+
+
+## Hooray! Now I have a lovely file with counts, gene names, GO IDs, term, and ontology 
+# Now I must put it in the heatmap...........
+
+# First, lets make a matrix of gene counts 
+rownames(merge_all) <- merge_all$gene
+mat <- select(merge_all, -c("gene", "GO.ID", "term", "ontology", "over_represented_pvalue", "term2"))
+mat <- as.matrix(mat)
+
+# Now lets make df of only treatment and sample ID
+#df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
+#colnames(df) <- "Treatment"
+#df <- df[order(df$Treatment),]
+#df <- as.data.frame(df)
+#colnames(df) <- "Treatment"
+df <- select(mcav_metadata, c("Treatment"))
+#df <- df[order(df$Treatment),]
+# probably just easier to take treatment info straight from metadata file
+
+# Now lets make a df of only gene names 
+df_gene <- as.data.frame(merge_all$gene)
+colnames(df_gene) <- "DEG"
+rownames(df_gene) <- df_gene$DEG
+
+# Some genes have multiple terms, so I am going to select the first term for every gene 
+merge_all$term2 <- merge_all$term
+merge_all$term <- gsub(",.*", "", merge_all$term)
+
+# Some genes have NAs, so subbing blank for NA to see the actual terms
+merge_all[is.na(merge_all$term)] <- " "
+
+#Set colors for treatment
+ann_colors <- list(Treatment = c(control="gray", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray"))
+
+## Plot heatmap
+mcav_sub_heatmap <- pheatmap(mat, 
+                              annotation_col = df,
+                              #annotation_row = df_gene,
+                              annotation_colors = ann_colors,
+                              annotation_legend = F,
+                              cluster_rows = F,
+                              show_rownames = T,
+                              cluster_cols = F,
+                              show_colnames = T,
+                              scale = "row",
+                              fontsize_row = 8,
+                              labels_row = merge_all$term)
+mcav_sub_heatmap
+ggsave("~/Desktop/mcav_heatmap.png", mcav_sub_heatmap, width = 30, height = 20,, units = "cm")
+
+
 
 
 
