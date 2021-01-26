@@ -1,0 +1,8 @@
+"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
+"10","GO:0020037",0.0369943450710385,0.991678765098336,4,55,"heme binding","MF"
+"7","GO:0008417",0.0273469947761552,0.99808054579625,2,10,"fucosyltransferase activity","MF"
+"2","GO:0004061",0.0461714810628931,0.999456894024744,1,2,"arylformamidase activity","MF"
+"3","GO:0004559",0.0355391360499109,0.999679994423401,1,2,"alpha-mannosidase activity","MF"
+"4","GO:0004821",0.0245280469951749,1,1,1,"histidine-tRNA ligase activity","MF"
+"8","GO:0008810",0.0276448849994888,1,1,1,"cellulase activity","MF"
+"9","GO:0018064",0.0245280469951749,1,1,1,"protein-histidine N-methyltransferase activity","MF"
