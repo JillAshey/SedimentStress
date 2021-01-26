@@ -17,6 +17,8 @@ acerv_IPS_GO$GO_term <- regmatches(acerv_IPS_GO$attr, gregexpr("(?<=Ontology_ter
 acerv_IPS_GO$GO_term <- gsub(";.*", "", acerv_IPS_GO$GO_term)
 acerv_IPS_GO <- select(acerv_IPS_GO, c(prot, GO_term))
 colnames(acerv_IPS_GO) <- c("gene_id", "GO.ID")
+acerv_IPS_GO <- unique(acerv_IPS_GO)
+length(unique(acerv_IPS_GO$gene_id)) # 12828
 
 # B2G + Uniprot
 acerv_BU <- read.csv("~/Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_annotations/acerv_FuncAnn_UniP_B2G.csv", header = T)
@@ -27,15 +29,24 @@ acerv_BU$GO.ID <- gsub("C:", "", acerv_BU$GO.ID)
 acerv_BU$GO.ID <- gsub("P:", "", acerv_BU$GO.ID)
 acerv_BU$GO.ID <- gsub(" ", "", acerv_BU$GO.ID)
 acerv_BU_GO <- filter(acerv_BU, grepl("GO:", GO.ID)) # select only rows with GO terms
+acerv_BU_GO <- unique(acerv_BU_GO)
+length(unique(acerv_BU_GO$gene_id)) # 2172
 
-# Bind IPS and BU by row
-acerv_GO <- rbind(acerv_BU_GO, acerv_IPS_GO)
+# Old GO terms 
+acerv_oldGO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/acerv/acerv_GOterms.csv", header = T)
+acerv_oldGO <- select(acerv_oldGO, c("prot", "GO_term"))
+colnames(acerv_oldGO) <- c("gene_id", "GO.ID")
+acerv_oldGO <- unique(acerv_oldGO)
+length(unique(acerv_oldGO$gene_id)) # 12828
+
+# Bind IPS, BU and old GO terms by row
+acerv_GO <- rbind(acerv_BU_GO, acerv_IPS_GO, acerv_oldGO)
 acerv_GO <- unique(acerv_GO)
 acerv_GO <- aggregate(acerv_GO$GO.ID, list(acerv_GO$gene_id), paste, collapse = ";")
 colnames(acerv_GO) <- c("gene_id", "GO.ID")
 
 # Save as a csv
-write.csv(acerv_GO, file = "~/Desktop/acerv_GO_20210101.csv")
+write.csv(acerv_GO, file = "~/Desktop/acerv_GO_20210124.csv")
 
 
 
@@ -51,7 +62,8 @@ mcav_IPS_GO$GO_term <- gsub(";.*", "", mcav_IPS_GO$GO_term)
 mcav_IPS_GO <- select(mcav_IPS_GO, c(prot, GO_term))
 mcav_IPS_GO$GO_term <- gsub(",", ";", mcav_IPS_GO$GO_term)
 colnames(mcav_IPS_GO) <- c("gene_id", "GO.ID")
-dim(mcav_IPS_GO) # 55925 x 2
+mcav_IPS_GO <- unique(mcav_IPS_GO)
+dim(mcav_IPS_GO) # 15933 x 2
 
 # B2G + Uniprot
 mcav_BU <- read.csv("~/Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_annotations/mcav_FuncAnn_UniP_B2G.csv", header = T)
@@ -62,20 +74,40 @@ mcav_BU$GO.ID <- gsub("C:", "", mcav_BU$GO.ID)
 mcav_BU$GO.ID <- gsub("P:", "", mcav_BU$GO.ID)
 mcav_BU$GO.ID <- gsub(" ", "", mcav_BU$GO.ID)
 mcav_BU_GO <- filter(mcav_BU, grepl("GO:", GO.ID)) # select only rows with GO terms
+mcav_BU_GO <- unique(mcav_BU_GO)
 dim(mcav_BU_GO) # 147 x 2
 
-# Bind IPS and BU by row
-mcav_GO <- rbind(mcav_BU_GO, mcav_IPS_GO)
+# Old GO terms 
+mcav_oldGO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav/mcav_GOterms.csv", header = T)
+mcav_oldGO <- select(mcav_oldGO, c("prot", "GO_term"))
+colnames(mcav_oldGO) <- c("gene_id", "GO.ID")
+mcav_oldGO <- unique(mcav_oldGO)
+length(unique(mcav_oldGO$gene_id)) # 10791
+
+# Bind IPS, BU and old GO terms by row
+mcav_GO <- rbind(mcav_BU_GO, mcav_IPS_GO, mcav_oldGO)
 mcav_GO <- unique(mcav_GO)
 mcav_GO <- aggregate(mcav_GO$GO.ID, list(mcav_GO$gene_id), paste, collapse = ";")
 colnames(mcav_GO) <- c("gene_id", "GO.ID")
+dim(mcav_GO) # 10859
 
 # Save as a csv
-write.csv(mcav_GO, file = "~/Desktop/mcav_GO_20210101.csv")
+write.csv(mcav_GO, file = "~/Desktop/mcav_GO_20210124.csv")
+
+
+
+
+
+
+
+
+
+
 
 
 
 ## GO terms for ofav
+#####STILL NEED TO INCORPORATE OLD GO TERMS
 
 # InterProScan
 ofav_IPS <- read.csv("~/Desktop/PutnamLab/FunctionalAnnotation/InterProScan/ofav.interpro.gff3", header = FALSE, sep="\t", skip=4)
@@ -180,10 +212,13 @@ write.csv(ofav_GO, file = "~/Desktop/ofav_GO_20210101.csv")
 ##### Hawaii 
 
 # GO terms for mcap
+#####STILL NEED TO INCORPORATE OLD GO TERMS
 
 
 
 # GO terms for pcomp
+#####STILL NEED TO INCORPORATE OLD GO TERMS
+
 # InterProScan
 pcomp_IPS <- read.csv("~/Desktop/PutnamLab/FunctionalAnnotation/InterProScan/pcomp.interpro.gff3", header = FALSE, sep="\t", skip=4)
 length(unique(pcomp_IPS$V1)) # 2086032
@@ -215,7 +250,9 @@ write.csv(pcomp_GO, file = "~/Desktop/pcomp_GO_20210101.csv")
 
 
 
-# GO terms for pcomp
+
+# GO terms for pdam
+
 # InterProScan
 pdam_IPS <- read.csv("~/Desktop/PutnamLab/FunctionalAnnotation/InterProScan/pdam.interpro.gff3", header = FALSE, sep="\t", skip=4)
 length(unique(pdam_IPS$V1)) # 1100156
@@ -249,14 +286,12 @@ ref_XP$gene_id <- gsub(".*-", "", ref_XP$gene_id)
 pdam_XP <- merge(ref_XP, pdam_BU_GO, by = "gene_id")
 # no matches 
 
-# Merge ref_XP with ofav_IPS_GO
+# Merge ref_XP with pdam_IPS_GO
 pdam_XP2 <- merge(pdam_IPS_GO, ref_XP, by = "gene_id")
 pdam_XP2 <- unique(pdam_XP2)
-
 # Isolate LOC terms 
 pdam_XP2$LOC <- regmatches(pdam_XP2$attr, gregexpr("(?<=gene=).*", pdam_XP2$attr, perl = TRUE))
 pdam_XP2$LOC <- sub(";.*", "", pdam_XP2$LOC)
-
 # Subset LOC and GO terms
 pdam_XP2 <- select(pdam_XP2, c("GO.ID", "LOC"))
 
@@ -269,13 +304,12 @@ ref_XM$gene_id <- sub("-.*", "", ref_XM$gene_id)
 # Merge ref_XM with ofav_BU_GO
 pdam_XM <- merge(pdam_BU_GO, ref_XM, by = "gene_id")
 # 710 matches 
-
 # Isolate LOC terms 
 pdam_XM$LOC <- regmatches(pdam_XM$attr, gregexpr("(?<=gene=).*", pdam_XM$attr, perl = TRUE))
 pdam_XM$LOC <- sub(";.*", "", pdam_XM$LOC)
-
 # Subset LOC and GO terms
 pdam_XM <- select(pdam_XM, c("GO.ID", "LOC"))
+pdam_XM <- unique(pdam_XM)
 
 # Make separate df with only rows with XR
 ref_XR <- ref[grep("XR", ref$attr), ]
@@ -286,29 +320,53 @@ ref_XR$gene_id <- sub("-.*", "", ref_XR$gene_id)
 # Merge ref_XR with ofav_BU_GO
 pdam_XR <- merge(pdam_BU_GO, ref_XR, by = "gene_id")
 # 1088 matches 
-
 # Isolate LOC terms 
 pdam_XR$LOC <- regmatches(pdam_XR$attr, gregexpr("(?<=gene=).*", pdam_XR$attr, perl = TRUE))
 pdam_XR$LOC <- sub(";.*", "", pdam_XR$LOC)
-
 # Subset LOC and GO terms
 pdam_XR <- select(pdam_XR, c("GO.ID", "LOC"))
 
 # Bind pdam_XP2, pdam_XM, and pdam_XR together 
 pdam_GO <- rbind(pdam_XP2, pdam_XM, pdam_XR)
-pdam_GO <- aggregate(pdam_GO$GO.ID, list(pdam_GO$gene_id), paste, collapse = ";")
 pdam_GO <- unique(pdam_GO)
-
-# Rename and reorder columns 
+pdam_GO <- pdam_GO[c("LOC", "GO.ID")]
+pdam_GO <- aggregate(pdam_GO$GO.ID, list(pdam_GO$LOC), paste, collapse = ";")
 colnames(pdam_GO) <- c("gene_id", "GO.ID")
-pdam_GO <- pdam_GO[c("gene_id", "GO.ID")]
+
+# Old GO terms 
+pdam_oldGO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam/pdam_GOterms.csv", header = T)
+pdam_oldGO <- select(pdam_oldGO, c("prot", "GO_term"))
+colnames(pdam_oldGO) <- c("gene_id", "GO.ID")
+pdam_oldGO <- unique(pdam_oldGO)
+length(unique(pdam_oldGO$gene_id)) # 15549
+
+# Merge ref_XP with pdam_oldGO
+pdam_oldGO_XP2 <- merge(pdam_oldGO, ref_XP, by = "gene_id")
+pdam_oldGO_XP2 <- unique(pdam_oldGO_XP2)
+# Isolate LOC terms 
+pdam_oldGO_XP2$LOC <- regmatches(pdam_oldGO_XP2$attr, gregexpr("(?<=gene=).*", pdam_oldGO_XP2$attr, perl = TRUE))
+pdam_oldGO_XP2$LOC <- sub(";.*", "", pdam_oldGO_XP2$LOC)
+# Subset LOC and GO terms
+pdam_oldGO_XP2 <- select(pdam_oldGO_XP2, c("GO.ID", "LOC"))
+pdam_oldGO_XP2 <- unique(pdam_oldGO_XP2)
+pdam_oldGO_XP2 <- pdam_oldGO_XP2[c("LOC", "GO.ID")]
+colnames(pdam_oldGO_XP2) <- c("gene_id", "GO.ID")
+
+# Bind pdam_oldGO_XP2 and pdam_GO together
+pdam_GO <- rbind(pdam_oldGO_XP2, pdam_GO)
+pdam_GO <- unique(pdam_GO)
+pdam_GO <- aggregate(pdam_GO$GO.ID, list(pdam_GO$gene_id), paste, collapse = ";")
+colnames(pdam_GO) <- c("gene_id", "GO.ID")
 
 # Save as a csv
-write.csv(pdam_GO, file = "~/Desktop/pdam_GO_20210101.csv")
+write.csv(pdam_GO, file = "~/Desktop/pdam_GO_20210125.csv")
+
 
 
 
 ## GO terms for plob
+#####STILL NEED TO INCORPORATE OLD GO TERMS
+
 # InterProScan
 plob_IPS <- read.csv("~/Desktop/PutnamLab/FunctionalAnnotation/InterProScan/plob.interpro.gff3", header = FALSE, sep="\t", skip=4)
 length(unique(plob_IPS$V1)) # 1192653
@@ -319,7 +377,8 @@ plob_IPS_GO$GO_term <- gsub(";.*", "", plob_IPS_GO$GO_term)
 plob_IPS_GO <- select(plob_IPS_GO, c(prot, GO_term))
 plob_IPS_GO$GO_term <- gsub(",", ";", plob_IPS_GO$GO_term)
 colnames(plob_IPS_GO) <- c("gene_id", "GO.ID")
-dim(plob_IPS_GO) # 112162 x 2
+plob_IPS_GO <- unique(plob_IPS_GO)
+dim(plob_IPS_GO) # 25332 x 2
 
 # B2G + Uniprot
 plob_BU <- read.csv("~/Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_annotations/plob_FuncAnn_UniP_B2G.csv", header = T)
@@ -330,16 +389,24 @@ plob_BU$GO.ID <- gsub("C:", "", plob_BU$GO.ID)
 plob_BU$GO.ID <- gsub("P:", "", plob_BU$GO.ID)
 plob_BU$GO.ID <- gsub(" ", "", plob_BU$GO.ID)
 plob_BU_GO <- filter(plob_BU, grepl("GO:", GO.ID)) # select only rows with GO terms
-dim(plob_BU_GO) # 147 x 2
+plob_BU_GO <- unique(plob_BU_GO)
+dim(plob_BU_GO) # 341 x 2
 
-# Bind IPS and BU by row
-plob_GO <- rbind(plob_BU_GO, plob_IPS_GO)
+# Old GO terms 
+plob_oldGO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/plob/plob_GOterms.csv", header = T)
+plob_oldGO <- select(plob_oldGO, c("prot", "GO_term"))
+colnames(plob_oldGO) <- c("gene_id", "GO.ID")
+plob_oldGO <- unique(plob_oldGO)
+length(unique(plob_oldGO$gene_id)) # 15549
+
+# Bind IPS, BU, and old GO terms by row
+plob_GO <- rbind(plob_BU_GO, plob_IPS_GO, plob_oldGO)
 plob_GO <- unique(plob_GO)
 plob_GO <- aggregate(plob_GO$GO.ID, list(plob_GO$gene_id), paste, collapse = ";")
 colnames(plob_GO) <- c("gene_id", "GO.ID")
 
 # Save as a csv
-write.csv(plob_GO, file = "~/Desktop/plob_GO_20210101.csv")
+write.csv(plob_GO, file = "~/Desktop/plob_GO_20210125.csv")
 
 
 

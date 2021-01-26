@@ -1,3 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"3","GO:0005871",0.0223735402670942,0.999814287276616,1,4,"kinesin complex","CC"
-"4","GO:0015935",0.0324665869580688,0.99956398874078,1,6,"small ribosomal subunit","CC"

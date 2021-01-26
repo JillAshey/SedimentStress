@@ -1,0 +1,8 @@
+"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
+"11","GO:0007017",0.000720866884659495,0.999973407738549,3,18,"microtubule-based process","BP"
+"10","GO:0006955",0.0109171745876074,0.999497958969786,2,16,"immune response","BP"
+"8","GO:0006206",0.0100201704735586,1,1,1,"pyrimidine nucleobase metabolic process","BP"
+"9","GO:0006213",0.0199405826127857,0.999900241665634,1,2,"pyrimidine nucleoside metabolic process","BP"
+"15","GO:0009308",0.0394860691601916,0.999409314841293,1,4,"amine metabolic process","BP"
+"16","GO:0140021",0.0199405826128202,0.999900241665633,1,2,"mitochondrial ADP transmembrane transport","BP"
+"17","GO:1990544",0.0199405826128202,0.999900241665633,1,2,"mitochondrial ATP transmembrane transport","BP"

@@ -1,6 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"4","GO:0006013",0.0355391360499109,0.999679994423401,1,2,"mannose metabolic process","BP"
-"5","GO:0006427",0.0245280469951749,1,1,1,"histidyl-tRNA aminoacylation","BP"
-"10","GO:0022904",0.0245280469951749,1,1,1,"respiratory electron transport chain","BP"
-"11","GO:0030047",0.0245280469951749,1,1,1,"actin modification","BP"
-"12","GO:0071705",0.0482428057123934,0.999406431806771,1,2,"nitrogen compound transport","BP"

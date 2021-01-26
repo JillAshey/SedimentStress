@@ -1,4 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"8","GO:0005576",0.0308697731963294,0.995153866637221,3,86,"extracellular region","CC"
-"9","GO:0005871",0.0141986052473635,0.998370057734276,3,45,"kinesin complex","CC"
-"10","GO:0005874",0.000645388426456628,0.999977270367207,3,17,"microtubule","CC"

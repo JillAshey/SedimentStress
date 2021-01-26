@@ -1,0 +1,6 @@
+"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
+"3","GO:0005515",0.0490605024374169,0.976874098313795,13,1490,"protein binding","MF"
+"1","GO:0003887",0.0389546781076711,0.999352624362287,1,7,"DNA-directed DNA polymerase activity","MF"
+"2","GO:0004190",0.0440402201275736,0.999140584145252,1,9,"aspartic-type endopeptidase activity","MF"
+"6","GO:0016772",0.0331410200415659,0.999545382009697,1,6,"transferase activity, transferring phosphorus-containing groups","MF"
+"7","GO:0016831",0.0161613014178177,0.999903320395139,1,4,"carboxy-lyase activity","MF"

@@ -1,0 +1,11 @@
+"","gene_id","scaffold","gene.start","gene.stop","length","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology","Treatment_Compare"
+"1","Mcavernosa00001","Sc0000007",323,85594,85271,"GO:0007154",0.0354246941214408,0.999431344828769,1,11,"cell communication","BP","CvsT3"
+"5","Mcavernosa00017","Sc0000007",216365,232612,16247,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"7","Mcavernosa00077","Sc0000007",942548,945584,3036,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"9","Mcavernosa00101","Sc0000007",1142696,1150751,8055,"GO:0007154",0.0354246941214408,0.999431344828769,1,11,"cell communication","BP",NA
+"11","Mcavernosa00170","Sc0000008",340188,356981,16793,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"14","Mcavernosa00174","Sc0000008",377197,381753,4556,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"24","Mcavernosa00359","Sc0000009",664675,679313,14638,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"26","Mcavernosa00373","Sc0000009",766428,774393,7965,"GO:0006979",0.000117961933897199,0.999997675979609,3,20,"response to oxidative stress","BP",NA
+"27","Mcavernosa00373","Sc0000009",766428,774393,7965,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
+"35","Mcavernosa00472","Sc0000010",306152,332498,26346,"GO:0055114",2.76935455978542e-05,0.999995771612945,10,420,"oxidation-reduction process","BP",NA
