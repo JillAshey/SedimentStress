@@ -89,4 +89,3 @@ STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnaml
 sbatch star_align_27_1_pdam_rgGFF.sh
 ```
 Submitted batch job 1672890
-
