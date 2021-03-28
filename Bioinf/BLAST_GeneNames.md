@@ -248,10 +248,10 @@ sed -i -e 's/>A/> A/g' Acervicornis_sub.proteins.SUBSET.fasta
 
 ```
 grep -c '^>' Acervicornis_sub.transcripts.SUBSET.fasta
-# 39
+# 13
 
 grep -c '^>' Acervicornis_sub.transcripts.SUBSET.fasta
-# 39
+# 13
 ```
 
 4) make directory for blast output 
@@ -285,7 +285,7 @@ module load BLAST+/2.8.1-foss-2018b
 blastn -db nt -query Acervicornis_sub.transcripts.SUBSET.fasta -out acerv_transcript_sub_blast.out -max_target_seqs 2 -remote
 
 sbatch acerv_transcript_sub_blast.sh
-Submitted batch job 1845864
+Submitted batch job 1862296
 ```
 
 

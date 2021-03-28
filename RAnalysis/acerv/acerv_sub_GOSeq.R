@@ -23,7 +23,7 @@ library("gridExtra")
 
 
 # Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
-acerv_counts_filt <- read.csv("~/Desktop/acerv_counts_sub_filt.csv", header = TRUE)
+acerv_counts_filt <- read.csv("~/Desktop/acerv_counts_sub_filt_20210327.csv", header = TRUE)
 dim(acerv_counts_filt) # 9054 rows x 14
 for ( col in 1:ncol(acerv_counts_filt)){
   colnames(acerv_counts_filt)[col] <-  gsub("X", "", colnames(acerv_counts_filt)[col])
@@ -32,12 +32,228 @@ colnames(acerv_counts_filt)[1] <-"gene_id"
 head(acerv_counts_filt)
 
 # Load DEGs
-DEG_acerv_sub <- read.csv("~/Desktop/acerv_sub_unique.sig.list.csv", header = TRUE)
-dim(DEG_acerv_sub) # 217 x 14
+DEG_acerv_sub <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = TRUE)
+dim(DEG_acerv_sub) # 215 x 14
 for ( col in 1:ncol(DEG_acerv_sub)){
   colnames(DEG_acerv_sub)[col] <-  gsub("X", "", colnames(DEG_acerv_sub)[col])
 }
 colnames(DEG_acerv_sub)[1] <-"gene_id"
+
+# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+length_Acerv <- read_csv("Desktop/length.mRNA_Acerv.csv")
+length_Acerv$gene_id <- gsub("model", "TU", length_Acerv$gene_id)
+length_merge <- merge(length_Acerv, acerv_counts_filt, by = "gene_id")
+
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(length_merge, gene_id%in%DEG_acerv_sub$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 215 rows 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(length_merge$gene_id%in%DEG_names)
+names(gene_vector)=length_merge$gene_id
+
+# Make ID vector 
+IDvector <- length_merge$gene_id
+
+# Make length vector
+lengthVector <- length_merge$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+# plot looks weird...does this mean that there is not much length bias in the dataset?
+
+
+### Prepare GO term dataframe 
+## old GO terms (not my annots)
+# Import GO term
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/acerv/acerv_GO_20210219.csv", header=TRUE)
+annot_GO <- select(annot_GO, -X)
+colnames(annot_GO)[1] <-"gene_id"
+annot_GO$gene_id <- gsub("model", "TU", annot_GO$gene_id)
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
+splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
+GO.terms_OG <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms_OG) <- c("gene_id", "GO.ID")
+GO.terms_OG[GO.terms_OG == "NA"] <- NA
+
+head(GO.terms_OG)
+tail(GO.terms_OG)
+GO.terms_OG$GO.ID<- as.character(GO.terms_OG$GO.ID)
+GO.terms_OG$GO.ID <- replace_na(GO.terms_OG$GO.ID, "unknown")
+GO.terms_OG$GO.ID <- as.factor(GO.terms_OG$GO.ID)
+GO.terms_OG$gene_id <- as.factor(GO.terms_OG$gene_id)
+GO.terms_OG <- unique(GO.terms_OG)
+
+dim(GO.terms_OG) # 36415 x 2
+head(GO.terms_OG, 10)
+tail(GO.terms_OG, 10)
+
+### Perform GOseq
+# Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+# should I include this: test.cats=c("GO:CC", "GO:BP", "GO:MF") ?
+GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms_OG, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/acerv_sub_GO_ALL_20210326.csv")
+
+
+#Subset enriched GO terms by category and save as csv
+#How many enriched GO terms do we have?
+class(GO.wall)
+head(GO.wall)
+tail(GO.wall)
+nrow(GO.wall) # 1772
+
+#Find only enriched GO terms that are statistically significant at cutoff - 0.05
+enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
+enriched.GO.05<-data.frame(enriched.GO.05.a)
+colnames(enriched.GO.05) <- c("category")
+enriched.GO.05 <- merge(enriched.GO.05, GO.wall, by="category")
+enriched.GO.05 <- enriched.GO.05[order(-enriched.GO.05$numDEInCat),]
+enriched.GO.05$term <- as.factor(enriched.GO.05$term)
+head(enriched.GO.05)
+MF <- subset(enriched.GO.05, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),] # 7
+CC <- subset(enriched.GO.05, ontology=="CC")
+CC <- CC[order(-CC$numDEInCat),] # 0
+BP <- subset(enriched.GO.05, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),] # 8
+write.csv(MF, file = "~/Desktop/acerv_sub_MF_Sig_Enriched_GO.05_20210326.csv")
+#write.csv(CC, file = "~/Desktop/plob_CC_Sig_Enriched_GO.05_20210326.csv")
+write.csv(BP, file = "~/Desktop/acerv_sub_BP_Sig_Enriched_GO.05_20210326.csv")
+write.csv(enriched.GO.05, file = "~/Desktop/acerv_sub_Sig_Enriched_GO.05_ALL_20210326.csv")
+
+# Merge GO terms and enriched list 
+colnames(GO.terms_OG) <- c("gene_id", "category")
+enriched_GO.terms <- merge(enriched.GO.05, GO.terms_OG, by = "category", all.x = TRUE)
+DEG_treatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv/acerv_sub_DEGs.all_treatment_20210219.csv", header = TRUE)
+DEG_treatment <- select(DEG_treatment, -X)
+#colnames(DEG_treatment)[1] <-"gene_id"
+ByTreatment_GO.terms <- merge(DEG_treatment, enriched_GO.terms, by = "gene_id", all.x = TRUE)
+ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
+# now I have a df with DEGs gene names, treatment comparisons, GO terms, and term info
+MF <- subset(ByTreatment_GO.terms, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),] # 15
+#CC <- subset(ByTreatment_GO.terms, ontology=="CC")
+#CC <- CC[order(-CC$numDEInCat),]
+BP <- subset(ByTreatment_GO.terms, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),] # 9
+write.csv(ByTreatment_GO.terms, file = "~/Desktop/acerv_sub_ByTreatment_GO.terms_20210327.csv")
+write.csv(MF, file = "~/Desktop/acerv_sub_MF_Sig_Enriched_ByTreatment_GO.05_20210327.csv")
+#write.csv(CC, file = "~/Desktop/acerv_sub_CC_Sig_Enriched_ByTreatment_GO.05_20210327.csv")
+write.csv(BP, file = "~/Desktop/acerv_sub_BP_Sig_Enriched_ByTreatment_GO.05_20210327.csv")
+
+# Plot terms by number of differentially expressed functions
+MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Molecular Function") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+MFplot
+
+# No sig. enriched CC terms, so not CC plot 
+
+BPplot <- BP %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none") +
+  xlab("") +
+  ylab("") +
+  ggtitle("Biological Process") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+BPplot
+
+GOplot <- grid.arrange(MFplot, BPplot, ncol=3, clip="off")
+ggsave("~/Desktop/acerv_sub_GOplot_05_20210327.pdf", GOplot, width = 21, height = 21, units = c("in"))
+
+# Combining all and ordering by pvalue
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  ylim(0,0.05) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/acerv_sub_GOplot2_pvalue_05_20210327.pdf", GOplot2_pvalue, width = 28, height = 28, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #Import merged annotated gtf file

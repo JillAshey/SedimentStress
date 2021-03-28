@@ -34,13 +34,125 @@ head(gcounts_filt_plob)
 dim(gcounts_filt_plob) # 15369 x 13
 
 # Load DEGs
-DEG_plob <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_unique.sig.list.csv", header = TRUE)
+DEG_plob <- read.csv("~/Desktop/plob_unique.sig.list_20210326.csv", header = TRUE)
 dim(DEG_plob) # 153 x 13
 for ( col in 1:ncol(DEG_plob)){
   colnames(DEG_plob)[col] <-  gsub("X", "", colnames(DEG_plob)[col])
 }
 colnames(DEG_plob)[1] <-"gene_id"
-dim(DEG_plob) # 154 x 13
+dim(DEG_plob) # 153 x 13
+
+# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+length_Plob <- read.csv("~/Desktop/length.mRNA_Plob.csv")
+length_Plob$gene_id <- gsub(".m1", "", length_Plob$gene_id)
+length_Plob$gene_id <- gsub("model", "TU", length_Plob$gene_id)
+length_merge <- merge(length_Plob, gcounts_filt_plob, by = "gene_id")
+
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(length_merge, gene_id%in%DEG_plob$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 153 rows 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(length_merge$gene_id%in%DEG_names)
+names(gene_vector)=length_merge$gene_id
+
+# Make ID vector 
+IDvector <- length_merge$gene_id
+
+# Make length vector
+lengthVector <- length_merge$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+# plot looks weird...does this mean that there is not much length bias in the dataset?
+
+
+
+
+
+#### Prepare GO term dataframe 
+annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/plob_FullAnnot.csv", header = TRUE)
+annot$gene_id <- gsub("model", "TU", annot$gene_id)
+GO.annot <- select(annot, gene_id, GO.IDs)
+GO.annot$GO.IDs <- gsub(",", ";", GO.annot$GO.IDs)
+splitted <- strsplit(as.character(GO.annot$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+GO.terms$GO.ID <- gsub("F:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("P:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("C:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+GO.terms[GO.terms == "NA"] <- NA
+
+head(GO.terms)
+tail(GO.terms)
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms <- unique(GO.terms)
+
+dim(GO.terms) # 52861 x 2
+head(GO.terms, 10)
+tail(GO.terms, 10)
+
+
+## old GO terms (not my annots)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOseq/plob/plob_GO_20210125.csv", header=TRUE)
+annot_GO <- select(annot_GO, -X)
+annot_GO$gene_id <- gsub(".m1", "", annot_GO$gene_id)
+annot_GO$gene_id <- gsub("model", "TU", annot_GO$gene_id)
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
+splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
+GO.terms_OG <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms_OG) <- c("gene_id", "GO.ID")
+GO.terms_OG[GO.terms_OG == "NA"] <- NA
+
+head(GO.terms_OG)
+tail(GO.terms_OG)
+GO.terms_OG$GO.ID<- as.character(GO.terms_OG$GO.ID)
+GO.terms_OG$GO.ID <- replace_na(GO.terms_OG$GO.ID, "unknown")
+GO.terms_OG$GO.ID <- as.factor(GO.terms_OG$GO.ID)
+GO.terms_OG$gene_id <- as.factor(GO.terms_OG$gene_id)
+GO.terms_OG <- unique(GO.terms_OG)
+
+dim(GO.terms_OG) # 52861 x 2
+head(GO.terms_OG, 10)
+tail(GO.terms_OG, 10)
+
+
+
+
+
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GO.wall<-goseq(DEG.pwf, IDvector, gene2cat=GO.terms_OG, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall_FullAnnot, file = "~/Desktop/mcav_GO_ALL_FullAnnot_20210222.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 #Import merged annotated gtf file
 map <- read.csv("~/Desktop/GFFs/Plob.merged.annotated.gtf", header=FALSE, sep="\t")
@@ -97,11 +209,12 @@ head(length_vector)
 
 #Calculate Probability Weighting Function
 DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector by length of gene
+# NAs in nullp: https://rdrr.io/bioc/goseq/man/nullp.html
 # plot looks strange ???
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/plob_GO_20210125.csv", header=TRUE)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/plob/plob_GO_20210125.csv", header=TRUE)
 annot_GO <- select(annot_GO, -X)
 annot_GO$gene_id <- gsub("model", "TU", annot_GO$gene_id) # replace model with TU to match DEG names
 annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
@@ -131,7 +244,7 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
-write.csv(GO.wall, file = "~/Desktop/plob_GO_ALL_20210125.csv")
+write.csv(GO.wall, file = "~/Desktop/plob_GO_ALL_20210207.csv")
 
 
 
@@ -156,12 +269,45 @@ CC <- subset(enriched.GO.05, ontology=="CC") # no CC significantly enriched go t
 CC <- CC[order(-CC$numDEInCat),]
 BP <- subset(enriched.GO.05, ontology=="BP")
 BP <- BP[order(-BP$numDEInCat),]
-write.csv(MF, file = "~/Desktop/mcav_MF_Sig_Enriched_GO.05_20210125.csv")
-write.csv(CC, file = "~/Desktop/mcav_CC_Sig_Enriched_GO.05_20210125.csv")
-write.csv(BP, file = "~/Desktop/mcav_BP_Sig_Enriched_GO.05_20210125.csv")
-write.csv(enriched.GO.05, file = "~/Desktop/mcav_Sig_Enriched_GO.05_ALL_20210125.csv")
+write.csv(MF, file = "~/Desktop/mcav_MF_Sig_Enriched_GO.05_20210207.csv")
+write.csv(CC, file = "~/Desktop/mcav_CC_Sig_Enriched_GO.05_20210207.csv")
+write.csv(BP, file = "~/Desktop/mcav_BP_Sig_Enriched_GO.05_20210207.csv")
+write.csv(enriched.GO.05, file = "~/Desktop/mcav_Sig_Enriched_GO.05_ALL_20210207.csv")
 
 # Merge enriched GO terms with gene ids (from GO.terms df)
+
+
+# Merge enriched GO terms with gene ids (from GO.terms df)
+colnames(GO.terms) <- c("gene_id","category")
+GO.terms_gene_ids <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE) # this combines gene ids with GO info from goseq analysis by GO term
+GO.terms_gene_ids <- unique(GO.terms_gene_ids)
+GO.terms_gene_ids.plob_genes.map_unique.ref <- merge(GO.terms_gene_ids, plob_filt.map_ref, by = "gene_id") # this combines GO info with counts and length data by gene id 
+#GO.terms_gene_ids.pdam_genes.map_unique.ref <- select(GO.terms_gene_ids.pdam_genes.map_unique.ref, c(gene_id, start, stop, length, category, over_represented_pvalue, under_represented_pvalue, numDEInCat, numInCat, term, ontology ))
+GO.terms_gene_ids.plob_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.plob_genes.map_unique.ref)
+write.csv(GO.terms_gene_ids.plob_genes.map_unique.ref, file = "~/Desktop/plob_GOterms_gene_ids_20210207.csv")
+
+# Merge GO.terms_gene_ids.pdam_genes.map_unique.ref and treatment comparison list 
+DEG_treatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_DEGs.all_treatment.csv", header = TRUE)
+colnames(DEG_treatment)[1] <-"gene_id"
+ByTreatment_GO.terms <- merge(DEG_treatment, GO.terms_gene_ids.pdam_genes.map_unique.ref, by = "gene_id", all.x = T) # this combines GO info, counts, and lengths with DEG treatment info by gene id 
+ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
+ByTreatment_GO.terms <- unique(ByTreatment_GO.terms)
+dim(ByTreatment_GO.terms) # 48 x 40
+length(unique(ByTreatment_GO.terms$gene_id)) # 37 unique gene ids
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 colnames(GO.terms) <- c("gene_id","category")
 GO.terms_gene_ids <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
 GO.terms_gene_ids <- unique(GO.terms_gene_ids)
