@@ -25,7 +25,7 @@ library("VennDiagram")
 
 
 ## Obtaining and tidying data 
-countdata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/star/gene_count_pdam_rgGFF_star_matrix.csv", header = TRUE, row.names = "gene_id")
+countdata <- read.csv("Desktop/PutnamLab/Repositories/Tufts_URI_RNASeq/Tufts_URI_CSM_RNASeq/Seneca/STAR_pipeline/Output/DESeq2/star/gene_count_pdam_rgGFF_star_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(countdata) # 1675 x 64
 head(countdata)
 for ( col in 1:ncol(countdata)){
@@ -33,7 +33,7 @@ for ( col in 1:ncol(countdata)){
 }
 
 # Load metadata 
-metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/sediment_HI_metadata_raw.csv", header = TRUE)
+metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/HI_sediment_metadata_raw.csv", header = TRUE)
 head(metadata)
 # Renaming specific columns
 names(metadata)[names(metadata) == "File.Name.fastq"] <- "SampleID" 
@@ -53,6 +53,55 @@ rownames(metadata) <- metadata$SampleID # make sampleID the row names
 # metadata <- metadata[-65,] # remove random blank space at the end
 # Select mcap species only 
 metadata_pdam <- subset(metadata, Species=="Pocillopora damicornis")
+
+# Making sampleID as rownames in metadata 
+rownames(metadata_pdam) <- metadata_pdam$SampleID
+
+# Filter reads by proportion of samples containing cutoff value
+filt <- filterfun(pOverA(0.85, 5)) # set filter values for P over A; I used 0.85 and 5
+tfil <- genefilter(countdata, filt) # create filter for counts data 
+keep <- countdata[tfil,] # identify genes to keep based on filter
+gn.keep <- rownames(keep)
+pdam_counts_filt <- as.matrix(countdata[which(rownames(countdata) %in% gn.keep),]) 
+write.csv(mcav_counts_filt, "~/Desktop/mcav_counts_filtered.csv")
+storage.mode(mcav_counts_filt) <- "integer" # stores count data as integer 
+# Checking to make sure rownames in metadata == colnames in counts data 
+all(rownames(mcav_metadata) %in% colnames(mcav_counts_filt)) # must come out TRUE
+# Set Treatment as a factor
+mcav_metadata$Treatment <- factor(mcav_metadata$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
+data <- DESeqDataSetFromMatrix(countData = mcav_counts_filt, colData = mcav_metadata, design = ~ Treatment)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 # Subset count data for only mcap samples based on SampleID and make sure rows of metadata = cols of count data
 pdam_ID <- metadata_pdam$SampleID
