@@ -112,7 +112,7 @@ dim(pdam_filt.map_unique.ref) # 13881 x 14
 #GOseq requires a vector of all genes and all differentially expressed genes. 
 #Make gene vector
 DEG <- filter(pdam_filt.map_unique.ref, gene_id%in%DEG_pdam$gene_id) #make vector of differentially expressed genes
-dim(DEG) #should be 549 - nope its 520. its because some of the lengths were NAs and those genes then got excluded
+dim(DEG) #should be 549 
 DEG <- DEG$gene_id # I believe I only need the gene ids here 
 DEG <- unique(DEG) # okay unique DEGs # is 549
 DEG_names <- as.vector(DEG) # turn values in vector to be used in goseq
@@ -121,7 +121,7 @@ DEG_names <- as.vector(DEG) # turn values in vector to be used in goseq
 #non-differentially expressed genes as 0 and differentially expressed genes as 1
 gene_vector=as.integer(pdam_filt.map_unique.ref$gene_id%in%DEG_names) # assign 0 and 1s
 names(gene_vector)=unique(pdam_filt.map_unique.ref$gene_id) # give gene ids as names in veector
-length(unique(names(gene_vector))) # 13568
+length(unique(names(gene_vector))) # 13881
 head(gene_vector)
 
 #Make ID vector

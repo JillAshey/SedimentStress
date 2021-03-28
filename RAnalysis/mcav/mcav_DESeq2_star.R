@@ -23,7 +23,7 @@ library("clusterProfiler")
 library(stringr)
 
 # Load gene count matrix
-mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
+mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -32,14 +32,15 @@ for ( col in 1:ncol(mcav_counts)){
 for ( col in 1:ncol(mcav_counts)){
   colnames(mcav_counts)[col] <-  gsub("X", "", colnames(mcav_counts)[col])
 }
+
 # functional annotation gff
-annot <- read.csv("~/Desktop/GFFs/Mcav.gff.annotations.fixed_transcript.gff3",header = FALSE, sep="\t")
-colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr")
-# annot$gene <- annot$attr
-annot <- annot[!grepl("##", annot$scaffold),]
-annot$gene <-gsub(";.*", "", annot$attr)
-annot$gene <-gsub("ID=", "", annot$gene)
-annot$gene <- gsub("-.*", "", annot$gene)
+# annot <- read.csv("~/Desktop/GFFs/Mcav.gff.annotations.fixed_transcript.gff3",header = FALSE, sep="\t")
+# colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr")
+# # annot$gene <- annot$attr
+# annot <- annot[!grepl("##", annot$scaffold),]
+# annot$gene <-gsub(";.*", "", annot$attr)
+# annot$gene <-gsub("ID=", "", annot$gene)
+# annot$gene <- gsub("-.*", "", annot$gene)
 
 # Load metadata
 metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/FL_sediment_metadata.csv", header = TRUE)
@@ -104,6 +105,7 @@ pheatmap(sampleDistMatrix, # plot matrix
          clustering_distance_cols = sampleDists, # cluster cols
          col=colors) # set colors
 plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
+# Treatment2 has a weird outlier, may remove?
 
 # Differential gene expression analysis 
 DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
@@ -117,6 +119,8 @@ DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p
 resultsNames(DEG.int) # view DE results 
 #[1] "Intercept"                       "Treatment_Treatment1_vs_control" "Treatment_Treatment2_vs_control"
 #[4] "Treatment_Treatment3_vs_control" "Treatment_Treatment4_vs_control"
+# NAs in padj: https://hbctraining.github.io/DGE_workshop/lessons/05_DGE_DESeq2_analysis2.html 
+# http://bioconductor.org/packages/devel/bioc/vignettes/DESeq2/inst/doc/DESeq2.html#why-are-some-p-values-set-to-na
 
 # Compare C vs T1
 DEG_control_vs_T1 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment1")) # results of DESeq2 comparing C and T1
@@ -266,22 +270,74 @@ DEG_T3_vs_T4.sig.num <- sum(DEG_T3_vs_T4$padj <0.05, na.rm = T) # identify # of 
 DEG_T3_vs_T4.sig.num
 # 0 DEG
 
-##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
+
+# Make full list of genes and treatments: CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
+DEG_control_vs_T1.sig.list_full$gene_id <- rownames(DEG_control_vs_T1.sig.list_full)
+rownames(DEG_control_vs_T1.sig.list_full) <- NULL
+DEG_control_vs_T2.sig.list_full$gene_id <- rownames(DEG_control_vs_T2.sig.list_full)
+rownames(DEG_control_vs_T2.sig.list_full) <- NULL
+DEG_control_vs_T3.sig.list_full$gene_id <- rownames(DEG_control_vs_T3.sig.list_full)
+rownames(DEG_control_vs_T3.sig.list_full) <- NULL
+DEG_control_vs_T4.sig.list_full$gene_id <- rownames(DEG_control_vs_T4.sig.list_full)
+rownames(DEG_control_vs_T4.sig.list_full) <- NULL
+DEG_T1_vs_T3.sig.list_full$gene_id <- rownames(DEG_T1_vs_T3.sig.list_full)
+rownames(DEG_T1_vs_T3.sig.list_full) <- NULL
+DEG_T2_vs_T3.sig.list_full$gene_id <- rownames(DEG_T2_vs_T3.sig.list_full)
+rownames(DEG_T2_vs_T3.sig.list_full) <- NULL
+
 DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full, 
                   DEG_control_vs_T2.sig.list_full,
                   DEG_control_vs_T3.sig.list_full, 
                   DEG_control_vs_T4.sig.list_full,
                   DEG_T1_vs_T3.sig.list_full,
-                  DEG_T2_vs_T3.sig.list_full
-)
-write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment.csv")
-DEGs.all$DEGs <- rownames(DEGs.all)
-DEGs.all_mcav <- DEGs.all$DEGs
+                  DEG_T2_vs_T3.sig.list_full)
+
+dim(DEGs.all) # 108 x 23
+length(unique(DEGs.all$gene_id)) # 62 unique genes between all treatments 
+write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment_20210208.csv")
+
+## Find intersections and unique results between treatments 
+# interactions
+int1 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T2.sig.list_full$gene_id)
+length(unique(int1)) # 15 DEGs shared between CvT1 and CvT2
+int2 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
+length(unique(int2)) # 16 DEGs shared between CvT1 and CvT3
+int3 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int3)) # 8 DEGs shared between CvT1 and CvT2
+int4 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
+length(unique(int4)) # 0 DEGs shared between CvT1 and T1vT3
+int5 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
+length(unique(int5)) # 0 DEGs shared between CvT1 and T2vT3
+int6 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
+length(unique(int6)) # 15 DEGs shared between CvT2 and CvT3
+int7 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int7)) # 10 DEGs shared between CvT2 and CvT4
+int8 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
+length(unique(int8)) # 0 DEGs shared between CvT2 and T1vT3
+int9 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
+length(unique(int9)) # 1 DEGs shared between CvT2 and T2vT3
+int10 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int10)) # 11 DEGs shared between CvT3 and T2vT4
+int11 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
+length(unique(int11)) # 0 DEGs shared between CvT3 and T1vT3
+int12 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
+length(unique(int12)) # 0 DEGs shared between CvT3 and T2vT3
+int13 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
+length(unique(int13)) # 0 DEGs shared between CvT4 and T1vT3
+int14 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
+length(unique(int14)) # 0 DEGs shared between CvT4 and T2vT3
+int15 <- intersect(DEG_T1_vs_T3.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
+length(unique(int15)) # 0 DEGs shared between T1vT3 and T2vT3
+
+
+##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
+DEGs.all_mcav <- DEGs.all$gene_id
 DEGs.all_mcav <- unique(DEGs.all_mcav)
-DEGs.all_mcav <- as.data.frame(DEGs.all_mcav) # 89 unique DEGs among treatment comparisons
+DEGs.all_mcav <- as.data.frame(DEGs.all_mcav) 
+dim(DEGs.all_mcav) # 62 unique DEGs among treatment comparisons 
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcav$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list.csv")
+write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list_20210208.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
@@ -356,6 +412,32 @@ col.order <- c("22_ctl2_Mc_TWF_1",
                "46_T41_Mc_QYH_1",
                "56_T42_Mc_JAW") 
   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 # Now I will order the counts data so the samples will group by treatment
 unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
 list(colnames(unique.DEG.annot))

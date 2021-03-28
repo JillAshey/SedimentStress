@@ -17,9 +17,70 @@ library("spdep")
 library("clusterProfiler")
 library("DataCombine")
 
+
+# 20210211
+## Match scaffold names with gffs from NCBI and RG
+
+# read in NCBI gff annotation file
+pdamgff3_NCBI <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff.gz", header=FALSE, sep="\t", skip=6)
+colnames(pdamgff3_NCBI) <- c("NCBI_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_NCBI <- na.omit(pdamgff3_NCBI) # get rid of NAs, they are ### rows
+dim(pdamgff3_NCBI) # 507906 x 9
+length(unique(pdamgff3_NCBI$NCBI_scaffold)) #4393 unique scaffolds 
+#pdamgff3_NCBI <- pdamgff3_NCBI[grep("LOC", pdamgff3_NCBI$gene),] # select only rows that have LOC term
+pdamgff3_NCBI$gene_id <- gsub(".*LOC", "", pdamgff3_NCBI$gene) # the | symbol being really annoying in subsetting, so removing everything up to L, then will add L back to gene_id
+pdamgff3_NCBI$gene_id <- sub(";.*", "", pdamgff3_NCBI$gene_id) # removing everything else in gene_id col
+pdamgff3_NCBI$gene_id <- paste0("LOC", pdamgff3_NCBI$gene_id) # adding LOC back to beginning of term
+length(unique(pdamgff3_NCBI$NCBI_scaffold)) #4393 unique scaffolds still
+
+# read in Reef Genomics gff annotation file
+pdamgff3_rg <- read.csv("~/Desktop/GFFs/pdam_annotation.gff3.gz", header=FALSE, sep="\t", skip=2)
+colnames(pdamgff3_rg) <- c("RG_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_rg <- na.omit(pdamgff3_rg)
+pdamgff3_rg$gene_id <- sub(";.*", "", pdamgff3_rg$gene) # make col for gene_id
+pdamgff3_rg$gene_id <- gsub("ID=", "", pdamgff3_rg$gene_id)
+dim(pdamgff3_rg) # 835024 x 9
+length(unique(pdamgff3_rg$RG_scaffold)) # 338 unique scaffolds - why does RG pdam annotation have so few scaffolds?
+
+
+# read in scaffold names. this file has both NCBI and RG scaffold names  
+scaffold <- read.delim("~/Desktop/GFFs/scaffold_NCBI_name.txt", header=FALSE, sep="\t")
+scaffold <- separate(scaffold, # separate scaffold df
+                     col = V1, # separate V1 col (only col there is)
+                     into = c("NCBI_scaffold", NA, NA, NA, NA, NA, NA, NA, NA, "RG_scaffold", NA, NA, NA), # name new cols, NA = no col
+                     sep = " ") # a space separates the proposed new cols in V1
+scaffold$RG_scaffold <- gsub(",", "", scaffold$RG_scaffold)
+#scaffold$length <- gsub(":.*", "", scaffold$NCBI_scaffold)        
+scaffold$NCBI_scaffold <- gsub(".*>", "", scaffold$NCBI_scaffold)
+length(unique(scaffold$NCBI_scaffold)) # 4393
+length(unique(scaffold$RG_scaffold)) # 4393
+dim(scaffold) # 4393 x 2
+
+# Lets see if we can merge scaffold names with annotation files
+# Merge NCBI gff with scaffold by NCBI_scaffold name 
+scaffold_merge <- merge(pdamgff3_NCBI, scaffold, by = "NCBI_scaffold")
+length(unique(scaffold_merge$NCBI_scaffold)) # 4393
+length(unique(scaffold_merge$RG_scaffold)) # 4393
+
+# Merge RG gff with scaffold by RG_scaffold name 
+scaffold_merge2 <- merge(pdamgff3_rg, scaffold, by = "RG_scaffold")
+length(unique(scaffold_merge2$NCBI_scaffold)) # 337
+length(unique(scaffold_merge2$RG_scaffold)) # 337
+
+
+
+
+
+
+
+
+
+
+
+# 20200824
 ## Reef Genomics
 # Load gff 
-pdamgff3_rg <- read.csv("~/Desktop/GFFs/pdam_annotation.gff3", header=FALSE, sep="\t", skip=2)
+pdamgff3_rg <- read.csv("~/Desktop/GFFs/pdam_annotation.gff3.gz", header=FALSE, sep="\t", skip=2)
 colnames(pdamgff3_rg) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
 dim(pdamgff3_rg) # 835,524 x 9
 # pdamgff3_rg <- na.omit(pdamgff3_rg)
@@ -498,6 +559,12 @@ dim(pdamgff3_NCBI) # 507,906 rows
   # 2) CDS = 206,863 
   # 3) mRNA = 25,170
 
+# NCBI has a lot of exons which is what STAR is using to align reads to the genome. That may be why STAR was not able to find a lot of gene expression 
+# for the RG file. I wonder what would happen if i left the gff file out of STAR for RG?
+# Because the gff annotation file for RG only has 337 scaffolds and 12504 exons, STAR doesnt have much to go forward with. But NCBI annotation gff file
+# has 4393 scaffolds and 226892 exons, so STAR has a lot of material to work with NCBI genome info. Its possible that RG has more exons in its annotation file,
+# but they are just labelled something else (like match_part or protein_match)
+
 # The two gffs shared these ids: gene, mRNA, exon, CDS
 #               pdamgff3_rg             vs               pdamgff3_NCBI
 #           gene = 1,675                                gene = 21,837
@@ -535,10 +602,18 @@ dim(pdam.gff_maker_genes_only) # 1675 x 9
 unique(pdam.gff_maker_genes_only$id)
 
 # file from RG with transcript_id= added in last col
-pdam.gff_fixed_transcript <- read.csv(file="~/Desktop/pdam_annotation_AddTranscript_id_fixed.gff3", header=FALSE, sep="\t")
+pdam.gff_fixed_transcript <- read.csv(file="~/Desktop/GFFs/pdam_annotation_AddTranscript_id_fixed.gff3", header=FALSE, sep="\t")
 colnames(pdam.gff_fixed_transcript) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
 dim(pdam.gff_fixed_transcript) # 835524 x 9
 unique(pdam.gff_fixed_transcript$id)
+
+
+
+
+
+
+
+
 pdam.gff_fixed_transcript_maker <- subset(pdam.gff_fixed_transcript, Gene.Predict == "maker") 
 dim(pdam.gff_fixed_transcript_maker) # 29372 x 9
 pdam.gff_fixed_transcript_genes_only <- subset(pdam.gff_fixed_transcript_maker, id=="gene")

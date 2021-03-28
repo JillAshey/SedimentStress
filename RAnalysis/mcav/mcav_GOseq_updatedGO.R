@@ -23,9 +23,8 @@ library("forcats")
 library("gridExtra")
 library("gapminder")
 
-
 # Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
-gcounts_filt_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_counts_filtered.csv", header = TRUE)
+gcounts_filt_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_counts_filtered.csv", header = TRUE)
 dim(gcounts_filt_mcav) # 12873 rows x 16
 for ( col in 1:ncol(gcounts_filt_mcav)){
   colnames(gcounts_filt_mcav)[col] <-  gsub("X", "", colnames(gcounts_filt_mcav)[col])
@@ -34,12 +33,674 @@ colnames(gcounts_filt_mcav)[1] <-"gene_id"
 head(gcounts_filt_mcav)
 
 # Load DEGs
-DEG_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_unique.sig.list.csv", header = TRUE)
+DEG_mcav <- read.csv("~/Desktop/mcav_unique.sig.list_20210208.csv", header = TRUE)
 dim(DEG_mcav) # 62 x 16
 for ( col in 1:ncol(DEG_mcav)){
   colnames(DEG_mcav)[col] <-  gsub("X", "", colnames(DEG_mcav)[col])
 }
 colnames(DEG_mcav)[1] <-"gene_id"
+head(DEG_mcav)
+
+# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+length_Mcav <- read_csv("Desktop/length.mRNA_Mcav.csv")
+length_Mcav$gene_id <- gsub("-RA", "", length_Mcav$gene_id)
+length_merge <- merge(length_Mcav, gcounts_filt_mcav, by = "gene_id")
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(length_merge, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 61 rows 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(length_merge$gene_id%in%DEG_names)
+names(gene_vector)=length_merge$gene_id
+
+# Make ID vector 
+IDvector <- length_merge$gene_id
+
+# Make length vector
+lengthVector <- length_merge$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+# plot looks weird...does this mean that there is not much length bias in the dataset?
+
+
+
+
+
+
+#### Prepare GO term dataframe 
+annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/mcav_FullAnnot.csv", header = TRUE)
+annot$gene_id <- gsub("-RA", "", annot$gene_id)
+GO.annot <- select(annot, gene_id, GO.IDs)
+GO.annot$GO.IDs <- gsub(",", ";", GO.annot$GO.IDs)
+splitted <- strsplit(as.character(GO.annot$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+GO.terms$GO.ID <- gsub("F:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("P:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("C:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+GO.terms[GO.terms == "NA"] <- NA
+
+head(GO.terms)
+tail(GO.terms)
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms <- unique(GO.terms)
+
+dim(GO.terms) # 36972 x 2
+head(GO.terms, 10)
+tail(GO.terms, 10)
+
+
+
+
+
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GO.wall_FullAnnot<-goseq(DEG.pwf, IDvector, gene2cat=GO.terms, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall_FullAnnot, file = "~/Desktop/mcav_GO_ALL_FullAnnot_20210222.csv")
+
+# Find significantly enriched GO terms 
+mcav.GO.05 <- GO.wall_FullAnnot$category[GO.wall_FullAnnot$over_represented_pvalue<.05]
+mcav.GO.05 <- as.data.frame(mcav.GO.05)
+colnames(mcav.GO.05) <- c("category")
+mcav.GO.05 <- merge(mcav.GO.05, GO.wall_FullAnnot, by="category")
+mcav.GO.05 <- mcav.GO.05[order(mcav.GO.05$ontology, mcav.GO.05$over_represented_pvalue, -mcav.GO.05$numDEInCat),]
+#Subset enriched GO terms by category and save as csv
+MF <- subset(mcav.GO.05, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),]
+CC <- subset(mcav.GO.05, ontology=="CC") 
+CC <- CC[order(-CC$numDEInCat),] 
+BP <- subset(mcav.GO.05, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),]
+write.csv(MF, file = "~/Desktop/mcav_MF_Sig_Enriched_GO.05_FullAnnot_20210222.csv")
+write.csv(CC, file = "~/Desktop/mcav_CC_Sig_Enriched_GO.05_FullAnnot_20210219.csv") 
+write.csv(BP, file = "~/Desktop/mcav_sub_BP_Sig_Enriched_GO.05_FullAnnot_20210222.csv")
+write.csv(acerv.GO.05, file = "~/Desktop/mcav_Sig_Enriched_GO.05_ALL_FullAnnot_2021022.csv")
+
+# Merge gene ids and sig enriched GO terms 
+colnames(GO.terms) <- c("gene_id", "category")
+merge <- merge(mcav.GO.05, GO.terms, by = "category") # contains gene ids and GO info 
+
+# Merge DEG with merge 
+merge_again <- merge(merge, DEG, by = "gene_id") # contains GO info and gene counts for DEGs
+
+# Read in DEG treatment info
+mcav_treatment <- read.csv("~/Desktop/mcav_DEGs.all_treatment_20210208.csv", header = TRUE)
+mcav_treatment <- select(mcav_treatment, c("baseMean", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj", "Treatment_Compare", "gene_id"))
+
+# Merge treatment info with merge_again 
+merge_all <- merge(merge_again, mcav_treatment, by = "gene_id")
+# yay now I have a df with all the info - GO info, gene ids, DESeq2 stats, gene counts
+dim(merge_all) # 131 x 31
+length(unique(merge_all$gene_id)) # 22 unique genes that are differentially expressed and have GO term info
+length(unique(merge_all$category)) # 32 unique GO terms 
+write.csv(merge_all, file = "~/Desktop/mcav_ByTreatment_GO.terms_FullAnnot_20210222.csv")
+MF_ByTreatment <- subset(merge_all, ontology=="MF")
+MF_ByTreatment <- MF_ByTreatment[order(-MF_ByTreatment$numDEInCat),]
+CC_ByTreatment <- subset(merge_all, ontology=="CC")
+CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] # no sig enriched under CC
+BP_ByTreatment <- subset(merge_all, ontology=="BP")
+BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
+write.csv(MF_ByTreatment, file = "~/Desktop/mcav_MF_Sig_Enriched_ByTreatment_GO.05_FullAnnot_20210222.csv")
+write.csv(CC_ByTreatment, file = "~/Desktop/mcav_CC_Sig_Enriched_ByTreatment_GO.05_20210222.csv")
+write.csv(BP_ByTreatment, file = "~/Desktop/mcav_BP_Sig_Enriched_ByTreatment_GO.05_FullAnnot_20210222.csv")
+
+
+
+
+# Plot terms by number of differentially expressed functions
+MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Molecular Function") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+MFplot
+
+CCplot <- CC %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Cellular Component") + #add a main title
+  theme(plot.title = element_text(face = 'bold',
+                                  size = 12,
+                                  hjust = 0)) +
+  theme_bw() + #Set background color
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+CCplot
+
+BPplot <- BP %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none") +
+  xlab("") +
+  ylab("") +
+  ggtitle("Biological Process") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+BPplot
+
+# Save MF, CC, and BP plot in grid layout
+GOplot <- grid.arrange(MFplot, CCplot, BPplot, ncol=3, clip="off")
+ggsave("~/Desktop/mcav_GOplot_05_FullAnnot_20210222.pdf", GOplot, width = 21, height = 21, units = c("in"))
+
+
+# Combining MF, CC, and BP into one plot and order by pvalue
+GOplot2 <- acerv.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_text(aes(label = over_represented_pvalue), hjust = -1, vjust = 0, size = 2) +
+  geom_point(size=3, aes(colour = ontology)) +
+  coord_flip() +
+  ylim(0,45) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2
+ggsave("~/Desktop/mcav_GOplot2_05_FullAnnot_20210222.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+
+# Combining into one plot and order by pvalue 
+GOplot_pvalue <- acerv.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  geom_point(size=3, aes(colour = ontology)) +
+  coord_flip() +
+  ylim(0,0.05) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot_pvalue
+ggsave("~/Desktop/mcav_GOplot_pvalue_05_FullAnnot_20210222.pdf", GOplot_pvalue, width = 28, height = 28, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# Import reference annotation file for length data 
+ref <- read.table("~/Desktop/GFFs/Mcav.gff.annotations.fixed_transcript.gff3", sep = "\t", header = FALSE)
+colnames(ref) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr")
+ref <- subset(ref, id == "gene") 
+ref$gene_id <- gsub(";.*", "", ref$attr)
+ref$gene_id <- gsub("ID=", "", ref$gene_id)
+ref <- select(ref, c(scaffold, gene.start, gene.stop, gene_id))
+ref <- ref %>% mutate(ref, length = gene.stop - gene.start)
+dim(ref) # 25142 x 5
+
+
+# Length data calculated directly from transcripts 
+length_Mcav <- read_csv("Desktop/length.mRNA_Mcav.csv")
+length_Mcav$gene_id <- gsub("-RA", "", length_Mcav$gene_id)
+length_merge <- merge(length_Mcav, gcounts_filt_mcav, by = "gene_id")
+
+
+
+
+
+
+## Instead of using map and ref files, try using annotation file that I generated (using interproscan, b2g, and uniprot)
+#annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/acerv_FuncAnn_UniP_B2G.csv", header = TRUE)
+annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/mcav_FullAnnot.csv", header = TRUE)
+annot$gene_id <- gsub("-RA", "", annot$gene_id)
+
+annot_length_merge <- merge(annot, length_Mcav, by = "gene_id")
+
+#Go.ref <- subset(annot, select = c(gene_id, length.x))
+colnames(annot_length_merge)[2] <- "length"
+
+# Filter counts by available annotations
+Go.ref <- merge(gcounts_filt_mcav, annot_length_merge, by = "gene_id")
+Go.ref <- unique(Go.ref)
+dim(Go.ref) # 7649 x 15
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(Go.ref, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
+dim(DEG) 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(Go.ref$gene_id%in%DEG_names)
+names(gene_vector)=Go.ref$gene_id
+
+# Make ID vector 
+IDvector <- Go.ref$gene_id
+
+# Make length vector
+lengthVector <- Go.ref$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+
+
+
+#### Prepare GO term dataframe 
+GO.annot <- select(annot, gene_id, GO.IDs)
+GO.annot$GO.IDs <- gsub(",", ";", GO.annot$GO.IDs)
+splitted <- strsplit(as.character(GO.annot$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+GO.terms$GO.ID <- gsub("F:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("P:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("C:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+GO.terms[GO.terms == "NA"] <- NA
+
+head(GO.terms)
+tail(GO.terms)
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms <- unique(GO.terms)
+
+dim(GO.terms) 
+head(GO.terms, 10)
+tail(GO.terms, 10)
+
+
+
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GO.wall_FullAnnot<-goseq(DEG.pwf, IDvector, gene2cat=GO.terms, method="Wallenius", use_genes_without_cat=TRUE)
+
+
+# Find significantly enriched GO terms 
+mcav.GO.05 <- GO.wall_FullAnnot$category[GO.wall_FullAnnot$over_represented_pvalue<.05]
+mcav.GO.05 <- as.data.frame(mcav.GO.05)
+colnames(mcav.GO.05) <- c("category")
+mcav.GO.05 <- merge(mcav.GO.05, GO.wall_FullAnnot, by="category")
+mcav.GO.05 <- mcav.GO.05[order(mcav.GO.05$ontology, mcav.GO.05$over_represented_pvalue, -mcav.GO.05$numDEInCat),]
+#Subset enriched GO terms by category and save as csv
+MF <- subset(mcav.GO.05, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),]
+CC <- subset(mcav.GO.05, ontology=="CC") 
+CC <- CC[order(-CC$numDEInCat),] 
+BP <- subset(mcav.GO.05, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(length_merge, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
+dim(DEG)
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(length_merge$gene_id%in%DEG_names)
+names(gene_vector)=length_merge$gene_id
+
+# Make ID vector 
+IDvector <- length_merge$gene_id
+
+# Make length vector
+lengthVector <- length_merge$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+
+
+
+
+
+
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(ref, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 37 rows - some DEGs do not have annotations?
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(ref$gene_id%in%DEG_names)
+names(gene_vector)=ref$gene_id
+
+# Make ID vector 
+IDvector <- ref$gene_id
+
+# Make length vector
+lengthVector <- ref$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+
+## GO 
+annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/mcav_FullAnnot.csv", header = TRUE)
+annot <- select(annot, -X)
+annot$gene_id <- gsub("-RA", "", annot$gene_id) # need to change to match gene count gene_ids - because annotations were made with protein/transcript seqs, they have the '-RA' designation on the end of name 
+
+#### Prepare GO term dataframe 
+GO.annot <- select(annot, gene_id, GO.IDs)
+GO.annot$GO.IDs <- gsub(",", ";", GO.annot$GO.IDs)
+splitted <- strsplit(as.character(GO.annot$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+GO.terms$GO.ID <- gsub("F:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("P:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("C:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+GO.terms[GO.terms == "NA"] <- NA
+
+head(GO.terms)
+tail(GO.terms)
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms <- unique(GO.terms)
+
+dim(GO.terms) 
+head(GO.terms, 10)
+tail(GO.terms, 10)
+
+
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GO.wall_FullAnnot<-goseq(DEG.pwf, IDvector, gene2cat=GO.terms, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall_FullAnnot, file = "~/Desktop/acerv_sub_GO_ALL_FullAnnot_20210219.csv")
+
+#Find overrepresented (expressed more?) enriched GO terms that are statistically significant at cutoff (p<0.05)
+enriched.GO.05 <- GO.wall_FullAnnot$category[GO.wall_FullAnnot$over_represented_pvalue<.05]
+enriched.GO.05 <- data.frame(enriched.GO.05)
+dim(enriched.GO.05) # 33
+colnames(enriched.GO.05) <- c("category")
+enriched.GO.05 <- merge(enriched.GO.05, GO.wall_FullAnnot, by="category")
+enriched.GO.05 <- enriched.GO.05[order(-enriched.GO.05$numDEInCat),]
+enriched.GO.05$term <- as.factor(enriched.GO.05$term)
+head(enriched.GO.05)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Instead of using map and ref files, try using annotation file that I generated (using interproscan, b2g, and uniprot)
+#annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/acerv_FuncAnn_UniP_B2G.csv", header = TRUE)
+annot <- read.csv("Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/mcav_FullAnnot.csv", header = TRUE)
+annot <- select(annot, -X)
+annot$gene_id <- gsub("-RA", "", annot$gene_id) # need to change to match gene count gene_ids - because annotations were made with protein/transcript seqs, they have the '-RA' designation on the end of name 
+
+Go.ref <- subset(annot, select = c(gene_id, length.x))
+colnames(Go.ref)[2] <- "length"
+
+# Filter counts by available annotations
+Go.ref <- merge(gcounts_filt_mcav, Go.ref, by = "gene_id")
+Go.ref <- unique(Go.ref)
+dim(Go.ref) # 7649 x 17
+
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(Go.ref, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 37 rows - some DEGs do not have annotations?
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(Go.ref$gene_id%in%DEG_names)
+names(gene_vector)=Go.ref$gene_id
+
+# Make ID vector 
+IDvector <- Go.ref$gene_id
+
+# Make length vector
+lengthVector <- Go.ref$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+
+
+
+#### Prepare GO term dataframe 
+GO.annot <- select(annot, gene_id, GO.IDs)
+GO.annot$GO.IDs <- gsub(",", ";", GO.annot$GO.IDs)
+splitted <- strsplit(as.character(GO.annot$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(GO.annot$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("gene_id", "GO.ID")
+GO.terms$GO.ID <- gsub("F:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("P:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub("C:", "", GO.terms$GO.ID)
+GO.terms$GO.ID <- gsub(" ", "", GO.terms$GO.ID)
+GO.terms[GO.terms == "NA"] <- NA
+
+head(GO.terms)
+tail(GO.terms)
+GO.terms$GO.ID<- as.character(GO.terms$GO.ID)
+GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
+GO.terms$GO.ID <- as.factor(GO.terms$GO.ID)
+GO.terms$gene_id <- as.factor(GO.terms$gene_id)
+GO.terms <- unique(GO.terms)
+
+dim(GO.terms) 
+head(GO.terms, 10)
+tail(GO.terms, 10)
+
+
+##Find enriched GO terms, "selection-unbiased testing for category enrichment amongst significantly expressed genes for RNA-seq data"
+GO.wall_FullAnnot<-goseq(DEG.pwf, IDvector, gene2cat=GO.terms, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall_FullAnnot, file = "~/Desktop/acerv_sub_GO_ALL_FullAnnot_20210219.csv")
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+############ Code below is using GO terms from my annotations (IPS, b2g, uniprot + old), gff reference file, and gtf stringtie file 
+### OLD CODE AS OF 20210219
+# Obtain names of all expressed ofav genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
+gcounts_filt_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_counts_filtered.csv", header = TRUE)
+dim(gcounts_filt_mcav) # 12873 rows x 16
+for ( col in 1:ncol(gcounts_filt_mcav)){
+  colnames(gcounts_filt_mcav)[col] <-  gsub("X", "", colnames(gcounts_filt_mcav)[col])
+}
+colnames(gcounts_filt_mcav)[1] <-"gene_id"
+head(gcounts_filt_mcav)
+
+# Load DEGs
+DEG_mcav <- read.csv("~/Desktop/mcav_unique.sig.list_20210208.csv", header = TRUE)
+dim(DEG_mcav) # 62 x 16
+for ( col in 1:ncol(DEG_mcav)){
+  colnames(DEG_mcav)[col] <-  gsub("X", "", colnames(DEG_mcav)[col])
+}
+colnames(DEG_mcav)[1] <-"gene_id"
+head(DEG_mcav)
 
 #Import merged annotated gtf file
 map <- read.csv("~/Desktop/GFFs/Mcav.merged.annotated.gtf", header=FALSE, sep="\t")
@@ -67,17 +728,18 @@ dim(ref) # 25142 x 5
 
 # Build a dataframe that links the gene IDs of expressed genes (poverA = 0.85,5), the gene ids of those genes (from the gene map), and the gene lengths (from the annotation file)
 mcav_filt.map <- merge(gcounts_filt_mcav, map, by = "gene_id", all.x = TRUE)
-dim(mcav_filt.map) # should be same # of rows as gcounts_filt_mcav - it is! 12873
+dim(mcav_filt.map) # should be same # of rows as gcounts_filt_mcav - it is! 12873 x 19
 
 #Find gene positions in ref corresponding to expressed genes 
 mcav_filt.map_ref <- merge(mcav_filt.map, ref, by = "gene_id", all.x= TRUE)
 mcav_filt.map_ref <- select(mcav_filt.map_ref, -c(scaffold.x, gene.start.x, gene.stop.x))
+dim(mcav_filt.map_ref) # should be same # of rows as gcounts_filt_mcav - it is! 12873 x 20
 
 #### Build GOSEQ vector 
 #GOseq requires a vector of all genes and all differentially expressed genes. 
 #Make gene vector
 DEG <- filter(mcav_filt.map_ref, gene_id%in%DEG_mcav$gene_id) #make vector of differentially expressed genes
-dim(DEG) #should be 62
+dim(DEG) #should be 62 - it is 62 x 20
 DEG_names <- as.vector(DEG$gene_id)
 
 # Make vector of all expressed genes (poverA = 0.85,5) with
@@ -96,13 +758,15 @@ head(length_vector)
 
 #Calculate Probability Weighting Function
 DEG.pwf<-nullp(gene_vector, ID_vector, bias.data=length_vector) #weight vector by length of gene
+# # NAs in nullp: https://rdrr.io/bioc/goseq/man/nullp.html
 # plot looks strange 
 
 ### Prepare GO term dataframe 
 # Import GO terms
-annot_GO <- read.csv("~/Desktop/mcav_GO_20210101.csv", header=TRUE)
+annot_GO <- read.csv("~/Desktop/mcav_GO_20210124.csv", header=TRUE)
 annot_GO <- select(annot_GO, -X)
 annot_GO$gene_id <- gsub("-.*", "", annot_GO$gene_id)
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
 
 # Split GO terms so there is only 1 GO term per row
 GO.terms <- separate_rows(annot_GO, GO.ID, sep = ";")
@@ -111,9 +775,9 @@ GO.terms <- GO.terms[!grepl("NA", GO.terms$GO.ID),]
 
 # Merge GO terms with all expressed acerv genes 
 GO.terms <- merge(mcav_filt.map_ref, GO.terms, by.x="gene_id")
-dim(GO.terms)
+dim(GO.terms) # 31152 x 21
 
-# Clean up GO.terms sd
+# Clean up GO.terms 
 GO.terms <- select(GO.terms, gene_id, GO.ID)
 GO.terms$GO.ID <- replace_na(GO.terms$GO.ID, "unknown")
 head(GO.terms, 10)
@@ -125,11 +789,7 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
-# Warning message:
-#   In goseq(DEG.pwf, ID_vector, gene2cat = GO.terms, method = "Wallenius",  :
-#              Missing length data for 56% of genes.  Accuarcy of GO test will be reduced.
-# need to look into this error 
-write.csv(GO.wall, file = "~/Desktop/mcav_GO_ALL_20210101.csv")
+write.csv(GO.wall, file = "~/Desktop/mcav_GO_ALL_20210208.csv")
 
 #### Explore enriched GO terms
 class(GO.wall)
@@ -152,40 +812,47 @@ CC <- subset(enriched.GO.05, ontology=="CC") # no CC significantly enriched go t
 CC <- CC[order(-CC$numDEInCat),]
 BP <- subset(enriched.GO.05, ontology=="BP")
 BP <- BP[order(-BP$numDEInCat),]
-write.csv(MF, file = "~/Desktop/mcav_MF_Sig_Enriched_GO.05_20210101.csv")
-write.csv(CC, file = "~/Desktop/mcav_CC_Sig_Enriched_GO.05_20210101.csv")
-write.csv(BP, file = "~/Desktop/mcav_BP_Sig_Enriched_GO.05_20210101.csv")
-write.csv(enriched.GO.05, file = "~/Desktop/mcav_Sig_Enriched_GO.05_ALL_20210101.csv")
+write.csv(MF, file = "~/Desktop/mcav_MF_Sig_Enriched_GO.05_20210208.csv")
+write.csv(CC, file = "~/Desktop/mcav_CC_Sig_Enriched_GO.05_20210208.csv")
+write.csv(BP, file = "~/Desktop/mcav_BP_Sig_Enriched_GO.05_20210208.csv")
+write.csv(enriched.GO.05, file = "~/Desktop/mcav_Sig_Enriched_GO.05_ALL_20210208.csv")
 
 # Merge enriched GO terms with gene ids (from GO.terms df)
+# Merge enriched GO terms with gene ids (from GO.terms df)
 colnames(GO.terms) <- c("gene_id","category")
-GO.terms_gene_ids <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
+GO.terms_gene_ids <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE) # this combines gene ids with GO info from goseq analysis by GO term
 GO.terms_gene_ids <- unique(GO.terms_gene_ids)
-GO.terms_gene_ids.mcav_genes.map_unique.ref <- merge(mcav_filt.map_ref, GO.terms_gene_ids, by = "gene_id", all.x = TRUE)
+GO.terms_gene_ids.mcav_genes.map_unique.ref <- merge(GO.terms_gene_ids, mcav_filt.map_ref, by = "gene_id") # this combines GO info with counts and length data by gene id 
 GO.terms_gene_ids.mcav_genes.map_unique.ref <- select(GO.terms_gene_ids.mcav_genes.map_unique.ref, c(gene_id, scaffold.y, gene.start.y, gene.stop.y, length, category, over_represented_pvalue, under_represented_pvalue, numDEInCat, numInCat, term, ontology ))
-colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref)[colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref) == 'scaffold.y'] <- 'scaffold'
-colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref)[colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref) == 'gene.start.y'] <- 'gene.start'
-colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref)[colnames(GO.terms_gene_ids.mcav_genes.map_unique.ref) == 'gene.stop.y'] <- 'gene.stop'
 GO.terms_gene_ids.mcav_genes.map_unique.ref <- na.omit(GO.terms_gene_ids.mcav_genes.map_unique.ref)
-GO.terms_gene_ids.mcav_genes.map_unique.ref <- unique(GO.terms_gene_ids.mcav_genes.map_unique.ref)
+write.csv(GO.terms_gene_ids.mcav_genes.map_unique.ref, file = "~/Desktop/mcav_GOterms_gene_ids_20210208.csv")
 
 # Merge GO.terms_gene_ids.acerv_genes.map_unique.ref and treatment comparison list 
-DEG_treatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav_DEGs.all_treatment.csv", header = TRUE)
-DEG_treatment <- select(DEG_treatment, -X)
-colnames(DEG_treatment)[1] <-"gene_id"
-ByTreatment_GO.terms <- merge(GO.terms_gene_ids.mcav_genes.map_unique.ref, DEG_treatment, by = "gene_id", all.x = TRUE)
+DEG_treatment <- read.csv("~/Desktop/mcav_DEGs.all_treatment_20210208.csv", header = TRUE)
+#colnames(DEG_treatment)[1] <-"gene_id"
+ByTreatment_GO.terms <- merge(DEG_treatment, GO.terms_gene_ids.mcav_genes.map_unique.ref, by = "gene_id", all.x = T) # this combines GO info, counts, and lengths with DEG treatment info by gene id 
 ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
-# now I have a df with DEGs gene names, treatment comparisons, GO terms, and term info
+dim(ByTreatment_GO.terms) # 132 x 33
+length(unique(ByTreatment_GO.terms$gene_id)) # 22 unique gene ids 
+#ByTreatment_GO.terms <- filter(ByTreatment_GO.terms, over_represented_pvalue > 0)
+############### THIS IS WHERE I NEED TO GET THE GENE IDS TO BLAST
+# now I have a df with gene ids, treatment comparisons, GO terms, and term info
+# in order for a gene id to make it onto this list, it has to:
+#1) be differentially expressed 
+#2) have length data from gff file 
+#3) have GO term(s) assigned to it
 MF_ByTreatment <- subset(ByTreatment_GO.terms, ontology=="MF")
 MF_ByTreatment <- MF_ByTreatment[order(-MF_ByTreatment$numDEInCat),]
 CC_ByTreatment <- subset(ByTreatment_GO.terms, ontology=="CC")
-CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),]
+CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] # no sig enriched under CC
 BP_ByTreatment <- subset(ByTreatment_GO.terms, ontology=="BP")
 BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
-write.csv(ByTreatment_GO.terms, file = "~/Desktop/mcav_ByTreatment_GO.terms_20210101.csv")
-write.csv(MF_ByTreatment, file = "~/Desktop/mcav_MF_Sig_Enriched_ByTreatment_GO.05_20210101.csv")
-write.csv(CC_ByTreatment, file = "~/Desktop/mcav_CC_Sig_Enriched_ByTreatment_GO.05_20210101.csv")
-write.csv(BP_ByTreatment, file = "~/Desktop/mcav_BP_Sig_Enriched_ByTreatment_GO.05_20210101.csv")
+write.csv(MF_ByTreatment, file = "~/Desktop/mcav_MF_Sig_Enriched_ByTreatment_GO.05_20210208.csv")
+write.csv(CC_ByTreatment, file = "~/Desktop/mcav_CC_Sig_Enriched_ByTreatment_GO.05_20210208.csv")
+write.csv(BP_ByTreatment, file = "~/Desktop/mcav_BP_Sig_Enriched_ByTreatment_GO.05_20210208.csv")
+write.csv(ByTreatment_GO.terms, file = "~/Desktop/mcav_ByTreatment_GO.terms_20210208.csv")
+
+
 
 # Plot terms by number of differentially expressed functions
 MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
@@ -261,7 +928,7 @@ BPplot
 
 # Save MF, CC, and BP plot in grid layout
 GOplot <- grid.arrange(MFplot, CCplot, BPplot, ncol=3, clip="off")
-ggsave("~/Desktop/mcav_GOplot_05_20210101.pdf", GOplot, width = 21, height = 21, units = c("in"))
+ggsave("~/Desktop/mcav_GOplot_05_20210208.pdf", GOplot, width = 21, height = 21, units = c("in"))
 
 # Combining MF, CC, and BP into one plot and order by pvalue
 GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
@@ -286,7 +953,7 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot2
-ggsave("~/Desktop/mcav_GOplot2_05_20210101.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/mcav_GOplot2_05_20210208.pdf", GOplot2, width = 28, height = 28, units = c("in"))
 
 # Combining into one plot and order by pvalue 
 GOplot_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
@@ -311,7 +978,7 @@ GOplot_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reor
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot_pvalue
-ggsave("~/Desktop/mcav_GOplot_pvalue_05_20210101.pdf", GOplot_pvalue, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/mcav_GOplot_pvalue_05_20210208.pdf", GOplot_pvalue, width = 28, height = 28, units = c("in"))
 
 
 
