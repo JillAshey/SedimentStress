@@ -33,6 +33,13 @@ pdamgff3_NCBI$gene_id <- sub(";.*", "", pdamgff3_NCBI$gene_id) # removing everyt
 pdamgff3_NCBI$gene_id <- paste0("LOC", pdamgff3_NCBI$gene_id) # adding LOC back to beginning of term
 length(unique(pdamgff3_NCBI$NCBI_scaffold)) #4393 unique scaffolds still
 
+
+pdamgff3_NCBI <- pdamgff3_NCBI[!grepl("region", pdamgff3_NCBI$id),]
+pdamgff3_NCBI_short <- pdamgff3_NCBI[,c("NCBI_scaffold", "gene_id")]
+pdamgff3_NCBI_short <- unique(pdamgff3_NCBI_short)
+write.csv(pdamgff3_NCBI, "~/Desktop/pdam_GeneNames_NCBI_LOC.csv")
+
+
 # read in Reef Genomics gff annotation file
 pdamgff3_rg <- read.csv("~/Desktop/GFFs/pdam_annotation.gff3.gz", header=FALSE, sep="\t", skip=2)
 colnames(pdamgff3_rg) <- c("RG_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols

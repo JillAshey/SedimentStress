@@ -4,6 +4,7 @@
 
 ### Gene Ontology Analysis of Differentially Expressed Genes in pdam - NCBI gff
 
+rm(list = ls())
 
 # Load packages 
 library("DESeq2")
@@ -21,6 +22,297 @@ library("goseq")
 library("forcats")
 library("gridExtra")
 library("GO.db")
+
+# Obtain names of all expressed pdam genes (poverA = 0.85,5)
+gcounts_filt_pdam <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam/pdam_counts_filt.csv", header = TRUE) # read data in
+dim(gcounts_filt_pdam) # 13881 rows x 13
+#for ( col in 1:ncol(gcounts_filt_pdam)){
+# colnames(gcounts_filt_pdam)[col] <-  gsub("X", "", colnames(gcounts_filt_pdam)[col]) # remove X in front of col names
+#}
+colnames(gcounts_filt_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
+head(gcounts_filt_pdam)
+length(unique(gcounts_filt_pdam$gene_id)) # 13881 total unique gene ids
+
+# Import file with DEGs for pdam
+DEG_pdam <- read.csv("~/Desktop/pdam_unique.sig.list_20210326.csv", header = TRUE) # read in list of significant pdam genes
+dim(DEG_pdam) # 549 x 13
+#for ( col in 1:ncol(DEG_pdam)){
+#   colnames(DEG_pdam)[col] <-  gsub("X", "", colnames(DEG_pdam)[col]) # remove X in front of col names
+# }
+colnames(DEG_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
+head(DEG_pdam)
+length(unique(DEG_pdam$gene_id)) # 549 total unique gene ids 
+
+# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+# since length data had the XM, XP etc terms, I need to read in NCBI gff and merge so I can get the LOC terms
+pdamgff3_NCBI <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff.gz", header=FALSE, sep="\t", skip=6)
+colnames(pdamgff3_NCBI) <- c("NCBI_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_NCBI <- na.omit(pdamgff3_NCBI) # omit NAs
+#pdamgff3_NCBI <- filter(pdamgff3_NCBI, id=="mRNA")
+pdamgff3_NCBI <- mutate(pdamgff3_NCBI, length = gene.stop - gene.start)
+pdamgff3_NCBI$loc <- gsub(".*LOC", "", pdamgff3_NCBI$gene) # the | symbol being really annoying in subsetting, so removing everything up to L, then will add L back to gene_id
+pdamgff3_NCBI$loc <- sub(";.*", "", pdamgff3_NCBI$loc) # removing everything else in gene_id col
+pdamgff3_NCBI$loc <- paste0("LOC", pdamgff3_NCBI$loc) # adding LOC back to beginning of term
+pdamgff3_NCBI <- pdamgff3_NCBI[!grepl("region", pdamgff3_NCBI$id),] # remove 'region' id
+pdamgff3_NCBI <- pdamgff3_NCBI[!grepl("region", pdamgff3_NCBI$id),] # remove 'region' id
+#pdamgff3_NCBI$gene_id <- sub(";.*", "", pdamgff3_NCBI$gene) # removing everything after the first ';'
+#pdamgff3_NCBI$gene_id <- sub(".*-", "", pdamgff3_NCBI$gene_id) # removing everything after the first ';'
+pdamgff3_NCBI_gene<- subset(pdamgff3_NCBI, id =="gene" | id=="pseudogene")
+
+# make new df with length and gene id
+pdamgff3_NCBI_gene <- pdamgff3_NCBI_gene[,c("length", "loc")]
+colnames(pdamgff3_NCBI_gene)[2] <-"gene_id" # switch loc col back to gene_id
+pdamgff3_NCBI_gene <- unique(pdamgff3_NCBI_gene)
+
+# Merge pdamgff3_NCBI_gene with DEG_pdam to subset DEGs from larger df
+#length_merge <- merge(DEG_pdam, pdamgff3_NCBI_gene)
+
+#### Build GOSEQ vector 
+#GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+# Make DEG/gene vector 
+DEG <- filter(pdamgff3_NCBI_gene, gene_id%in%DEG_pdam$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 549 rows 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(pdamgff3_NCBI_gene$gene_id%in%DEG_names)
+names(gene_vector)=pdamgff3_NCBI_gene$gene_id
+
+# Make ID vector 
+IDvector <- pdamgff3_NCBI_gene$gene_id
+
+# Make length vector
+lengthVector <- pdamgff3_NCBI_gene$length
+
+# Calculate Probability Weighting Function
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+# plot looks weird...does this mean that there is not much length bias in the dataset?
+# also got this warning: In pcls(G) : initial point very close to some inequality constraints - but goseq forums seem to think its okay
+# it may mean there is not much length bias 
+# looks like we have an outlier 
+
+
+## old GO terms (not my annots)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOseq/pdam/pdam_GO_20210125.csv", header=TRUE)
+annot_GO <- annot_GO[,2:3]
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
+splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
+GO.terms_OG <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms_OG) <- c("gene_id", "GO.ID")
+GO.terms_OG[GO.terms_OG == "NA"] <- NA
+
+head(GO.terms_OG)
+tail(GO.terms_OG)
+GO.terms_OG$GO.ID<- as.character(GO.terms_OG$GO.ID)
+GO.terms_OG$GO.ID <- replace_na(GO.terms_OG$GO.ID, "unknown")
+GO.terms_OG$GO.ID <- as.factor(GO.terms_OG$GO.ID)
+GO.terms_OG$gene_id <- as.factor(GO.terms_OG$gene_id)
+GO.terms_OG <- unique(GO.terms_OG)
+
+dim(GO.terms_OG) # 31327 x 2
+head(GO.terms_OG, 10)
+tail(GO.terms_OG, 10)
+
+
+### Perform GOseq
+# Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+# should I include this: test.cats=c("GO:CC", "GO:BP", "GO:MF") ?
+GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms_OG, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/pdam_GO_ALL_20210508.csv")
+
+#Subset enriched GO terms by category and save as csv
+#How many enriched GO terms do we have?
+class(GO.wall)
+head(GO.wall)
+tail(GO.wall)
+nrow(GO.wall)
+
+#Find only enriched GO terms that are statistically significant at cutoff - 0.05
+enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
+enriched.GO.05<-data.frame(enriched.GO.05.a)
+colnames(enriched.GO.05) <- c("category")
+enriched.GO.05 <- merge(enriched.GO.05, GO.wall, by="category")
+enriched.GO.05 <- enriched.GO.05[order(-enriched.GO.05$numDEInCat),]
+enriched.GO.05$term <- as.factor(enriched.GO.05$term)
+head(enriched.GO.05)
+MF <- subset(enriched.GO.05, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),] # 22
+CC <- subset(enriched.GO.05, ontology=="CC")
+CC <- CC[order(-CC$numDEInCat),] # 5
+BP <- subset(enriched.GO.05, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),] # 23
+write.csv(MF, file = "~/Desktop/pdam_MF_Sig_Enriched_GO.05_20210508.csv")
+write.csv(CC, file = "~/Desktop/pdam_CC_Sig_Enriched_GO.05_20210508.csv")
+write.csv(BP, file = "~/Desktop/pdam_BP_Sig_Enriched_GO.05_20210508.csv")
+write.csv(enriched.GO.05, file = "~/Desktop/pdam_Sig_Enriched_GO.05_ALL_20210508.csv")
+
+# Merge GO terms and enriched list 
+colnames(GO.terms_OG) <- c("gene_id", "category")
+enriched_GO.terms <- merge(enriched.GO.05, GO.terms_OG, by = "category", all.x = TRUE)
+DEG_treatment <- read.csv("~/Desktop/pdam_DEGs.all_treatment_20210326.csv", header = TRUE)
+DEG_treatment <- DEG_treatment[, -1]
+#colnames(DEG_treatment)[1] <-"gene_id"
+ByTreatment_GO.terms <- merge(enriched_GO.terms, DEG_treatment, by = "gene_id", all.x = TRUE)
+ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
+# now I have a df with DEGs gene names, treatment comparisons, GO terms, and term info
+MF <- subset(ByTreatment_GO.terms, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),] # 50
+CC <- subset(ByTreatment_GO.terms, ontology=="CC")
+CC <- CC[order(-CC$numDEInCat),] # 9
+BP <- subset(ByTreatment_GO.terms, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),] # 41
+write.csv(ByTreatment_GO.terms, file = "~/Desktop/pdam_ByTreatment_GO.terms_20210508.csv")
+write.csv(MF, file = "~/Desktop/plob_MF_Sig_Enriched_ByTreatment_GO.05_20210508.csv")
+write.csv(CC, file = "~/Desktop/plob_CC_Sig_Enriched_ByTreatment_GO.05_20210508.csv")
+write.csv(BP, file = "~/Desktop/plob_BP_Sig_Enriched_ByTreatment_GO.05_20210508.csv")
+
+
+# Plot terms by number of differentially expressed functions
+MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Molecular Function") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+MFplot
+
+CCplot <- CC %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Cellular Component") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+CCplot
+
+BPplot <- BP %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none") +
+  xlab("") +
+  ylab("") +
+  ggtitle("Biological Process") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+BPplot
+
+GOplot <- grid.arrange(MFplot, CCplot, BPplot, ncol=3, clip="off")
+ggsave("~/Desktop/pdam_GOplot_05_20210508.pdf", GOplot, width = 21, height = 21, units = c("in"))
+
+# Combining all and ordering by pvalue
+GOplot2_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
+  mutate(term = fct_reorder(term, ontology)) %>%
+  ggplot( aes(x=term, y=over_represented_pvalue) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=over_represented_pvalue), color="grey") +
+  geom_point(size=3, aes(colour = ontology)) +
+  geom_text(aes(label = numDEInCat), hjust = -1, vjust = 0.5, size = 3) +
+  coord_flip() +
+  ylim(0,0.05) +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="bottom"
+  ) +
+  xlab("") +
+  ylab("p-value") +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background #set title attributes
+GOplot2_pvalue
+ggsave("~/Desktop/pdam_GOplot2_pvalue_05_20210508.pdf", GOplot2_pvalue, width = 28, height = 28, units = c("in"))
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+####### old code 
+
 
 ## The gene ids in gcounts and DEG files are LOC terms. I need to use the ref file to assign the LOC terms to XM terms. Then I can use the length_pdam file!
 # Import reference annotation gff file. This is from NCBI
@@ -47,7 +339,6 @@ length(unique(gcounts_filt_pdam$gene_id)) # 13881 total unique gene ids
 # Merge ref and gcounts_filt_pdam to assign LOC terms in gcounts_filt_pdam to XM terms
 gcounts_filt_pdam_XM <- merge(gcounts_filt_pdam, ref, by = "gene_id")
 gcounts_filt_pdam_XM <- unique(gcounts_filt_pdam_XM)
-
 dim(gcounts_filt_pdam_XM) # 17119
 
 # Import file with DEGs for pdam
