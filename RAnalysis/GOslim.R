@@ -19,7 +19,7 @@ colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename colum
 Gene.GO.IDs.slims <- merge(pdam.go, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
 Gene.GO.IDs.slims <- na.omit(Gene.GO.IDs.slims)
 
-
+# Plot pdam goslim
 GO <- ggplot(Gene.GO.IDs.slims, aes(x = ontology, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
   facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+

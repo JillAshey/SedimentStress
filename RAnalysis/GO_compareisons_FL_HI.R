@@ -1,33 +1,44 @@
-# Title: venn diagram of acerv, mcav, pdam, plob
+# Title: Evaluating shared GO terms
 # Project: Sedimentation RNA-Seq
 # Author: J. Ashey
-# Date: 12/1/20
+# Date: 5/9/21
 
 
 # should I be looking at the number of GO terms between species or the number of genes that have those GO terms between species?
 
+# Load packages 
+library("tidyverse")
+library("readr")
 
 ## Read in GO sig enriched terms for each species
 
 # Acerv
-GO_acerv_sub <- read.csv("~/Desktop/acerv_sub_Sig_Enriched_GO.05_ALL.csv", header = TRUE)
-GO_acerv_sub <- select(GO_acerv_sub, c("category", "over_represented_pvalue", "term", "ontology"))
+GO_acerv_sub <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Acervicornis_DEG_SuppTable.csv")
+#GO_acerv_sub <- select(GO_acerv_sub, c("category", "over_represented_pvalue", "term", "ontology"))
 # 13 GO terms
 
 # Mcav
-GO_mcav <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_Sig_Enriched_GO.05_ALL.csv", header = TRUE)
-GO_mcav <- select(GO_mcav, c("category", "over_represented_pvalue", "term", "ontology"))
+GO_mcav <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Mcavernosa_DEG_SuppTable.csv")
+#GO_mcav <- select(GO_mcav, c("category", "over_represented_pvalue", "term", "ontology"))
 # 33 GO terms
 
 # Pdam
-GO_pdam <- read.csv("~/Desktop/pdam_Sig_Enriched_GO.05_ALL.csv", header = TRUE)
-GO_pdam <- select(GO_pdam, c("category", "over_represented_pvalue", "term", "ontology"))
+GO_pdam <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Pdamicornis_DEG_SuppTable.csv")
+#GO_pdam <- select(GO_pdam, c("category", "over_represented_pvalue", "term", "ontology"))
 # 226 GO terms
 
 # Plob
-GO_plob <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/plob_Sig_Enriched_GO.05_ALL.csv", header = TRUE)
-GO_plob <- select(GO_plob, c("category", "over_represented_pvalue", "term", "ontology"))
+GO_plob <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Plobata_DEG_SuppTable.csv")
+#GO_plob <- select(GO_plob, c("category", "over_represented_pvalue", "term", "ontology"))
 # 20 GO terms
+
+
+
+
+
+
+
+
 
 
 # Merge and see what happens? Put larger df first 

@@ -155,6 +155,8 @@ DEG_treatment <- DEG_treatment[, -1]
 #colnames(DEG_treatment)[1] <-"gene_id"
 ByTreatment_GO.terms <- merge(enriched_GO.terms, DEG_treatment, by = "gene_id", all.x = TRUE)
 ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
+ByTreatment_GO.terms <- merge(ByTreatment_GO.terms, pdamgff3_NCBI_gene, by = "gene_id")
+ByTreatment_GO.terms <- unique(ByTreatment_GO.terms)
 # now I have a df with DEGs gene names, treatment comparisons, GO terms, and term info
 MF <- subset(ByTreatment_GO.terms, ontology=="MF")
 MF <- MF[order(-MF$numDEInCat),] # 50
