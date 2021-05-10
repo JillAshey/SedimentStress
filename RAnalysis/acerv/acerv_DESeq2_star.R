@@ -427,14 +427,14 @@ length(which(threshold)) # this did not reduce anything, as the df only has DEGs
 acerv.DEG$threshold <- threshold   
 
 # Volcano plot
-plob.volcano <- ggplot(acerv.DEG) +
+acerv.volcano <- ggplot(acerv.DEG) +
   geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=Treatment_Compare)) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
-plob.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/acerv/acerv_volcano.pdf", plob.volcano, width = 28, height = 28, units = "cm")
+acerv.volcano
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/acerv/acerv_volcano.pdf", acerv.volcano, width = 28, height = 28, units = "cm")
 
 
 ## trying volcano plot with expanded data 
@@ -442,14 +442,14 @@ acerv_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/S
 View(acerv_ByTreatment)
 
 # Volcano plot
-plob.volcano <- ggplot(plob_ByTreatment) +
+acerv.volcano <- ggplot(acerv_ByTreatment) +
   geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=term)) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
-plob.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/acerv/acerv_volcano.GOterms.pdf", plob.volcano, width = 28, height = 28, units = "cm")
+acerv.volcano
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/acerv/acerv_volcano.GOterms.pdf", acerv.volcano, width = 28, height = 28, units = "cm")
 
 
 
