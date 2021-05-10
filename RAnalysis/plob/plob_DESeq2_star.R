@@ -111,7 +111,6 @@ DEG_control_vs_mid <- results(DEG.int, contrast = c("Treatment", "control", "mid
 DEG_control_vs_mid
 DEG_control_vs_mid <- as.data.frame(DEG_control_vs_mid) # make full results into a df
 DEG_control_vs_mid["Treatment_Compare"] <- "CvsMid" # add treatment comparison col
-write.csv(DEG_control_vs_mid, file = "~/Desktop/pdam_control_vs_mid_all_genes_20210326.csv") # maybe include gene counts too?
 DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_mid.sig.num
 # 109 DEGs
@@ -127,7 +126,6 @@ DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_m
 DEG_control_vs_high <- results(DEG.int, contrast = c("Treatment", "control", "high"))
 DEG_control_vs_high
 DEG_control_vs_high <- as.data.frame(DEG_control_vs_high) # make full results into a df
-DEG_control_vs_high["Treatment_Compare"] <- "CvsHigh" # add treatment comparison col
 write.csv(DEG_control_vs_high, file = "~/Desktop/pdam_control_vs_high_all_genes_20210326.csv") # maybe include gene counts too?
 DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_high.sig.num
@@ -145,7 +143,6 @@ DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
 DEG_mid_vs_high
 DEG_mid_vs_high <- as.data.frame(DEG_mid_vs_high) # make full results into a df
 DEG_mid_vs_high["Treatment_Compare"] <- "MidvsHigh" # add treatment comparison col
-write.csv(DEG_mid_vs_high, file = "~/Desktop/pdam_control_vs_high_all_genes_20210326.csv") # maybe include gene counts too?
 DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_mid_vs_high.sig.num
 # 18 DEGs
@@ -197,6 +194,8 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # specify fitType='local' or 'mean' to avoid this message next time.
 
 
+unique.sig.list <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_unique.sig.list_20210326.csv")
+
 # PCA plot of diff-expressed genes 
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
@@ -221,7 +220,7 @@ plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
 plob_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 #PC.info <- plob_DEGPCAplot$data
-ggsave("~/Desktop/plob_DEGs_PCA.png", plob_DEGPCAplot, width = 30, height = 20,, units = "cm")
+ggsave("~/Desktop/plob_DEGs_PCA.pdf", plob_DEGPCAplot, width = 28, height = 28,, units = "cm")
 
 
 
@@ -358,141 +357,45 @@ ggsave("~/Desktop/plob_heatmap.png", plob_heatmap, width = 30, height = 20,, uni
 
 
 
+##### Volcano plots 
+## Here, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html)
+# Read in data 
+plob.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_DEGs.all_treatment_20210326.csv")
+plob.DEG <- select(plob.DEG, -X)
+
+# Set thresholds
+padj.cutoff <- 0.05
+lfc.cutoff <- 0.5
+
+threshold <- plob.DEG$padj < padj.cutoff & abs(plob.DEG$log2FoldChange) > lfc.cutoff
+length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
+
+# Add vector to df
+plob.DEG$threshold <- threshold   
+
+# Volcano plot
+plob.volcano <- ggplot(plob.DEG) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=Treatment_Compare)) +
+  xlab("log2 fold change") + 
+  ylab("-log10 adjusted p-value") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) 
+plob.volcano
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.pdf", plob.volcano, width = 30, height = 20,, units = "cm")
 
 
+## trying volcano plot with expanded data 
+plob_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/plob/plob_ByTreatment_GO.terms_20210326.csv")
+View(plob_ByTreatment)
 
-
-
-
-
-
-
-
-
-## Going to remove the control from the list and see how DEG PCA looks without it--can look at spread of mid and high 
-# Subset count data for only mcap samples based on SampleID and make sure rows of metadata = cols of count data
-metadata_plob_treatment <- subset(metadata_plob, Treatment=="mid" | Treatment=="high")
-plob_ID_treatment <- metadata_plob_treatment$SampleID
-count_plob_treatment <- select(countdata, all_of(plob_ID_treatment))
-
-# Filter reads by proportion of samples containing cutoff value
-filt <- filterfun(pOverA(0.85, 5)) # set filter values for P over A; I used 0.85 and 5
-tfil <- genefilter(count_plob_treatment, filt) # create filter for counts data 
-keep <- count_plob_treatment[tfil,] # identify genes to keep based on filter
-gn.keep <- rownames(keep)
-plob_treatment_counts_filt <- as.matrix(count_plob_treatment[which(rownames(count_plob_treatment) %in% gn.keep),]) 
-storage.mode(plob_treatment_counts_filt) <- "integer" # stores count data as integer 
-#write.csv(plob_treatment_counts_filt, "~/Desktop/plob_treatment_counts_filt.csv")
-# Checking to make sure rownames in metadata == colnames in counts data 
-all(rownames(metadata_plob_treatment) %in% colnames(plob_treatment_counts_filt)) # must come out TRUE
-# Set Treatment as a factor
-metadata_plob_treatment$Treatment <- factor(metadata_plob_treatment$Treatment, levels = c("mid", "high"))
-data <- DESeqDataSetFromMatrix(countData = plob_treatment_counts_filt, colData = metadata_plob_treatment, design = ~ Treatment)
-
-# Expression visualization
-# First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. 
-# Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). 
-# Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects.
-# To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. 
-# In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
-SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
-SF.data
-print(sizeFactors(SF.data)) #view size factors
-# size factors all less than 4, can use VST
-
-vst <- vst(data, blind = FALSE) 
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-# function: y = a/x + b, and a local regression fit was automatically substituted.
-# specify fitType='local' or 'mean' to avoid this message next time.
-
-head(assay(vst), 3) # view data
-sampleDists <- dist(t(assay(vst))) # calculate distance matrix
-sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
-rownames(sampleDistMatrix) <- colnames(vst) # assign row names
-colnames(sampleDistMatrix) <- NULL # assign col names 
-colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
-pheatmap(sampleDistMatrix, # plot matrix
-         clustering_distance_rows = sampleDists, # cluster rows
-         clustering_distance_cols = sampleDists, # cluster cols
-         col=colors) # set colors
-plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
-
-# Differential gene expression analysis 
-DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
-# estimating size factors
-# estimating dispersions
-# gene-wise dispersion estimates
-# mean-dispersion relationship
-# final dispersion estimates
-# fitting model and testing
-DEG.int.res <- results(DEG.int) # save DE results ; why does it say 'Wald test p-value: Treatment Treatment4 vs control' for DEG.int.res? Is it only looking at treatment 4 and control? In DESeq object created above, it says that design is Treatment
-resultsNames(DEG.int) # view DE results 
-#[1] "Intercept"             "Treatment_high_vs_mid"
-
-# Compare mid and high
-DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
-DEG_mid_vs_high
-DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
-DEG_mid_vs_high.sig.num
-# 14 DEGs 
-# why is it different than when control is included?
-DEG_mid_vs_high.sig <- subset(DEG_mid_vs_high, padj <0.05) # identify and subset significant pvalues
-DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subsey list of significant genes from original count data 
-DEG_mid_vs_high.sig.list$contrast <- as_factor(c("Treatment_high_vs_mid")) # set contrast as a factor 
-SFtest <- estimateSizeFactors(DEG_mid_vs_high.sig.list)
-print(sizeFactors(SFtest))
-DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-# function: y = a/x + b, and a local regression fit was automatically substituted.
-# specify fitType='local' or 'mean' to avoid this message next time.
-DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list))
-DEG_mid_vs_high.sig.list["Treatment_Compare"] <- "MidsHigh" # adding treatment comparison column
-#write.csv(DEG_mid_vs_high.sig.list, file = "~/Desktop/pdam_mid_vs_high_DEG.csv")
-
-#write.csv(DEGs.all, file = "~/Desktop/pdam_DEGs.all_treatment.csv")
-DEGs.all <- select(DEG_mid_vs_high.sig.list, -Treatment_Compare)
-DEGs.all$DEGs <- rownames(DEGs.all)
-DEGs.all <- unique(DEGs.all) # 4 unique DEGs
-#unique.sig.num <- length(t(unique(DEGs.all)))
-
-# PCA plot of diff-expressed genes 
-plob_DEGPCAdata <- plotPCA(DEG_mid_vs_high.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
-percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
-plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=3) +
-  xlab(paste0("PC1: ",percentVar_pca_plob[1],"% variance")) +
-  ylab(paste0("PC2: ",percentVar_pca_plob[2],"% variance")) +
-  scale_color_manual(values = c(mid = "pink", high = "darkgreen")) +
-  coord_fixed() +
-  ggtitle("Plob") + 
-  theme_bw() + #Set background color
-  theme(panel.border = element_blank(), # Set border
-        #panel.grid.major = element_blank(), #Set major gridlines
-        #panel.grid.minor = element_blank(), #Set minor gridlines
-        axis.line = element_line(colour = "black"), #Set axes color
-        plot.background=element_blank()) #Set the plot background
-plob_DEGPCAplot
-# PCA plot is of differentially expressed genes only
-PC.info <- plob_DEGPCAplot$data
-ggsave("~/Desktop/plob_treatment_DEGs_PCA.pdf", plob_DEGPCAplot)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# Volcano plot
+plob.volcano <- ggplot(plob_ByTreatment) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=term)) +
+  xlab("log2 fold change") + 
+  ylab("-log10 adjusted p-value") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) 
+plob.volcano
 
 
 

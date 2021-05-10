@@ -13,24 +13,24 @@ library("readr")
 ## Read in GO sig enriched terms for each species
 
 # Acerv
-GO_acerv_sub <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Acervicornis_DEG_SuppTable.csv")
-#GO_acerv_sub <- select(GO_acerv_sub, c("category", "over_represented_pvalue", "term", "ontology"))
-# 13 GO terms
+GO_acerv_sub <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Acervicornis_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
+GO_acerv_sub <- select(GO_acerv_sub, c("category", "term", "ontology"))
+length(unique(GO_acerv_sub$category)) # 15 GO terms
 
 # Mcav
-GO_mcav <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Mcavernosa_DEG_SuppTable.csv")
-#GO_mcav <- select(GO_mcav, c("category", "over_represented_pvalue", "term", "ontology"))
-# 33 GO terms
+GO_mcav <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Mcavernosa_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
+GO_mcav <- select(GO_mcav, c("category", "term", "ontology"))
+length(unique(GO_mcav$category)) # 33 GO terms
 
 # Pdam
-GO_pdam <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Pdamicornis_DEG_SuppTable.csv")
-#GO_pdam <- select(GO_pdam, c("category", "over_represented_pvalue", "term", "ontology"))
-# 226 GO terms
+GO_pdam <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Pdamicornis_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
+GO_pdam <- select(GO_pdam, c("category", "term", "ontology"))
+length(unique(GO_pdam$category)) # 50 GO terms
 
 # Plob
-GO_plob <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Plobata_DEG_SuppTable.csv")
-#GO_plob <- select(GO_plob, c("category", "over_represented_pvalue", "term", "ontology"))
-# 20 GO terms
+GO_plob <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Plobata_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
+GO_plob <- select(GO_plob, c("category", "term", "ontology"))
+length(unique(GO_plob$category)) # 20 GO terms
 
 
 
@@ -44,10 +44,30 @@ GO_plob <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStr
 # Merge and see what happens? Put larger df first 
 
 # Acerv and Mcav
-test_acerv_mcav <- merge(GO_mcav, GO_acerv_sub, by = "category", all.x = TRUE)
+test_acerv_mcav <- inner_join(GO_mcav, GO_acerv_sub)
+
+test <- full_join(GO_pdam, GO_acerv_sub, by = "term")
+
+
+
+
+
+
+test_acerv_mcav <- merge(GO_mcav, GO_acerv_sub, by = "term", all.x = T)
 unique(test_acerv_mcav$term.y) # 1 GO term in common: heme binding
+
+
+
+test <- full_join(GO_mcav, GO_acerv_sub, by = "term")
+
+
+
+
 # Acerv and Pdam
-test_acerv_pdam <- merge(GO_pdam, GO_acerv_sub, by = "category", all.x = TRUE)
+test_acerv_pdam <- merge(GO_pdam, GO_acerv_sub, by = "category", all = TRUE)
+
+
+
 unique(test_acerv_pdam$term.y) # 1 GO term in common: heme binding
 # Acerv and Plob
 test_acerv_plob <- merge(GO_plob, GO_acerv_sub, by = "category", all.x = TRUE)

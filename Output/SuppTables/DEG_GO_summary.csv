@@ -1,0 +1,5 @@
+,# total genes expressed (filtered),# unique differentially expressed genes,# total GO terms,# sig. enriched GO terms,# DEGs w/ sig. enriched GO terms
+Acerv,9054,89,1772,15,13
+Mcav,12873,62,1570,33,22
+Pdam,13881,549,2113,50,56
+Plob,15369,153,1881,20,58
