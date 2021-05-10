@@ -381,7 +381,7 @@ plob.volcano <- ggplot(plob.DEG) +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
 plob.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.pdf", plob.volcano, width = 30, height = 20,, units = "cm")
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.pdf", plob.volcano, width = 28, height = 28, units = "cm")
 
 
 ## trying volcano plot with expanded data 
@@ -396,6 +396,7 @@ plob.volcano <- ggplot(plob_ByTreatment) +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
 plob.volcano
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.GOterms.pdf", plob.volcano, width = 28, height = 28, units = "cm")
 
 
 
