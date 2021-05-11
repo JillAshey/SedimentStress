@@ -2,6 +2,11 @@
 
 Four coral species from Hawai'i and three coral species from Florida were exposed _in situ_ to varying levels of sediment load.
 
+
+### Bioinformatic pipeline
+
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/BioinformaticPipeline.png?token=APHKO36ZKVCMTDCXIZTKOULATKY64)
+
 ##### Table of Contents
 
 - Bioinf
