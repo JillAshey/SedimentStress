@@ -5,7 +5,7 @@ Four coral species from Hawai'i and three coral species from Florida were expose
 
 ### Bioinformatic pipeline
 
-
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/BioinformaticPipeline.jpeg?token=APHKO3ZVWTZNRAOJLSGSRATAU3WFC)
 
 ##### Table of Contents
 
