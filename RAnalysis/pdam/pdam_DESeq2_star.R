@@ -219,7 +219,7 @@ pdam_DEGPCAplot <- ggplot(pdam_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   theme(axis.text = element_text(size = 20),
         axis.title = element_text(size=25),
         #title = element_text(size=30),
-        legend.position = "none",
+        legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
@@ -228,131 +228,11 @@ pdam_DEGPCAplot <- ggplot(pdam_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
 pdam_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 #PC.info <- pdam_DEGPCAplot$data
-ggsave("~/Desktop/pdam_DEGs_PCA.png", pdam_DEGPCAplot, width = 30, height = 20, units = "cm")
+ggsave("~/Desktop/pdam_DEGs_PCA_20210705.jpeg", pdam_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("~/Desktop/pdam_DEGs_PCA_20210705.pdf", pdam_DEGPCAplot, width = 25, height = 25, units = "cm")
 
 
 ## Heatmap of DEGs
-# This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side
-# Also taking out legend 
-
-# Need a file with counts, gene names, GO IDs, term, and ontology
-
-# To get a file with gene names associated with GO terms, I have to look at pdam_GOterms_ByGene
-# This file is pdam genes with GO terms associated with them. One GO term per line, so multiple pdam gene names sometimes if genes have multiple GO terms
-# This file includes all gene names and GO IDs
-# pdam_sig <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam_GOterms_ByGene.csv", header = TRUE)
-# pdam_sig <- select(pdam_sig, -X)
-# colnames(pdam_sig)[1] <-"gene"
-# head(pdam_sig)
-# 
-# # Getting col order to order unique counts data
-# list(metadata_pdam)
-# list <- metadata_pdam[order(metadata_pdam$Treatment),] # need to order them so it will group by treatment in plot
-# list(list$SampleID) # look at sample IDs and use that list to make col.order
-# col.order <- c("4_2",
-#                "11_2",
-#                "39_2",
-#                "41_2",
-#                "1_2",
-#                "28_2",
-#                "42_2",
-#                "47_2",
-#                "2_2",
-#                "35_2",
-#                "36_2",
-#                "38_2")
-# 
-# # Now I will order the counts data so the samples will group by treatment
-# unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
-# list(colnames(unique.DEG.annot))
-# unique.DEG.annot2 <- unique.DEG.annot[, col.order]
-# unique.DEG.annot2$gene <- rownames(unique.DEG.annot2)
-# 
-# # Now we will take the unique.DEG.annot2 and merge it with acerv_sig
-# # The unique.DEG.annot2 file includes gene names for DEGs and counts data
-# test_merge <- merge(unique.DEG.annot2, pdam_sig, by = "gene", all.x = TRUE)
-# # test_merge now holds gene names for DEGs, counts data, and GO.IDs
-# 
-# # Now we need info about term and ontology 
-# GO_all <- read.csv("~/Desktop/pdam_GO_ALL.csv", header = TRUE) 
-# GO_all <- select(GO_all, -X)
-# colnames(GO_all)[1] <-"GO.ID"
-# GO_merge <- merge(test_merge, GO_all, by = "GO.ID", all.x = T)
-# # Great! GO_merge now contains GO IDs, gene names for DEGs, counts data, over and under represented pvalue, numCat, term, and ontology.
-# # All of the genes are in there (sometimes duplicated because multple GO/term/ontology info per gene) and some don't have any GO/term/ontology info. 
-# # *** I could also just plot GO_merge, but have duplicate genes for some that have multiple multple GO/term/ontology info per gene. Probably not the best idea tho
-# 
-# # Trying to aggregate based on GO terms. Hopefully this works because I also want the term and ontology to also aggregate but i think they may just go.
-# # Well maybe I could aggregate multiple times and then bind them? Lets see
-# agg_GO <- aggregate(GO_merge$GO.ID, list(GO_merge$gene), paste, collapse = ",") # aggregate GO terms 
-# colnames(agg_GO) <- c("gene", "GO.ID")
-# agg_term <- aggregate(GO_merge$term, list(GO_merge$gene), paste, collapse = ",") # aggregate term
-# colnames(agg_term) <- c("gene", "term")
-# agg_ont <- aggregate(GO_merge$ontology, list(GO_merge$gene), paste, collapse = ",") # aggregate ontology
-# colnames(agg_ont) <- c("gene", "ontology")
-# agg_over <- aggregate(GO_merge$over_represented_pvalue, list(GO_merge$gene), paste, collapse = ",")
-# colnames(agg_over) <- c("gene", "over_represented_pvalue")
-# 
-# # Now I'll merge them all together!
-# merge_all <- merge(agg_GO, agg_term, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, agg_ont, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, agg_over, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, unique.DEG.annot2, by = "gene", all.x = TRUE)
-# write.csv(merge_all, file = "~/Desktop/pdam_GO_DEG.csv") # maybe include gene counts too?
-# 
-# 
-# 
-# ## Hooray! Now I have a lovely file with counts, gene names, GO IDs, term, and ontology 
-# # Now I must put it in the heatmap...........
-# 
-# # First, lets make a matrix of gene counts 
-# rownames(merge_all) <- merge_all$gene
-# mat <- select(merge_all, -c("gene", "GO.ID", "term", "ontology", "over_represented_pvalue"))
-# mat <- as.matrix(mat)  
-#   
-# # Now lets make df of only treatment and sample ID
-# #df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
-# #colnames(df) <- "Treatment"
-# #df <- df[order(df$Treatment),]
-# #df <- as.data.frame(df)
-# #colnames(df) <- "Treatment"
-# df <- select(metadata_pdam, c("Treatment"))
-# #df <- df[order(df$Treatment),]
-# # probably just easier to take treatment info straight from metadata file
-# 
-# # Now lets make a df of only gene names 
-# df_gene <- as.data.frame(merge_all$gene)
-# colnames(df_gene) <- "DEG"
-# rownames(df_gene) <- df_gene$DEG
-# 
-# # Some genes have multiple terms, so I am going to select the first term for every gene 
-# merge_all$term2 <- merge_all$term
-# merge_all$term <- gsub(",.*", "", merge_all$term)
-# 
-# # Some genes have NAs, so subbing blank for NA to see the actual terms
-# merge_all[is.na(merge_all$term)] <- " "
-# 
-# #Set colors for treatment
-# ann_colors <- list(Treatment = c(control="gray", mid = "darksalmon", high = "darkred"))
-# 
-# 
-# ## Plot heatmap
-# pdam_heatmap <- pheatmap(mat, 
-#                              annotation_col = df,
-#                              #annotation_row = df_gene,
-#                              annotation_colors = ann_colors,
-#                              annotation_legend = F,
-#                              cluster_rows = F,
-#                              show_rownames = T,
-#                              cluster_cols = F,
-#                              show_colnames = T,
-#                              scale = "row",
-#                              fontsize_row = 8,
-#                              labels_row = merge_all$term)
-# pdam_heatmap
-# ggsave("~/Desktop/pdam_heatmap.png", pdam_heatmap, width = 30, height = 20,, units = "cm")
-# 
-
 
 
 
@@ -361,9 +241,9 @@ ggsave("~/Desktop/pdam_DEGs_PCA.png", pdam_DEGPCAplot, width = 30, height = 20, 
 # Read in data 
 pdam.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam/pdam_DEGs.all_treatment_20210326.csv")
 pdam.DEG <- select(pdam.DEG, -X)
-
-
-#### need to fix DEG file here ^^
+pdam.DEG$diffexpressed <- "NA"
+pdam.DEG$diffexpressed[pdam.DEG$log2FoldChange > 0] <- "Up"
+pdam.DEG$diffexpressed[pdam.DEG$log2FoldChange < 0] <- "Down"
 
 # Set thresholds
 padj.cutoff <- 0.05
@@ -373,29 +253,45 @@ threshold <- pdam.DEG$padj < padj.cutoff & abs(pdam.DEG$log2FoldChange) > lfc.cu
 length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
 
 # Add vector to df
-pdam.DEG$threshold <- threshold   
+pdam.DEG$threshold <- threshold 
 
-# Volcano plot
+# Volcano plot w/ DEGs
 pdam.volcano <- ggplot(pdam.DEG) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=Treatment_Compare)) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
 pdam.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/pdam/pdam_volcano.pdf", pdam.volcano, width = 28, height = 28, units = "cm")
+ggsave("~/Desktop/pdam_volcano_20210705.pdf", pdam.volcano, width = 25, height = 25)
+ggsave("~/Desktop/pdam_volcano_20210705.jpeg", pdam.volcano, width = 25, height = 25)
 
 
-## trying volcano plot with expanded data 
+
+## trying volcano plot with GO.slim data 
 pdam_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/pdam/pdam_ByTreatment_GO.terms_20210508.csv")
-View(pdam_ByTreatment)
+names(pdam_ByTreatment)[names(pdam_ByTreatment) == "category"] <- "GO.IDs"
+pdam_ByTreatment$diffexpressed <- "NA"
+pdam_ByTreatment$diffexpressed[pdam_ByTreatment$log2FoldChange > 0] <- "Up"
+pdam_ByTreatment$diffexpressed[pdam_ByTreatment$log2FoldChange < 0] <- "Down"
+
+# Read in GO slim info
+go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
+colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
+pdam_ByTreatment <- merge(pdam_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
+pdam_ByTreatment <- na.omit(pdam_ByTreatment)
 
 # Volcano plot
-pdam.volcano <- ggplot(pdam_ByTreatment) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=term)) +
+pdam_go.volcano <- ggplot(pdam_ByTreatment) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
-pdam.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/pdam/pdam_volcano.GOterms.pdf", pdam.volcano, width = 28, height = 28, units = "cm")
+pdam_go.volcano
+ggsave("~/Desktop/pdam_volcano.GOterms_20210705.pdf", pdam_go.volcano, width = 25, height = 25)
+ggsave("~/Desktop/pdam_volcano.GOterms_20210705.jpeg", pdam_go.volcano, width = 25, height = 25)
+
+
+
+

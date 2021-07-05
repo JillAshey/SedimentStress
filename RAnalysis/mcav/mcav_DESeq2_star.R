@@ -8,6 +8,14 @@
 # Load packages
 library("DESeq2")
 library("tidyverse")
+library("pheatmap")
+library("adegenet") 
+library("goseq")
+library("gridExtra")
+library("limma")
+library("genefilter")
+
+
 library("dplyr")
 library("pheatmap")
 library("RColorBrewer")
@@ -23,7 +31,7 @@ library("clusterProfiler")
 library(stringr)
 
 # Load gene count matrix
-mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
+mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -352,30 +360,30 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # PCA plot of diff-expressed genes 
 mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
-mcav_DEGPCAplot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
+mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   geom_point(size=8) +
   #geom_text(aes(label=name), hjust=0, vjust=0) +
   xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
-  #scale_color_manual(values = c(control="black", Treatment1="skyblue1", Treatment2="skyblue2", Treatment3="skyblue3", Treatment4="skyblue4")) +
-  #scale_color_manual(values = c(control="black", Treatment1="cadetblue3", Treatment2="palevioletred", Treatment3="darkgreen", Treatment4="orange")) +
-  scale_color_manual(values = c(control="gray", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
   #ggtitle("M. cavernosa") +
   theme_bw() + #Set background color
   theme(axis.text = element_text(size = 20),
-        axis.title = element_text(size=25),
+        axis.title = element_text(size=20),
         #title = element_text(size=30),
-        legend.position = "none",
+        legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background
-mcav_DEGPCAplot
+mcav_DEG_PCA_plot
 # PCA plot is of differentially expressed genes only
 #PC.info <- mcav_DEGPCAplot$data
-ggsave("~/Desktop/mcav_DEGs_PCA.png", mcav_DEGPCAplot, width = 30, height = 20,, units = "cm")
+ggsave("~/Desktop/mcav_DEGs_PCA_20210705.jpeg", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+ggsave("~/Desktop/mcav_sub_DEGs_PCA_20210705.pdf", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+
 
 
 
@@ -422,6 +430,9 @@ col.order <- c("22_ctl2_Mc_TWF_1",
 # Read in data 
 mcav.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_DEGs.all_treatment_20210208.csv")
 mcav.DEG <- select(mcav.DEG, -X)
+mcav.DEG$diffexpressed <- "NA"
+mcav.DEG$diffexpressed[mcav.DEG$log2FoldChange > 0] <- "Up"
+mcav.DEG$diffexpressed[mcav.DEG$log2FoldChange < 0] <- "Down"
 
 # Set thresholds
 padj.cutoff <- 0.05
@@ -433,27 +444,43 @@ length(which(threshold)) # this did not reduce anything, as the df only has DEGs
 # Add vector to df
 mcav.DEG$threshold <- threshold   
 
-# Volcano plot
+# Volcano plot w/ DEGs
 mcav.volcano <- ggplot(mcav.DEG) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=Treatment_Compare)) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
 mcav.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/mcav/mcav_volcano.pdf", mcav.volcano, width = 28, height = 28, units = "cm")
+ggsave("~/Desktop/mcav_volcano_20210705.pdf", mcav.volcano, width = 25, height = 25)
+ggsave("~/Desktop/mcav_volcano_20210705.jpeg", mcav.volcano, width = 25, height = 25)
 
 
-## trying volcano plot with expanded data 
+## trying volcano plot with GO.slim data 
 mcav_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20210208.csv")
 View(mcav_ByTreatment)
+names(mcav_ByTreatment)[names(mcav_ByTreatment) == "category"] <- "GO.IDs"
+mcav_ByTreatment$diffexpressed <- "NA"
+mcav_ByTreatment$diffexpressed[mcav_ByTreatment$log2FoldChange > 0] <- "Up"
+mcav_ByTreatment$diffexpressed[mcav_ByTreatment$log2FoldChange < 0] <- "Down"
+
+# Read in GO slim info
+go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
+colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
+mcav_ByTreatment <- merge(mcav_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
+mcav_ByTreatment <- na.omit(mcav_ByTreatment)
 
 # Volcano plot
-mcav.volcano <- ggplot(mcav_ByTreatment) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=term)) +
+mcav_go.volcano <- ggplot(mcav_ByTreatment) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
-mcav.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/mcav/mcav_volcano.GOterms.pdf", mcav.volcano, width = 28, height = 28, units = "cm")
+mcav_go.volcano
+ggsave("~/Desktop/mcav_volcano.GOterms_20210705.pdf", mcav_go.volcano, width = 25, height = 25)
+ggsave("~/Desktop/mcav_volcano.GOterms_20210705.jpeg", mcav_go.volcano, width = 25, height = 25)
+
+
+
+

@@ -194,8 +194,6 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # specify fitType='local' or 'mean' to avoid this message next time.
 
 
-unique.sig.list <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_unique.sig.list_20210326.csv")
-
 # PCA plot of diff-expressed genes 
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
@@ -211,7 +209,7 @@ plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   theme(axis.text = element_text(size = 20),
         axis.title = element_text(size=25),
         #title = element_text(size=30),
-        legend.position = "none",
+        legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
@@ -220,7 +218,8 @@ plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
 plob_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 #PC.info <- plob_DEGPCAplot$data
-ggsave("~/Desktop/plob_DEGs_PCA.pdf", plob_DEGPCAplot, width = 28, height = 28,, units = "cm")
+ggsave("~/Desktop/plob_DEGs_PCA_20210705.jpeg", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("~/Desktop/plob_DEGs_PCA_20210705.pdf", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
 
 
 
@@ -362,6 +361,9 @@ ggsave("~/Desktop/plob_heatmap.png", plob_heatmap, width = 30, height = 20,, uni
 # Read in data 
 plob.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob/plob_DEGs.all_treatment_20210326.csv")
 plob.DEG <- select(plob.DEG, -X)
+plob.DEG$diffexpressed <- "NA"
+plob.DEG$diffexpressed[plob.DEG$log2FoldChange > 0] <- "Up"
+plob.DEG$diffexpressed[plob.DEG$log2FoldChange < 0] <- "Down"
 
 # Set thresholds
 padj.cutoff <- 0.05
@@ -373,37 +375,41 @@ length(which(threshold)) # this did not reduce anything, as the df only has DEGs
 # Add vector to df
 plob.DEG$threshold <- threshold   
 
-# Volcano plot
+# Volcano plot w/ DEGs
 plob.volcano <- ggplot(plob.DEG) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=Treatment_Compare)) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
 plob.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.pdf", plob.volcano, width = 28, height = 28, units = "cm")
+ggsave("~/Desktop/plob_volcano_20210705.pdf", plob.volcano, width = 25, height = 25)
+ggsave("~/Desktop/plob_volcano_20210705.jpeg", plob.volcano, width = 25, height = 25)
 
 
 ## trying volcano plot with expanded data 
 plob_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/plob/plob_ByTreatment_GO.terms_20210326.csv")
-View(plob_ByTreatment)
+names(plob_ByTreatment)[names(plob_ByTreatment) == "category"] <- "GO.IDs"
+plob_ByTreatment$diffexpressed <- "NA"
+plob_ByTreatment$diffexpressed[plob_ByTreatment$log2FoldChange > 0] <- "Up"
+plob_ByTreatment$diffexpressed[plob_ByTreatment$log2FoldChange < 0] <- "Down"
+
+# Read in GO slim info
+go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
+colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
+plob_ByTreatment <- merge(plob_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
+plob_ByTreatment <- na.omit(plob_ByTreatment)
 
 # Volcano plot
-plob.volcano <- ggplot(plob_ByTreatment) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=term)) +
+plob_go.volcano <- ggplot(plob_ByTreatment) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
   xlab("log2 fold change") + 
   ylab("-log10 adjusted p-value") +
   theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) 
-plob.volcano
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Plots/plob/plob_volcano.GOterms.pdf", plob.volcano, width = 28, height = 28, units = "cm")
-
-
-
-
-
-
-
+plob_go.volcano
+ggsave("~/Desktop/plob_volcano.GOterms_20210705.pdf", plob_go.volcano, width = 25, height = 25)
+ggsave("~/Desktop/plob_volcano.GOterms_20210705.jpeg", plob_go.volcano, width = 25, height = 25)
 
 
 

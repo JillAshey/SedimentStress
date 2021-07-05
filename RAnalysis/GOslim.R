@@ -36,7 +36,7 @@ GO.pdam <- ggplot(Gene.GO.IDs.slims.pdam, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.pdam
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/pdam_GOslim_20210508.pdf", GO.pdam, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/pdam/pdam_GOslim_20210508.pdf", GO.pdam, width = 28, height = 28, units = c("in"))
 
 ## Plob
 plob.go <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/SuppTables/Plobata_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
@@ -58,7 +58,7 @@ GO.plob <- ggplot(Gene.GO.IDs.slims.plob, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.plob
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/plob_GOslim_20210328.pdf", GO.plob, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/plob/plob_GOslim_20210328.pdf", GO.plob, width = 28, height = 28, units = c("in"))
 
 
 
@@ -85,7 +85,7 @@ GO.acerv <- ggplot(Gene.GO.IDs.slims.acerv, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.acerv
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/acerv_GOslim_20210328.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/acerv/acerv_GOslim_20210328.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
 
 
 ## Mcav
@@ -108,7 +108,7 @@ GO.mcav <- ggplot(Gene.GO.IDs.slims.mcav, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.mcav
-ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/mcav_GOslim_20210328.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/mcav/mcav_GOslim_20210328.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
 
 
 
@@ -142,11 +142,15 @@ APd_GO.term <- intersect(Gene.GO.IDs.slims.pdam$term, Gene.GO.IDs.slims.acerv$te
 
 
 ### Plot all species on one GO slim plot 
-# Add species name to each df
+# Add species name and site to each df
 Gene.GO.IDs.slims.pdam$Species <- "P.damicornis"
+Gene.GO.IDs.slims.pdam$Site <- "Florida"
 Gene.GO.IDs.slims.plob$Species <- "P.lobata"
+Gene.GO.IDs.slims.plob$Site <- "Florida"
 Gene.GO.IDs.slims.acerv$Species <- "A.cervicornis"
+Gene.GO.IDs.slims.acerv$Site <- "Hawaii"
 Gene.GO.IDs.slims.mcav$Species <- "M.cavernosa"
+Gene.GO.IDs.slims.mcav$Site <- "Hawaii"
 
 # Bind all species df together for GO slim plot 
 all.go.slim <- rbind(Gene.GO.IDs.slims.acerv, Gene.GO.IDs.slims.mcav, Gene.GO.IDs.slims.pdam, Gene.GO.IDs.slims.plob)
@@ -160,9 +164,40 @@ GO.all <- ggplot(all.go.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.all
-ggsave("~/Desktop/all_GOslim_20210509.pdf", GO.all, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/all_GOslim_20210509.pdf", GO.all, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/all_GOslim_20210509.jpeg", GO.all, width = 28, height = 28, units = c("in"))
 
-# Subset and plot only 'other molecular function', 'other metabolic processes', and 'protein metabolism'
+# Subset and plot by MF
+go.slim.MF <- all.go.slim %>% filter(ontology=="MF")
+
+GO.subset.MF <- ggplot(go.slim.MF, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 15))
+GO.subset.MF
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MF_GOslim_20210705.pdf", GO.subset.MF, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MF_GOslim_20210705.jpeg", GO.subset.MF, width = 28, height = 28, units = c("in"))
+
+# Subset and plot by BP
+go.slim.BP <- all.go.slim %>% filter(ontology=="BP")
+
+GO.subset.BP <- ggplot(go.slim.BP, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 15))
+GO.subset.BP
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.pdf", GO.subset.BP, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.jpeg", GO.subset.BP, width = 28, height = 28, units = c("in"))
+
+# Subset and plot only 'other molecular function' & 'other metabolic processes'
 go.slim.subset <- all.go.slim %>% filter(GO.Slim.Term=="other molecular function" | GO.Slim.Term=="other metabolic processes")
 
 GO.subset <- ggplot(go.slim.subset, aes(x = Species, y = term)) + 
@@ -174,9 +209,39 @@ GO.subset <- ggplot(go.slim.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 15))
 GO.subset
-ggsave("~/Desktop/molecSubset_GOslim_20210509.pdf", GO.subset, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MolecMetab.Subset_GOslim_20210509.pdf", GO.subset, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MolecMetab.Subset_GOslim_20210509.jpeg", GO.subset, width = 28, height = 28, units = c("in"))
 
+# Subset and plot by site 
+## FL
+go.FL.subset <- all.go.slim %>% filter(Site=="Florida")
 
+GO.FL_subset <- ggplot(go.FL.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 15))
+GO.FL_subset
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/FL_GOslim_20210509.pdf", GO.FL_subset, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/FL_GOslim_20210509.jpeg", GO.FL_subset, width = 28, height = 28, units = c("in"))
+
+## HI
+go.HI.subset <- all.go.slim %>% filter(Site=="Hawaii")
+
+GO.HI_subset <- ggplot(go.HI.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 15))
+GO.HI_subset
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/HI_GOslim_20210509.pdf", GO.HI_subset, width = 28, height = 28, units = c("in"))
+ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/HI_GOslim_20210509.jpeg", GO.HI_subset, width = 28, height = 28, units = c("in"))
 
 
 

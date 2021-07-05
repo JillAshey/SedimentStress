@@ -133,7 +133,6 @@ all(rownames(acerv_metadata_sub) %in% colnames(acerv_counts_sub_filt)) # must co
 acerv_metadata_sub$Treatment <- factor(acerv_metadata_sub$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
 # create matrix that can be read by DESeq
 data <- DESeqDataSetFromMatrix(countData = acerv_counts_sub_filt, colData = acerv_metadata_sub, design = ~ Treatment)
-DESeqDataSetFromMatrix
 
 # Expression visualization
 # First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. 
@@ -427,16 +426,14 @@ acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color=Treatmen
   #geom_text(aes(label=name), hjust=0, vjust=0) +
   xlab(paste0("PC1: ",percentVar_pca_acerv_sub[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_acerv_sub[2],"% variance")) +
-  #scale_color_manual(values = c(control="black", Treatment1="skyblue1", Treatment2="skyblue2", Treatment3="skyblue3", Treatment4="skyblue4")) +
-  #scale_color_manual(values = c(control="black", Treatment1="cadetblue3", Treatment2="palevioletred", Treatment3="darkgreen", Treatment4="orange")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
   #ggtitle("A. cervicornis") +
   theme_bw() + #Set background color
   theme(axis.text = element_text(size = 20),
-        axis.title = element_text(size=25),
+        axis.title = element_text(size=20),
         #title = element_text(size=30),
-        legend.position = "none",
+        legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
@@ -445,7 +442,8 @@ acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color=Treatmen
 acerv_sub_DEG_PCA_plot
 # PCA plot is of differentially expressed genes only
 #PC.info <- mcav_DEGPCAplot$data
-ggsave("~/Desktop/acerv_sub_DEGs_PCA_20210219.jpeg", acerv_sub_DEG_PCA_plot, width = 30, height = 20,, units = "cm")
+ggsave("~/Desktop/acerv_sub_DEGs_PCA_20210705.jpeg", acerv_sub_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+ggsave("~/Desktop/acerv_sub_DEGs_PCA_20210705.pdf", acerv_sub_DEG_PCA_plot, width = 25, height = 25, units = "cm")
 
 
 ## Heatmap of DEGs
@@ -460,314 +458,60 @@ acerv_sig <- select(acerv_sig, -X)
 colnames(acerv_sig)[1] <-"gene"
 head(acerv_sig)
 
-# Now we will take the unique.DEG.annot2 and merge it with acerv_sig
-# The unique.DEG.annot2 file includes gene names for DEGs and counts data
-# test_merge <- merge(unique.DEG.annot2, acerv_sig, by = "gene", all.x = TRUE)
-# # test_merge now holds gene names for DEGs, counts data, and GO.IDs
-# 
-# # Now we need info about term and ontology 
-# GO_all <- read.csv("~/Desktop/acerv_sub_GO_ALL.csv", header = TRUE) 
-# GO_all <- select(GO_all, -X)
-# colnames(GO_all)[1] <-"GO.ID"
-# GO_merge <- merge(test_merge, GO_all, by = "GO.ID", all.x = T)
-# # Great! GO_merge now contains GO IDs, gene names for DEGs, counts data, over and under represented pvalue, numCat, term, and ontology.
-# # All of the genes are in there (sometimes duplicated because multple GO/term/ontology info per gene) and some don't have any GO/term/ontology info. 
-# # *** I could also just plot GO_merge, but have duplicate genes for some that have multiple multple GO/term/ontology info per gene. Probably not the best idea tho
-# 
-# # Trying to aggregate based on GO terms. Hopefully this works because I also want the term and ontology to also aggregate but i think they may just go.
-# # Well maybe I could aggregate multiple times and then bind them? Lets see
-# agg_GO <- aggregate(GO_merge$GO.ID, list(GO_merge$gene), paste, collapse = ",") # aggregate GO terms 
-# colnames(agg_GO) <- c("gene", "GO.ID")
-# agg_term <- aggregate(GO_merge$term, list(GO_merge$gene), paste, collapse = ",") # aggregate term
-# colnames(agg_term) <- c("gene", "term")
-# agg_ont <- aggregate(GO_merge$ontology, list(GO_merge$gene), paste, collapse = ",") # aggregate ontology
-# colnames(agg_ont) <- c("gene", "ontology")
-# agg_over <- aggregate(GO_merge$over_represented_pvalue, list(GO_merge$gene), paste, collapse = ",")
-# colnames(agg_over) <- c("gene", "over_represented_pvalue")
-# 
-# # Now I'll merge them all together!
-# merge_all <- merge(agg_GO, agg_term, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, agg_ont, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, agg_over, by = "gene", all.x = TRUE)
-# merge_all <- merge(merge_all, unique.DEG.annot2, by = "gene", all.x = TRUE)
-# write.csv(merge_all, file = "~/Desktop/acerv_sub_GO_DEG.csv") # maybe include gene counts too?
-# 
-# 
-# 
-# # Hooray! Now I have a lovely file with counts, gene names, GO IDs, term, and ontology 
-# # Now I must put it in the heatmap...........
-# 
-# # First, lets make a matrix of gene counts 
-# rownames(merge_all) <- merge_all$gene
-# mat <- select(merge_all, -c("gene", "GO.ID", "term", "ontology", "over_represented_pvalue"))
-# mat <- as.matrix(mat)
-# 
-# # Now lets make df of only treatment and sample ID
-# df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
-# colnames(df) <- "Treatment"
-# 
-# # Now lets make a df of only gene names 
-# df_gene <- as.data.frame(merge_all$gene)
-# colnames(df_gene) <- "DEG"
-# rownames(df_gene) <- df_gene$DEG
-# 
-# # Some genes have multiple terms, so I am going to select the first term for every gene 
-# merge_all$term2 <- merge_all$term
-# merge_all$term <- gsub(",.*", "", merge_all$term)
-# 
-# # Some genes have NAs, so subbing blank for NA to see the actual terms
-# merge_all[is.na(merge_all$term)] <- " "
-# 
-# #Set colors for treatment
-# ann_colors <- list(Treatment = c(control="gray", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray"))
-# 
-# ## Plot heatmap
-# acerv_sub_heatmap <- pheatmap(mat, 
-#                               annotation_col = df,
-#                              # annotation_row = df_gene,
-#                               annotation_colors = ann_colors,
-#                               annotation_legend = F,
-#                               cluster_rows = F,
-#                               show_rownames = T,
-#                               cluster_cols = F,
-#                               show_colnames = T,
-#                               scale = "row",
-#                               fontsize_row = 8,
-#                               labels_row = merge_all$term,
-#                               naprint=F
-#                               )
-# acerv_sub_heatmap
-# ggsave("~/Desktop/acerv_sub_heatmap.png", acerv_sub_heatmap, width = 30, height = 20,, units = "cm")
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# merge_all <- merge(merge_all, agg_ont, by = "gene", all.x = TRUE)
-# write.csv(GO_all, file = "~/Desktop/acerv_sub_GO_all_gene_ID.csv") # maybe include gene counts too?
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# GO_test_merge <- merge(test_merge, acerv_sig, by = "gene", all.x = TRUE)
-# # So now we got GO.x and GO.y in this file, which are GO terms that came from the two files. some match and some dont. Why?? Okay I see
-# # In the acerv_sig file, there were repeats of genes because some genes had multiple GO terms associated. So Go.y is coming from that, so I'll keep that one
-# # Go.x is repeating
-# GO_test_merge <- select(GO_test_merge, -GO.ID.x)
-# colnames(GO_test_merge)[15] <-"category" # renaming GO col so that it can merge with the info generated from GOseq
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# # Creating df of only treatment
-# df <- as.data.frame(colData(unique.vst.sig) [, c("Treatment")])
-# colnames(df) <- "Treatment"
-# #df <- df[order(df$Treatment),]
-# #df <- as.data.frame(df)
-# #colnames(df) <- "Treatment"
-# 
-# # Getting col order 
-# list(acerv_metadata_sub)
-# test <- acerv_metadata_sub[order(acerv_metadata_sub$Treatment),] # need to order them so it will group by treatment in plot
-# list(test$SampleID) # look at sample IDs and use that list to make col.order
-# col.order <- c("25_ctl1_Ac_GF_1",
-#                "27_ctl2_Ac_YG_1",
-#                "41_ctl3_Ac_RN_1",
-#                "37_T13_Ac_ML",
-#                "52_T11_Ac_II",
-#                "31_T22_Ac_UV",
-#                "38_T23_Ac_IN",
-#                "53_T21_Ac_NH",
-#                "19_T33_Ac_WK",
-#                "47_T31_Ac_JB",
-#                "57_T32_Ac_NM",
-#                "35_T43_Ac_MT",
-#                "54_T42_Ac_JQ") 
-# 
-# # Getting unique DEGs
-# unique.DEG.annot <- as.data.frame(counts(unique.sig.list)) # make df of sig genes with counts and sample IDs
-# #unique.DEG.annot$gene <- rownames(unique.DEG.annot) # make column with gene names
-# #unique.DEG.annot <- merge(unique.DEG.annot, annot, by = "gene") # merge annotation file with df of sig genes by gene id
-# #unique.DEG.annot <- unique.DEG.annot[!duplicated(unique.DEG.annot$gene),] # remove duplicate rows
-# #rownames(unique.DEG.annot) <- unique.DEG.annot$gene
-# #write.csv(unique.DEG.annot, file = "~/Desktop/acerv_sub_unique_DEG_annotated.csv")
-# list(colnames(unique.DEG.annot))
-# unique.DEG.annot2 <- unique.DEG.annot[, col.order] # similarly to test above, need to order them so it will correctly group by treatment in plot
-# #unique.DEG.annot <- unique.DEG.annot[,2:14]
-# #rownames(df) <- colnames(unique.DEG.annot)
-# 
-# # Creating matrix to use as input for heatmap
-# mat <- as.matrix(unique.DEG.annot2)
-# mat <- mat[,col.order] # put in col.order
-# mat <- mat[order(rownames(mat)),]
-# 
-# #Set colors for treatment
-# ann_colors <- list(Treatment = c(control="lightpink", Treatment1="darkslategray1", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray"))
-# 
-# # Now we need to add GO terms. 
-# acerv_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/acerv_GOterms.unique.csv", header = TRUE)
-# acerv_GO <- select(acerv_GO, -X)
-# colnames(acerv_GO)[1] <-"gene"
-# # lets try merging acerv_GO terms with unique.DEG.annot2
-# unique.DEG.annot2$gene <- rownames(unique.DEG.annot2)
-# test_merge <- merge(unique.DEG.annot2, acerv_GO, by = "gene", all.x = TRUE)
-# 
-# # Now lets merge test_merge by acerv_sub significantly enriched GO terms 
-# acerv_sig <- read.csv("~/Desktop/acerv_sub_GOterms.unique.csv", header = TRUE)
-# acerv_sig <- select(acerv_sig, -X)
-# colnames(acerv_sig)[1] <-"gene"
-# GO_test_merge <- merge(test_merge, acerv_sig, by = "gene", all.x = TRUE)
-# # So now we got GO.x and GO.y in this file, which are GO terms that came from the two files. some match and some dont. Why?? Okay I see
-# # In the acerv_sig file, there were repeats of genes because some genes had multiple GO terms associated. So Go.y is coming from that, so I'll keep that one
-# # Go.x is repeating
-# GO_test_merge <- select(GO_test_merge, -GO.ID.x)
-# colnames(GO_test_merge)[15] <-"category" # renaming GO col so that it can merge with the info generated from GOseq
-# 
-# # Now we shall merge GO_test_merge with the associated GO terms as generated by GOSeq
-# GO_all <- read.csv("~/Desktop/acerv_sub_GO_ALL.csv", header = TRUE) 
-# GO_all <- select(GO_all, -X)
-# GO_all <- merge(GO_test_merge, GO_all, by = "category", all.x = TRUE)
-# write.csv(GO_all, file = "~/Desktop/acerv_sub_GO_all_gene_ID.csv") # maybe include gene counts too?
-# 
-# # Alright now we got a file that has the GO terms, terms, ontologies, counts, and gene ids
-# GO_all <- select(GO_all, c("category", "gene", "over_represented_pvalue", "under_represented_pvalue", "numDEInCat", "numInCat", "term", "ontology")) # removing counts to make it easier to look at 
-# # Now lets merge GO_all with unique.DEG.annot2 by gene
-# GO_DEG_all <- merge(unique.DEG.annot2, GO_all, by = "gene", all.x = TRUE)
-# GO_DEG_all <- unique(GO_DEG_all)
-# GO_DEG_all <- na.omit(GO_DEG_all)
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# # Filter based on the DEGs in unique.DEG.annot2
-# keep2 <- rownames(mat)
-# 
-# test <- as.data.frame(GO_DEG_all$gene[GO_DEG_all$gene %in% keep,]) 
-# 
-# # Based on filt info, keep only the genes that pass in acerv_counts_filt
-# acerv_counts_sub_filt <- as.matrix(acerv_counts_sub[which(rownames(acerv_counts_sub) %in% gn.keep),]) 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# GO_DEG_all <- GO_DEG_all[order(GO_DEG_all$over_represented_pvalue),] # need to order them so it will group by treatment in plot
-# GO_DEG_all <- na.omit(GO_DEG_all)
-# # 218 rows, but only 217 unique DEGs...
-# head(GO_DEG_all)
-# # The 218 is a result of Acerv_evm.TU.Segkk2909_pilon.1 having 2 GO terms that are very similar: GO:0006427 (histidyl-tRNA aminoacylation, BP) and GO:0004821 (histidine-tRNA ligase activity, MF)
-# # These are quite similar...so I think I'll manually remove the first row. Need to find way to automate this
-# GO_DEG_all <- GO_DEG_all[-1,]
-# GO_DEG_all <- GO_DEG_all[order(GO_DEG_all$gene),]
-# 
-# 
-# ## So now I have all my info I need to make the heatmap! now how do i put it all together 
-# 
-# list <- data.frame(GO_DEG_all$gene, rownames(mat))
-# 
-# 
-# # Trying to add terms to left of map
-# term_df <- data.frame(GO_DEG_all$term)
-# 
-# 
-# 
-# 
-# rownames(term_df) = rownames(mat) # match names 
-# 
-# # Plot
-# acerv_sub_heatmap <- pheatmap(mat, 
-#                               annotation_col = df,
-#                               annotation_colors = ann_colors,
-#                               scale = "row",
-#                               show_rownames = T,
-#                               fontsize_row = 4,
-#                               cluster_cols = F,
-#                               show_colnames = T,
-#                               cluster_rows = F)
-# acerv_sub_heatmap
-# #dev.off()
-# # plot has all treatment comparisons 
-# ggsave("~/Desktop/mcav_DEGs_heatmap.pdf", mcav_heatmap)
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# 
-# library(heatmaply)
-# p <- heatmaply(mat, 
-#                dendrogram = "none",
-#                xlab = "", ylab = "", 
-#                main = "",
-#                scale = "column",
-#                margins = c(60,100,40,20),
-#                grid_color = "white",
-#                grid_width = 0.00001,
-#                titleX = FALSE,
-#                hide_colorbar = TRUE,
-#                branches_lwd = 0.1,
-#                label_names = c("Country", "Feature:", "Value"),
-#                fontsize_row = 5, fontsize_col = 5,
-#                labCol = colnames(mat),
-#                labRow = rownames(mat),
-#                heatmap_layers = theme(axis.line=element_blank())
-# )
-# 
-# 
-# 
-# 
-# 
-# 
+
+##### Volcano plots 
+## Here, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html)
+# Read in data 
+acerv.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv/acerv_sub_DEGs.all_treatment_20210219.csv")
+acerv.DEG <- select(acerv.DEG, -X)
+acerv.DEG$diffexpressed <- "NA"
+acerv.DEG$diffexpressed[acerv.DEG$log2FoldChange > 0] <- "Up"
+acerv.DEG$diffexpressed[acerv.DEG$log2FoldChange < 0] <- "Down"
+
+# Set thresholds
+padj.cutoff <- 0.05
+lfc.cutoff <- 0.5
+
+threshold <- acerv.DEG$padj < padj.cutoff & abs(acerv.DEG$log2FoldChange) > lfc.cutoff
+length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
+
+# Add vector to df
+acerv.DEG$threshold <- threshold   
+
+# Volcano plot w/ DEGs
+acerv.volcano <- ggplot(acerv.DEG) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
+  xlab("log2 fold change") + 
+  ylab("-log10 adjusted p-value") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) 
+acerv.volcano
+ggsave("~/Desktop/acerv_volcano_20210705.pdf", acerv.volcano, width = 25, height = 25)
+ggsave("~/Desktop/acerv_volcano_20210705.jpeg", acerv.volcano, width = 25, height = 25)
+
+
+## trying volcano plot with GO term and GO slim data 
+acerv_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20210327.csv")
+names(acerv_ByTreatment)[names(acerv_ByTreatment) == "category"] <- "GO.IDs"
+acerv_ByTreatment$diffexpressed <- "NA"
+acerv_ByTreatment$diffexpressed[acerv_ByTreatment$log2FoldChange > 0] <- "Up"
+acerv_ByTreatment$diffexpressed[acerv_ByTreatment$log2FoldChange < 0] <- "Down"
+
+# Read in GO slim info
+go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
+colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
+acerv_ByTreatment <- merge(acerv_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
+acerv_ByTreatment <- na.omit(acerv_ByTreatment)
+
+# Volcano plot
+acerv_go.volcano <- ggplot(acerv_ByTreatment) +
+  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
+  xlab("log2 fold change") + 
+  ylab("-log10 adjusted p-value") +
+  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) 
+acerv_go.volcano
+ggsave("~/Desktop/acerv_volcano.GOterms_20210705.pdf", acerv_go.volcano, width = 25, height = 25)
+ggsave("~/Desktop/acerv_volcano.GOterms_20210705.jpeg", acerv_go.volcano, width = 25, height = 25)
+
+
