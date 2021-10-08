@@ -1,0 +1,276 @@
+---
+title: "pdam_GOSeq"
+author: "jillashey"
+date: "9/28/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library("DESeq2")
+library("tidyverse")
+library("dplyr")
+library("pheatmap")
+library("RColorBrewer")
+library("genefilter")
+library("ggplot2")
+library("gplots")
+library("limma")
+library("spdep") 
+library("adegenet") 
+library("goseq")
+library("gridExtra")
+library("clusterProfiler")
+library("DataCombine")
+library("VennDiagram")
+```
+
+## Read in all expressed pdam genes (poverA = 0.85,5)
+```{r}
+gcounts_filt_pdam <- read.csv("Output/DESeq2/pdam/pdam_counts_filt_20210336.csv", header = T)
+dim(gcounts_filt_pdam) # 13881 x 13
+colnames(gcounts_filt_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
+head(gcounts_filt_pdam)
+length(unique(gcounts_filt_pdam$gene_id)) # 13881 total unique gene ids
+```
+
+## Read in pdam DEGs
+```{r}
+# Import file with DEGs for pdam
+DEG_pdam <- read.csv("Output/DESeq2/pdam/pdam_unique.sig.list_20210326.csv", header = TRUE) # read in list of significant pdam genes
+dim(DEG_pdam) # 549 x 13
+#for ( col in 1:ncol(DEG_pdam)){
+#   colnames(DEG_pdam)[col] <-  gsub("X", "", colnames(DEG_pdam)[col]) # remove X in front of col names
+# }
+colnames(DEG_pdam)[1] <-"gene_id" # make colnames a true column called gene_id
+head(DEG_pdam)
+length(unique(DEG_pdam$gene_id)) # 549 total unique gene ids 
+```
+
+## Read in gff file to calculate gene lengths 
+```{r}
+
+# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+# since length data had the XM, XP etc terms, I need to read in NCBI gff and merge so I can get the LOC terms
+pdamgff3_NCBI <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff.gz", header=FALSE, sep="\t", skip=6)
+colnames(pdamgff3_NCBI) <- c("NCBI_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_NCBI <- na.omit(pdamgff3_NCBI) # omit NAs
+#pdamgff3_NCBI <- filter(pdamgff3_NCBI, id=="mRNA")
+pdamgff3_NCBI <- mutate(pdamgff3_NCBI, length = gene.stop - gene.start)
+pdamgff3_NCBI$loc <- gsub(".*LOC", "", pdamgff3_NCBI$gene) # the | symbol being really annoying in subsetting, so removing everything up to L, then will add L back to gene_id
+pdamgff3_NCBI$loc <- sub(";.*", "", pdamgff3_NCBI$loc) # removing everything else in gene_id col
+pdamgff3_NCBI$loc <- paste0("LOC", pdamgff3_NCBI$loc) # adding LOC back to beginning of term
+pdamgff3_NCBI <- pdamgff3_NCBI[!grepl("region", pdamgff3_NCBI$id),] # remove 'region' id
+pdamgff3_NCBI <- pdamgff3_NCBI[!grepl("region", pdamgff3_NCBI$id),] # remove 'region' id
+#pdamgff3_NCBI$gene_id <- sub(";.*", "", pdamgff3_NCBI$gene) # removing everything after the first ';'
+#pdamgff3_NCBI$gene_id <- sub(".*-", "", pdamgff3_NCBI$gene_id) # removing everything after the first ';'
+pdamgff3_NCBI_gene<- subset(pdamgff3_NCBI, id =="gene" | id=="pseudogene")
+
+
+```
+
+## Make df with just LOC and length info
+```{r}
+pdamgff3_NCBI_gene <- pdamgff3_NCBI_gene[,c("length", "loc")]
+colnames(pdamgff3_NCBI_gene)[2] <-"gene_id" # switch loc col back to gene_id
+#pdamgff3_NCBI <- unique(pdamgff3_NCBI)
+dim(pdamgff3_NCBI_gene) # 503513 x 2
+length(unique(pdamgff3_NCBI_gene$gene_id)) # 28446 unique gene ids 
+
+#pdamgff3_NCBI <- unique(pdamgff3_NCBI)
+#dim(pdamgff3_NCBI) # 23818 x 2
+#length(unique(pdamgff3_NCBI$gene_id)) # 20919 unique gene ids 
+```
+
+# Build GOSEQ vector 
+GOseq requires a vector of all genes, all differentially expressed genes, and gene lengths
+
+## Make vectors
+```{r}
+# Make DEG vector
+DEG <- filter(pdamgff3_NCBI_gene, gene_id%in%DEG_pdam$gene_id) #make vector of differentially expressed genes
+dim(DEG) # 549 rows 
+#length(unique(DEG)) # 20919 unique gene ids 
+DEG_names <- as.vector(DEG$gene_id)
+gene_vector=as.integer(pdamgff3_NCBI_gene$gene_id%in%DEG_names)
+names(gene_vector)=pdamgff3_NCBI_gene$gene_id
+
+# Make ID vector 
+IDvector <- pdamgff3_NCBI_gene$gene_id
+
+# Make length vector
+lengthVector <- pdamgff3_NCBI_gene$length
+```
+
+## Calculate Probability Weighting Function
+
+```{r}
+DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by length of gene
+
+# plot looks weird...does this mean that there is not much length bias in the dataset?
+# also got this warning: In pcls(G) : initial point very close to some inequality constraints - but goseq forums seem to think its okay
+# it may mean there is not much length bias 
+# looks like we have an outlier 
+```
+
+# GOSeq with old annotations 
+
+## old GO terms (not my annots)
+```{r}
+annot_GO <- read.csv("Output/DESeq2/pdam/pdam_GO_20210125.csv", header=TRUE)
+annot_GO <- annot_GO[,2:3]
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
+splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
+GO.terms_OG <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms_OG) <- c("gene_id", "GO.ID")
+GO.terms_OG[GO.terms_OG == "NA"] <- NA
+
+#length(unique(GO.terms_OG$gene_id))
+```
+
+```{r}
+head(GO.terms_OG)
+tail(GO.terms_OG)
+GO.terms_OG$GO.ID<- as.character(GO.terms_OG$GO.ID)
+GO.terms_OG$GO.ID <- replace_na(GO.terms_OG$GO.ID, "unknown")
+GO.terms_OG$GO.ID <- as.factor(GO.terms_OG$GO.ID)
+GO.terms_OG$gene_id <- as.factor(GO.terms_OG$gene_id)
+GO.terms_OG <- unique(GO.terms_OG)
+
+dim(GO.terms_OG) # 31327 x 2
+head(GO.terms_OG, 10)
+tail(GO.terms_OG, 10)
+```
+# Perform GOseq
+
+## Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+```{r}
+### Perform GOseq
+# Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+# should I include this: test.cats=c("GO:CC", "GO:BP", "GO:MF") ?
+GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms_OG, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/pdam_GO_ALL_20210508.csv")
+
+#Subset enriched GO terms by category and save as csv
+#How many enriched GO terms do we have?
+class(GO.wall)
+head(GO.wall)
+tail(GO.wall)
+nrow(GO.wall)
+
+
+enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
+enriched.GO.05<-data.frame(enriched.GO.05.a)
+colnames(enriched.GO.05) <- c("category")
+enriched.GO.05 <- merge(enriched.GO.05, GO.wall, by="category")
+enriched.GO.05 <- enriched.GO.05[order(-enriched.GO.05$numDEInCat),]
+enriched.GO.05$term <- as.factor(enriched.GO.05$term)
+head(enriched.GO.05)
+```
+
+
+# GOSeq with my annotations 
+I did my own annotation (see [here](https://github.com/JillAshey/FunctionalAnnotation)) and I want to check it against the annotation that I pulled from the pdam gff file 
+
+## GO terms ( my annots)
+```{r}
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/FunctionalAnnotation/FunctionalAnnotation/final_Annotations/pdam_fullAnnot.csv", header=TRUE)
+annot_GO <- select(annot_GO, c("gene_id", "GO.IDs"))
+annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
+splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
+GO.terms <- data.frame(v1 = rep.int(annot_GO$gene_id, sapply(splitted, length)), v2 = unlist(splitted)) #list all genes with each of their GO terms in a single row
+colnames(GO.terms) <- c("X_term", "GO.ID")
+GO.terms[GO.terms == "NA"] <- NA
+
+# Because my annotation ended up with the gene_id being an XR or XP term, I need to extract the LOC term that matches with the gene ids from the original pdam gff. There is probably an easier way to do this, but the pdam files have been so annoying to work with. 
+# Get XP_ and XR_ ids 
+## XP_ selection
+pdamgff3_NCBI_XP <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff.gz", header=FALSE, sep="\t", skip=6)
+colnames(pdamgff3_NCBI_XP) <- c("NCBI_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_NCBI_XP <- na.omit(pdamgff3_NCBI_XP) # omit NAs
+pdamgff3_NCBI_XP <- mutate(pdamgff3_NCBI_XP, length = gene.stop - gene.start)
+pdamgff3_NCBI_XP <- pdamgff3_NCBI_XP[grepl("XP_", pdamgff3_NCBI_XP$gene),] # select only rows with XP_
+pdamgff3_NCBI_XP$X_term <- gsub(".*cds-", "", pdamgff3_NCBI_XP$gene) # remove everything in front of XP_
+pdamgff3_NCBI_XP$X_term <- sub(";.*", "", pdamgff3_NCBI_XP$X_term) # removing everything else after XP_
+## XR_ selection
+pdamgff3_NCBI_XR <- read.csv("~/Desktop/GFFs/GCF_003704095.1_ASM370409v1_genomic.gff.gz", header=FALSE, sep="\t", skip=6)
+colnames(pdamgff3_NCBI_XR) <- c("NCBI_scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+pdamgff3_NCBI_XR <- na.omit(pdamgff3_NCBI_XR) # omit NAs
+pdamgff3_NCBI_XR <- mutate(pdamgff3_NCBI_XR, length = gene.stop - gene.start)
+pdamgff3_NCBI_XR <- pdamgff3_NCBI_XR[grepl("XR_", pdamgff3_NCBI_XR$gene),] # select only rows with XR_
+pdamgff3_NCBI_XR$X_term <- gsub(".*XR", "", pdamgff3_NCBI_XR$gene) # remove everything in front of XR_
+pdamgff3_NCBI_XR$X_term <- sub(";.*", "", pdamgff3_NCBI_XR$X_term) # removing everything else after XR_
+pdamgff3_NCBI_XR$X_term <- paste0("XR", pdamgff3_NCBI_XR$X_term) # adding XP back to beginning of term
+
+# Combine the XP and XR gff info
+pdamgff3 <- rbind(pdamgff3_NCBI_XP, pdamgff3_NCBI_XR)
+
+# Join the dataset with the GO terms and the gff dataset. Now we have a df that contains all the info we need to pull LOC terms
+GO.terms <- full_join(GO.terms, pdamgff3, by = "X_term")
+
+# Extract LOC term
+GO.terms$loc <- gsub(".*LOC", "", GO.terms$gene) # Removing everything up to LOC, then will add LOC back to gene_id
+GO.terms$loc <- gsub(";.*", "", GO.terms$loc) # removing everything else in gene_id col
+GO.terms$loc <- paste0("LOC", GO.terms$loc) # adding LOC back to beginning of term
+
+# okay! Moving on to isolating GO terms and gene ids
+GO.terms <- select(GO.terms, c("GO.ID", "loc"))
+GO.terms <- unique(GO.terms)
+colnames(GO.terms) <- c("GO.ID", "gene_id")
+```
+
+# Perform GOseq
+
+## Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+```{r}
+### Perform GOseq
+# Find enriched GO terms, "selection-unbiased testing for category enrichment amongst differentially expressed (DE) genes for RNA-seq data"
+# should I include this: test.cats=c("GO:CC", "GO:BP", "GO:MF") ?
+GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=GO.terms, method="Wallenius", use_genes_without_cat=TRUE)
+# Using manually entered categories.
+# Calculating the p-values...
+# 'select()' returned 1:1 mapping between keys and columns
+write.csv(GO.wall, file = "~/Desktop/pdam_GO_ALL_20210508.csv")
+
+#Subset enriched GO terms by category and save as csv
+#How many enriched GO terms do we have?
+class(GO.wall)
+head(GO.wall)
+tail(GO.wall)
+nrow(GO.wall)
+
+
+enriched.GO.05.a<-GO.wall$category[GO.wall$over_represented_pvalue<.05]
+enriched.GO.05.a<-data.frame(enriched.GO.05.a)
+colnames(enriched.GO.05.a) <- c("category")
+#test <- merge(enriched.GO.05.a, GO.wall, by="category", all.x = T)
+enriched.GO.05.a$term <- as.factor(enriched.GO.05.a$term)
+head(enriched.GO.05)
+MF <- subset(enriched.GO.05, ontology=="MF")
+MF <- MF[order(-MF$numDEInCat),] # 22
+CC <- subset(enriched.GO.05, ontology=="CC")
+CC <- CC[order(-CC$numDEInCat),] # 5
+BP <- subset(enriched.GO.05, ontology=="BP")
+BP <- BP[order(-BP$numDEInCat),] # 23
+```
+
+## Merge GO terms and enriched list 
+```{r}
+colnames(GO.terms) <- c("category", "gene_id")
+enriched_GO.terms <- merge(enriched.GO.05, GO.terms, by = "category", all.x = TRUE)
+DEG_treatment <- read.csv("Output/DESeq2/pdam/pdam_DEGs.all_treatment_20210326.csv", header = TRUE)
+DEG_treatment <- DEG_treatment[, -1]
+ByTreatment_GO.terms <- merge(enriched_GO.terms, DEG_treatment, by = "gene_id")
+ByTreatment_GO.terms <- na.omit(ByTreatment_GO.terms)
+ByTreatment_GO.terms <- merge(ByTreatment_GO.terms, pdamgff3_NCBI_gene, by = "gene_id")
+ByTreatment_GO.terms <- unique(ByTreatment_GO.terms)
+```
+
+
+
+
+

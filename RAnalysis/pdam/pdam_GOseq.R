@@ -91,7 +91,7 @@ DEG.pwf<-nullp(gene_vector, IDvector, bias.data=lengthVector) #weight vector by 
 
 
 ## old GO terms (not my annots)
-annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOseq/pdam/pdam_GO_20210125.csv", header=TRUE)
+annot_GO <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pdam/pdam_GO_20210125.csv", header=TRUE)
 annot_GO <- annot_GO[,2:3]
 annot_GO$GO.ID <- gsub(",", ";", annot_GO$GO.ID)
 splitted <- strsplit(as.character(annot_GO$GO.ID), ";") #split into multiple GO ids
