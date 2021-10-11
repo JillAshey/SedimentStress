@@ -19,6 +19,7 @@ library("RColorBrewer")
 library("genefilter")
 library("ggplot2")
 library("gplots")
+library("ggrepel")
 library("limma")
 library("spdep") 
 library("adegenet") 
@@ -255,11 +256,55 @@ pdam_DEGPCAplot
 
 
 # Volcano plots 
-I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R
-Starting on line 239
+I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R starting on line 239. 
+In these plots, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html). 
 
+## Read in data and set cutoffs 
+```{r}
+# Read in data 
+pdam.DEG <- read_csv("Output/DESeq2/pdam/pdam_DEGs.all_treatment_20210326.csv")
+pdam.DEG <- select(pdam.DEG, -X1)
+pdam.DEG$diffexpressed <- "NA"
+pdam.DEG$diffexpressed[pdam.DEG$log2FoldChange > 0] <- "Up"
+pdam.DEG$diffexpressed[pdam.DEG$log2FoldChange < 0] <- "Down"
 
+# Set thresholds
+padj.cutoff <- 0.05
+lfc.cutoff <- 0.5
 
+threshold <- pdam.DEG$padj < padj.cutoff & abs(pdam.DEG$log2FoldChange) > lfc.cutoff
+length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
+
+# Add vector to df
+pdam.DEG$threshold <- threshold 
+
+# Write name of gene beside points 
+pdam.DEG$delabel <- "NA"
+pdam.DEG$delabel[pdam.DEG$diffexpressed != "NO"] <- pdam.DEG$gene_id[pdam.DEG$diffexpressed != "NO"]
+
+```
+
+## Make volcano plot with DEGs
+```{r}
+# Volcano plot w/ DEGs
+
+pdam.volcano <- ggplot(data=pdam.DEG, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=delabel)) +
+ geom_point() +
+ xlab("log2 fold change") + 
+ ylab("-log10 adjusted p-value") +
+ theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) +
+  theme_minimal() +
+  #geom_text_repel() + # use this argument to add labels to points on plot 
+  scale_color_manual(values=c("blue", "red")) +
+  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red")
+pdam.volcano
+
+# Save plots 
+ggsave("Output/Figs/pdam/pdam_DEG_volcano_20211010.pdf", pdam.volcano, width = 25, height = 25)
+#ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
+```
 
 
 
