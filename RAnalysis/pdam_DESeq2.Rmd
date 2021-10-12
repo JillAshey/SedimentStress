@@ -131,7 +131,7 @@ DEG_control_vs_mid <- results(DEG.int, contrast = c("Treatment", "control", "mid
 DEG_control_vs_mid
 DEG_control_vs_mid <- as.data.frame(DEG_control_vs_mid) # make full results into a df
 DEG_control_vs_mid["Treatment_Compare"] <- "CvsMid" # add treatment comparison col
-write.csv(DEG_control_vs_mid, file = "Output/DESeq2/pdam/pdam_control_vs_mid_all_genes_20211010.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_mid, file = "Output/DESeq2/pdam/pdam_control_vs_mid_all_genes_20211010.csv") # maybe include gene counts too?
 DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_mid.sig.num
 # 317 differentially expressed genes between control and mid 
@@ -150,7 +150,7 @@ DEG_control_vs_high <- results(DEG.int, contrast = c("Treatment", "control", "hi
 DEG_control_vs_high
 DEG_control_vs_high <- as.data.frame(DEG_control_vs_high) # make full results into a df
 DEG_control_vs_high["Treatment_Compare"] <- "CvsHigh" # add treatment comparison col
-write.csv(DEG_control_vs_high, file = "Output/DESeq2/pdam/pdam_control_vs_high_all_genes_20211010.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_high, file = "Output/DESeq2/pdam/pdam_control_vs_high_all_genes_20211010.csv") # maybe include gene counts too?
 DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_control_vs_high.sig.num
 # 462 differentially expressed genes between control and high 
@@ -169,7 +169,7 @@ DEG_mid_vs_high <- results(DEG.int, contrast = c("Treatment", "mid", "high"))
 DEG_mid_vs_high
 DEG_mid_vs_high <- as.data.frame(DEG_mid_vs_high) # make full results into a df
 DEG_mid_vs_high["Treatment_Compare"] <- "MidvsHigh" # add treatment comparison col
-write.csv(DEG_mid_vs_high, file = "Output/DESeq2/pdam/pdam_mid_vs_high_all_genes_20211010.csv") # maybe include gene counts too?
+#write.csv(DEG_mid_vs_high, file = "Output/DESeq2/pdam/pdam_mid_vs_high_all_genes_20211010.csv") # maybe include gene counts too?
 DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
 DEG_mid_vs_high.sig.num
 # 8 differentially expressed genes between mid and high 
@@ -192,6 +192,14 @@ DEG_control_vs_high.sig.list_full$gene_id <- rownames(DEG_control_vs_high.sig.li
 rownames(DEG_control_vs_high.sig.list_full) <- NULL
 DEG_mid_vs_high.sig.list_full$gene_id <- rownames(DEG_mid_vs_high.sig.list_full)
 rownames(DEG_mid_vs_high.sig.list_full) <- NULL
+
+# Find similar genes among treatments 
+int1 <- intersect(DEG_control_vs_mid.sig.list_full$gene_id, DEG_control_vs_high.sig.list_full$gene_id)
+length(unique(int1)) # 231 DEGs shared between CvMid and CvsHigh
+int2 <- intersect(DEG_control_vs_mid.sig.list_full$gene_id, DEG_mid_vs_high.sig.list_full$gene_id)
+length(unique(int2)) # 3 DEGs shared between CvMid and MidvHigh
+int3 <- intersect(DEG_control_vs_high.sig.list_full$gene_id, DEG_mid_vs_high.sig.list_full$gene_id)
+length(unique(int3)) # 4 DEGs shared between CvHigh and MidvHigh
 
 DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full,
                   DEG_control_vs_high.sig.list_full,
@@ -252,8 +260,8 @@ pdam_DEGPCAplot <- ggplot(pdam_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
 pdam_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 #PC.info <- pdam_DEGPCAplot$data
-#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.jpeg", pdam_DEGPCAplot, width = 25, height = 25, units = "cm")
-#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.pdf", pdam_DEGPCAplot, width = 25, height = 25, units = "cm")
+#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.jpeg", pdam_DEGPCAplot, width = 10, height = 10, units = "cm")
+#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.pdf", pdam_DEGPCAplot, width = 10, height = 10, units = "cm")
 
 ```
 
@@ -300,7 +308,8 @@ pdam.volcano <- ggplot(data=pdam.DEG, aes(x=log2FoldChange, y=-log10(padj), col=
  xlab("log2 fold change") + 
  ylab("-log10 adjusted p-value") +
  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) +
+        axis.text = element_text(size = 200),
+        axis.title = element_text(size=250)) +
   theme_minimal() +
   #geom_text_repel() + # use this argument to add labels to points on plot 
   scale_color_manual(values=c("blue", "red")) +
@@ -309,13 +318,14 @@ pdam.volcano <- ggplot(data=pdam.DEG, aes(x=log2FoldChange, y=-log10(padj), col=
 pdam.volcano
 
 # Save plots 
-ggsave("Output/Figs/pdam/pdam_DEG_volcano_20211010.pdf", pdam.volcano, width = 25, height = 25)
+ggsave("Output/Figs/pdam/pdam_DEG_volcano_20211010.pdf", pdam.volcano, width = 10, height = 10)
 #ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
 ```
 
 
 
-### volcano plot with all genes 
+## Volcano plot with all genes 
+In order to make plot with all genes, must create and save dfs above that include DESeq2 results for all genes, not just DEGs
 ```{r}
 # Read in df with all expressed genes
 pdam_counts_filt <- read_csv( "Output/DESeq2/pdam/pdam_AllGenes.AllTreatments_20211010.csv")
@@ -325,7 +335,7 @@ colnames(pdam_counts_filt)[1] <- "gene_id"
 pdam_counts_filt$diffexpressed <- "NA"
 pdam_counts_filt$diffexpressed[pdam_counts_filt$log2FoldChange > 0] <- "Up"
 pdam_counts_filt$diffexpressed[pdam_counts_filt$log2FoldChange < 0] <- "Down"
-pdam_counts_filt <- pdam_counts_filt %>% replace_na(list(diffexpressed = "No"))
+#pdam_counts_filt <- pdam_counts_filt %>% replace_na(list(diffexpressed = "No"))
 
 # Set thresholds
 padj.cutoff <- 0.05
@@ -352,7 +362,7 @@ pdam.full.volcano <- ggplot(data=pdam_counts_filt, aes(x=log2FoldChange, y=-log1
 pdam.full.volcano
 
 # Save plots 
-ggsave("Output/Figs/pdam/pdam_AllGenes_volcano_20211010.pdf", pdam.full.volcano, width = 25, height = 25)
+ggsave("Output/Figs/pdam/pdam_AllGenes_volcano_20211010.pdf", pdam.full.volcano, width = 10, height = 10)
 #ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
 ```
 
