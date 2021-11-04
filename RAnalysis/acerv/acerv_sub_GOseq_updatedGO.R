@@ -31,7 +31,7 @@ library("gridExtra")
 ####### Subsetted samples GO analysis
 
 # Obtain names of all expressed Acerv genes (poverA = 0.85,5), and all differentially expressed planuala genes (p<0.05)
-gcounts_filt_acerv_sub <- read.csv("~/Desktop/acerv_counts_sub_filt_20210219.csv", header = TRUE)
+gcounts_filt_acerv_sub <- read.csv("Output/DESeq2/acerv/acerv_counts_sub_filt_20210327.csv", header = TRUE)
 dim(gcounts_filt_acerv_sub) # 9054 rows x 14
 for ( col in 1:ncol(gcounts_filt_acerv_sub)){
   colnames(gcounts_filt_acerv_sub)[col] <-  gsub("X", "", colnames(gcounts_filt_acerv_sub)[col])

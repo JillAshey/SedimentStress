@@ -1,0 +1,462 @@
+---
+title: "ofav_DESeq2"
+author: "jillashey"
+date: "11/4/2021"
+output: html_document
+---
+
+#### Code for Francois sedimentation data. Ofav only samples analyzed here aligned against Ofav. STAR was read aligner with gff annotation file from NCBI.
+
+## Load packages
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library("DESeq2")
+library("tidyverse")
+library("dplyr")
+library("pheatmap")
+library("RColorBrewer")
+library("genefilter")
+library("ggplot2")
+library("gplots")
+library("ggrepel")
+library("limma")
+library("spdep") 
+library("adegenet") 
+library("goseq")
+library("gridExtra")
+library("clusterProfiler")
+library("DataCombine")
+library("VennDiagram")
+```
+
+## Load gene count matrix
+```{r}
+countdata <- read.csv("Output/DESeq2/ofav/ofav_gene_count_matrix.csv")
+for ( col in 1:ncol(countdata)){
+  colnames(countdata)[col] <-  gsub("X", "", colnames(countdata)[col]) # remove X from column names 
+} 
+for ( col in 1:ncol(countdata)){
+  colnames(countdata)[col] <-  gsub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(countdata)[col]) # remove long string from colnames 
+}
+# Remove all gene_ids that are MSTRG - not helpful as they are novel spliced genes found by STAR. There may be some way to ID the specific genes associated with them, but not sure
+countdata <- countdata[grep("LOC", countdata$gene_id), ]
+countdata$gene_id <- gsub(".*L","", countdata$gene_id) # the | symbol being really annoying in subsetting, so removing everything up to L, then will add L back to gene_id
+countdata$gene_id <- paste0("L", countdata$gene_id)
+rownames(countdata) <- countdata$gene_id
+```
+
+## Load metadata file 
+```{r}
+metadata_ofav <- read.csv("Data/ofav_metadata_filtered.csv")
+metadata_ofav$SampleID <- gsub("X", "", metadata_ofav$SampleID)
+rownames(metadata_ofav) <- metadata_ofav$SampleID
+```
+
+## Subset count data for only ofav samples based on SampleID and make sure rows of metadata = cols of count data
+```{r}
+ofav_ID <- metadata_ofav$SampleID
+count_ofav <- select(countdata, all_of(ofav_ID))
+all(rownames(metadata_ofav) %in% colnames(count_ofav)) # must come out TRUE
+```
+
+## Filter reads by proportion of samples containing cutoff value
+```{r}
+filt <- filterfun(pOverA(0.85, 5)) # set filter values for P over A; I used 0.85 and 5
+tfil <- genefilter(count_ofav, filt) # create filter for counts data 
+keep <- count_ofav[tfil,] # identify genes to keep based on filter
+gn.keep <- rownames(keep)
+ofav_counts_filt <- as.matrix(count_ofav[which(rownames(count_ofav) %in% gn.keep),]) 
+storage.mode(ofav_counts_filt) <- "integer" # stores count data as integer 
+write.csv(ofav_counts_filt, "Output/DESeq2/ofav/ofav_counts_filt_20211104.csv")
+# Checking to make sure rownames in metadata == colnames in counts data 
+all(rownames(metadata_ofav) %in% colnames(ofav_counts_filt)) # must come out TRUE
+```
+
+## Set Treatment as a factor
+```{r}
+metadata_ofav$Treatment <- factor(metadata_ofav$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
+data <- DESeqDataSetFromMatrix(countData = ofav_counts_filt, colData = metadata_ofav, design = ~ Treatment)
+```
+
+## Expression visualization
+First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects. To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
+```{r}
+SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+SF.data
+print(sizeFactors(SF.data)) #view size factors
+# size factors all less than 4, can use VST
+vst <- vst(data, blind = FALSE) 
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#    function: y = a/x + b, and a local regression fit was automatically substituted.
+#    specify fitType='local' or 'mean' to avoid this message next time.
+## Should I specify a fitType?
+head(assay(vst), 3) # view data
+sampleDists <- dist(t(assay(vst))) # calculate distance matrix
+sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
+rownames(sampleDistMatrix) <- colnames(vst) # assign row names
+colnames(sampleDistMatrix) <- NULL # assign col names 
+colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
+pheatmap(sampleDistMatrix, # plot matrix
+         clustering_distance_rows = sampleDists, # cluster rows
+         clustering_distance_cols = sampleDists, # cluster cols
+         col=colors) # set colors
+plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
+
+# pretty clear control outlier in PCA. going to proceed w/ outlier included, but will come back later to rerun w/o outlier 
+```
+
+```{r}
+DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
+# estimating size factors
+# estimating dispersions
+# gene-wise dispersion estimates
+# mean-dispersion relationship
+# final dispersion estimates
+# fitting model and testing
+DEG.int.res <- results(DEG.int) # save DE results 
+resultsNames(DEG.int) # view DE results 
+# [1] "Intercept"                       "Treatment_Treatment1_vs_control" "Treatment_Treatment2_vs_control" "Treatment_Treatment3_vs_control"
+# [5] "Treatment_Treatment4_vs_control"
+```
+
+
+
+## Differential expression comparisons by treatment 
+### Compare control and T1
+```{r}
+DEG_control_vs_T1 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment1"))
+DEG_control_vs_T1
+
+DEG_control_vs_T1 <- as.data.frame(DEG_control_vs_T1) # make full results into a df
+DEG_control_vs_T1["Treatment_Compare"] <- "CvsT1" # add treatment comparison col
+DEG_control_vs_T1.sig.num <- sum(DEG_control_vs_T1$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T1.sig.num # 8 DEGs
+DEG_control_vs_T1.sig <- subset(DEG_control_vs_T1, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T1.sig["Treatment_Compare"] <- "CvsT1" # add treatment comparison col
+DEG_control_vs_T1.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T1.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_T1.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T1.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+# error from vst:
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#    function: y = a/x + b, and a local regression fit was automatically substituted.
+#    specify fitType='local' or 'mean' to avoid this message next time.
+# Estimated rdf < 1.0; not estimating variance
+DEG_control_vs_T1.sig.list <- as.data.frame(counts(DEG_control_vs_T1.sig.list))
+DEG_control_vs_T1.sig.list_full <- cbind(DEG_control_vs_T1.sig, DEG_control_vs_T1.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_T1.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T1_DEG_20211104.csv")
+```
+
+### Compare control and T2
+```{r}
+DEG_control_vs_T2 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment2"))
+DEG_control_vs_T2
+
+DEG_control_vs_T2 <- as.data.frame(DEG_control_vs_T2) # make full results into a df
+DEG_control_vs_T2["Treatment_Compare"] <- "CvsT2" # add treatment comparison col
+DEG_control_vs_T2.sig.num <- sum(DEG_control_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T2.sig.num # 7 DEGs
+DEG_control_vs_T2.sig <- subset(DEG_control_vs_T2, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T2.sig["Treatment_Compare"] <- "CvsT2" # add treatment comparison col
+DEG_control_vs_T2.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T2.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_T2.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T2.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+# error from vst:
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#    function: y = a/x + b, and a local regression fit was automatically substituted.
+#    specify fitType='local' or 'mean' to avoid this message next time.
+# Estimated rdf < 1.0; not estimating variance
+DEG_control_vs_T2.sig.list <- as.data.frame(counts(DEG_control_vs_T2.sig.list))
+DEG_control_vs_T2.sig.list_full <- cbind(DEG_control_vs_T2.sig, DEG_control_vs_T2.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_T2.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T2_DEG_20211104.csv")
+```
+
+### Compare control and T3
+```{r}
+DEG_control_vs_T3 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment3"))
+DEG_control_vs_T3
+
+DEG_control_vs_T3 <- as.data.frame(DEG_control_vs_T3) # make full results into a df
+DEG_control_vs_T3["Treatment_Compare"] <- "CvsT3" # add treatment comparison col
+DEG_control_vs_T3.sig.num <- sum(DEG_control_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T3.sig.num # 12 DEGs
+DEG_control_vs_T3.sig <- subset(DEG_control_vs_T3, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T3.sig["Treatment_Compare"] <- "CvsT3" # add treatment comparison col
+DEG_control_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T3.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+# error from vst:
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#    function: y = a/x + b, and a local regression fit was automatically substituted.
+#    specify fitType='local' or 'mean' to avoid this message next time.
+# Estimated rdf < 1.0; not estimating variance
+DEG_control_vs_T3.sig.list <- as.data.frame(counts(DEG_control_vs_T3.sig.list))
+DEG_control_vs_T3.sig.list_full <- cbind(DEG_control_vs_T3.sig, DEG_control_vs_T3.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_T3.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T3_DEG_20211104.csv")
+```
+
+### Compare control and T3
+```{r}
+DEG_control_vs_T4 <- results(DEG.int, contrast = c("Treatment", "control", "Treatment4"))
+DEG_control_vs_T4
+
+DEG_control_vs_T4 <- as.data.frame(DEG_control_vs_T4) # make full results into a df
+DEG_control_vs_T4["Treatment_Compare"] <- "CvsT4" # add treatment comparison col
+DEG_control_vs_T4.sig.num <- sum(DEG_control_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_control_vs_T4.sig.num # 10 DEGs
+DEG_control_vs_T4.sig <- subset(DEG_control_vs_T4, padj <0.05) # identify and subset significant pvalues
+DEG_control_vs_T4.sig["Treatment_Compare"] <- "CvsT4" # add treatment comparison col
+DEG_control_vs_T4.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T4.sig)),] # subset list of significant genes from original count data 
+DEG_control_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+# error from vst:
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+#    function: y = a/x + b, and a local regression fit was automatically substituted.
+#    specify fitType='local' or 'mean' to avoid this message next time.
+# Estimated rdf < 1.0; not estimating variance
+DEG_control_vs_T4.sig.list <- as.data.frame(counts(DEG_control_vs_T4.sig.list))
+DEG_control_vs_T4.sig.list_full <- cbind(DEG_control_vs_T4.sig, DEG_control_vs_T4.sig.list) # bind results with gene counts for DEGs
+write.csv(DEG_control_vs_T4.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T4_DEG_20211104.csv")
+```
+
+### Compare T1 and T2
+```{r}
+DEG_T1_vs_T2 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment2"))
+DEG_T1_vs_T2
+
+DEG_T1_vs_T2 <- as.data.frame(DEG_T1_vs_T2) # make full results into a df
+DEG_T1_vs_T2["Treatment_Compare"] <- "T1vsT2" # add treatment comparison col
+DEG_T1_vs_T2.sig.num <- sum(DEG_T1_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T2.sig.num # 0 DEGs
+```
+
+### Compare T1 and T3
+```{r}
+DEG_T1_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment3"))
+DEG_T1_vs_T3
+
+DEG_T1_vs_T3 <- as.data.frame(DEG_T1_vs_T3) # make full results into a df
+DEG_T1_vs_T3["Treatment_Compare"] <- "T1vsT3" # add treatment comparison col
+DEG_T1_vs_T3.sig.num <- sum(DEG_T1_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T3.sig.num # 0 DEGs
+```
+
+### Compare T1 and T4
+```{r}
+DEG_T1_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatment4"))
+DEG_T1_vs_T4
+
+DEG_T1_vs_T4 <- as.data.frame(DEG_T1_vs_T4) # make full results into a df
+DEG_T1_vs_T4["Treatment_Compare"] <- "T1vsT4" # add treatment comparison col
+DEG_T1_vs_T4.sig.num <- sum(DEG_T1_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T1_vs_T4.sig.num # 0 DEGs
+```
+
+### Compare T2 and T3
+```{r}
+DEG_T2_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatment3"))
+DEG_T2_vs_T3
+
+DEG_T2_vs_T3 <- as.data.frame(DEG_T2_vs_T3) # make full results into a df
+DEG_T2_vs_T3["Treatment_Compare"] <- "T2vsT3" # add treatment comparison col
+DEG_T2_vs_T3.sig.num <- sum(DEG_T2_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T2_vs_T3.sig.num # 0 DEGs
+```
+
+### Compare T2 and T4
+```{r}
+DEG_T2_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatment4"))
+DEG_T2_vs_T4
+
+DEG_T2_vs_T4 <- as.data.frame(DEG_T2_vs_T4) # make full results into a df
+DEG_T2_vs_T4["Treatment_Compare"] <- "T2vsT4" # add treatment comparison col
+DEG_T2_vs_T4.sig.num <- sum(DEG_T2_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T2_vs_T4.sig.num # 0 DEGs
+```
+
+### Compare T3 and T4
+```{r}
+DEG_T3_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment3", "Treatment4"))
+DEG_T3_vs_T4
+
+DEG_T3_vs_T4 <- as.data.frame(DEG_T3_vs_T4) # make full results into a df
+DEG_T3_vs_T4["Treatment_Compare"] <- "T3vsT4" # add treatment comparison col
+DEG_T3_vs_T4.sig.num <- sum(DEG_T3_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
+DEG_T3_vs_T4.sig.num # 0 DEGs
+```
+
+
+## Make full list of differentially expressed genes and treatments 
+```{r}
+# Create gene_id from rownames
+DEG_control_vs_T1.sig.list_full$gene_id <- rownames(DEG_control_vs_T1.sig.list_full)
+rownames(DEG_control_vs_T1.sig.list_full) <- NULL
+DEG_control_vs_T2.sig.list_full$gene_id <- rownames(DEG_control_vs_T2.sig.list_full)
+rownames(DEG_control_vs_T2.sig.list_full) <- NULL
+DEG_control_vs_T3.sig.list_full$gene_id <- rownames(DEG_control_vs_T3.sig.list_full)
+rownames(DEG_control_vs_T3.sig.list_full) <- NULL
+DEG_control_vs_T4.sig.list_full$gene_id <- rownames(DEG_control_vs_T4.sig.list_full)
+rownames(DEG_control_vs_T4.sig.list_full) <- NULL
+
+# Find similar genes among treatments 
+int1 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T2.sig.list_full$gene_id)
+length(unique(int1)) # 0 genes shared between control_vs_T1 and control_vs_T2'
+int2 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
+length(unique(int2)) # 0 genes shared between control_vs_T1 and control_vs_T3
+int3 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int3)) # 0 genes shared between control_vs_T1 and control_vs_T4
+int4 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
+length(unique(int4)) # 6 genes shared between control_vs_T2 and control_vs_T3
+int5 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int5)) # 5 genes shared between control_vs_T2 and control_vs_T4
+int6 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
+length(unique(int6)) # 9 genes shared between control_vs_T3 and control_vs_T4
+
+# bind all DEGs
+DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full,
+                  DEG_control_vs_T2.sig.list_full,
+                  DEG_control_vs_T3.sig.list_full,
+                  DEG_control_vs_T4.sig.list_full) # make sure column names are the same in all dfs before binding!
+dim(DEGs.all) # 37 x 23
+length(unique(DEGs.all$gene_id)) # 16 unique genes between all treatments 
+write.csv(DEGs.all, "Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20211104.csv")
+
+# Bind all genes
+gene.all <- rbind(DEG_control_vs_T1,
+                  DEG_control_vs_T2,
+                  DEG_control_vs_T3,
+                  DEG_control_vs_T4)
+write.csv(gene.all, "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20211104.csv")
+```
+
+## Identify unique genes from DEGs in CvsMid, CvsHigh, MidvsHigh
+```{r}
+DEGs.all_ofav <- DEGs.all$gene_id
+DEGs.all_ofav <- unique(DEGs.all_ofav)
+DEGs.all_ofav <- as.data.frame(DEGs.all_ofav) 
+dim(DEGs.all_ofav) # 16 unique DEGs among treatment comparisons 
+```
+
+## 
+```{r}
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all_ofav$DEGs), ] # subset list of sig transcripts from original count data
+#write.csv(counts(unique.sig.list), file = "~/Desktop/pdam_unique.sig.list_20210326.csv")
+SFtest <- estimateSizeFactors(unique.sig.list)
+print(sizeFactors(SFtest))
+unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
+# -- note: fitType='parametric', but the dispersion trend was not well captured by the
+# function: y = a/x + b, and a local regression fit was automatically substituted.
+# specify fitType='local' or 'mean' to avoid this message next time.
+```
+
+# PCA plot of diff-expressed genes 
+```{r}
+ofav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
+percentVar_pca_ofav <- round(100*attr(ofav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+ofav_DEGPCAplot <- ggplot(ofav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
+  geom_point(size=8) +
+  #geom_text(aes(label=name), hjust=0, vjust=0) +
+  xlab(paste0("PC1: ",percentVar_pca_ofav[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_pca_ofav[2],"% variance")) +
+  scale_color_manual(values = c(control="black", Treatment1="skyblue1", Treatment2="skyblue2", Treatment3="skyblue3", Treatment4="skyblue4")) +
+  coord_fixed() +
+  #ggtitle("P. damicornis") +
+  theme_bw() + #Set background color
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size=25),
+        #title = element_text(size=30),
+        legend.position = "right",
+        panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background
+ofav_DEGPCAplot
+# PCA plot is of differentially expressed genes only
+#PC.info <- pdam_DEGPCAplot$data
+#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.jpeg", pdam_DEGPCAplot, width = 10, height = 10, units = "cm")
+ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20211104.pdf", ofav_DEGPCAplot, width = 10, height = 10, units = "cm")
+```
+
+# Heatmap of DEGs
+
+
+
+# Volcano plots w/ DEGs
+I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R starting on line 239. 
+In these plots, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html). 
+
+## Read in data and set cutoffs 
+```{r}
+# Read in data 
+ofav.DEG <- read_csv("Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20211104.csv")
+ofav.DEG <- select(ofav.DEG, -X1)
+ofav.DEG$diffexpressed <- "NA"
+ofav.DEG$diffexpressed[ofav.DEG$log2FoldChange > 0] <- "Up"
+ofav.DEG$diffexpressed[ofav.DEG$log2FoldChange < 0] <- "Down"
+# Set thresholds
+padj.cutoff <- 0.05
+lfc.cutoff <- 0.5
+threshold <- ofav.DEG$padj < padj.cutoff & abs(ofav.DEG$log2FoldChange) > lfc.cutoff
+length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
+# Add vector to df
+ofav.DEG$threshold <- threshold 
+# Write name of gene beside points 
+ofav.DEG$delabel <- "NA"
+ofav.DEG$delabel[ofav.DEG$diffexpressed != "NO"] <- ofav.DEG$gene_id[ofav.DEG$diffexpressed != "NO"]
+```
+
+## Make volcano plot with DEGs
+```{r}
+# Volcano plot w/ DEGs
+ofav.volcano <- ggplot(data=ofav.DEG, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
+ geom_point() +
+ xlab("log2 fold change") + 
+ ylab("-log10 adjusted p-value") +
+ theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.text = element_text(size = 200),
+        axis.title = element_text(size=250)) +
+  theme_minimal() +
+  #geom_text_repel() + # use this argument to add labels to points on plot 
+  scale_color_manual(values=c("blue", "red")) +
+  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red")
+ofav.volcano
+# Save plots 
+ggsave("Output/Figs/ofav/ofav_DEG_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
+#ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
+```
+
+## Volcano plot with all genes 
+In order to make plot with all genes, must create and save dfs above that include DESeq2 results for all genes, not just DEGs
+```{r}
+# Read in df with all expressed genes
+ofav_counts_filt <- read_csv( "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20211104.csv")
+colnames(ofav_counts_filt)[1] <- "gene_id"
+# Assign DEG status
+ofav_counts_filt$diffexpressed <- "NA"
+ofav_counts_filt$diffexpressed[ofav_counts_filt$log2FoldChange > 0] <- "Up"
+ofav_counts_filt$diffexpressed[ofav_counts_filt$log2FoldChange < 0] <- "Down"
+#ofav_counts_filt <- ofav_counts_filt %>% replace_na(list(diffexpressed = "No"))
+# Set thresholds
+padj.cutoff <- 0.05
+lfc.cutoff <- 0.5
+threshold <- ofav_counts_filt$padj < padj.cutoff & abs(ofav_counts_filt$log2FoldChange) > lfc.cutoff
+length(which(threshold)) 
+# Add vector to df
+ofav_counts_filt$threshold <- threshold 
+# Volcano plot w/ all genes 
+ofav.full.volcano <- ggplot(data=ofav_counts_filt, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
+ geom_point() +
+ xlab("log2 fold change") + 
+ ylab("-log10 adjusted p-value") +
+ theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
+        axis.title = element_text(size = rel(1.25))) +
+  theme_minimal() +
+  #geom_text_repel() + # use this argument to add labels to points on plot 
+  scale_color_manual(values=c("blue", "red")) +
+  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+  geom_hline(yintercept=-log10(0.05), col="red")
+ofav.volcano
+# Save plots 
+ggsave("Output/Figs/ofav/ofav_AllGenes_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
+#ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
+```
+
+Both volcano plots (DEG and all genes) look the same...need to look into this more
