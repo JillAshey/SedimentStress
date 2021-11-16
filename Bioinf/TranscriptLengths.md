@@ -31,6 +31,27 @@ awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile.fasta >
 
 ```
 
+### Ofav 
+
+Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
+
+```
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' GCF_002042975.1_ofav_dov_v1_rna.fna > newfile_RNA_Ofav.fasta
+
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' GCF_002042975.1_ofav_dov_v1_protein.faa > newfile_Protein_Ofav.fasta
+```
+
+Now gene lengths can be calculated 
+
+```
+# Transcript lengths
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Ofav.fasta > length.mRNA_Ofav.txt
+
+# Protein lengths 
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Ofav.fasta > length.protein_Ofav.txt
+
+```
+
 ## Hawaii
 
 ### Pdam 
