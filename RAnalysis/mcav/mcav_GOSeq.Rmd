@@ -50,7 +50,7 @@ length(unique(DEG_mcav$gene_id)) # 62 total unique gene ids
 ```
 
 ```{r}
-# Read in length data (calculated directly from transcripts) and merge with filtered counts 
+# Read in length data (calculated directly from transcripts) and forand merge with filtered counts 
 length_Mcav <- read.csv("Output/DESeq2/mcav/length.mRNA_Mcav.csv")
 length_Mcav$gene_id <- gsub("-RA", "", length_Mcav$gene_id)
 length_merge <- merge(length_Mcav, gcounts_filt_mcav, by = "gene_id")

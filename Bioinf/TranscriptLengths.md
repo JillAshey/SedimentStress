@@ -45,10 +45,10 @@ Now gene lengths can be calculated
 
 ```
 # Transcript lengths
-awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Ofav.fasta > length.mRNA_Ofav.txt
+awk 'BEGIN{FS="[>]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Ofav.fasta > length.mRNA_Ofav.txt
 
 # Protein lengths 
-awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Ofav.fasta > length.protein_Ofav.txt
+awk 'BEGIN{FS="[>]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Ofav.fasta > length.protein_Ofav.txt
 
 ```
 
