@@ -1,0 +1,6 @@
+﻿Species,Site ,AverageRawReads,AverageCleanReads,AverageReadsRemoved,Average %Mapped (aligned to species specific genome)
+Acerv,FL,16630621,16499909,130712,70.62
+Mcav,FL,15921959,15740195,181765,50.18
+Ofav,FL,13830442,13622937,207505,65.68
+Pact,FI,14441259,14359654,81605,
+Plob,HI,13995393,13858883,136510,52.83
