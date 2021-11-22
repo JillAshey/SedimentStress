@@ -1,0 +1,91 @@
+---
+title: "PCAs"
+author: "jillashey"
+date: "11/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library("DESeq2")
+library("tidyverse")
+library("dplyr")
+library("pheatmap")
+library("RColorBrewer")
+library("genefilter")
+library("ggplot2")
+library("gplots")
+library("ggrepel")
+library("limma")
+library("spdep") 
+library("adegenet") 
+library("goseq")
+library("gridExtra")
+library("clusterProfiler")
+library("DataCombine")
+library("VennDiagram")
+```
+
+
+
+
+
+# Mcav DEG PCA
+```{r}
+# PCA plot of diff-expressed genes 
+mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
+percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
+  geom_point(size=8) +
+  #geom_text(aes(label=name), hjust=0, vjust=0) +
+  xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+  coord_fixed() +
+  #ggtitle("M. cavernosa") +
+  theme_bw() + #Set background color
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size=20),
+        #title = element_text(size=30),
+        legend.position = "right",
+        panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background
+mcav_DEG_PCA_plot
+# PCA plot is of differentially expressed genes only
+#PC.info <- mcav_DEGPCAplot$data
+ggsave("~/Desktop/mcav_DEGs_PCA_20210705.jpeg", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+ggsave("~/Desktop/mcav_sub_DEGs_PCA_20210705.pdf", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+
+
+```
+
+
+# PCA plot of diff-expressed genes 
+```{r}
+ofav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
+percentVar_pca_ofav <- round(100*attr(ofav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+ofav_DEGPCAplot <- ggplot(ofav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
+  geom_point(size=8) +
+  #geom_text(aes(label=name), hjust=0, vjust=0) +
+  xlab(paste0("PC1: ",percentVar_pca_ofav[1],"% variance")) +
+  ylab(paste0("PC2: ",percentVar_pca_ofav[2],"% variance")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+  coord_fixed() +
+  #ggtitle("M. cavernosa") +
+  theme_bw() + #Set background color
+  theme(axis.text = element_text(size = 20),
+        axis.title = element_text(size=20),
+        #title = element_text(size=30),
+        legend.position = "right",
+        panel.border = element_blank(), # Set border
+        #panel.grid.major = element_blank(), #Set major gridlines
+        #panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank()) #Set the plot background
+ofav_DEGPCAplot
+ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20211104.pdf", ofav_DEGPCAplot, width = 25, height = 25, units = "cm")
+```

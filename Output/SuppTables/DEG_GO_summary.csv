@@ -1,5 +1,7 @@
-,# total genes expressed (filtered),# unique differentially expressed genes,# total GO terms,# sig. enriched GO terms,# DEGs w/ sig. enriched GO terms
-Acerv,9054,215,1772,15,13
-Mcav,12873,62,1570,33,22
-Pdam,13881,549,2113,50,56
-Plob,15369,153,1881,20,58
+﻿Species,Site ,TotalGenes,FilteredGenes,DEGs,%TotalDEG,Upreg_DEGs,Downreg_DEGs,DEGs with GO terms,%DEG_GO
+Acerv,FL,33322,9055,215,0.023743788,67,154,83,0.386046512
+Mcav,FL,25142,12873,62,0.004816282,19,44,35,0.564516129
+Ofav,FL,35971,18815,16,0.000850385,13,3,7,0.4375
+Pact,HI,,,,,,,,
+Plob,HI,31126,15369,153,0.009955104,32,128,83,0.54248366
+,,,,,,,,,

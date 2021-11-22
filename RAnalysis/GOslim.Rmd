@@ -117,7 +117,6 @@ GO.ofav
 ggsave("Output/Figs/ofav/ofav_GOslim.BP_20211117.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
 ```
 
-# GO slim plots for FL corals 
 
 ## Plob 
 ```{r}
@@ -203,6 +202,22 @@ unique(all.go.slim.BP$GO.Slim.Term)
 ```
 
 Look at all_GOslim.BP_20211112.pdf plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot: cell organization and biogenesis, developmental processes, other biological processes, other metabolic processes, protein metabolism, RNA metabolism, signal transduction, stress response, & transport 
+
+## Subset and plot only 'cell-cell signaling' (CCS)
+```{r}
+go.slim.CCS.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="cell-cell signaling")
+
+GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 30))
+GO.CCS.subset
+ggsave("Output/Figs/CCS.Subset_GOslim.BP_20211118.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+```
 
 ## Subset and plot only 'cell organization and biogenesis' (COB)
 ```{r}
