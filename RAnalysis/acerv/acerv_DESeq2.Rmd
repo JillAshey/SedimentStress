@@ -70,18 +70,18 @@ acerv_counts_filt <- as.matrix(acerv_counts[which(rownames(acerv_counts) %in% gn
 #write.csv(acerv_counts_filt, "~/Desktop/acerv_counts_filtered.csv")
 storage.mode(acerv_counts_filt) <- "integer" # stores count data as integer 
 # Check to make sure rownames in metadata == colnames in counts data 
-all(rownames(acerv_metadata) %in% colnames(acerv_counts_filt)) # must come out TRUE
+all(rownames(metadata_acerv) %in% colnames(acerv_counts_filt)) # must come out TRUE
 # Set Treatment as a factor
-acerv_metadata$Treatment <- factor(acerv_metadata$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
+metadata_acerv$Treatment <- factor(metadata_acerv$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
 # create matrix that can be read in DESeq
-data <- DESeqDataSetFromMatrix(countData = acerv_counts_filt, colData = acerv_metadata, design = ~ Treatment)
+data <- DESeqDataSetFromMatrix(countData = acerv_counts_filt, colData = metadata_acerv, design = ~ Treatment)
 
 ```
 
 ## Set Treatment as a factor
 ```{r}
-acerv_metadata$Treatment <- factor(acerv_metadata$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
-data <- DESeqDataSetFromMatrix(countData = acerv_counts_filt, colData = acerv_metadata, design = ~ Treatment)
+metadata_acerv$Treatment <- factor(metadata_acerv$Treatment, levels = c("control", "Treatment1", "Treatment2", "Treatment3", "Treatment4"))
+data <- DESeqDataSetFromMatrix(countData = acerv_counts_filt, colData = metadata_acerv, design = ~ Treatment)
 ```
 
 ## Expression visualization
@@ -257,12 +257,24 @@ DEG_T1_vs_T4.sig.num # 1 DEGs
 DEG_T1_vs_T4.sig <- subset(DEG_T1_vs_T4, padj <0.05) # identify and subset significant pvalues
 DEG_T1_vs_T4.sig["Treatment_Compare"] <- "T1vsT4" # add treatment comparison col
 DEG_T1_vs_T4.sig.list <- data[which(rownames(data) %in% rownames(DEG_T1_vs_T4.sig)),] # subset list of significant genes from original count data 
-DEG_T1_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_T1_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
-# error from vst:
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-#    function: y = a/x + b, and a local regression fit was automatically substituted.
-#    specify fitType='local' or 'mean' to avoid this message next time.
-# Estimated rdf < 1.0; not estimating variance
+DEG_T1_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_T1_vs_T4.sig.list, blind = FALSE) # apply a regularized logtransformation to minimize effects of small counts and normalize wrt library. Specify fit type??
+## error from varianceStabilizingTransformation:
+# Error in estimateDispersionsFit(object, quiet = TRUE, fitType) : 
+#   all gene-wise dispersion estimates are within 2 orders of magnitude
+#   from the minimum value, and so the standard curve fitting techniques will not work.
+#   One can instead use the gene-wise estimates as final estimates:
+#   dds <- estimateDispersionsGeneEst(dds)
+#   dispersions(dds) <- mcols(dds)$dispGeneEst
+#   ...then continue with testing using nbinomWaldTest or nbinomLRT
+## Not sure what this error means?????? it worked before
+### FIGURE THIS OUT --JA 20211221
+
+
+
+
+
+
+
 DEG_T1_vs_T4.sig.list <- as.data.frame(counts(DEG_T1_vs_T4.sig.list))
 DEG_T1_vs_T4.sig.list_full <- cbind(DEG_T1_vs_T4.sig, DEG_T1_vs_T4.sig.list) # bind results with gene counts for DEGs
 #write.csv(DEG_T1_vs_T4.sig.list_full, "Output/DESeq2/acerv/acerv_T1_vs_T4_DEG.csv")
