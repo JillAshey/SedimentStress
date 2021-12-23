@@ -360,29 +360,31 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # PCA plot of diff-expressed genes 
 mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+
 mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
-  #geom_text(aes(label=name), hjust=0, vjust=0) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
-  #ggtitle("M. cavernosa") +
+  ggtitle(label = "M. cavernosa") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 20),
-        axis.title = element_text(size=20),
-        #title = element_text(size=30),
+  theme(axis.text = element_text(size = 10),
+        axis.title = element_text(size=15),
         legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background
 mcav_DEG_PCA_plot
+
+
 # PCA plot is of differentially expressed genes only
-#PC.info <- mcav_DEGPCAplot$data
-ggsave("~/Desktop/mcav_DEGs_PCA_20210705.jpeg", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
-ggsave("~/Desktop/mcav_sub_DEGs_PCA_20210705.pdf", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+PC.info <- mcav_DEG_PCA_plot$data
+#ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20211223.jpeg", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20211223.pdf", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
 
 
 

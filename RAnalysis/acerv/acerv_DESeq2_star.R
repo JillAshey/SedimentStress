@@ -26,7 +26,7 @@ library("clusterProfiler")
 library(stringr)
 
 # Load gene count matrix
-acerv_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
+acerv_counts <- read.csv("Output/DESeq2/acerv/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(acerv_counts) # 33715 x 15
 for ( col in 1:ncol(acerv_counts)){
   colnames(acerv_counts)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(acerv_counts)[col]) # removing excess from col names
@@ -34,6 +34,8 @@ for ( col in 1:ncol(acerv_counts)){
 for ( col in 1:ncol(acerv_counts)){
   colnames(acerv_counts)[col] <-  gsub("X", "", colnames(acerv_counts)[col]) # remvoing X from col names
 }
+# remove 24 and 45 samples 
+acerv_counts <- acerv_counts[,-c(2,10)]
 
 # Load annotation file
 annot <- read.csv("~/Desktop/GFFs/Acerv.GFFannotations.fixed_transcript.gff3", header = FALSE, sep = "\t") # gff annotation file 
@@ -74,7 +76,7 @@ annot <- select(annot, c(scaffold:attr, Parent)) # select cols
 colnames(annot) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "attr", "gene") # rename cols 
 
 # Load metadata
-metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/FL_sediment_metadata.csv", header = TRUE)
+metadata <- read.csv("Data/FL_sediment_metadata.csv", header = TRUE)
 dim(metadata) # 45 by 12
 head(metadata)
 # Select only the columns I need for analyses 
@@ -94,6 +96,10 @@ acerv_metadata$SampleID <- gsub(".txt.gz", "", acerv_metadata$SampleID)
 acerv_metadata$SampleID <- gsub(";.*", "", acerv_metadata$SampleID)
 acerv_metadata$SampleID <- gsub(".fastq.gz", "", acerv_metadata$SampleID)
 acerv_metadata$SampleID <- sub("\\.", "", acerv_metadata$SampleID)
+# remove 24 and 45 samples 
+acerv_metadata <- acerv_metadata[-c(2,10),]
+
+
 # Make sampleID as rownames in metadata 
 rownames(acerv_metadata) <- acerv_metadata$SampleID
 
