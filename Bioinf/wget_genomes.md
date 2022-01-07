@@ -19,19 +19,11 @@ Genome file: ```wget http://cyanophora.rutgers.edu/porites_compressa/Porites_com
 Annotation file: ```wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_genemodels_v1.0_201905.gff.gz```
 
 
-#### [P. damicornis](https://www.ncbi.nlm.nih.gov/genome/22550)
+#### [P. acuta](http://cyanophora.rutgers.edu/Pocillopora_acuta/)
 
-###### Citation: Cunning et al. (2018). Comparative analysis of the Pocillopora damicornis genome highlights role of immune system in coral evolution. 
+###### Citation: 
 
-NCBI Genome file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/704/095/GCF_003704095.1_ASM370409v1/GCF_003704095.1_ASM370409v1_genomic.fna.gz```
-
-NCBI Annotation file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/003/704/095/GCF_003704095.1_ASM370409v1/GCF_003704095.1_ASM370409v1_genomic.gff.gz```
-
-OR
-
-Reef Genomics Genome file: ```wget http://pdam.reefgenomics.org/download/pdam_scaffolds.fasta.gz```
-
-Reef Genomics Annotation file: ```wget http://pdam.reefgenomics.org/download/pdam_annotation.gff3.gz```
+Download genome, protein and transcript sequences, and gff files [here](http://cyanophora.rutgers.edu/Pocillopora_acuta/) and upload to server 
 
 #### [P. lutea](http://plut.reefgenomics.org/download/)
 
@@ -47,7 +39,9 @@ Annotation file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.genes.g
 #### [Acropora cervicornis](http://baumslab.org/research/data/)
 ###### Baums lab (http://baumslab.org/research/data/)
 
-Coming soon
+Download genome, protein and transcript sequences, and gff files [here](https://usegalaxy.org/u/skitch/h/acervicornis-genome) and upload to server 
+
+Permission to use from Drs. Shelia Kitchen & Iliana Baums 
 
 #### [Orbicella faveolata](https://www.ncbi.nlm.nih.gov/genome/13173)
 
