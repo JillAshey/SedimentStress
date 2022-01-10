@@ -197,31 +197,31 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # PCA plot of diff-expressed genes 
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+
+
 plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
-  #geom_text(aes(label=name), hjust=0, vjust=0) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_plob[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_plob[2],"% variance")) +
   scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
   coord_fixed() +
-  #ggtitle("P. lobata") +
+  ggtitle(label = "P. lobata") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 20),
-        axis.title = element_text(size=25),
-        #title = element_text(size=30),
+  theme(axis.text = element_text(size = 10),
+        axis.title = element_text(size=15),
         legend.position = "right",
         panel.border = element_blank(), # Set border
         #panel.grid.major = element_blank(), #Set major gridlines
         #panel.grid.minor = element_blank(), #Set minor gridlines
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background
 plob_DEGPCAplot
+
 # PCA plot is of differentially expressed genes only
-#PC.info <- plob_DEGPCAplot$data
-ggsave("~/Desktop/plob_DEGs_PCA_20210705.jpeg", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
-ggsave("~/Desktop/plob_DEGs_PCA_20210705.pdf", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
-
-
+PC.info <- plob_DEGPCAplot$data
+#ggsave("Output/Figs/plob/plob_DEGs_PCA_20211223.jpeg", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/plob/plob_DEGs_PCA_20211223.pdf", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
 
 
 
