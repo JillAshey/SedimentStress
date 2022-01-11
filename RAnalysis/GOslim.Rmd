@@ -48,7 +48,7 @@ GO.acerv <- ggplot(Gene.GO.IDs.slims.acerv.BP, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.acerv
-ggsave("Output/Figs/acerv/acerv_GOslim.BP_20211116.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
+#ggsave("Output/Figs/acerv/acerv_GOslim.BP_20211116.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
 ```
 
 ## Mcav
@@ -81,13 +81,13 @@ GO.mcav <- ggplot(Gene.GO.IDs.slims.mcav.BP, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.mcav
-ggsave("Output/Figs/mcav/mcav_GOslim.BP_20211116.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
+#ggsave("Output/Figs/mcav/mcav_GOslim.BP_20211116.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
 ```
 
 ## Ofav
 ```{r}
 # Read in Ofav DEG GO terms 
-ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20211117.csv", header = T)
+ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
 ofav.go <- select(ofav.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
 colnames(ofav.go)[1] <-"GO.IDs"
 ofav.go <- unique(ofav.go)
@@ -114,7 +114,7 @@ GO.ofav <- ggplot(Gene.GO.IDs.slims.ofav.BP, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ofav
-ggsave("Output/Figs/ofav/ofav_GOslim.BP_20211117.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
+ggsave("Output/Figs/ofav/ofav_GOslim.BP_20220111.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
 ```
 
 
@@ -148,7 +148,7 @@ GO.plob <- ggplot(Gene.GO.IDs.slims.plob.BP, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.plob
-ggsave("Output/Figs/plob/plob_GOslim.BP_20211116.pdf", GO.plob, width = 28, height = 28, units = c("in"))
+#ggsave("Output/Figs/plob/plob_GOslim.BP_20211116.pdf", GO.plob, width = 28, height = 28, units = c("in"))
 ```
 
 # All species 
@@ -176,7 +176,7 @@ all.go.slim <- rbind(Gene.GO.IDs.slims.acerv,
 
 # Subset Biological Processes (BP) 
 all.go.slim.BP <- subset(all.go.slim, ontology == "BP")
-write.csv(all.go.slim.BP, "Output/GOSeq/all.go.slim.BP_20211117.csv")
+write.csv(all.go.slim.BP, "Output/GOSeq/all.go.slim.BP_20220111.csv")
 
 GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -187,7 +187,7 @@ GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.all
-ggsave("Output/Figs/all_GOslim.BP_20211117.pdf", GO.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim.BP_20220111.pdf", GO.all, width = 40, height = 40, units = c("in"))
 ```
 
 # Subset by GO slim term and plot for all species 
@@ -201,7 +201,7 @@ unique(all.go.slim.BP$GO.Slim.Term)
 #[13] "signal transduction"              "cell-cell signaling"             
 ```
 
-Look at all_GOslim.BP_20211112.pdf plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot: cell organization and biogenesis, developmental processes, other biological processes, other metabolic processes, protein metabolism, RNA metabolism, signal transduction, stress response, & transport 
+Look at all_GOslim.BP plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot: cell organization and biogenesis, developmental processes, other biological processes, other metabolic processes, protein metabolism, RNA metabolism, signal transduction, stress response, & transport 
 
 ## Subset and plot only 'cell-cell signaling' (CCS)
 ```{r}
@@ -216,7 +216,7 @@ GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCS.subset
-ggsave("Output/Figs/CCS.Subset_GOslim.BP_20211118.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220111.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'cell organization and biogenesis' (COB)
@@ -232,7 +232,7 @@ GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.COB.subset
-ggsave("Output/Figs/COB.Subset_GOslim.BP_20211117.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/COB.Subset_GOslim.BP_20220111.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'developmental processes' (DP)
@@ -248,7 +248,7 @@ GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DP.subset
-ggsave("Output/Figs/DP.Subset_GOslim.BP_20211116.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/DP.Subset_GOslim.BP_20220111.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'other biological processes' (OBP)
@@ -264,7 +264,7 @@ GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OBP.subset
-ggsave("Output/Figs/OBP.Subset_GOslim.BP_20211117.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220111.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'other metabolic processes' (OMP)
@@ -280,7 +280,7 @@ GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMP.subset
-ggsave("Output/Figs/OMP.Subset_GOslim.BP_20211117.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220111.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'protein metabolism' (PM)
@@ -296,7 +296,7 @@ GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PM.subset
-ggsave("Output/Figs/PM.Subset_GOslim.BP_20211117.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/PM.Subset_GOslim.BP_20220111.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'RNA metabolism' (RNAM)
@@ -312,7 +312,7 @@ GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.RNAM.subset
-ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20211116.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220111.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'signal transduction' (ST)
@@ -328,7 +328,7 @@ GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ST.subset
-ggsave("Output/Figs/ST.Subset_GOslim.BP_20211117.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/ST.Subset_GOslim.BP_20220111.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'stress response' (SR)
@@ -344,7 +344,7 @@ GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.SR.subset
-ggsave("Output/Figs/SR.Subset_GOslim.BP_20211116.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SR.Subset_GOslim.BP_20220111.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
 ```
 
 ## Subset and plot only 'transport' (T)
@@ -360,7 +360,7 @@ GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.T.subset
-ggsave("Output/Figs/T.Subset_GOslim.BP_20211116.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/T.Subset_GOslim.BP_20220111.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
 ```
 
 

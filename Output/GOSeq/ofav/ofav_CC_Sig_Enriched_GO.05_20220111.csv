@@ -1,0 +1,4 @@
+"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
+"36","GO:0071944",0.00050080832308553,0.99999580042469,2,83,"cell periphery","CC"
+"7","GO:0005622",0.0449782350045312,0.999107365509885,1,115,"intracellular","CC"
+"13","GO:0009941",0.0030958158214998,0.999996401380721,1,7,"chloroplast envelope","CC"

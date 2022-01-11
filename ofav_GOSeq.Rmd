@@ -32,10 +32,10 @@ This code is using the ofav data. This code is also using the GO terms generated
 ## Read in all expressed ofav genes (poverA = 0.85,5)
 ```{r}
 # Obtain names of all expressed Ofav genes (poverA = 0.85,5), and all differentially expressed genes (p<0.05)
-gcounts_filt_ofav <- read.csv("Output/DESeq2/ofav/ofav_counts_filtered.csv", header = T)
-dim(gcounts_filt_ofav) # 18815 rows x 16
+gcounts_filt_ofav <- read.csv("Output/DESeq2/ofav/ofav_counts_filt_20220111.csv", header = T)
+dim(gcounts_filt_ofav) # 19699 rows x 15
 colnames(gcounts_filt_ofav)[1] <-"gene_id" # make colnames a true column called gene_id
-length(unique(gcounts_filt_ofav$gene_id)) # 18815 total unique gene ids 
+length(unique(gcounts_filt_ofav$gene_id)) # 19699 total unique gene ids 
 for ( col in 1:ncol(gcounts_filt_ofav)){
   colnames(gcounts_filt_ofav)[col] <-  gsub("X", "", colnames(gcounts_filt_ofav)[col])
 }
@@ -47,14 +47,14 @@ gcounts_filt_ofav$gene_id <- gsub(".*-", "", gcounts_filt_ofav$gene_id)
 
 ## Read in ofav DEGs
 ```{r}
-DEG_ofav <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list.csv", header = TRUE)
-dim(DEG_ofav) # 16 x 16
+DEG_ofav <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = TRUE)
+dim(DEG_ofav) # 8 x 16
 colnames(DEG_ofav)[1] <-"gene_id" # make colnames a true column called gene_id
 for ( col in 1:ncol(DEG_ofav)){
   colnames(DEG_ofav)[col] <-  gsub("X", "", colnames(DEG_ofav)[col])
 }
 head(DEG_ofav)
-length(unique(DEG_ofav$gene_id)) # 16 total unique gene ids 
+length(unique(DEG_ofav$gene_id)) # 8 total unique gene ids 
 # Isolate LOC term
 DEG_ofav$gene_id <- gsub("\\|.*", "", DEG_ofav$gene_id)
 DEG_ofav$gene_id <- gsub(".*-", "", DEG_ofav$gene_id)
@@ -75,7 +75,7 @@ GOseq requires a vector of all genes, all differentially expressed genes, and ge
 ```{r}
 #DEG<- filter(length_Acerv, gene_id %in% DEG_acerv_sub$gene_id) - for some reason, R keeps giving me error saying object 'gene_id' not found, so used another way below
 DEG <- length_merge[length_merge$gene_id %in% DEG_ofav$gene_id, ]
-dim(DEG) # 16 x 18
+dim(DEG) # 8 x 16
 DEG_names <- as.vector(DEG$gene_id)
 gene_vector <- as.integer(length_merge$gene_id%in%DEG_names)
 names(gene_vector) <- length_merge$gene_id
@@ -153,7 +153,7 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=merge, method="Wallenius", use_genes
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
-write.csv(GO.wall, file = "Output/GOSeq/ofav/ofav_GO_ALL_20211117.csv")
+write.csv(GO.wall, file = "Output/GOSeq/ofav/ofav_GO_ALL_20220111.csv")
 
 # Check GO.wall df
 class(GO.wall)
@@ -173,14 +173,14 @@ head(enriched.GO.05)
 # Subset enriched GO terms by ontology (BP, CC, MF) and save as csv. 
 MF <- subset(enriched.GO.05, ontology=="MF")
 MF <- MF[order(-MF$numDEInCat),]
-#CC <- subset(enriched.GO.05, ontology=="CC") --- no sig enriched CC terms 
-#CC <- CC[order(-CC$numDEInCat),] 
+CC <- subset(enriched.GO.05, ontology=="CC") 
+CC <- CC[order(-CC$numDEInCat),] 
 BP <- subset(enriched.GO.05, ontology=="BP")
 BP <- BP[order(-BP$numDEInCat),]
-write.csv(MF, file = "Output/GOSeq/ofav/ofav_MF_Sig_Enriched_GO.05_20211117.csv")
-#write.csv(CC, file = "Output/GOSeq/ofav/ofav_CC_Sig_Enriched_GO.05_20211117.csv") 
-write.csv(BP, file = "Output/GOSeq/ofav/ofav_BP_Sig_Enriched_GO.05_20211117.csv")
-write.csv(enriched.GO.05, file = "Output/GOSeq/ofav/ofav_Sig_Enriched_GO.05_ALL_20211117.csv")
+write.csv(MF, file = "Output/GOSeq/ofav/ofav_MF_Sig_Enriched_GO.05_20220111.csv")
+write.csv(CC, file = "Output/GOSeq/ofav/ofav_CC_Sig_Enriched_GO.05_20220111.csv") 
+write.csv(BP, file = "Output/GOSeq/ofav/ofav_BP_Sig_Enriched_GO.05_20220111.csv")
+write.csv(enriched.GO.05, file = "Output/GOSeq/ofav/ofav_Sig_Enriched_GO.05_ALL_20220111.csv")
 ```
 
 ## Merge DEG gene ids and GO info
@@ -197,27 +197,27 @@ merge_DEG <- merge(merge_cat, DEG, by = "gene_id") # contains GO info and gene c
 ## Add treatment info to df and save 
 ```{r}
 # Read in DEG treatment info
-ofav_treatment <- read.csv("Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20211104.csv", header = TRUE)
+ofav_treatment <- read.csv("Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20220111.csv", header = TRUE)
 ofav_treatment <- select(ofav_treatment, c("baseMean", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj", "Treatment_Compare", "gene_id"))
 
 # Merge treatment info with GO info 
 merge_all <- merge(merge_DEG, ofav_treatment, by = "gene_id")
 # yay now I have a df with all the info - GO info, gene ids, DESeq2 stats, gene counts
-dim(merge_all) # 51 x 31
-length(unique(merge_all$gene_id)) # 7 unique genes that are differentially expressed and have GO term info
-length(unique(merge_all$category)) # 20 unique GO terms 
-write.csv(merge_all, file = "Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20211117.csv")
+dim(merge_all) # 49 x 30
+length(unique(merge_all$gene_id)) # 4 unique genes that are differentially expressed and have GO term info
+length(unique(merge_all$category)) # 39 unique GO terms 
+write.csv(merge_all, file = "Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv")
 
 # Subset enriched GO terms by ontology (BP, CC, MF) and save as csv. 
 MF_ByTreatment <- subset(merge_all, ontology=="MF")
 MF_ByTreatment <- MF_ByTreatment[order(-MF_ByTreatment$numDEInCat),]
-#CC_ByTreatment <- subset(merge_all, ontology=="CC")
-#CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] # no sig enriched under CC
+CC_ByTreatment <- subset(merge_all, ontology=="CC")
+CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] 
 BP_ByTreatment <- subset(merge_all, ontology=="BP")
-BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
-write.csv(MF_ByTreatment, file = "Output/GOSeq/ofav/ofav_MF_Sig_Enriched_ByTreatment_GO.05_20211117.csv")
-#write.csv(CC_ByTreatment, file = "Output/GOSeq/ofav/mcav_CC_Sig_Enriched_ByTreatment_GO.05_20211117.csv")
-write.csv(BP_ByTreatment, file = "Output/GOSeq/ofav/ofav_BP_Sig_Enriched_ByTreatment_GO.05_20211117.csv")
+#BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
+write.csv(MF_ByTreatment, file = "Output/GOSeq/ofav/ofav_MF_Sig_Enriched_ByTreatment_GO.05_20220111.csv")
+write.csv(CC_ByTreatment, file = "Output/GOSeq/ofav/mcav_CC_Sig_Enriched_ByTreatment_GO.05_20220111.csv")
+write.csv(BP_ByTreatment, file = "Output/GOSeq/ofav/ofav_BP_Sig_Enriched_ByTreatment_GO.05_20220111.csv")
 ```
 
 ## Plot terms by ontology numbers 
@@ -246,7 +246,29 @@ MFplot <- MF %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
         plot.background=element_blank())#Set the plot background
 MFplot
 
-# no CC plot 
+CCplot <- CC %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
+  ggplot( aes(x=term, y=numDEInCat) ) +
+  geom_segment( aes(x=term ,xend=term, y=0, yend=numDEInCat), color="grey") +
+  geom_point(size=3, color="#69b3a2") +
+  coord_flip() +
+  theme(
+    panel.grid.minor.y = element_blank(),
+    panel.grid.major.y = element_blank(),
+    legend.position="none"
+  ) +
+  xlab("") +
+  ylab("") +
+  ggtitle("Molecular Function") + #add a main title
+  theme(plot.title = element_text(face = 'bold', 
+                                  size = 12, 
+                                  hjust = 0)) +
+  theme_bw() + #Set background color 
+  theme(panel.border = element_blank(), # Set border
+        panel.grid.major = element_blank(), #Set major gridlines
+        panel.grid.minor = element_blank(), #Set minor gridlines
+        axis.line = element_line(colour = "black"), #Set axes color
+        plot.background=element_blank())#Set the plot background
+CCplot
 
 BPplot <- BP %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
   ggplot( aes(x=term, y=numDEInCat) ) +
@@ -272,11 +294,11 @@ BPplot <- BP %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
 BPplot # lots of BP, hard to see. Could subset df and plot by BP dfs
 
 # Save MF, CC, and BP plot in grid layout
-GOplot <- grid.arrange(MFplot, BPplot, ncol=3, clip="off")
-ggsave("Output/Figs/ofav/ofav_GOplot_05_FullAnnot_20211117.pdf", GOplot, width = 40, height = 40, units = c("in"))
+GOplot <- grid.arrange(MFplot, CCplot, BPplot, ncol=3, clip="off")
+ggsave("Output/Figs/ofav/ofav_GOplot_05_FullAnnot_20220111.pdf", GOplot, width = 40, height = 40, units = c("in"))
 ```
 
-# Combining MF and BP into one plot and order by pvalue
+# Combining MF, CC and BP into one plot and order by pvalue
 ```{r}
 GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, numDEInCat)) %>%
   mutate(term = fct_reorder(term, ontology)) %>%
@@ -300,7 +322,7 @@ GOplot2 <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(te
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot2
-ggsave("Output/Figs/ofav/ofav_GOplot2_05_FullAnnot_20211117.pdf", GOplot2, width = 28, height = 28, units = c("in"))
+ggsave("Output/Figs/ofav/ofav_GOplot2_05_FullAnnot_20220111.pdf", GOplot2, width = 28, height = 28, units = c("in"))
 
 # Combining into one plot and order by pvalue 
 GOplot_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reorder(term, over_represented_pvalue)) %>%
@@ -325,7 +347,7 @@ GOplot_pvalue <- enriched.GO.05 %>% drop_na(ontology) %>% mutate(term = fct_reor
         axis.line = element_line(colour = "black"), #Set axes color
         plot.background=element_blank()) #Set the plot background #set title attributes
 GOplot_pvalue
-ggsave("Output/Figs/ofav/ofav_GOplot_pvalue_05_FullAnnot_20211117.pdf", GOplot_pvalue, width = 28, height = 28, units = c("in"))
+ggsave("Output/Figs/ofav/ofav_GOplot_pvalue_05_FullAnnot_20220111.pdf", GOplot_pvalue, width = 28, height = 28, units = c("in"))
 ```
 
 

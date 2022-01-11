@@ -173,11 +173,11 @@ write.csv(merge_all, file = "Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_2
 
 # Subset enriched GO terms by ontology (BP, CC, MF) and save as csv. 
 MF_ByTreatment <- subset(merge_all, ontology=="MF")
-MF_ByTreatment <- MF_ByTreatment[order(-MF_ByTreatment$numDEInCat),]
+#MF_ByTreatment <- MF_ByTreatment[order(-MF_ByTreatment$numDEInCat),]
 CC_ByTreatment <- subset(merge_all, ontology=="CC")
-CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] # no sig enriched under CC
+#CC_ByTreatment <- CC_ByTreatment[order(-CC_ByTreatment$numDEInCat),] 
 BP_ByTreatment <- subset(merge_all, ontology=="BP")
-BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
+#BP_ByTreatment <- BP_ByTreatment[order(-BP$numDEInCat),]
 write.csv(MF_ByTreatment, file = "Output/GOSeq/acerv/acerv_sub_MF_Sig_Enriched_ByTreatment_GO.05_20211104.csv")
 write.csv(CC_ByTreatment, file = "Output/GOSeq/acerv/acerv_sub_CC_Sig_Enriched_ByTreatment_GO.05_20211104.csv")
 write.csv(BP_ByTreatment, file = "Output/GOSeq/acerv/acerv_sub_BP_Sig_Enriched_ByTreatment_GO.05_20211104.csv")

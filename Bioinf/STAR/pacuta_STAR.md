@@ -145,7 +145,67 @@ sbatch --array=1-11 AlignReads_pacuta_only.sh # submit as an array job
 
 Submitted batch job 1960633
 
+Told me job was done, took ~15 hours to run. for some reason, no output for 4_2 
+
+Align 4_2 individually 
+
+```
+nano 4_2_align.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="4_2_align_pacuta_out_error"
+#SBATCH --output="4_2_align_pacuta_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/test_TMP --readFilesIn 4_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pacuta/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 4_2.
+
+sbatch 4_2_align.sh
+```
+
+Submitted batch job 1960686
+
+Will now align the rest of the samples against pacuta genome 
+
+```
+nano AlignReads_pacuta.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_pacuta_out_error"
+#SBATCH --output="Align_pacuta_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pacuta
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pacuta --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch --array=1-52%15 AlignReads_pacuta.sh # submit as an array job 
+```
+
+Submitted batch job 1960658
+
 d) Perform gene counts with stringTie
+
+Make folders for stringtie results 
 
 ```
 cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star
