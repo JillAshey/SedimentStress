@@ -170,7 +170,7 @@ STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnaml
 sbatch 4_2_align.sh
 ```
 
-Submitted batch job 1960686
+Submitted batch job 1960686. cancelled job because it was pending for >1 day
 
 Will now align the rest of the samples against pacuta genome 
 
