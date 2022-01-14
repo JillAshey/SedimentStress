@@ -213,3 +213,219 @@ mkdir Pacuta
 cd Pacuta
 mkdir BAM GTF GTF_merge
 ```
+
+Move BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pacuta/pacuta_only
+mv *Aligned.sortedByCoord.out.bam ../../../../stringTie_star/pacuta/BAM/
+```
+
+Assemble and estimate reads 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM
+
+nano stringTie_pacuta_assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_pacuta_out_error"
+#SBATCH --output="assemble_pacuta_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+	stringtie -G /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3 -e -o ${i}.gtf ${i}
+	echo "${i}"
+done
+
+sbatch stringTie_pacuta_assemble.sh
+```
+
+Submitted batch job 1960732
+
+For some reason, sample 47_2 didn't run, no gtf file produced...making separate folder for 47_2 and running it by itself 
+
+jk so for some reason the 47_2 BAM file is empty? going back to STAR to rerun 
+
+Align 47_2 individually 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pacuta/pacuta_only
+
+nano 47_2_align.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="47_2_align_pacuta_out_error"
+#SBATCH --output="47_2_align_pacuta_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/test_TMP --readFilesIn 47_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pacuta/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 47_2.
+
+sbatch 47_2_align.sh
+```
+
+Submitted batch job 1960734
+
+Move 47_2 BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_pacuta/pacuta_only
+mv *Aligned.sortedByCoord.out.bam ../../../../stringTie_star/pacuta/BAM/
+```
+
+now assemble reads for sample 47_2. made its own folder to run separately 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM/47_2
+
+nano stringTie_pacuta_assemble_47_2.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_pacuta_47_2_out_error"
+#SBATCH --output="assemble_pacuta_47_2_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM/47_2
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+        stringtie -G /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3 -e -o ${i}.gtf ${i}
+        echo "${i}"
+done
+
+sbatch stringTie_pacuta_assemble_47_2.sh
+```
+
+Submitted batch job 1960750
+
+Move gtf file into GTF directory 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF
+
+mv /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM/47_2/47_2.fastq.trim.fq.Aligned.sortedByCoord.out.bam.gtf .
+```
+
+Okay NOW I can merge stringTie gtf results 
+
+```
+ls *gtf > pacuta_mergelist.txt
+cat pacuta_mergelist.txt
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3 -o stringtie_pacuta_merged.gtf pacuta_mergelist.txt
+```
+
+Assess assembly quality
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3 -o Pacuta.merged stringtie_pacuta_merged.gtf
+
+38913 reference transcripts loaded.
+  518 duplicate reference transcripts discarded.
+  38672 query transfrags loaded.
+```
+
+Re-estimate assembly 
+
+```
+nano stringTie_pacuta_reassemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="reassemble_pacuta_out_error"
+#SBATCH --output="reassemble_pacuta_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3 -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_pacuta_reassemble.sh
+```
+
+Submitted batch job 1960752
+
+Move merged gtf files 
+
+```
+mv *merge.gtf ../GTF_merge
+```
+
+Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_pacuta.txt
+done
+
+python prepDE.py -g gene_count_pacuta_matrix.csv -i sample_list_pacuta.txt
+
+wc -l gene_count_pacuta_matrix.csv 
+35709 gene_count_pacuta_matrix.csv
+```
+
+Secure-copy gene counts onto local computer
+
+```
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge/gene_count_pacuta_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pacuta
+```
