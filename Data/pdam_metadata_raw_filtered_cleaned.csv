@@ -1,18 +1,18 @@
-"","Time","Sample.ID","Sample.name","Rep","Species","Treatment","Days","Location","SampleID"
-"X1_2","Morning","11698X33",1,1,"Pocillopora damicornis","mid","seven","HIMB","X1_2"
-"X2_2","Morning","11698X35",2,1,"Pocillopora damicornis","high","four","HIMB","X2_2"
-"X4_1",NA,NA,NA,NA,"Pocillopora damicornis","unknown","unknown","HIMB","X4_1"
-"X4_2","Morning","11698X15",4,1,"Pocillopora damicornis","control","seven","HIMB","X4_2"
-"X11_1",NA,NA,NA,NA,"Pocillopora damicornis","unknown","unknown","HIMB","X11_1"
-"X11_2","Morning","11698X11",11,2,"Pocillopora damicornis","control","seven","HIMB","X11_2"
-"X28_2","Morning","11698X40",28,1,"Pocillopora damicornis","mid","four","HIMB","X28_2"
-"X31_2",NA,NA,NA,NA,"Pocillopora damicornis","unknown","unknown","HIMB","X31_2"
-"X35_2","Morning","11698X45",35,2,"Pocillopora damicornis","high","four","HIMB","X35_2"
-"X36_2","Morning","11698X46",36,1,"Pocillopora damicornis","high","seven","HIMB","X36_2"
-"X38_2","Morning","11698X42",38,2,"Pocillopora damicornis","high","seven","HIMB","X38_2"
-"X39_1",NA,NA,NA,NA,"Pocillopora damicornis","unknown","unknown","HIMB","X39_1"
-"X39_2","Morning","11698X14",39,1,"Pocillopora damicornis","control","four","HIMB","X39_2"
-"X41_1",NA,NA,NA,NA,"Pocillopora damicornis","unknown","unknown","HIMB","X41_1"
-"X41_2","Morning","11698X16",41,2,"Pocillopora damicornis","control","four","HIMB","X41_2"
-"X42_2","Morning","11698X44",42,2,"Pocillopora damicornis","mid","four","HIMB","X42_2"
-"X47_2","Morning","11698X36",47,2,"Pocillopora damicornis","mid","seven","HIMB","X47_2"
+,Time,Sample.ID,Sample.name,Rep,Species,Treatment,Days,Location,SampleID
+X1_2,Morning,11698X33,1,1,Pocillopora damicornis,mid,seven,HIMB,X1_2
+X2_2,Morning,11698X35,2,1,Pocillopora damicornis,high,four,HIMB,X2_2
+X4_1,NA,NA,NA,NA,Pocillopora damicornis,unknown,unknown,HIMB,X4_1
+X4_2,Morning,11698X15,4,1,Pocillopora damicornis,control,seven,HIMB,X4_2
+X11_1,NA,NA,NA,NA,Pocillopora damicornis,unknown,unknown,HIMB,X11_1
+X11_2,Morning,11698X11,11,2,Pocillopora damicornis,control,seven,HIMB,X11_2
+X28_2,Morning,11698X40,28,1,Pocillopora damicornis,mid,four,HIMB,X28_2
+X31_2,NA,NA,NA,NA,Pocillopora damicornis,unknown,unknown,HIMB,X31_2
+X35_2,Morning,11698X45,35,2,Pocillopora damicornis,high,four,HIMB,X35_2
+X36_2,Morning,11698X46,36,1,Pocillopora damicornis,high,seven,HIMB,X36_2
+X38_2,Morning,11698X42,38,2,Pocillopora damicornis,high,seven,HIMB,X38_2
+X39_1,NA,NA,NA,NA,Pocillopora damicornis,unknown,unknown,HIMB,X39_1
+X39_2,Morning,11698X14,39,1,Pocillopora damicornis,control,four,HIMB,X39_2
+X41_1,NA,NA,NA,NA,Pocillopora damicornis,unknown,unknown,HIMB,X41_1
+X41_2,Morning,11698X16,41,2,Pocillopora damicornis,control,four,HIMB,X41_2
+X42_2,Morning,11698X44,42,2,Pocillopora damicornis,mid,four,HIMB,X42_2
+X47_2,Morning,11698X36,47,2,Pocillopora damicornis,mid,seven,HIMB,X47_2
