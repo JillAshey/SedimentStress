@@ -1,5 +1,9 @@
 ## Pipeline for FL species - sediment stress 
 
+Species: _Acropora cervicornis_, _Montestraea cavernosa_, and _Orbicella faveolata_
+
+Note: some of the paths may not be correct, as I have made new directories and moved files around since running this pipeline.
+
 ### 1) Check file integrity 
 
 a) Count all files to make sure all downloaded
@@ -117,8 +121,7 @@ The fastqc code was not working with files as .txt.gz, so changed them to .fastq
 
 ```
 nano fastqc_raw.sh
-```
-```
+
 #!/bin/bash
 #SBATCH -t 24:00:00
 #SBATCH --nodes=1 --ntasks-per-node=1
@@ -137,8 +140,7 @@ for file in /data/putnamlab/jillashey/Francois_data/Florida/data/raw/*fastq.gz
 do
 fastqc $file --outdir /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/raw
 done
-```
-```
+
 sbatch fastqc_raw.sh
 ```
 Submitted batch job 1689863
@@ -214,9 +216,7 @@ c) Write script for Trimmomatic and run on bluewaves
 ```
 cd scripts
 nano trimmomatic.sh
-```
 
-```
 #!/bin/bash
 #SBATCH -t 48:00:00
 #SBATCH --nodes=1 --ntasks-per-node=2
@@ -235,8 +235,7 @@ for file in /data/putnamlab/jillashey/Francois_data/Florida/data/raw/*fastq
 do
         java -jar $EBROOTTRIMMOMATIC/trimmomatic-0.38.jar SE -phred33 $file $file.trim.fq ILLUMINACLIP:/data/putnamlab/jillashey/Francois_data/Florida/data/Illumina_adapter_reads_PE_SE.fa:2:30:10 LEADING:3 TRAILING:3 SLIDINGWINDOW:4:15 MINLEN:20 >> TrimmedAmount.txt
 done
-```
-```
+
 sbatch trimmomatic.sh
 ```
 Submitted batch job 1690125
@@ -337,8 +336,7 @@ c) Run FastQC on trimmed data
 
 ```
 nano fastqc_trimmed.sh
-```
-```
+
 #!/bin/bash
 #SBATCH -t 24:00:00
 #SBATCH --nodes=1 --ntasks-per-node=1
@@ -357,13 +355,12 @@ for file in /data/putnamlab/jillashey/Francois_data/Florida/data/trimmed/*trim.f
 do
 fastqc $file --outdir /data/putnamlab/jillashey/Francois_data/Florida/fastqc_results/trimmed
 done
-```
-```
+
 sbatch fastqc_trimmed.sh
 ```
 Submitted batch job 1690402
 
-d) Run MultiQC on trimmed data and moved files 
+d) Run MultiQC on trimmed data and download files to local computer
 
 ```
 module load MultiQC/1.7-foss-2018b-Python-2.7.15
@@ -387,6 +384,8 @@ scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Florida/
 Adapter content looks kinda weird...maybe because Francois may have already trimmed some of the samples? But not sure about that yet
 
 ### 6) Align reads with STAR
+
+Before running STAR, I added the identifier 'transcript_id=' to the last column of the gff file in R. STAR needs this identifier to run and most of the gffs I used don't have it. Code to edit gff files herexxxxxxx
 
 #### O. fav
 

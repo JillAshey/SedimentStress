@@ -329,7 +329,7 @@ sbatch stringTie_pacuta_assemble_47_2.sh
 
 Submitted batch job 1960750
 
-Move gtf file into GTF directory 
+Move 47_2 gtf file into GTF directory 
 
 ```
 cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF

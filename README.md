@@ -1,7 +1,6 @@
 # Sediment Stress
 
-Four coral species from Hawai'i and three coral species from Florida were exposed _in situ_ to varying levels of sediment load.
-
+This study evaluated the transcriptomic responses of corals with different morphological characteristics in response to different types of sediment stress. Five coral species (_Acropora cervicornis_, _Montestraea cavernosa_, _Orbicella faveolata_, _Pocillopora acuta_, and _Porites lobata_) were assessed at two locations (Florida and Hawai’i). Floridian corals (_A. cervicornis_, _M. cavernosa_ and _O. faveolata_) were exposed to sterilized white carbonate sediment for 30 days, whereas Hawaiian corals (_P. acuta_ and _P. lobata_) were exposed to unsterilized terrigenous red soil for up to 7 days. 
 
 ### Bioinformatic pipeline
 
@@ -10,20 +9,13 @@ Four coral species from Hawai'i and three coral species from Florida were expose
 ##### Table of Contents
 
 - Bioinf
-	- HISAT2
-		- HISAT2_species_genome.md - HISAT2 script for each species
-		- stringtie_HISAT2_xx.md - stringTie script for each species (following hisat2)
 	- STAR
 		- STAR_species_genome.md - STAR script for each species
 		- stringtie_STAR_xx.md - stringTie script for each species (following star)
 	- BLAST.md - BLASTp for all coral proteins
-	- GenomeAnnotation_Cunning_makerPipeline.md - Annotating genes with R. Cunning MAKER pipeline
 	- RNASeq_pipeline_FL.md - full bioinformatics pipeline for FL corals
 	- wget_genomes.md - locations to download genome and annotation files for all coral species
 - Data
-	- gene_GOterms_pdam_Connelly.csv - GO terms associated with Reef Genomics gene names (obtained from Connelly [github](https://github.com/michaeltconnelly/EAPSI_Pocillopora_LPS/blob/master/data/pdam_genome_genesGO.txt))
-	- gene_function_pdam_Connelly.csv - functional info associated with Reef Genomics gene names (obtained from Connelly [github](https://github.com/michaeltconnelly/EAPSI_Pocillopora_LPS/blob/master/data/pdam_genome_IDInfo.gff))
-	- gene_result_pdam_NCBI.csv - NCBI gene names associated with functional info and Reef Genomics gene names
 	- metadata_species_raw_filtered.csv - metadata associated with species and sample names 
 	- sediment_FL_metadata.csv - FL metadata for all species
 	- sediment_HT_metadata.csv - HI metadata for all species 
