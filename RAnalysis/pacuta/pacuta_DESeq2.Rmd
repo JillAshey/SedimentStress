@@ -33,8 +33,30 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-countdata <- read.csv("Output/DESeq2/pacuta/gene_count_pacuta_matrix.csv")
-dim(countdata) # 35708 x 13
+## using gene count matrix made w/ stringtie merged gtf b/c too many MSTRG/STRG gene ids generated when using the original GFF. Here, I'm merging the count matrix and the stringtie merged gtf file to match up gene ids from original gff w/ MSTRG/STRG gene ids created by stringtie
+countdata_merge <- read.csv("~/Desktop/gene_count_pacuta_matrix_merge.csv")
+gtf <- read.csv(file="~/Desktop/stringtie_pacuta_merged.gtf", header=FALSE, sep="\t", skip = 2) 
+colnames(gtf) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
+head(gtf)
+gtf_transcript <- subset(gtf, id == "transcript")
+
+# Make cols for gene and transcript ids
+gtf_transcript$gene_id <- sub(";.*", "", gtf_transcript$gene)
+gtf_transcript$gene_id <- gsub("gene_id", "", gtf_transcript$gene_id) #remove gene_id
+gtf_transcript$gene_id <- gsub(" ", "", gtf_transcript$gene_id) 
+
+gtf_transcript$transcript_id <- regmatches(gtf_transcript$gene,gregexpr("(?<=;).*",gtf_transcript$gene,perl=TRUE))
+gtf_transcript$transcript_id <- gsub("transcript_id", "", gtf_transcript$transcript_id) #remove transcript_id
+gtf_transcript$transcript_id <- gsub(";", "", gtf_transcript$transcript_id)
+gtf_transcript$transcript_id <- gsub(" ", "", gtf_transcript$transcript_id) 
+
+# merge countdata_merge and gtf_transcript 
+test <- merge(countdata_merge, gtf_transcript, by = "gene_id")
+test <- test[,c(2:13, 23)]
+names(test)[names(test) == "transcript_id"] <- "gene_id"
+countdata <- test
+
+dim(countdata) # 30932 x 13
 for ( col in 1:ncol(countdata)){
   colnames(countdata)[col] <-  gsub("X", "", colnames(countdata)[col])
 }
@@ -68,7 +90,7 @@ keep <- count_pacuta[tfil,] # identify genes to keep based on filter
 gn.keep <- rownames(keep)
 pacuta_counts_filt <- as.matrix(count_pacuta[which(rownames(count_pacuta) %in% gn.keep),]) 
 storage.mode(pacuta_counts_filt) <- "integer" # stores count data as integer 
-write.csv(pacuta_counts_filt, "Output/DESeq2/pacuta/pacuta_counts_filt_20220113.csv")
+write.csv(pacuta_counts_filt, "Output/DESeq2/pacuta/pacuta_counts_filt_20220116.csv")
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(metadata_pacuta) %in% colnames(pacuta_counts_filt)) # must come out TRUE
 ```
@@ -127,7 +149,7 @@ DEG_control_vs_mid
 DEG_control_vs_mid <- as.data.frame(DEG_control_vs_mid) # make full results into a df
 DEG_control_vs_mid["Treatment_Compare"] <- "CvsMid" # add treatment comparison col
 DEG_control_vs_mid.sig.num <- sum(DEG_control_vs_mid$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
-DEG_control_vs_mid.sig.num # 80 DEGs
+DEG_control_vs_mid.sig.num # 83 DEGs
 DEG_control_vs_mid.sig <- subset(DEG_control_vs_mid, padj <0.05) # identify and subset significant pvalues
 DEG_control_vs_mid.sig["Treatment_Compare"] <- "CvsMid" # add treatment comparison col
 DEG_control_vs_mid.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_mid.sig)),] # subset list of significant genes from original count data 
@@ -137,7 +159,7 @@ DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_m
 #    specify fitType='local' or 'mean' to avoid this message next time.
 DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list))
 DEG_control_vs_mid.sig.list_full <- cbind(DEG_control_vs_mid.sig, DEG_control_vs_mid.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_mid.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_Mid_DEG_20220113.csv")
+write.csv(DEG_control_vs_mid.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_Mid_DEG_20220116.csv")
 ```
 
 ### Compare control and high
@@ -148,14 +170,14 @@ DEG_control_vs_high
 DEG_control_vs_high <- as.data.frame(DEG_control_vs_high) # make full results into a df
 DEG_control_vs_high["Treatment_Compare"] <- "CvsHigh" # add treatment comparison col
 DEG_control_vs_high.sig.num <- sum(DEG_control_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
-DEG_control_vs_high.sig.num # 226 DEGs
+DEG_control_vs_high.sig.num # 242 DEGs
 DEG_control_vs_high.sig <- subset(DEG_control_vs_high, padj <0.05) # identify and subset significant pvalues
 DEG_control_vs_high.sig["Treatment_Compare"] <- "CvsHigh" # add treatment comparison col
 DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_high.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize
 DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list))
 DEG_control_vs_high.sig.list_full <- cbind(DEG_control_vs_high.sig, DEG_control_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_High_DEG_20220113.csv")
+write.csv(DEG_control_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_High_DEG_20220116.csv")
 ```
 
 ### Compare mid and high
@@ -166,18 +188,14 @@ DEG_mid_vs_high
 DEG_mid_vs_high <- as.data.frame(DEG_mid_vs_high) # make full results into a df
 DEG_mid_vs_high["Treatment_Compare"] <- "MidvsHigh" # add treatment comparison col
 DEG_mid_vs_high.sig.num <- sum(DEG_mid_vs_high$padj <0.05, na.rm = T) # identify # of significant pvalues with 10%FDR (padj<0.1) -  jk using 0.05
-DEG_mid_vs_high.sig.num # 6 DEGs
+DEG_mid_vs_high.sig.num # 14 DEGs
 DEG_mid_vs_high.sig <- subset(DEG_mid_vs_high, padj <0.05) # identify and subset significant pvalues
 DEG_mid_vs_high.sig["Treatment_Compare"] <- "MidvsHigh" # add treatment comparison col
 DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subset list of significant genes from original count data 
 DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-#    function: y = a/x + b, and a local regression fit was automatically substituted.
-#    specify fitType='local' or 'mean' to avoid this message next time.
-# Estimated rdf < 1.0; not estimating variance
 DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list))
 DEG_mid_vs_high.sig.list_full <- cbind(DEG_mid_vs_high.sig, DEG_mid_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_mid_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_Mid_vs_High_DEG_20220113.csv")
+write.csv(DEG_mid_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_Mid_vs_High_DEG_20220116.csv")
 ```
 
 ## Make full list of differentially expressed genes and treatments 
@@ -194,15 +212,15 @@ rownames(DEG_mid_vs_high.sig.list_full) <- NULL
 DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full,
                   DEG_control_vs_high.sig.list_full,
                   DEG_mid_vs_high.sig.list_full) # make sure column names are the same in all dfs before binding!
-dim(DEGs.all) # 312 x 20
-length(unique(DEGs.all$gene_id)) # 232 unique genes between all treatments 
-write.csv(DEGs.all, "Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220113.csv")
+dim(DEGs.all) # 339 x 20
+length(unique(DEGs.all$gene_id)) # 263 unique genes between all treatments 
+write.csv(DEGs.all, "Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220116.csv")
 
 # Bind all genes
 gene.all <- rbind(DEG_control_vs_mid,
                   DEG_control_vs_high,
                   DEG_mid_vs_high)
-write.csv(gene.all, "Output/DESeq2/pacuta/pacuta_AllGenes_AllTreatments_20220113.csv")
+write.csv(gene.all, "Output/DESeq2/pacuta/pacuta_AllGenes_AllTreatments_20220116.csv")
 ```
 
 ## Identify unique genes from DEGs in CvsMid, CvsHigh, MidvsHigh
@@ -210,20 +228,16 @@ write.csv(gene.all, "Output/DESeq2/pacuta/pacuta_AllGenes_AllTreatments_20220113
 DEGs.all_pacuta <- DEGs.all$gene_id
 DEGs.all_pacuta <- unique(DEGs.all_pacuta)
 DEGs.all_pacuta <- as.data.frame(DEGs.all_pacuta) 
-dim(DEGs.all_pacuta) # 232 unique DEGs among treatment comparisons 
+dim(DEGs.all_pacuta) # 263 unique DEGs among treatment comparisons 
 ```
 
 ## 
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_pacuta$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "Output/DESeq2/pacuta/pacuta_unique.sig.list_20220113.csv")
+write.csv(counts(unique.sig.list), file = "Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
-# -- note: fitType='parametric', but the dispersion trend was not well captured by the
-#    function: y = a/x + b, and a local regression fit was automatically substituted.
-#    specify fitType='local' or 'mean' to avoid this message next time.
-# Estimated rdf < 1.0; not estimating variance
 ```
 
 ## PCA plot of diff-expressed genes 
@@ -252,8 +266,8 @@ pacuta_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- pacuta_DEGPCAplot$data
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220113.jpeg", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220113.pdf", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220116.jpeg", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220116.pdf", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
 ```
 
 

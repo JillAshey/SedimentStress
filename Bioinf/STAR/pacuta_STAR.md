@@ -429,3 +429,152 @@ Secure-copy gene counts onto local computer
 ```
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge/gene_count_pacuta_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/pacuta
 ```
+
+The gene matrix has mostly STRG.xxx as gene ids (as opposed to the actual gene ids from the gff file). Going to try to use the [mstrg_prep.py](https://gist.github.com/gpertea/4207fa9cb30fe7fec0eb52bd29b9a976) python script to add gene ids to MSTRG gene ids. I think I need to run this on the stringtie_pacuta_merged.gtf file ??. See comments in this [thread](https://github.com/gpertea/stringtie/issues/113). 
+
+This comment is of interest to me. So was I supposed to be using the stringtie_pacuta_merged.gtf for the next run of stringtie? 
+
+```
+gpertea commented on Aug 27, 2018
+
+As explained in #179 (comment) , the idea was to use the script on the output of stringtie --merge, which is a GTF file (let's call it merged.gtf) and from it generate a "processed" gtf output (at stdout) which transforms the 'gene_id' attribute to include one or more reference gene_ids (or gene_name, if the script), if any were found to match any of the transcripts assembled there. There is a "usage" comment as the 2nd line of that gist suggesting the command line:
+
+mstrg_prep.py merged.gtf > merged_prep.gtf
+The input file is not directly modified -- a new gtf file is produced at stdout (captured as merged_prep.gtf in the example above), and that's the one that should be used with -G option for the subsequent runs of stringtie -e for each sample.
+```
+
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+python mstrg_prep.py stringtie_pacuta_merged.gtf > merged_prep_test.gtf
+
+```
+
+Okay not quite sure what to do. First, I'm going to try to re-estimate assembly with the stringtie_pacuta_merged.gtf file. 
+
+```
+nano stringTie_pacuta_reassemble_merge.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="reassemble_merge_pacuta_out_error"
+#SBATCH --output="reassemble_merge_pacuta_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF/stringtie_pacuta_merged.gtf -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_pacuta_reassemble_merge.sh
+```
+
+Submitted batch job 1960766
+
+Move merged gtf files 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/
+mkdir GTF_merge_20220116
+mv *merge.gtf ../GTF_merge_20220116
+```
+
+Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge_20220116/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_pacuta.txt
+done
+
+python prepDE.py -g gene_count_pacuta_matrix_merge.csv -i sample_list_pacuta.txt
+
+wc -l 
+```
+
+Then, I'm going to re-estimate assembly using the merged_prep_test.gtf file and see how the gene count matrix files are different 
+
+```
+nano stringTie_pacuta_reassemble_merge_prep.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="reassemble_merge_prep_pacuta_out_error"
+#SBATCH --output="reassemble_merge_prep_pacuta_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF/merged_prep_test.gtf -o ${i}.merge_prep.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_pacuta_reassemble_merge_prep.sh
+```
+
+Submitted batch job 1960768
+
+Move merged gtf files 
+
+```
+mv *merge_prep.gtf ../GTF_merge_20220116
+```
+
+Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge_20220116/
+
+array2=($(ls *merge_prep.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_prep_pacuta.txt
+done
+
+python prepDE.py -g gene_count_pacuta_matrix_merge_prep.csv -i sample_list_prep_pacuta.txt
+
+wc -l 
+```
+
+Because of the number of MSTRG/STRG gene ids that are generated, I am going to use ```gene_count_pacuta_matrix_merge.csv``` to analyze gene counts. In R, I will merge this csv file w/ ```stringtie_pacuta_merged.gtf``` to match MSTRG/STRG ids w/ gene ids from original gff.

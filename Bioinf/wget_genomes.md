@@ -54,4 +54,4 @@ Annotation file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/97
 #### [Montastraea cavernosa](https://www.dropbox.com/s/0inwmljv6ti643o/Mcavernosa_genome.tgz?dl=0&file_subpath=%2FMcav_genome)
 ###### Matz lab (https://matzlab.weebly.com/data--code.html)
 
-Coming soon
+Downloaded from DropBox

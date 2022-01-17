@@ -135,3 +135,64 @@ g) Secure-copy gene counts onto local computer
 ```
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/GTF_merge/gene_count_plob_only_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/
 ```
+
+20220116
+
+Going to try to run re-assemble step with the stringtie_plob_merged.gtf file instead of the Plut.GFFannotation.fixed_transcript.gff file. 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/BAM/plob_only
+
+nano stringTie_plob_re-assemble_merge.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_merge_plob_out_error"
+#SBATCH --output="re-assemble_merge_plob_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/BAM/plob_only # do i need a / after BAM?
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/GTF/stringtie_plob_merged.gtf -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_plob_re-assemble_merge.sh
+```
+
+Submitted batch job 1960767
+
+Move samples to new GTF folder 
+
+f) Create gene matrix
+
+```
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/GTF_merge_20220116/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_plob.txt
+done
+
+python prepDE.py -g gene_count_plob_matrix_merge.csv -i sample_list_plob.txt
+
+```
+
+I'm sticking w/ the original gene count matrix that I made 
