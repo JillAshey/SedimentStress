@@ -54,6 +54,28 @@ awk 'BEGIN{FS="[>]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_
 
 ## Hawaii
 
+### Pacuta 
+
+Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
+
+```
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' braker_v1.codingseq.fasta > newfile_RNA_Pacuta.fasta
+
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' Pocillopora_acuta_HIv1.genes.pep.faa > newfile_Protein_Pacuta.fasta
+
+```
+
+Now gene lengths can be calculated 
+
+```
+# Transcript lengths
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Pacuta.fasta > length.mRNA_Pacuta.txt
+
+# Protein lengths 
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Pacuta.fasta > length.protein_Pacuta.txt
+
+```
+
 ### Pdam 
 
 Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
