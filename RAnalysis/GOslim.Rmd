@@ -33,7 +33,7 @@ colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename colum
 
 # Merge acerv go w/ go slim
 Gene.GO.IDs.slims.acerv <- merge(acerv.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.acerv <- na.omit(Gene.GO.IDs.slims.acerv)
+#Gene.GO.IDs.slims.acerv <- na.omit(Gene.GO.IDs.slims.acerv)
 
 # Subset Biological Processes (BP) 
 Gene.GO.IDs.slims.acerv.BP <- subset(Gene.GO.IDs.slims.acerv, ontology == "BP")
@@ -66,7 +66,7 @@ colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename colum
 
 # Merge mcav go w/ go slim
 Gene.GO.IDs.slims.mcav <- merge(mcav.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.mcav <- na.omit(Gene.GO.IDs.slims.mcav)
+#Gene.GO.IDs.slims.mcav <- na.omit(Gene.GO.IDs.slims.mcav)
 
 # Subset Biological Processes (BP) 
 Gene.GO.IDs.slims.mcav.BP <- subset(Gene.GO.IDs.slims.mcav, ontology == "BP")
@@ -99,7 +99,7 @@ colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename colum
 
 # Merge mcav go w/ go slim
 Gene.GO.IDs.slims.ofav <- merge(ofav.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.ofav <- na.omit(Gene.GO.IDs.slims.ofav)
+#Gene.GO.IDs.slims.ofav <- na.omit(Gene.GO.IDs.slims.ofav)
 
 # Subset Biological Processes (BP) 
 Gene.GO.IDs.slims.ofav.BP <- subset(Gene.GO.IDs.slims.ofav, ontology == "BP")
@@ -114,7 +114,7 @@ GO.ofav <- ggplot(Gene.GO.IDs.slims.ofav.BP, aes(x = ontology, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ofav
-ggsave("Output/Figs/ofav/ofav_GOslim.BP_20220111.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
+#ggsave("Output/Figs/ofav/ofav_GOslim.BP_20220111.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
 ```
 
 
@@ -133,7 +133,7 @@ colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename colum
 
 # Merge plob go w/ go slim
 Gene.GO.IDs.slims.plob <- merge(plob.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.plob <- na.omit(Gene.GO.IDs.slims.plob)
+#Gene.GO.IDs.slims.plob <- na.omit(Gene.GO.IDs.slims.plob)
 
 # Subset Biological Processes (BP) 
 Gene.GO.IDs.slims.plob.BP <- subset(Gene.GO.IDs.slims.plob, ontology == "BP")
@@ -173,10 +173,11 @@ all.go.slim <- rbind(Gene.GO.IDs.slims.acerv,
                      Gene.GO.IDs.slims.ofav,
                      #Gene.GO.IDs.slims.pdam, 
                      Gene.GO.IDs.slims.plob)
+write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220119.csv")
 
 # Subset Biological Processes (BP) 
 all.go.slim.BP <- subset(all.go.slim, ontology == "BP")
-write.csv(all.go.slim.BP, "Output/GOSeq/all.go.slim.BP_20220111.csv")
+write.csv(all.go.slim.BP, "Output/GOSeq/all.go.slim.BP_20220119.csv")
 
 GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -187,7 +188,7 @@ GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.all
-ggsave("Output/Figs/all_GOslim.BP_20220111.pdf", GO.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim.BP_20220119.pdf", GO.all, width = 40, height = 40, units = c("in"))
 ```
 
 # Subset by GO slim term and plot for all species 

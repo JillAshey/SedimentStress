@@ -1,0 +1,143 @@
+---
+title: "Sediment Stress venn diagram"
+author: "jillashey"
+date: "1/19/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Load library
+library(VennDiagram)
+```
+
+Test code from [here](https://www.r-graph-gallery.com/14-venn-diagramm.html)
+```{r}
+# Generate 3 sets of 200 words
+set1 <- paste(rep("word_" , 200) , sample(c(1:1000) , 200 , replace=F) , sep="")
+set2 <- paste(rep("word_" , 200) , sample(c(1:1000) , 200 , replace=F) , sep="")
+set3 <- paste(rep("word_" , 200) , sample(c(1:1000) , 200 , replace=F) , sep="")
+
+# Prepare a palette of 3 colors with R colorbrewer:
+library(RColorBrewer)
+myCol <- brewer.pal(3, "Pastel2")
+
+# Chart
+venn.diagram(
+        x = list(set1, set2, set3),
+        category.names = c("Set 1" , "Set 2 " , "Set 3"),
+        filename = 'Output/Figs/test_venn_diagramm.png',
+        output=TRUE,
+        
+        # Output features
+        imagetype="png",
+        height = 480,
+        width = 480,
+        resolution = 300,
+        compression = "lzw",
+        
+        # Circles
+        lwd = 2,
+        lty = 'blank',
+        fill = myCol,
+        
+        # Numbers
+        cex = .6,
+        fontface = "bold",
+        fontfamily = "sans",
+        
+        # Set names
+        cat.cex = 0.6,
+        cat.fontface = "bold",
+        cat.default.pos = "outer",
+        cat.pos = c(-27, 27, 135),
+        cat.dist = c(0.055, 0.055, 0.085),
+        cat.fontfamily = "sans",
+        rotation = 1
+)
+```
+
+From ?venn.diagram in r
+```{r}
+# sample four-set Venn Diagram
+A <- sample(1:1000, 400, replace = FALSE);
+B <- sample(1:1000, 600, replace = FALSE);
+C <- sample(1:1000, 350, replace = FALSE);
+D <- sample(1:1000, 550, replace = FALSE);
+E <- sample(1:1000, 375, replace = FALSE);
+
+venn.plot <- venn.diagram(
+	x = list(
+		A = A,
+		D = D,
+		B = B,
+		C = C
+		),
+	filename = "Output/Figs/test2_venn_diagramm.png",
+	col = "transparent",
+	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
+	alpha = 0.50,
+	label.col = c("orange", "white", "darkorchid4", "white", 
+	"white", "white", "white", "white", "darkblue", "white", 
+	"white", "white", "white", "darkgreen", "white"),
+	cex = 1.5,
+	fontfamily = "serif",
+	fontface = "bold",
+	cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+	cat.cex = 1.5,
+	cat.pos = 0,
+	cat.dist = 0.07,
+	cat.fontfamily = "serif",
+	rotation.degree = 270,
+	margin = 0.2
+	)
+```
+
+Now try with my data 
+Venn diagram including ONLY BP
+```{r}
+# four-set Venn Diagram
+
+## read in data 
+all.BP  <- read.csv("Output/GOSeq/all.go.slim.BP_20220119.csv")
+head(all.BP)
+all.BP <- all.BP[,-c(1)] # remove weird first col
+
+all.BP <- na.omit(all.BP)
+
+## subset by species 
+acerv <- all.BP %>% filter(Species=="A.cervicornis")
+mcav <- all.BP %>% filter(Species=="M.cavernosa")
+ofav <- all.BP %>% filter(Species=="O.faveolata") 
+plob <- all.BP %>% filter(Species=="P.lobata") 
+
+## Plot
+venn.plot <- venn.diagram(
+	x = list(
+		A.cervicornis = acerv$GO.IDs,
+		M.cavernosa = mcav$GO.IDs,
+		O.faveolata = ofav$GO.IDs,
+		P.lobata = plob$GO.IDs
+		),
+	filename = "Output/Figs/venn_mydata2_test.BP_NAomit.png",
+	col = "transparent",
+	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
+	alpha = 0.50,
+	label.col = c("orange", "white", "darkorchid4", "white", 
+	"white", "white", "white", "white", "darkblue", "white", 
+	"white", "white", "white", "darkgreen", "white"),
+	cex = 1.5,
+	fontfamily = "serif",
+	fontface = "bold",
+	cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
+	cat.cex = 1.5,
+	cat.pos = 0,
+	cat.dist = 0.07,
+	cat.fontfamily = "serif",
+	rotation.degree = 270,
+	margin = 0.2
+	)
+venn.plot
+
+```

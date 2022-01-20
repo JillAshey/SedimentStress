@@ -114,7 +114,7 @@ GO.wall<-goseq(DEG.pwf, ID_vector, gene2cat=annot_GO, method="Wallenius", use_ge
 # Using manually entered categories.
 # Calculating the p-values...
 # 'select()' returned 1:1 mapping between keys and columns
-write.csv(GO.wall, file = "Output/GOSeq/acerv/acerv_sub_GO_ALL_20211104.csv")
+#write.csv(GO.wall, file = "Output/GOSeq/acerv/acerv_sub_GO_ALL_20211104.csv")
 
 # Check GO.wall df
 class(GO.wall)
@@ -138,10 +138,10 @@ CC <- subset(enriched.GO.05, ontology=="CC")
 CC <- CC[order(-CC$numDEInCat),] 
 BP <- subset(enriched.GO.05, ontology=="BP")
 BP <- BP[order(-BP$numDEInCat),]
-write.csv(MF, file = "Output/GOSeq/acerv/acerv_sub_MF_Sig_Enriched_GO.05_20211104.csv")
-write.csv(CC, file = "Output/GOSeq/acerv/acerv_CC_Sig_Enriched_GO.05_20211104.csv") 
-write.csv(BP, file = "Output/GOSeq/acerv/acerv_sub_BP_Sig_Enriched_GO.05_20211104.csv")
-write.csv(enriched.GO.05, file = "Output/GOSeq/acerv/acerv_sub_Sig_Enriched_GO.05_ALL_20211104.csv")
+# write.csv(MF, file = "Output/GOSeq/acerv/acerv_sub_MF_Sig_Enriched_GO.05_20211104.csv")
+# write.csv(CC, file = "Output/GOSeq/acerv/acerv_CC_Sig_Enriched_GO.05_20211104.csv") 
+# write.csv(BP, file = "Output/GOSeq/acerv/acerv_sub_BP_Sig_Enriched_GO.05_20211104.csv")
+# write.csv(enriched.GO.05, file = "Output/GOSeq/acerv/acerv_sub_Sig_Enriched_GO.05_ALL_20211104.csv")
 ```
 
 ## Merge DEG gene ids and GO info
