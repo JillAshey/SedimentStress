@@ -1,8 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"11","GO:0020037",0.0335411274570097,0.992683666031566,4,55,"heme binding","MF"
-"7","GO:0008417",0.0207328133174971,0.998745516634392,2,10,"fucosyltransferase activity","MF"
-"2","GO:0004559",0.0448576526087391,0.999487734653139,1,2,"alpha-mannosidase activity","MF"
-"3","GO:0004821",0.021457419124266,1,1,1,"histidine-tRNA ligase activity","MF"
-"8","GO:0008810",0.0214315822334857,1,1,1,"cellulase activity","MF"
-"9","GO:0016712",0.0432528333931401,0.999524129390165,1,2,"oxidoreductase activity, acting on paired donors, with incorporation or reduction of molecular oxygen, reduced flavin or flavoprotein as one donor, and incorporation of one atom of oxygen","MF"
-"10","GO:0018064",0.0214366425825671,1,1,1,"protein-histidine N-methyltransferase activity","MF"

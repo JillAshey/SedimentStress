@@ -1,6 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"2","GO:0004013",0.00315833370252037,0.99999648841628,1,4,"adenosylhomocysteinase activity","MF"
-"3","GO:0004725",0.0398847650635611,0.999259467478912,1,47,"protein tyrosine phosphatase activity","MF"
-"4","GO:0005164",0.0213128867910101,0.999793980610801,1,25,"tumor necrosis factor receptor binding","MF"
-"10","GO:0016301",0.0411556754374749,0.999210797145476,1,48,"kinase activity","MF"
-"13","GO:0032813",0.00104943697770095,1,1,1,"tumor necrosis factor receptor superfamily binding","MF"

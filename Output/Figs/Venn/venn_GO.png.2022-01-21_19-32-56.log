@@ -1,0 +1,33 @@
+INFO [2022-01-21 19:32:56] $x
+INFO [2022-01-21 19:32:56] list(A.cervicornis = acerv$GO.IDs, M.cavernosa = mcav$GO.IDs, 
+INFO [2022-01-21 19:32:56]     O.faveolata = ofav$GO.IDs, P.acuta = pacuta$GO.IDs, P.lobata = plob$GO.IDs)
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $filename
+INFO [2022-01-21 19:32:56] [1] "Output/Figs/venn_GO.png"
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $col
+INFO [2022-01-21 19:32:56] [1] "black"
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $fill
+INFO [2022-01-21 19:32:56] c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3")
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $alpha
+INFO [2022-01-21 19:32:56] [1] 0.5
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $cex
+INFO [2022-01-21 19:32:56] c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8, 1, 
+INFO [2022-01-21 19:32:56]     0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 
+INFO [2022-01-21 19:32:56]     1, 1, 1.5)
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $cat.col
+INFO [2022-01-21 19:32:56] c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3")
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $cat.cex
+INFO [2022-01-21 19:32:56] [1] 1.5
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $cat.fontface
+INFO [2022-01-21 19:32:56] [1] "bold"
+INFO [2022-01-21 19:32:56] 
+INFO [2022-01-21 19:32:56] $margin
+INFO [2022-01-21 19:32:56] [1] 0.1
+INFO [2022-01-21 19:32:56] 

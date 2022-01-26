@@ -14,9 +14,7 @@ library(arsenal)
 library(tidyverse)
 ```
 
-This code uses GO term annotation generated in Nov 2021
-
-# GO slim plots for FL corals 
+This code uses GO term annotation generated in Nov-Dec 2021 and Jan 2022
 
 ## Acerv
 ```{r}
@@ -24,31 +22,15 @@ This code uses GO term annotation generated in Nov 2021
 acerv.go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)
 acerv.go <- select(acerv.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
 colnames(acerv.go)[1] <-"GO.IDs"
+acerv.go$Species <- "A.cervicornis"
+acerv.go$Site <- "Florida"
 acerv.go <- unique(acerv.go)
 length(unique(acerv.go$GO.IDs)) # 366 unique GO terms 
 
-# Read in go slim info
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-
-# Merge acerv go w/ go slim
-Gene.GO.IDs.slims.acerv <- merge(acerv.go, go.slim, by="GO.IDs", all = TRUE)
-#Gene.GO.IDs.slims.acerv <- na.omit(Gene.GO.IDs.slims.acerv)
-
-# Subset Biological Processes (BP) 
-Gene.GO.IDs.slims.acerv.BP <- subset(Gene.GO.IDs.slims.acerv, ontology == "BP")
-
-# Plot 
-GO.acerv <- ggplot(Gene.GO.IDs.slims.acerv.BP, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.acerv
-#ggsave("Output/Figs/acerv/acerv_GOslim.BP_20211116.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
+# Subset by BP
+acerv.go.BP <- subset(acerv.go, ontology == "BP")
+acerv.go.BP <- unique(acerv.go.BP)
+length(unique(acerv.go.BP$GO.IDs)) # 278 unique BP GO terms 
 ```
 
 ## Mcav
@@ -57,31 +39,15 @@ GO.acerv
 mcav.go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)
 mcav.go <- select(mcav.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
 colnames(mcav.go)[1] <-"GO.IDs"
+mcav.go$Species <- "M.cavernosa"
+mcav.go$Site <- "Florida"
 mcav.go <- unique(mcav.go)
-length(unique(mcav.go$GO.IDs)) # 366 unique GO terms 
+length(unique(mcav.go$GO.IDs)) # 220 unique GO terms 
 
-# Read in go slim info
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-
-# Merge mcav go w/ go slim
-Gene.GO.IDs.slims.mcav <- merge(mcav.go, go.slim, by="GO.IDs", all = TRUE)
-#Gene.GO.IDs.slims.mcav <- na.omit(Gene.GO.IDs.slims.mcav)
-
-# Subset Biological Processes (BP) 
-Gene.GO.IDs.slims.mcav.BP <- subset(Gene.GO.IDs.slims.mcav, ontology == "BP")
-
-# Plot
-GO.mcav <- ggplot(Gene.GO.IDs.slims.mcav.BP, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.mcav
-#ggsave("Output/Figs/mcav/mcav_GOslim.BP_20211116.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
+# Subset by BP
+mcav.go.BP <- subset(mcav.go, ontology == "BP")
+mcav.go.BP <- unique(mcav.go.BP)
+length(unique(mcav.go.BP$GO.IDs)) # 158 unique BP GO terms 
 ```
 
 ## Ofav
@@ -90,33 +56,33 @@ GO.mcav
 ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
 ofav.go <- select(ofav.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
 colnames(ofav.go)[1] <-"GO.IDs"
+ofav.go$Species <- "O.faveolata"
+ofav.go$Site <- "Florida"
 ofav.go <- unique(ofav.go)
-length(unique(ofav.go$GO.IDs)) # 20 unique GO terms 
+length(unique(ofav.go$GO.IDs)) # 39 unique GO terms 
 
-# Read in go slim info
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-
-# Merge mcav go w/ go slim
-Gene.GO.IDs.slims.ofav <- merge(ofav.go, go.slim, by="GO.IDs", all = TRUE)
-#Gene.GO.IDs.slims.ofav <- na.omit(Gene.GO.IDs.slims.ofav)
-
-# Subset Biological Processes (BP) 
-Gene.GO.IDs.slims.ofav.BP <- subset(Gene.GO.IDs.slims.ofav, ontology == "BP")
-
-# Plot
-GO.ofav <- ggplot(Gene.GO.IDs.slims.ofav.BP, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.ofav
-#ggsave("Output/Figs/ofav/ofav_GOslim.BP_20220111.pdf", GO.ofav, width = 28, height = 28, units = c("in"))
+# Subset by BP
+ofav.go.BP <- subset(ofav.go, ontology == "BP")
+ofav.go.BP <- unique(ofav.go.BP)
+length(unique(ofav.go.BP$GO.IDs)) # 27 unique BP GO terms 
 ```
 
+## Pacuta 
+```{r}
+# Read in pacuta DEG GO terms
+pacuta.go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)
+pacuta.go <- select(pacuta.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
+colnames(pacuta.go)[1] <-"GO.IDs"
+pacuta.go$Species <- "P.acuta"
+pacuta.go$Site <- "Hawaii"
+pacuta.go <- unique(pacuta.go)
+length(unique(pacuta.go$GO.IDs)) # 532 unique GO terms 
+
+# Subset by BP
+pacuta.go.BP <- subset(pacuta.go, ontology == "BP")
+pacuta.go.BP <- unique(pacuta.go.BP)
+length(unique(pacuta.go.BP$GO.IDs)) # 380 unique BP GO terms 
+```
 
 ## Plob 
 ```{r}
@@ -124,62 +90,37 @@ GO.ofav
 plob.go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)
 plob.go <- select(plob.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
 colnames(plob.go)[1] <-"GO.IDs"
+plob.go$Species <- "P.lobata"
+plob.go$Site <- "Hawaii"
 plob.go <- unique(plob.go)
 length(unique(plob.go$GO.IDs)) # 279 unique GO terms 
 
+# Subset by BP
+plob.go.BP <- subset(plob.go, ontology == "BP")
+plob.go.BP <- unique(plob.go.BP)
+length(unique(plob.go.BP$GO.IDs)) # 198 unique BP GO terms 
+```
+
+
+## Merge w/ GO slim terms 
+```{r}
 # Read in go slim info
 go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
 colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
 
-# Merge plob go w/ go slim
-Gene.GO.IDs.slims.plob <- merge(plob.go, go.slim, by="GO.IDs", all = TRUE)
-#Gene.GO.IDs.slims.plob <- na.omit(Gene.GO.IDs.slims.plob)
-
-# Subset Biological Processes (BP) 
-Gene.GO.IDs.slims.plob.BP <- subset(Gene.GO.IDs.slims.plob, ontology == "BP")
+# Bind all species df together for GO slim plot and merge w/ GO slim terms
+all.go <- rbind(acerv.go, 
+                     mcav.go, 
+                     ofav.go,
+                     pacuta.go, 
+                     plob.go)
+write.csv(all.go, "Output/GOSeq/all.go_20220121.csv")
+all.go.slim <- merge(all.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220121.csv")
 
 # Plot 
-GO.plob <- ggplot(Gene.GO.IDs.slims.plob.BP, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.plob
-#ggsave("Output/Figs/plob/plob_GOslim.BP_20211116.pdf", GO.plob, width = 28, height = 28, units = c("in"))
-```
-
-# All species 
-
-## Plot all species on one GO slim plot 
-```{r}
-# Add species name and site to each df
-#Gene.GO.IDs.slims.pdam$Species <- "P.damicornis"
-#Gene.GO.IDs.slims.pdam$Site <- "Hawaii"
-Gene.GO.IDs.slims.plob$Species <- "P.lobata"
-Gene.GO.IDs.slims.plob$Site <- "Hawaii"
-Gene.GO.IDs.slims.acerv$Species <- "A.cervicornis"
-Gene.GO.IDs.slims.acerv$Site <- "Florida"
-Gene.GO.IDs.slims.mcav$Species <- "M.cavernosa"
-Gene.GO.IDs.slims.mcav$Site <- "Florida"
-Gene.GO.IDs.slims.ofav$Species <- "O.faveolata"
-Gene.GO.IDs.slims.ofav$Site <- "Florida"
-
-# Bind all species df together for GO slim plot 
-all.go.slim <- rbind(Gene.GO.IDs.slims.acerv, 
-                     Gene.GO.IDs.slims.mcav, 
-                     Gene.GO.IDs.slims.ofav,
-                     #Gene.GO.IDs.slims.pdam, 
-                     Gene.GO.IDs.slims.plob)
-write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220119.csv")
-
-# Subset Biological Processes (BP) 
-all.go.slim.BP <- subset(all.go.slim, ontology == "BP")
-write.csv(all.go.slim.BP, "Output/GOSeq/all.go.slim.BP_20220119.csv")
-
-GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) + 
+all.go.slim <- na.omit(all.go.slim)
+GO.all <- ggplot(all.go.slim, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
   facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -188,27 +129,71 @@ GO.all <- ggplot(all.go.slim.BP, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.all
-ggsave("Output/Figs/all_GOslim.BP_20220119.pdf", GO.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim_20220121.pdf", GO.all, width = 40, height = 40, units = c("in"))
+
+
+
+
+
+# Bind all species df together for BP GO slim plot and merge w/ GO slim terms
+all.go.BP <- rbind(acerv.go.BP, 
+                     mcav.go.BP, 
+                     ofav.go.BP,
+                     pacuta.go.BP, 
+                     plob.go.BP)
+write.csv(all.go.BP, "Output/GOSeq/all.go.BP_20220121.csv")
+all.go.BP.slim <- merge(all.go.BP, go.slim, by="GO.IDs", all = TRUE)
+write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220121.csv")
+
+# Plot 
+all.go.BP.slim <- na.omit(all.go.BP.slim)
+GO.BP.all <- ggplot(all.go.BP.slim, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 8),
+                     strip.text.x = element_text(size = 8),
+                     axis.text = element_text(size = 8))
+GO.BP.all
+ggsave("Output/Figs/all_GOslim.BP_20220121.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
 ```
 
 # Subset by GO slim term and plot for all species 
 ### Determine all categories to plot by
 ```{r}
-unique(all.go.slim.BP$GO.Slim.Term)
-#[1] "transport"                        "RNA metabolism"                   "cell organization and biogenesis"
-# [4] "protein metabolism"               "DNA metabolism"                   "stress response"                 
-# [7] "developmental processes"          "other biological processes"       "cell cycle and proliferation"    
-#[10] "cell adhesion"                    "other metabolic processes"        "death"                           
-#[13] "signal transduction"              "cell-cell signaling"             
+unique(all.go.BP.slim$GO.Slim.Term)
+#  [1] "transport"                        "RNA metabolism"                   "cell organization and biogenesis" "protein metabolism"              
+#  [5] "DNA metabolism"                   "stress response"                  "developmental processes"          "other biological processes"      
+#  [9] "cell cycle and proliferation"     "cell adhesion"                    "other metabolic processes"        "death"                           
+# [13] "signal transduction"              "cell-cell signaling"                                      
 ```
 
-Look at all_GOslim.BP plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot: cell organization and biogenesis, developmental processes, other biological processes, other metabolic processes, protein metabolism, RNA metabolism, signal transduction, stress response, & transport 
+Look at all_GOslim.BP plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot by GOslim terms that appear in all_GOslim.BP_20220121.pdf: 
 
-## Subset and plot only 'cell-cell signaling' (CCS)
+(1) "cell adhesion"
+(2) "cell cycle and proliferation"
+(3) "cell organization and biogenesis"
+(4) "cell-cell signaling"
+(5) "death"
+(6) "developmental processes"
+(7) "DNA metabolism"
+(8) "other biological processes"
+(9) "other metabolic processes"
+(10) "protein metabolism"
+(11) "RNA metabolism"
+(12) "signal transduction" 
+(13) "stress response"
+(14) "transport 
+
+
+### Plots 
+
+(1) "cell adhesion"
 ```{r}
-go.slim.CCS.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="cell-cell signaling")
+go.slim.CA.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="cell adhesion")
 
-GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) + 
+GO.CA.subset <- ggplot(go.slim.CA.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
   facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
@@ -216,13 +201,31 @@ GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) +
                      strip.text.y = element_text(angle=0, size = 25),
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
-GO.CCS.subset
-ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220111.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+GO.CA.subset
+ggsave("Output/Figs/CA.Subset_GOslim.BP_20220121.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'cell organization and biogenesis' (COB)
+
+(2) "cell cycle and proliferation"
 ```{r}
-go.slim.COB.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="cell organization and biogenesis")
+go.slim.CCP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="cell cycle and proliferation")
+
+GO.CCP.subset <- ggplot(go.slim.CCP.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 30))
+GO.CCP.subset
+ggsave("Output/Figs/CCP.Subset_GOslim.BP_20220121.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+```
+
+
+(3) "cell organization and biogenesis"
+```{r}
+go.slim.COB.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="cell organization and biogenesis")
 
 GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -233,12 +236,46 @@ GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.COB.subset
-ggsave("Output/Figs/COB.Subset_GOslim.BP_20220111.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/COB.Subset_GOslim.BP_20220121.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'developmental processes' (DP)
+
+(4) "cell-cell signaling"
 ```{r}
-go.slim.DP.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="developmental processes")
+go.slim.CCS.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="cell-cell signaling")
+
+GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 30))
+GO.CCS.subset
+ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220121.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+```
+
+
+(5) "death"
+```{r}
+go.slim.Death.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="death")
+
+GO.death.subset <- ggplot(go.slim.Death.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 30))
+GO.death.subset
+ggsave("Output/Figs/Death.Subset_GOslim.BP_20220121.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
+```
+
+(6) "developmental processes"
+```{r}
+go.slim.DP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="developmental processes")
 
 GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -249,12 +286,29 @@ GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DP.subset
-ggsave("Output/Figs/DP.Subset_GOslim.BP_20220111.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/DP.Subset_GOslim.BP_20220121.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'other biological processes' (OBP)
+
+(7) "DNA metabolism"
 ```{r}
-go.slim.OBP.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="other biological processes")
+go.slim.DNAM.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="DNA metabolism")
+
+GO.DNAM.subset <- ggplot(go.slim.DNAM.subset, aes(x = Species, y = term)) + 
+  geom_tile(aes(fill =over_represented_pvalue)) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.x = element_text(size = 25),
+                     axis.text = element_text(size = 30))
+GO.DNAM.subset
+ggsave("Output/Figs/DNAM.Subset_GOslim.BP_20220121.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+```
+
+(8) "other biological processes"
+```{r}
+go.slim.OBP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other biological processes")
 
 GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -265,12 +319,12 @@ GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OBP.subset
-ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220111.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220121.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'other metabolic processes' (OMP)
+(9) "other metabolic processes"
 ```{r}
-go.slim.OMP.subset <- all.go.slim %>% filter(GO.Slim.Term=="other metabolic processes")
+go.slim.OMP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other metabolic processes")
 
 GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -281,12 +335,12 @@ GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMP.subset
-ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220111.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220121.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'protein metabolism' (PM)
+(10) "protein metabolism"
 ```{r}
-go.slim.PM.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="protein metabolism")
+go.slim.PM.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="protein metabolism")
 
 GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -297,12 +351,13 @@ GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PM.subset
-ggsave("Output/Figs/PM.Subset_GOslim.BP_20220111.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/PM.Subset_GOslim.BP_20220121.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'RNA metabolism' (RNAM)
+
+(11) "RNA metabolism"
 ```{r}
-go.slim.RNAM.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="RNA metabolism")
+go.slim.RNAM.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="RNA metabolism")
 
 GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -313,12 +368,12 @@ GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.RNAM.subset
-ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220111.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220121.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'signal transduction' (ST)
+(12) "signal transduction"
 ```{r}
-go.slim.ST.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="signal transduction")
+go.slim.ST.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="signal transduction")
 
 GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -329,12 +384,12 @@ GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ST.subset
-ggsave("Output/Figs/ST.Subset_GOslim.BP_20220111.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/ST.Subset_GOslim.BP_20220121.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'stress response' (SR)
+(13) "stress response"
 ```{r}
-go.slim.SR.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="stress response")
+go.slim.SR.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="stress response")
 
 GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -345,12 +400,12 @@ GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.SR.subset
-ggsave("Output/Figs/SR.Subset_GOslim.BP_20220111.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SR.Subset_GOslim.BP_20220121.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
 ```
 
-## Subset and plot only 'transport' (T)
+(14) "transport"
 ```{r}
-go.slim.T.subset <- all.go.slim.BP %>% filter(GO.Slim.Term=="transport")
+go.slim.T.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="transport")
 
 GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) + 
   geom_tile(aes(fill =over_represented_pvalue)) + 
@@ -361,434 +416,8 @@ GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.T.subset
-ggsave("Output/Figs/T.Subset_GOslim.BP_20220111.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/Transport.Subset_GOslim.BP_20220121.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-The plots below use old GO terms generated in Dec. 2020
-# GO slim plots for HI corals 
-
-## Pdam 
-```{r}
-# Read in pdam info
-pdam.go <- read_csv("Output/SuppTables/Pdamicornis_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
-pdam.go <- select(pdam.go, c("category", "term", "ontology", "over_represented_pvalue", "Treatment_Compare"))
-colnames(pdam.go)[1] <-"GO.IDs" # rename column with GO terms to GO.IDs
-length(unique(pdam.go$term)) # 50 GO terms
-
-# Read in GOslim info
-go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-Gene.GO.IDs.slims.pdam <- merge(pdam.go, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
-Gene.GO.IDs.slims.pdam <- na.omit(Gene.GO.IDs.slims.pdam)
-
-# Plot pdam goslim
-GO.pdam <- ggplot(Gene.GO.IDs.slims.pdam, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.pdam
-ggsave("Output/Figs/pdam/pdam_GOslim_20211011.pdf", GO.pdam, width = 28, height = 28)
-```
-
-## Plob 
-```{r}
-plob.go <- read_csv("Output/SuppTables/Plobata_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
-plob.go <- select(plob.go, c("category", "term", "ontology", "over_represented_pvalue", "Treatment_Compare"))
-colnames(plob.go)[1] <-"GO.IDs"
-length(unique(plob.go$term)) # 20 GO terms 
-
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-Gene.GO.IDs.slims.plob <- merge(plob.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.plob <- na.omit(Gene.GO.IDs.slims.plob)
-
-GO.plob <- ggplot(Gene.GO.IDs.slims.plob, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.plob
-ggsave("Output/Figs/plob/plob_GOslim_20211011.pdf", GO.plob, width = 28, height = 28, units = c("in"))
-```
-
-
-# GO slim plots for FL corals 
-
-## Acerv
-```{r}
-acerv.go <- read_csv("Output/SuppTables/Acervicornis_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
-acerv.go <- select(acerv.go, c("category", "term", "ontology", "over_represented_pvalue", "Treatment_Compare"))
-colnames(acerv.go)[1] <-"GO.IDs"
-
-# Renaming specific term in Acerv because it is very long and makes the plots look weird
-acerv.go$term <- gsub("oxidoreductase activity, acting on paired donors, with incorporation or reduction of molecular oxygen, reduced flavin or flavoprotein as one donor, and incorporation of one atom of oxygen", "oxidoreductase activity", acerv.go$term)
-
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-Gene.GO.IDs.slims.acerv <- merge(acerv.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.acerv <- na.omit(Gene.GO.IDs.slims.acerv)
-
-GO.acerv <- ggplot(Gene.GO.IDs.slims.acerv, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.acerv
-ggsave("Output/Figs/acerv/acerv_GOslim_20211011.pdf", GO.acerv, width = 28, height = 28, units = c("in"))
-```
-
-## Mcav 
-```{r}
-mcav.go <- read_csv("Output/SuppTables/Mcavernosa_DEG_SuppTable.csv", locale = locale(encoding = "Latin1"))
-mcav.go <- select(mcav.go, c("category", "term", "ontology", "over_represented_pvalue", "Treatment_Compare"))
-colnames(mcav.go)[1] <-"GO.IDs"
-
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-Gene.GO.IDs.slims.mcav <- merge(mcav.go, go.slim, by="GO.IDs", all = TRUE)
-Gene.GO.IDs.slims.mcav <- na.omit(Gene.GO.IDs.slims.mcav)
-
-GO.mcav <- ggplot(Gene.GO.IDs.slims.mcav, aes(x = ontology, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.mcav
-ggsave("Output/Figs/mcav/mcav_GOslim_20211011.pdf", GO.mcav, width = 28, height = 28, units = c("in"))
-
-```
-
-
-# All species 
-
-## Plot all species on one GO slim plot 
-```{r}
-# Add species name and site to each df
-Gene.GO.IDs.slims.pdam$Species <- "P.damicornis"
-Gene.GO.IDs.slims.pdam$Site <- "Hawaii"
-Gene.GO.IDs.slims.plob$Species <- "P.lobata"
-Gene.GO.IDs.slims.plob$Site <- "Hawaii"
-Gene.GO.IDs.slims.acerv$Species <- "A.cervicornis"
-Gene.GO.IDs.slims.acerv$Site <- "Florida"
-Gene.GO.IDs.slims.mcav$Species <- "M.cavernosa"
-Gene.GO.IDs.slims.mcav$Site <- "Florida"
-
-# Bind all species df together for GO slim plot 
-all.go.slim <- rbind(Gene.GO.IDs.slims.acerv, Gene.GO.IDs.slims.mcav, Gene.GO.IDs.slims.pdam, Gene.GO.IDs.slims.plob)
-
-GO.all <- ggplot(all.go.slim, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.all
-ggsave("Output/Figs/all_GOslim_20211011.pdf", GO.all, width = 28, height = 28, units = c("in"))
-#ggsave("Output/Figs/all_GOslim_20210509.jpeg", GO.all, width = 28, height = 28, units = c("in"))
-```
-
-# Subset by ontology (BP, MF) and plot for all species 
-```{r}
-# Subset and plot by MF
-go.slim.MF <- all.go.slim %>% filter(ontology=="MF")
-
-GO.subset.MF <- ggplot(go.slim.MF, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.MF
-ggsave("Output/Figs/MF_GOslim_20211011.pdf", GO.subset.MF, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MF_GOslim_20210705.jpeg", GO.subset.MF, width = 28, height = 28, units = c("in"))
-
-# Subset and plot by BP
-go.slim.BP <- all.go.slim %>% filter(ontology=="BP")
-
-GO.subset.BP <- ggplot(go.slim.BP, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.BP
-ggsave("Output/Figs/BP_GOslim_20211011.pdf", GO.subset.BP, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.jpeg", GO.subset.BP, width = 28, height = 28, units = c("in"))
-```
-
-# Subset by GO slim term and plot for all species 
-```{r}
-# Subset and plot only 'other molecular function' (OMF)
-go.slim.OMF.subset <- all.go.slim %>% filter(GO.Slim.Term=="other molecular function")
-
-GO.OMF.subset <- ggplot(go.slim.OMF.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.OMF.subset
-ggsave("Output/Figs/OMF.Subset_GOslim_20211011.pdf", GO.OMF.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMF.Subset_GOslim_20211011.jpeg", GO.OMF.subset, width = 28, height = 28, units = c("in"))
-
-
-# Subset and plot only 'other metabolic processes' (OMP)
-go.slim.OMP.subset <- all.go.slim %>% filter(GO.Slim.Term=="other metabolic processes")
-
-GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.OMP.subset
-ggsave("Output/Figs/OMP.Subset_GOslim_20210509.pdf", GO.OMP.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMP.Subset_GOslim_20210509.pdf", GO.OMP.subset, width = 28, height = 28, units = c("in"))
-```
-
-## Subset and plot by site 
-```{r}
-## FL
-go.FL.subset <- all.go.slim %>% filter(Site=="Florida")
-
-GO.FL_subset <- ggplot(go.FL.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.FL_subset
-ggsave("Output/Figs/FL_GOslim_20211011.pdf", GO.FL_subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/FL_GOslim_20210509.jpeg", GO.FL_subset, width = 28, height = 28, units = c("in"))
-
-## HI
-go.HI.subset <- all.go.slim %>% filter(Site=="Hawaii")
-
-GO.HI_subset <- ggplot(go.HI.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.HI_subset
-ggsave("Output/Figs/HI_GOslim_20211011.pdf", GO.HI_subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/HI_GOslim_20210509.jpeg", GO.HI_subset, width = 28, height = 28, units = c("in"))
-```
-
-# Subset by ontology (BP, MF) and plot by site 
-```{r}
-## FL
-# Subset and plot by MF
-go.slim.FL.MF <- go.FL.subset %>% filter(ontology=="MF")
-
-GO.subset.FL.MF <- ggplot(go.slim.FL.MF, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.FL.MF
-ggsave("Output/Figs/FL_MF_GOslim_20211011.pdf", GO.subset.FL.MF, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MF_GOslim_20210705.jpeg", GO.subset.FL.MF, width = 28, height = 28, units = c("in"))
-
-# Subset and plot by BP
-go.slim.FL.BP <- go.FL.subset %>% filter(ontology=="BP")
-
-GO.subset.FL.BP <- ggplot(go.slim.FL.BP, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.FL.BP
-ggsave("Output/Figs/FL_BP_GOslim_20211011.pdf", GO.subset.FL.BP, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.jpeg", GO.subset.FL.BP, width = 28, height = 28, units = c("in"))
-
-
-
-## HI
-# Subset and plot by MF
-go.slim.HI.MF <- go.HI.subset %>% filter(ontology=="MF")
-
-GO.subset.HI.MF <- ggplot(go.slim.HI.MF, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.HI.MF
-ggsave("Output/Figs/HI_MF_GOslim_20211011.pdf", GO.subset.HI.MF, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/MF_GOslim_20210705.jpeg", GO.subset.HI.MF, width = 28, height = 28, units = c("in"))
-
-# Subset and plot by BP
-go.slim.HI.BP <- go.HI.subset %>% filter(ontology=="BP")
-
-GO.subset.HI.BP <- ggplot(go.slim.HI.BP, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.HI.BP
-ggsave("Output/Figs/HI_BP_GOslim_20211011.pdf", GO.subset.HI.BP, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.jpeg", GO.subset.HI.BP, width = 28, height = 28, units = c("in"))
-```
-
-# Subset by GO slim term and plot by site 
-```{r}
-## FL
-# Subset and plot only 'other molecular function' (OMF)
-go.slim.FL.OMF.subset <- go.FL.subset %>% filter(GO.Slim.Term=="other molecular function")
-
-GO.FL.OMF.subset <- ggplot(go.slim.FL.OMF.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.FL.OMF.subset
-ggsave("Output/Figs/FL_OMF.Subset_GOslim_20211011.pdf", GO.FL.OMF.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMF.Subset_GOslim_20211011.jpeg", GO.FL.OMF.subset, width = 28, height = 28, units = c("in"))
-
-# Subset and plot only 'other metabolic processes' (OMP)
-go.slim.FL.OMP.subset <- go.FL.subset %>% filter(GO.Slim.Term=="other metabolic processes")
-
-GO.FL.OMP.subset <- ggplot(go.slim.FL.OMP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.FL.OMP.subset
-ggsave("Output/Figs/FL_OMP.Subset_GOslim_20211011.pdf", GO.FL.OMP.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMP.Subset_GOslim_20210509.pdf", GO.OMP.subset, width = 28, height = 28, units = c("in"))
-
-
-
-## HI
-# Subset and plot only 'other molecular function' (OMF)
-go.slim.HI.OMF.subset <- go.HI.subset %>% filter(GO.Slim.Term=="other molecular function")
-
-GO.HI.OMF.subset <- ggplot(go.slim.HI.OMF.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.HI.OMF.subset
-ggsave("Output/Figs/HI_OMF.Subset_GOslim_20211011.pdf", GO.HI.OMF.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMF.Subset_GOslim_20211011.jpeg", GO.HI.OMF.subset, width = 28, height = 28, units = c("in"))
-
-# Subset and plot only 'other metabolic processes' (OMP)
-go.slim.HI.OMP.subset <- go.HI.subset %>% filter(GO.Slim.Term=="other metabolic processes")
-
-GO.HI.OMP.subset <- ggplot(go.slim.HI.OMP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.HI.OMP.subset
-ggsave("Output/Figs/HI_OMP.Subset_GOslim_20211011.pdf", GO.HI.OMP.subset, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/OMP.Subset_GOslim_20210509.pdf", GO.OMP.subset, width = 28, height = 28, units = c("in"))
-```
-
-### Because Pdam and Mcav have a GO term in common, I'm going to make a BP GO slim plot to show that overlap
-```{r}
-## Bind mcav and pdam species dfs together for GO slim plot 
-mcav.pdam.go.slim <- rbind(Gene.GO.IDs.slims.mcav, Gene.GO.IDs.slims.pdam)
-
-# Subset and plot by BP
-go.slim.Mcav_Pdam.BP <- mcav.pdam.go.slim %>% filter(ontology=="BP")
-
-GO.subset.Mcav_Pdam.BP <- ggplot(go.slim.Mcav_Pdam.BP, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.subset.Mcav_Pdam.BP
-ggsave("Output/Figs/Mcav.Pdam_BP_GOslim_20211011.pdf", GO.subset.Mcav_Pdam.BP, width = 28, height = 28, units = c("in"))
-#ggsave("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/Figs/BP_GOslim_20210705.jpeg", GO.subset.Mcav_Pdam.BP, width = 28, height = 28, units = c("in"))
-```
-
-
-
-
+Plot by species?
