@@ -8,8 +8,9 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
-# Load library
+# Load libraries
 library(VennDiagram)
+library(tidyverse)
 ```
 
 Test code from [here](https://www.r-graph-gallery.com/14-venn-diagramm.html)
@@ -27,7 +28,7 @@ myCol <- brewer.pal(3, "Pastel2")
 venn.diagram(
         x = list(set1, set2, set3),
         category.names = c("Set 1" , "Set 2 " , "Set 3"),
-        filename = 'Output/Figs/test_venn_diagramm.png',
+        filename = 'Output/Figs/Venn/test_venn_diagramm.png',
         output=TRUE,
         
         # Output features
@@ -56,86 +57,6 @@ venn.diagram(
         cat.fontfamily = "sans",
         rotation = 1
 )
-```
-
-From ?venn.diagram in r
-```{r}
-# sample four-set Venn Diagram
-A <- sample(1:1000, 400, replace = FALSE);
-B <- sample(1:1000, 600, replace = FALSE);
-C <- sample(1:1000, 350, replace = FALSE);
-D <- sample(1:1000, 550, replace = FALSE);
-E <- sample(1:1000, 375, replace = FALSE);
-
-venn.plot <- venn.diagram(
-	x = list(
-		A = A,
-		D = D,
-		B = B,
-		C = C
-		),
-	filename = "Output/Figs/test2_venn_diagramm.png",
-	col = "transparent",
-	fill = c("cornflowerblue", "green", "yellow", "darkorchid1"),
-	alpha = 0.50,
-	label.col = c("orange", "white", "darkorchid4", "white", 
-	"white", "white", "white", "white", "darkblue", "white", 
-	"white", "white", "white", "darkgreen", "white"),
-	cex = 1.5,
-	fontfamily = "serif",
-	fontface = "bold",
-	cat.col = c("darkblue", "darkgreen", "orange", "darkorchid4"),
-	cat.cex = 1.5,
-	cat.pos = 0,
-	cat.dist = 0.07,
-	cat.fontfamily = "serif",
-	rotation.degree = 270,
-	margin = 0.2
-	)
-```
-
-Now try with my data 
-Venn diagram including ONLY BP
-```{r}
-# 5-set Venn Diagram
-
-## read in data 
-all.BP  <- read.csv("Output/GOSeq/all.go.BP_20220121.csv")
-head(all.BP)
-all.BP <- all.BP[,-c(1)] # remove weird first col
-
-## subset by species 
-acerv <- all.BP %>% filter(Species=="A.cervicornis")
-length(unique(acerv$GO.IDs)) # 278 - there are some duplicates because certain terms matched to multiple GO slim terms 
-mcav <- all.BP %>% filter(Species=="M.cavernosa")
-length(unique(mcav$GO.IDs)) # 158 - there are some duplicates because certain terms matched to multiple GO slim terms 
-ofav <- all.BP %>% filter(Species=="O.faveolata")
-length(unique(ofav$GO.IDs)) # 27 - there are some duplicates because certain terms matched to multiple GO slim terms 
-pacuta <- all.BP %>% filter(Species=="P.acuta") 
-length(unique(pacuta$GO.IDs)) # 380 - there are some duplicates because certain terms matched to multiple GO slim terms 
-plob <- all.BP %>% filter(Species=="P.lobata") 
-length(unique(plob$GO.IDs)) # 198 - there are some duplicates because certain terms matched to multiple GO slim terms 
-
-## Plot 
-venn.plot <- venn.diagram(
-	x = list(
-		A.cervicornis = acerv$GO.IDs,
-		M.cavernosa = mcav$GO.IDs,
-		O.faveolata = ofav$GO.IDs,
-		P.acuta = pacuta$GO.IDs,
-		P.lobata = plob$GO.IDs
-		),
-	filename = "Output/Figs/venn_GO.BP.png",
-	col = "black",
-	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
-	alpha = 0.50,
-	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
-	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
-	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
-	cat.cex = 1.5,
-	cat.fontface = "bold",
-	margin = 0.1
-	)
 ```
 
 Venn diagram including BP, CC, MF
@@ -168,7 +89,7 @@ venn.plot <- venn.diagram(
 		P.acuta = pacuta$GO.IDs,
 		P.lobata = plob$GO.IDs
 		),
-	filename = "Output/Figs/venn_GO.png",
+	filename = "Output/Figs/Venn/venn_GO.png",
 	col = "black",
 	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
 	alpha = 0.50,
@@ -180,6 +101,142 @@ venn.plot <- venn.diagram(
 	margin = 0.1
 	)
 ```
+
+Now try with my data 
+Venn diagram - ONLY BP
+```{r}
+# 5-set Venn Diagram
+
+## read in data 
+all.BP  <- read.csv("Output/GOSeq/all.go.BP_20220121.csv")
+head(all.BP)
+all.BP <- all.BP[,-c(1)] # remove weird first col
+
+## subset by species 
+acerv <- all.BP %>% filter(Species=="A.cervicornis")
+length(unique(acerv$GO.IDs)) # 278 - there are some duplicates because certain terms matched to multiple GO slim terms 
+mcav <- all.BP %>% filter(Species=="M.cavernosa")
+length(unique(mcav$GO.IDs)) # 158 - there are some duplicates because certain terms matched to multiple GO slim terms 
+ofav <- all.BP %>% filter(Species=="O.faveolata")
+length(unique(ofav$GO.IDs)) # 27 - there are some duplicates because certain terms matched to multiple GO slim terms 
+pacuta <- all.BP %>% filter(Species=="P.acuta") 
+length(unique(pacuta$GO.IDs)) # 380 - there are some duplicates because certain terms matched to multiple GO slim terms 
+plob <- all.BP %>% filter(Species=="P.lobata") 
+length(unique(plob$GO.IDs)) # 198 - there are some duplicates because certain terms matched to multiple GO slim terms 
+
+## Plot 
+venn.plot <- venn.diagram(
+	x = list(
+		A.cervicornis = acerv$GO.IDs,
+		M.cavernosa = mcav$GO.IDs,
+		O.faveolata = ofav$GO.IDs,
+		P.acuta = pacuta$GO.IDs,
+		P.lobata = plob$GO.IDs
+		),
+	filename = "Output/Figs/Venn/venn_GO.BP.png",
+	col = "black",
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	alpha = 0.50,
+	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
+	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.cex = 1.5,
+	cat.fontface = "bold",
+	margin = 0.1
+	)
+```
+
+Venn diagram - ONLY CC
+```{r}
+# 5-set Venn Diagram
+
+## read in data 
+all.CC  <- read.csv("Output/GOSeq/all.go.CC_20220125.csv")
+head(all.CC)
+all.CC <- all.CC[,-c(1)] # remove weird first col
+
+## subset by species 
+acerv <- all.CC %>% filter(Species=="A.cervicornis")
+length(unique(acerv$GO.IDs)) # 34 - there are some duplicates because certain terms matched to multiple GO slim terms 
+mcav <- all.CC %>% filter(Species=="M.cavernosa")
+length(unique(mcav$GO.IDs)) # 21 - there are some duplicates because certain terms matched to multiple GO slim terms 
+ofav <- all.CC %>% filter(Species=="O.faveolata")
+length(unique(ofav$GO.IDs)) # 3 - there are some duplicates because certain terms matched to multiple GO slim terms 
+pacuta <- all.CC %>% filter(Species=="P.acuta") 
+length(unique(pacuta$GO.IDs)) # 25 - there are some duplicates because certain terms matched to multiple GO slim terms 
+plob <- all.CC %>% filter(Species=="P.lobata") 
+length(unique(plob$GO.IDs)) # 31 - there are some duplicates because certain terms matched to multiple GO slim terms 
+
+## Plot 
+venn.plot <- venn.diagram(
+	x = list(
+		A.cervicornis = acerv$GO.IDs,
+		M.cavernosa = mcav$GO.IDs,
+		O.faveolata = ofav$GO.IDs,
+		P.acuta = pacuta$GO.IDs,
+		P.lobata = plob$GO.IDs
+		),
+	filename = "Output/Figs/Venn/venn_GO.CC.png",
+	col = "black",
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	alpha = 0.50,
+	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
+	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.cex = 1.5,
+	cat.fontface = "bold",
+	margin = 0.1
+	)
+```
+
+Venn diagram - ONLY MF
+```{r}
+# 5-set Venn Diagram
+
+## read in data 
+all.MF  <- read.csv("Output/GOSeq/all.go.MF_20220125.csv")
+head(all.MF)
+all.MF <- all.MF[,-c(1)] # remove weird first col
+
+## subset by species 
+acerv <- all.MF %>% filter(Species=="A.cervicornis")
+length(unique(acerv$GO.IDs)) # 54 - there are some duplicates because certain terms matched to multiple GO slim terms 
+mcav <- all.MF %>% filter(Species=="M.cavernosa")
+length(unique(mcav$GO.IDs)) # 39 - there are some duplicates because certain terms matched to multiple GO slim terms 
+ofav <- all.MF %>% filter(Species=="O.faveolata")
+length(unique(ofav$GO.IDs)) # 9 - there are some duplicates because certain terms matched to multiple GO slim terms 
+pacuta <- all.MF %>% filter(Species=="P.acuta") 
+length(unique(pacuta$GO.IDs)) # 126 - there are some duplicates because certain terms matched to multiple GO slim terms 
+plob <- all.MF %>% filter(Species=="P.lobata") 
+length(unique(plob$GO.IDs)) # 50 - there are some duplicates because certain terms matched to multiple GO slim terms 
+
+## Plot 
+venn.plot <- venn.diagram(
+	x = list(
+		A.cervicornis = acerv$GO.IDs,
+		M.cavernosa = mcav$GO.IDs,
+		O.faveolata = ofav$GO.IDs,
+		P.acuta = pacuta$GO.IDs,
+		P.lobata = plob$GO.IDs
+		),
+	filename = "Output/Figs/Venn/venn_GO.MF.png",
+	col = "black",
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	alpha = 0.50,
+	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
+	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.cex = 1.5,
+	cat.fontface = "bold",
+	margin = 0.1
+	)
+```
+
+
+
+
+
+
 
 
 
