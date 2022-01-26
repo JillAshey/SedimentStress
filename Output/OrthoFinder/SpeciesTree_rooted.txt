@@ -1,0 +1,1 @@
+((plut2v1.1.proteins:0.245472,Acerv_assembly_v1.0.protein:0.308579)0.663906:0.0393642,(Pocillopora_acuta_HIv1.genes.pep:0.202715,(Mcavernosa.maker.proteins:0.223081,GCF_002042975.1_ofav_dov_v1_protein:0.125834)0.738766:0.110689)0.663906:0.0393642);
