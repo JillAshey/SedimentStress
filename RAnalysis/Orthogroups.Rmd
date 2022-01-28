@@ -1,0 +1,174 @@
+---
+title: "OrthoFinder"
+author: "jillashey"
+date: "1/28/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(tidyverse)
+```
+
+Why did we run OrthoFinder? 
+
+ran OrthoFinder on bluewaves, got lots of output. One file (xxx) has the Orthogroups listed with all the genes found in that orthogroup for each species. I'm going to first remove any orthogroups that have blank cells (ie no protein from a species in that orthogroup). Then I'll read in my DEG info and filter the protein names from each species. With that info, I'll make a Venn diagram showing shared orthogroups among species 
+
+```{r}
+# Read in orthofinder data 
+ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+ortho <- na.omit(ortho)
+colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Pacuta", "Plobata")
+```
+
+```{r}
+# Split by species (probably easier/cleaner way to do this)
+acerv_ortho <- select(ortho, c("Orthogroup", "Acervicornis"))
+mcav_ortho <- select(ortho, c("Orthogroup", "Mcavernosa"))
+ofav_ortho <- select(ortho, c("Orthogroup", "Ofaveolata"))
+pacuta_ortho <- select(ortho, c("Orthogroup", "Pacuta"))
+plob_ortho <- select(ortho, c("Orthogroup", "Plobata"))
+
+# Now split strings of gene names into cols w/ corresponding orthogroup
+acerv_ortho <- acerv_ortho %>% mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+mcav_ortho <- mcav_ortho %>% mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
+    unnest(Mcavernosa)
+ofav_ortho <- ofav_ortho %>% mutate(Ofaveolata = strsplit(as.character(Ofaveolata), ",")) %>% 
+    unnest(Ofaveolata)
+pacuta_ortho <- pacuta_ortho %>% mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
+    unnest(Pacuta)
+plob_ortho <- plob_ortho %>% mutate(Plobata = strsplit(as.character(Plobata), ",")) %>% 
+    unnest(Plobata)
+```
+
+Read DEGs in and merge w/ orthogroup by gene for each species 
+### Acerv 
+```{r}
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)
+colnames(acerv_DEG)[1] <- "gene_id"
+
+# name gene id col in acerv_ortho
+colnames(acerv_ortho)[2] <- "gene_id"
+acerv_ortho$gene_id <- gsub("model", "TU", acerv_ortho$gene_id)
+acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
+
+# Merge dfs by gene_id
+acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
+length(unique(acerv$gene_id)) # 60 DEGs found in orthogroups 
+length(unique(acerv$Orthogroup)) # 60 orthogroups ? should they be the same?
+```
+
+### Mcav 
+```{r}
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)
+colnames(mcav_DEG)[1] <- "gene_id"
+
+# name gene id col in acerv_ortho
+colnames(mcav_ortho)[2] <- "gene_id"
+mcav_ortho$gene_id <- gsub("-RA", "", mcav_ortho$gene_id)
+mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
+
+# Merge dfs by gene_id
+mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
+length(unique(mcav$gene_id)) # 29 DEGs found in orthogroups 
+length(unique(mcav$Orthogroup)) # 26 orthogroups 
+```
+
+### Ofav 
+```{r}
+ofav_DEG <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)
+colnames(ofav_DEG)[1] <- "gene_id"
+
+# ofav is so annoying bc it has its prot seqs labeled with XP_xxx but when running STAR, the LOC term was used for gene id. Now I have to read in original gff file and merge original gff with ofav_ortho df to get LOC term
+
+# read in gff 
+ofav <- read.csv("~/Desktop/GFFs/ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff", header=FALSE, sep="\t", skip=6) # read in gff from NCBI
+colnames(ofav) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+ofav <- na.omit(ofav)
+ofav <- subset(ofav, id == "CDS")
+ofav$prot_id <- gsub(".*cds-","", ofav$gene) # remove everything before -cds
+ofav$prot_id <- gsub(";.*","", ofav$prot_id) # remove everything after ;
+ofav$gene_id <- gsub(".*LOC","", ofav$gene) # remove everything before LOC
+ofav$gene_id <- gsub(";.*","", ofav$gene_id) # remove everything after ;
+ofav$gene_id <- gsub("iso.*","", ofav$gene_id) # remove everything after iso
+ofav$gene_id <- paste0("LOC", ofav$gene_id)
+write.csv("~/Desktop/GFFs/ofav/ofav_gff_LOCTerm.gff") # writing gff file so that it always has LOC term already isolated
+# select cols with XP- and LOC info
+ofav_sub <- ofav[,c("prot_id", "gene_id")]
+ofav_sub<- unique(ofav_sub)
+
+# temporarily change names of ofav_ortho to match ofav_sub
+colnames(ofav_ortho)[2] <- "prot_id"
+ofav_ortho$prot_id <- gsub(" ", "", ofav_ortho$prot_id)
+
+# Merge gff info / ortho results and remove prot_id
+merge <- merge(ofav_ortho, ofav_sub, by = "prot_id")
+merge <- select(merge, c(Orthogroup, gene_id))
+merge <- unique(merge)
+
+# Merge dfs by gene_id
+ofav <- merge(merge, ofav_DEG, by = "gene_id")
+length(unique(ofav$gene_id)) # 2 DEGs found in orthogroups 
+length(unique(ofav$Orthogroup)) # 2 orthogroups ? should they be the same?
+```
+
+### Pacuta 
+```{r}
+pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)
+colnames(pacuta_DEG)[1] <- "gene_id"
+
+# name gene id col in acerv_ortho
+colnames(pacuta_ortho)[2] <- "gene_id"
+pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
+
+# Merge dfs by gene_id
+pacuta <- merge(pacuta_ortho, pacuta_DEG, by = "gene_id")
+length(unique(pacuta$gene_id)) # 125 DEGs found in orthogroups 
+length(unique(pacuta$Orthogroup)) # 99 orthogroups 
+```
+
+### Pacuta 
+```{r}
+plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)
+colnames(plob_DEG)[1] <- "gene_id"
+
+# name gene id col in acerv_ortho
+colnames(plob_ortho)[2] <- "gene_id"
+plob_ortho$gene_id <- gsub(".m1", "", plob_ortho$gene_id)
+plob_ortho$gene_id <- gsub("model", "TU", plob_ortho$gene_id)
+plob_ortho$gene_id <- gsub(" ", "", plob_ortho$gene_id)
+
+# Merge dfs by gene_id
+plob <- merge(plob_ortho, plob_DEG, by = "gene_id")
+length(unique(plob$gene_id)) # 67 DEGs found in orthogroups 
+length(unique(plob$Orthogroup)) # 58 orthogroups 
+```
+
+```{r}
+## Plot shared orthogroups 
+venn.plot <- venn.diagram(
+	x = list(
+		A.cervicornis = acerv$Orthogroup,
+		M.cavernosa = mcav$Orthogroup,
+		O.faveolata = ofav$Orthogroup,
+		P.acuta = pacuta$Orthogroup,
+		P.lobata = plob$Orthogroup
+		),
+	filename = "Output/Figs/Venn/venn_Orthogroup.png",
+	col = "black",
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	alpha = 0.50,
+	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
+	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.cex = 1.5,
+	cat.fontface = "bold",
+	margin = 0.1
+	)
+```
+
+
+
+
