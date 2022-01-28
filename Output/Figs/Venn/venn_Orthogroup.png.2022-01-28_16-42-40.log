@@ -1,0 +1,34 @@
+INFO [2022-01-28 16:42:40] $x
+INFO [2022-01-28 16:42:40] list(A.cervicornis = acerv$Orthogroup, M.cavernosa = mcav$Orthogroup, 
+INFO [2022-01-28 16:42:40]     O.faveolata = ofav$Orthogroup, P.acuta = pacuta$Orthogroup, 
+INFO [2022-01-28 16:42:40]     P.lobata = plob$Orthogroup)
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $filename
+INFO [2022-01-28 16:42:40] [1] "Output/Figs/Venn/venn_Orthogroup.png"
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $col
+INFO [2022-01-28 16:42:40] [1] "black"
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $fill
+INFO [2022-01-28 16:42:40] c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3")
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $alpha
+INFO [2022-01-28 16:42:40] [1] 0.5
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $cex
+INFO [2022-01-28 16:42:40] c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8, 1, 
+INFO [2022-01-28 16:42:40]     0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 
+INFO [2022-01-28 16:42:40]     1, 1, 1.5)
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $cat.col
+INFO [2022-01-28 16:42:40] c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3")
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $cat.cex
+INFO [2022-01-28 16:42:40] [1] 1.5
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $cat.fontface
+INFO [2022-01-28 16:42:40] [1] "bold"
+INFO [2022-01-28 16:42:40] 
+INFO [2022-01-28 16:42:40] $margin
+INFO [2022-01-28 16:42:40] [1] 0.1
+INFO [2022-01-28 16:42:40] 
