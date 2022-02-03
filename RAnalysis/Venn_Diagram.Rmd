@@ -59,6 +59,7 @@ venn.diagram(
 )
 ```
 
+Now try with my data 
 Venn diagram including BP, CC, MF
 ```{r}
 # 5-set Venn Diagram
@@ -102,7 +103,6 @@ venn.plot <- venn.diagram(
 	)
 ```
 
-Now try with my data 
 Venn diagram - ONLY BP
 ```{r}
 # 5-set Venn Diagram
@@ -144,6 +144,16 @@ venn.plot <- venn.diagram(
 	cat.fontface = "bold",
 	margin = 0.1
 	)
+
+# intersections to check against figure 
+intersect(acerv$GO.IDs, mcav$GO.IDs)
+intersect(acerv$GO.IDs, ofav$GO.IDs)
+intersect(acerv$GO.IDs, pacuta$GO.IDs)
+intersect(acerv$GO.IDs, plob$GO.IDs)
+intersect(pacuta$GO.IDs, mcav$GO.IDs)
+intersect(plob$GO.IDs, mcav$GO.IDs)
+intersect(pacuta$GO.IDs, ofav$GO.IDs)
+intersect(pacuta$GO.IDs, plob$GO.IDs)
 ```
 
 Venn diagram - ONLY CC
@@ -232,6 +242,10 @@ venn.plot <- venn.diagram(
 	)
 ```
 
+```{r}
+# easy way to find some way to list overlap?
+#intersect(xx$a, yy$a)
+```
 
 
 
