@@ -257,6 +257,29 @@ GO.MF.all
 ggsave("Output/Figs/all_GOslim.MF_20220125.pdf", GO.MF.all, width = 40, height = 40, units = c("in"))
 ```
 
+Make bar chart for go slim term counts for all species
+```{r}
+unique(all.go.BP.slim$Species)
+# "A.cervicornis" "P.lobata"      "P.acuta"       "M.cavernosa"  "O.faveolata"  
+
+count_by_group <- all.go.BP.slim %>%
+  count(Species, GO.Slim.Term)
+count_by_group
+
+count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
+  geom_bar(position = "dodge", stat = "identity") +
+#  geom_text(aes(label = n), vjust = 0) +
+  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"))
+count
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220207.pdf", count, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220207.png", count, width = 40, height = 40, units = c("in"))
+
+# include other biological/metabolic processes?
+```
+
+
+
 # Subset by GO slim term and plot for all species 
 In the manuscript, only the BP terms will be presented. The CC and MF terms will be included in the supplementary materials
 

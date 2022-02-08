@@ -9,6 +9,7 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
+library(VennDiagram)
 ```
 
 Why did we run OrthoFinder? 
@@ -18,7 +19,7 @@ ran OrthoFinder on bluewaves, got lots of output. One file (xxx) has the Orthogr
 ```{r}
 # Read in orthofinder data 
 ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
-ortho <- na.omit(ortho)
+#ortho <- na.omit(ortho)
 colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Pacuta", "Plobata")
 ```
 
@@ -33,14 +34,23 @@ plob_ortho <- select(ortho, c("Orthogroup", "Plobata"))
 # Now split strings of gene names into cols w/ corresponding orthogroup
 acerv_ortho <- acerv_ortho %>% mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
     unnest(Acervicornis)
+acerv_ortho <- na.omit(acerv_ortho)
+
 mcav_ortho <- mcav_ortho %>% mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
     unnest(Mcavernosa)
+mcav_ortho <- na.omit(mcav_ortho)
+
 ofav_ortho <- ofav_ortho %>% mutate(Ofaveolata = strsplit(as.character(Ofaveolata), ",")) %>% 
     unnest(Ofaveolata)
+ofav_ortho <- na.omit(ofav_ortho)
+
 pacuta_ortho <- pacuta_ortho %>% mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
     unnest(Pacuta)
+pacuta_ortho <- na.omit(pacuta_ortho)
+
 plob_ortho <- plob_ortho %>% mutate(Plobata = strsplit(as.character(Plobata), ",")) %>% 
     unnest(Plobata)
+plob_ortho <- na.omit(plob_ortho)
 ```
 
 Read DEGs in and merge w/ orthogroup by gene for each species 
@@ -56,8 +66,8 @@ acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
 
 # Merge dfs by gene_id
 acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
-length(unique(acerv$gene_id)) # 60 DEGs found in orthogroups 
-length(unique(acerv$Orthogroup)) # 60 orthogroups ? should they be the same?
+length(unique(acerv$gene_id)) # 167 DEGs found in orthogroups 
+length(unique(acerv$Orthogroup)) # 148 orthogroups ? should they be the same?
 ```
 
 ### Mcav 
@@ -72,8 +82,8 @@ mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
-length(unique(mcav$gene_id)) # 29 DEGs found in orthogroups 
-length(unique(mcav$Orthogroup)) # 26 orthogroups 
+length(unique(mcav$gene_id)) # 50 DEGs found in orthogroups 
+length(unique(mcav$Orthogroup)) # 45 orthogroups 
 ```
 
 ### Ofav 
@@ -156,7 +166,7 @@ venn.plot <- venn.diagram(
 		P.acuta = pacuta$Orthogroup,
 		P.lobata = plob$Orthogroup
 		),
-	filename = "Output/Figs/Venn/venn_Orthogroup.png",
+	filename = "Output/Figs/Venn/venn_Orthogroup_20220206.png",
 	col = "black",
 	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
 	alpha = 0.50,
