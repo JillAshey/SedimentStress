@@ -1,0 +1,239 @@
+"","GO.IDs","term","ontology","over_represented_pvalue","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"416","GO:0000422","autophagy of mitochondrion","BP",0.024445749,"M.cavernosa","Florida","mitochondrion degradation","other metabolic processes","P"
+"500","GO:0000502","proteasome complex","CC",0.030201637,"M.cavernosa","Florida","proteasome complex","other cellular component","C"
+"626","GO:0000786","nucleosome","CC",0.042634936,"M.cavernosa","Florida","nucleosome","other cellular component","C"
+"814","GO:0001502","cartilage condensation","BP",0.043304951,"M.cavernosa","Florida","cartilage condensation","developmental processes","P"
+"815","GO:0001502","cartilage condensation","BP",0.043304951,"M.cavernosa","Florida","cartilage condensation","cell adhesion","P"
+"857","GO:0001550","ovarian cumulus expansion","BP",0.005289377,"M.cavernosa","Florida","ovarian cumulus expansion","developmental processes","P"
+"1042","GO:0001770","establishment of natural killer cell polarity","BP",0.005106591,"M.cavernosa","Florida","establishment of natural killer cell polarity","cell organization and biogenesis","P"
+"1044","GO:0001772","immunological synapse","CC",0.03500846,"M.cavernosa","Florida","immunological synapse","other membranes","C"
+"1045","GO:0001772","immunological synapse","CC",0.03500846,"M.cavernosa","Florida","immunological synapse","plasma membrane","C"
+"1056","GO:0001782","B cell homeostasis","BP",0.026048226,"M.cavernosa","Florida","B cell homeostasis","other biological processes","P"
+"1171","GO:0001880","Mullerian duct regression","BP",0.010454942,"M.cavernosa","Florida","Mullerian duct regression","developmental processes","P"
+"1227","GO:0001931","uropod","CC",0.017055801,"M.cavernosa","Florida","uropod","other cellular component","C"
+"1400","GO:0002090","regulation of receptor internalization","BP",0.029506907,"M.cavernosa","Florida","regulation of receptor internalization","cell organization and biogenesis","P"
+"1401","GO:0002090","regulation of receptor internalization","BP",0.029506907,"M.cavernosa","Florida","regulation of receptor internalization","protein metabolism","P"
+"1402","GO:0002090","regulation of receptor internalization","BP",0.029506907,"M.cavernosa","Florida","regulation of receptor internalization","transport","P"
+"1554","GO:0002281","macrophage activation involved in immune response","BP",0.022248911,"M.cavernosa","Florida","macrophage activation during immune response","other biological processes","P"
+"1588","GO:0002315","marginal zone B cell differentiation","BP",0.013569657,"M.cavernosa","Florida","marginal zone B cell differentiation","developmental processes","P"
+"2398","GO:0003183","mitral valve morphogenesis","BP",0.015257808,"M.cavernosa","Florida",NA,NA,NA
+"2399","GO:0003186","tricuspid valve morphogenesis","BP",0.005289377,"M.cavernosa","Florida",NA,NA,NA
+"2402","GO:0003215","cardiac right ventricle morphogenesis","BP",0.029716596,"M.cavernosa","Florida",NA,NA,NA
+"2403","GO:0003222","ventricular trabecula myocardium morphogenesis","BP",0.022580629,"M.cavernosa","Florida",NA,NA,NA
+"2404","GO:0003223","ventricular compact myocardium morphogenesis","BP",0.024379728,"M.cavernosa","Florida",NA,NA,NA
+"2405","GO:0003272","endocardial cushion formation","BP",0.010683252,"M.cavernosa","Florida",NA,NA,NA
+"2466","GO:0003785","actin monomer binding","MF",0.047256663,"M.cavernosa","Florida","actin monomer binding","cytoskeletal activity","F"
+"2684","GO:0004081","bis(5'-nucleosyl)-tetraphosphatase (asymmetrical) activity","MF",0.008121988,"M.cavernosa","Florida","bis(5'-nucleosyl)-tetraphosphatase (asymmetrical) activity","other molecular function","F"
+"2852","GO:0004370","glycerol kinase activity","MF",0.00504164,"M.cavernosa","Florida","glycerol kinase activity","kinase activity","F"
+"3109","GO:0004675","transmembrane receptor protein serine/threonine kinase activity","MF",0.009746732,"M.cavernosa","Florida","transmembrane receptor protein serine/threonine kinase activity","kinase activity","F"
+"3110","GO:0004675","transmembrane receptor protein serine/threonine kinase activity","MF",0.009746732,"M.cavernosa","Florida","transmembrane receptor protein serine/threonine kinase activity","signal transduction activity","F"
+"3126","GO:0004698","calcium-dependent protein kinase C activity","MF",0.021544192,"M.cavernosa","Florida","calcium-dependent protein kinase C activity","kinase activity","F"
+"3127","GO:0004699","calcium-independent protein kinase C activity","MF",0.009110924,"M.cavernosa","Florida","calcium-independent protein kinase C activity","kinase activity","F"
+"3249","GO:0004820","glycine-tRNA ligase activity","MF",0.00377484,"M.cavernosa","Florida","glycine-tRNA ligase activity","other molecular function","F"
+"3441","GO:0005025","transforming growth factor beta receptor activity, type I","MF",0.01439422,"M.cavernosa","Florida","transforming growth factor beta receptor activity, type I","kinase activity","F"
+"3442","GO:0005025","transforming growth factor beta receptor activity, type I","MF",0.01439422,"M.cavernosa","Florida","transforming growth factor beta receptor activity, type I","signal transduction activity","F"
+"3476","GO:0005085","guanyl-nucleotide exchange factor activity","MF",0.005543269,"M.cavernosa","Florida","guanyl-nucleotide exchange factor activity","enzyme regulator activity","F"
+"3594","GO:0005244","voltage-gated ion channel activity","MF",0.035698329,"M.cavernosa","Florida","voltage-gated ion channel activity","transporter activity","F"
+"3747","GO:0005542","folic acid binding","MF",0.020048352,"M.cavernosa","Florida","folic acid binding","other molecular function","F"
+"3750","GO:0005545","1-phosphatidylinositol binding","MF",0.044799139,"M.cavernosa","Florida","phosphatidylinositol binding","other molecular function","F"
+"3937","GO:0005769","early endosome","CC",0.014625799,"M.cavernosa","Florida","early endosome","other cytoplasmic organelle","C"
+"4075","GO:0005912","adherens junction","CC",0.010302974,"M.cavernosa","Florida","adherens junction","plasma membrane","C"
+"4076","GO:0005912","adherens junction","CC",0.010302974,"M.cavernosa","Florida","adherens junction","other membranes","C"
+"4241","GO:0006071","glycerol metabolic process","BP",0.031802858,"M.cavernosa","Florida","glycerol metabolic process","other metabolic processes","P"
+"4584","GO:0006426","glycyl-tRNA aminoacylation","BP",0.00377484,"M.cavernosa","Florida","glycyl-tRNA aminoacylation","protein metabolism","P"
+"4585","GO:0006426","glycyl-tRNA aminoacylation","BP",0.00377484,"M.cavernosa","Florida","glycyl-tRNA aminoacylation","RNA metabolism","P"
+"4648","GO:0006497","protein lipidation","BP",0.021325233,"M.cavernosa","Florida","protein amino acid lipidation","protein metabolism","P"
+"4659","GO:0006513","protein monoubiquitination","BP",0.047496768,"M.cavernosa","Florida","protein monoubiquitination","protein metabolism","P"
+"4689","GO:0006544","glycine metabolic process","BP",0.018851804,"M.cavernosa","Florida","glycine metabolic process","other metabolic processes","P"
+"4789","GO:0006641","triglyceride metabolic process","BP",0.03877324,"M.cavernosa","Florida","triglyceride metabolic process","other metabolic processes","P"
+"4850","GO:0006703","estrogen biosynthetic process","BP",0.020076201,"M.cavernosa","Florida","estrogen biosynthetic process","other metabolic processes","P"
+"4938","GO:0006807","nitrogen compound metabolic process","BP",0.017626361,"M.cavernosa","Florida","nitrogen compound metabolic process","other metabolic processes","P"
+"5345","GO:0007178","transmembrane receptor protein serine/threonine kinase signaling pathway","BP",0.033629173,"M.cavernosa","Florida","transmembrane receptor protein serine/threonine kinase signaling pathway","signal transduction","P"
+"5578","GO:0007398","ectoderm development","BP",0.01918799,"M.cavernosa","Florida","ectoderm development","developmental processes","P"
+"5707","GO:0007525","somatic muscle development","BP",0.011051174,"M.cavernosa","Florida","somatic muscle development","developmental processes","P"
+"5782","GO:0007606","sensory perception of chemical stimulus","BP",0.016289886,"M.cavernosa","Florida","sensory perception of chemical stimulus","other biological processes","P"
+"5808","GO:0007635","chemosensory behavior","BP",0.023269311,"M.cavernosa","Florida","chemosensory behavior","other biological processes","P"
+"5923","GO:0008137","NADH dehydrogenase (ubiquinone) activity","MF",0.00263302,"M.cavernosa","Florida","NADH dehydrogenase (ubiquinone) activity","other molecular function","F"
+"6246","GO:0008519","ammonium transmembrane transporter activity","MF",0.028021998,"M.cavernosa","Florida","ammonium transmembrane transporter activity","transporter activity","F"
+"6336","GO:0008641","ubiquitin-like modifier activating enzyme activity","MF",0.014598678,"M.cavernosa","Florida","small protein activating enzyme activity","other molecular function","F"
+"6695","GO:0009055","electron transfer activity","MF",0.010895455,"M.cavernosa","Florida","electron carrier activity","other molecular function","F"
+"6913","GO:0009277","fungal-type cell wall","CC",0.009197955,"M.cavernosa","Florida","fungal-type cell wall","other cellular component","C"
+"7025","GO:0009411","response to UV","BP",0.049569621,"M.cavernosa","Florida","response to UV","other biological processes","P"
+"7072","GO:0009505","plant-type cell wall","CC",0.014385395,"M.cavernosa","Florida","plant-type cell wall","other cellular component","C"
+"7456","GO:0009897","external side of plasma membrane","CC",0.029453952,"M.cavernosa","Florida","external side of plasma membrane","plasma membrane","C"
+"7457","GO:0009897","external side of plasma membrane","CC",0.029453952,"M.cavernosa","Florida","external side of plasma membrane","other membranes","C"
+"7661","GO:0010102","lateral root morphogenesis","BP",0.003669778,"M.cavernosa","Florida","lateral root morphogenesis","developmental processes","P"
+"8072","GO:0010499","proteasomal ubiquitin-independent protein catabolic process","BP",0.016437567,"M.cavernosa","Florida","proteasomal ubiquitin-independent protein catabolic process","protein metabolism","P"
+"8225","GO:0010634","positive regulation of epithelial cell migration","BP",0.005596614,"M.cavernosa","Florida","positive regulation of epithelial cell migration","other biological processes","P"
+"8449","GO:0010811","positive regulation of cell-substrate adhesion","BP",0.035030598,"M.cavernosa","Florida","positive regulation of cell-substrate adhesion","cell adhesion","P"
+"8507","GO:0010862","positive regulation of pathway-restricted SMAD protein phosphorylation","BP",0.04356632,"M.cavernosa","Florida","positive regulation of pathway-restricted SMAD protein phosphorylation","signal transduction","P"
+"8508","GO:0010862","positive regulation of pathway-restricted SMAD protein phosphorylation","BP",0.04356632,"M.cavernosa","Florida","positive regulation of pathway-restricted SMAD protein phosphorylation","protein metabolism","P"
+"8565","GO:0010917","negative regulation of mitochondrial membrane potential","BP",0.026092869,"M.cavernosa","Florida","negative regulation of mitochondrial membrane potential","other biological processes","P"
+"8630","GO:0010976","positive regulation of neuron projection development","BP",0.032260528,"M.cavernosa","Florida","positive regulation of neuron projection development","cell organization and biogenesis","P"
+"8631","GO:0010976","positive regulation of neuron projection development","BP",0.032260528,"M.cavernosa","Florida","positive regulation of neuron projection development","developmental processes","P"
+"8712","GO:0014032","neural crest cell development","BP",0.001144569,"M.cavernosa","Florida","neural crest cell development","developmental processes","P"
+"8955","GO:0014912","negative regulation of smooth muscle cell migration","BP",0.019935896,"M.cavernosa","Florida","negative regulation of smooth muscle cell migration","other biological processes","P"
+"9197","GO:0015299","solute:proton antiporter activity","MF",0.017522074,"M.cavernosa","Florida","solute:hydrogen antiporter activity","transporter activity","F"
+"9714","GO:0015918","sterol transport","BP",0.032841677,"M.cavernosa","Florida","sterol transport","transport","P"
+"9761","GO:0015966","diadenosine tetraphosphate biosynthetic process","BP",0.009090382,"M.cavernosa","Florida","diadenosine tetraphosphate biosynthetic process","other metabolic processes","P"
+"9820","GO:0016032","viral process","BP",0.02823049,"M.cavernosa","Florida","viral reproduction","other biological processes","P"
+"9977","GO:0016203","muscle attachment","BP",0.016953688,"M.cavernosa","Florida","muscle attachment","developmental processes","P"
+"10213","GO:0016504","peptidase activator activity","MF",0.034065801,"M.cavernosa","Florida","peptidase activator activity","enzyme regulator activity","F"
+"10305","GO:0016600","flotillin complex","CC",0.027739417,"M.cavernosa","Florida","flotillin complex","other membranes","C"
+"10306","GO:0016600","flotillin complex","CC",0.027739417,"M.cavernosa","Florida","flotillin complex","plasma membrane","C"
+"10475","GO:0016805","dipeptidase activity","MF",0.023729897,"M.cavernosa","Florida","dipeptidase activity","other molecular function","F"
+"11699","GO:0018991","oviposition","BP",0.029098814,"M.cavernosa","Florida","oviposition","other biological processes","P"
+"11704","GO:0019001","guanyl nucleotide binding","MF",0.037045375,"M.cavernosa","Florida","guanyl nucleotide binding","other molecular function","F"
+"11898","GO:0019211","phosphatase activator activity","MF",0.022081999,"M.cavernosa","Florida","phosphatase activator activity","enzyme regulator activity","F"
+"12429","GO:0019778","Atg12 activating enzyme activity","MF",0.005654587,"M.cavernosa","Florida","APG12 activating enzyme activity","other molecular function","F"
+"12430","GO:0019779","Atg8 activating enzyme activity","MF",0.005654587,"M.cavernosa","Florida","APG8 activating enzyme activity","other molecular function","F"
+"12825","GO:0021680","cerebellar Purkinje cell layer development","BP",0.026704721,"M.cavernosa","Florida","cerebellar Purkinje cell layer development","developmental processes","P"
+"13035","GO:0021860","pyramidal neuron development","BP",0.024419533,"M.cavernosa","Florida","pyramidal neuron development","developmental processes","P"
+"13185","GO:0021955","central nervous system neuron axonogenesis","BP",0.015510461,"M.cavernosa","Florida","central nervous system neuron axonogenesis","cell organization and biogenesis","P"
+"13186","GO:0021955","central nervous system neuron axonogenesis","BP",0.015510461,"M.cavernosa","Florida","central nervous system neuron axonogenesis","developmental processes","P"
+"13236","GO:0021983","pituitary gland development","BP",0.040156638,"M.cavernosa","Florida","pituitary gland development","developmental processes","P"
+"13252","GO:0021998","neural plate mediolateral regionalization","BP",0.005289377,"M.cavernosa","Florida","neural plate mediolateral pattern formation","developmental processes","P"
+"13348","GO:0022617","extracellular matrix disassembly","BP",0.036526514,"M.cavernosa","Florida","extracellular matrix disassembly","cell organization and biogenesis","P"
+"13430","GO:0022900","electron transport chain","BP",0.001919699,"M.cavernosa","Florida","electron transport chain","other metabolic processes","P"
+"13454","GO:0030027","lamellipodium","CC",0.038552729,"M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13590","GO:0030166","proteoglycan biosynthetic process","BP",0.034080184,"M.cavernosa","Florida","proteoglycan biosynthetic process","other metabolic processes","P"
+"13922","GO:0030546","signaling receptor activator activity","MF",0.013898772,"M.cavernosa","Florida","receptor activator activity","signal transduction activity","F"
+"13961","GO:0030587","sorocarp development","BP",0.030752658,"M.cavernosa","Florida","sorocarp development","stress response","P"
+"13962","GO:0030587","sorocarp development","BP",0.030752658,"M.cavernosa","Florida","sorocarp development","developmental processes","P"
+"14861","GO:0031396","regulation of protein ubiquitination","BP",0.038019541,"M.cavernosa","Florida","regulation of protein ubiquitination","protein metabolism","P"
+"15172","GO:0031663","lipopolysaccharide-mediated signaling pathway","BP",0.023025443,"M.cavernosa","Florida","lipopolysaccharide-mediated signaling pathway","signal transduction","P"
+"15774","GO:0032217","riboflavin transmembrane transporter activity","MF",0.019211729,"M.cavernosa","Florida","riboflavin transporter activity","transporter activity","F"
+"15775","GO:0032218","riboflavin transport","BP",0.019211729,"M.cavernosa","Florida","riboflavin transport","transport","P"
+"15784","GO:0032226","positive regulation of synaptic transmission, dopaminergic","BP",0.00902976,"M.cavernosa","Florida","positive regulation of synaptic transmission, dopaminergic","cell-cell signaling","P"
+"15788","GO:0032230","positive regulation of synaptic transmission, GABAergic","BP",0.047755981,"M.cavernosa","Florida","positive regulation of synaptic transmission, GABAergic","cell-cell signaling","P"
+"15905","GO:0032332","positive regulation of chondrocyte differentiation","BP",0.018036683,"M.cavernosa","Florida","positive regulation of chondrocyte differentiation","developmental processes","P"
+"16074","GO:0032486","Rap protein signal transduction","BP",0.007407729,"M.cavernosa","Florida","Rap protein signal transduction","signal transduction","P"
+"16530","GO:0032915","positive regulation of transforming growth factor beta2 production","BP",0.005289377,"M.cavernosa","Florida","positive regulation of transforming growth factor-beta2 production","other biological processes","P"
+"16884","GO:0033227","dsRNA transport","BP",0.022817482,"M.cavernosa","Florida","dsRNA transport","transport","P"
+"17876","GO:0034116","positive regulation of heterotypic cell-cell adhesion","BP",0.009416404,"M.cavernosa","Florida","positive regulation of heterotypic cell-cell adhesion","developmental processes","P"
+"17877","GO:0034116","positive regulation of heterotypic cell-cell adhesion","BP",0.009416404,"M.cavernosa","Florida","positive regulation of heterotypic cell-cell adhesion","cell adhesion","P"
+"17922","GO:0034141","positive regulation of toll-like receptor 3 signaling pathway","BP",0.009328119,"M.cavernosa","Florida","positive regulation of toll-like receptor 3 signaling pathway","stress response","P"
+"17923","GO:0034141","positive regulation of toll-like receptor 3 signaling pathway","BP",0.009328119,"M.cavernosa","Florida","positive regulation of toll-like receptor 3 signaling pathway","signal transduction","P"
+"18451","GO:0034614","cellular response to reactive oxygen species","BP",0.0323525,"M.cavernosa","Florida","cellular response to reactive oxygen species","stress response","P"
+"18909","GO:0035023","regulation of Rho protein signal transduction","BP",0.010385489,"M.cavernosa","Florida","regulation of Rho protein signal transduction","signal transduction","P"
+"18912","GO:0035025","positive regulation of Rho protein signal transduction","BP",0.033433478,"M.cavernosa","Florida","positive regulation of Rho protein signal transduction","signal transduction","P"
+"18988","GO:0035093","spermatogenesis, exchange of chromosomal proteins","BP",0.024326431,"M.cavernosa","Florida","spermatogenesis, exchange of chromosomal proteins","cell organization and biogenesis","P"
+"19036","GO:0035137","hindlimb morphogenesis","BP",0.023531025,"M.cavernosa","Florida","hindlimb morphogenesis","developmental processes","P"
+"19160","GO:0035255","ionotropic glutamate receptor binding","MF",0.033933704,"M.cavernosa","Florida","ionotropic glutamate receptor binding","signal transduction activity","F"
+"19181","GO:0035276","ethanol binding","MF",0.009110924,"M.cavernosa","Florida","ethanol binding","other molecular function","F"
+"19237","GO:0035669","TRAM-dependent toll-like receptor 4 signaling pathway","BP",0.009110924,"M.cavernosa","Florida",NA,NA,NA
+"19241","GO:0035912","dorsal aorta morphogenesis","BP",0.009898896,"M.cavernosa","Florida",NA,NA,NA
+"19244","GO:0035999","tetrahydrofolate interconversion","BP",0.024185742,"M.cavernosa","Florida",NA,NA,NA
+"19245","GO:0036010","protein localization to endosome","BP",0.023811038,"M.cavernosa","Florida",NA,NA,NA
+"19249","GO:0036094","small molecule binding","MF",0.035078687,"M.cavernosa","Florida",NA,NA,NA
+"19252","GO:0036120","cellular response to platelet-derived growth factor stimulus","BP",0.043272832,"M.cavernosa","Florida",NA,NA,NA
+"19253","GO:0036122","BMP binding","MF",0.009746732,"M.cavernosa","Florida",NA,NA,NA
+"19266","GO:0038096","Fc-gamma receptor signaling pathway involved in phagocytosis","BP",0.014184481,"M.cavernosa","Florida",NA,NA,NA
+"19269","GO:0038180","nerve growth factor signaling pathway","BP",0.018529139,"M.cavernosa","Florida",NA,NA,NA
+"19271","GO:0039521","suppression by virus of host autophagy","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"19272","GO:0039689","negative stranded viral RNA replication","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"19298","GO:0040024","dauer larval development","BP",0.021352902,"M.cavernosa","Florida","dauer larval development","developmental processes","P"
+"20513","GO:0043167","ion binding","MF",0.017507186,"M.cavernosa","Florida","ion binding","other molecular function","F"
+"20575","GO:0043226","organelle","CC",0.025512308,"M.cavernosa","Florida","organelle","other cellular component","C"
+"20913","GO:0043547","positive regulation of GTPase activity","BP",0.013626736,"M.cavernosa","Florida","positive regulation of GTPase activity","other biological processes","P"
+"21557","GO:0044291","cell-cell contact zone","CC",0.022525308,"M.cavernosa","Florida",NA,NA,NA
+"21637","GO:0044854","plasma membrane raft assembly","BP",0.005284331,"M.cavernosa","Florida",NA,NA,NA
+"22607","GO:0045937","positive regulation of phosphate metabolic process","BP",0.007668244,"M.cavernosa","Florida","positive regulation of phosphate metabolic process","other metabolic processes","P"
+"22870","GO:0046167","glycerol-3-phosphate biosynthetic process","BP",0.00504164,"M.cavernosa","Florida","glycerol-3-phosphate biosynthetic process","other metabolic processes","P"
+"22902","GO:0046203","spermidine catabolic process","BP",0.004225595,"M.cavernosa","Florida","spermidine catabolic process","other metabolic processes","P"
+"22907","GO:0046208","spermine catabolic process","BP",0.004225595,"M.cavernosa","Florida","spermine catabolic process","other metabolic processes","P"
+"23259","GO:0046592","polyamine oxidase activity","MF",0.009217614,"M.cavernosa","Florida","polyamine oxidase activity","other molecular function","F"
+"24544","GO:0047865","dimethylglycine dehydrogenase activity","MF",0.014805923,"M.cavernosa","Florida","dimethylglycine dehydrogenase activity","other molecular function","F"
+"24685","GO:0048009","insulin-like growth factor receptor signaling pathway","BP",0.021801135,"M.cavernosa","Florida","insulin-like growth factor receptor signaling pathway","signal transduction","P"
+"24721","GO:0048046","apoplast","CC",0.009217614,"M.cavernosa","Florida","apoplast","non-structural extracellular","C"
+"25021","GO:0048352","paraxial mesoderm structural organization","BP",0.005289377,"M.cavernosa","Florida","paraxial mesoderm structural organization","developmental processes","P"
+"25047","GO:0048378","regulation of lateral mesodermal cell fate specification","BP",0.025614247,"M.cavernosa","Florida","regulation of lateral mesodermal cell fate specification","developmental processes","P"
+"25051","GO:0048382","mesendoderm development","BP",0.023890922,"M.cavernosa","Florida","mesendoderm development","developmental processes","P"
+"25237","GO:0048592","eye morphogenesis","BP",0.000512722,"M.cavernosa","Florida","eye morphogenesis","developmental processes","P"
+"25286","GO:0048643","positive regulation of skeletal muscle tissue development","BP",0.019897887,"M.cavernosa","Florida","positive regulation of skeletal muscle tissue development","developmental processes","P"
+"26303","GO:0050660","flavin adenine dinucleotide binding","MF",0.030970754,"M.cavernosa","Florida","FAD binding","other molecular function","F"
+"26374","GO:0050730","regulation of peptidyl-tyrosine phosphorylation","BP",0.022968759,"M.cavernosa","Florida","regulation of peptidyl-tyrosine phosphorylation","protein metabolism","P"
+"26526","GO:0050877","nervous system process","BP",0.027694513,"M.cavernosa","Florida","neurological system process","other biological processes","P"
+"26542","GO:0050893","sensory processing","BP",0.034578607,"M.cavernosa","Florida","sensory processing","other biological processes","P"
+"26576","GO:0050927","positive regulation of positive chemotaxis","BP",0.016411549,"M.cavernosa","Florida","positive regulation of positive chemotaxis","other biological processes","P"
+"26624","GO:0050975","sensory perception of touch","BP",0.029285013,"M.cavernosa","Florida","sensory perception of touch","other biological processes","P"
+"26645","GO:0050996","positive regulation of lipid catabolic process","BP",0.009110924,"M.cavernosa","Florida","positive regulation of lipid catabolic process","other metabolic processes","P"
+"26804","GO:0051148","negative regulation of muscle cell differentiation","BP",0.015343969,"M.cavernosa","Florida","negative regulation of muscle cell differentiation","other biological processes","P"
+"26941","GO:0051280","negative regulation of release of sequestered calcium ion into cytosol","BP",0.012706826,"M.cavernosa","Florida","negative regulation of release of sequestered calcium ion into cytosol","transport","P"
+"27248","GO:0051562","negative regulation of mitochondrial calcium ion concentration","BP",0.012706826,"M.cavernosa","Florida","reduction of mitochondrial calcium ion concentration","other biological processes","P"
+"27274","GO:0051580","regulation of neurotransmitter uptake","BP",0.009300416,"M.cavernosa","Florida","regulation of neurotransmitter uptake","transport","P"
+"27275","GO:0051580","regulation of neurotransmitter uptake","BP",0.009300416,"M.cavernosa","Florida","regulation of neurotransmitter uptake","cell-cell signaling","P"
+"28264","GO:0052894","norspermine:oxygen oxidoreductase activity","MF",0.004225595,"M.cavernosa","Florida",NA,NA,NA
+"28265","GO:0052901","spermine:oxygen oxidoreductase (spermidine-forming) activity","MF",0.004225595,"M.cavernosa","Florida",NA,NA,NA
+"28266","GO:0052903","N1-acetylspermine:oxygen oxidoreductase (3-acetamidopropanal-forming) activity","MF",0.004225595,"M.cavernosa","Florida",NA,NA,NA
+"28267","GO:0052904","N1-acetylspermidine:oxygen oxidoreductase (3-acetamidopropanal-forming) activity","MF",0.004225595,"M.cavernosa","Florida",NA,NA,NA
+"28447","GO:0060041","retina development in camera-type eye","BP",0.012608109,"M.cavernosa","Florida","retina development in camera-type eye","developmental processes","P"
+"28736","GO:0060284","regulation of cell development","BP",0.043690888,"M.cavernosa","Florida","regulation of cell development","other biological processes","P"
+"28806","GO:0060350","endochondral bone morphogenesis","BP",0.018251139,"M.cavernosa","Florida","endochondral bone morphogenesis","developmental processes","P"
+"28811","GO:0060355","positive regulation of cell adhesion molecule production","BP",0.019442068,"M.cavernosa","Florida","positive regulation of cell adhesion molecule production","other biological processes","P"
+"28851","GO:0060391","positive regulation of SMAD protein signal transduction","BP",0.027745706,"M.cavernosa","Florida","positive regulation of SMAD protein nuclear translocation","transport","P"
+"28852","GO:0060391","positive regulation of SMAD protein signal transduction","BP",0.027745706,"M.cavernosa","Florida","positive regulation of SMAD protein nuclear translocation","signal transduction","P"
+"28879","GO:0060412","ventricular septum morphogenesis","BP",0.042771719,"M.cavernosa","Florida","ventricular septum morphogenesis","developmental processes","P"
+"29339","GO:0060914","heart formation","BP",0.020112146,"M.cavernosa","Florida",NA,NA,NA
+"29340","GO:0060928","atrioventricular node cell development","BP",0.009679747,"M.cavernosa","Florida",NA,NA,NA
+"29343","GO:0061028","establishment of endothelial barrier","BP",0.021079837,"M.cavernosa","Florida",NA,NA,NA
+"29352","GO:0061312","BMP signaling pathway involved in heart development","BP",0.009502871,"M.cavernosa","Florida",NA,NA,NA
+"29359","GO:0061626","pharyngeal arch artery morphogenesis","BP",0.014362501,"M.cavernosa","Florida",NA,NA,NA
+"29361","GO:0061684","chaperone-mediated autophagy","BP",0.011025332,"M.cavernosa","Florida",NA,NA,NA
+"29719","GO:0070257","positive regulation of mucus secretion","BP",7.15e-05,"M.cavernosa","Florida","positive regulation of mucus secretion","transport","P"
+"30018","GO:0070509","calcium ion import","BP",0.043535909,"M.cavernosa","Florida","calcium ion import","transport","P"
+"30046","GO:0070528","protein kinase C signaling","BP",0.02815273,"M.cavernosa","Florida","protein kinase C signaling cascade","signal transduction","P"
+"30437","GO:0071203","WASH complex","CC",0.029235944,"M.cavernosa","Florida",NA,NA,NA
+"30444","GO:0071315","cellular response to morphine","BP",0.009650168,"M.cavernosa","Florida",NA,NA,NA
+"30447","GO:0071360","cellular response to exogenous dsRNA","BP",0.025118304,"M.cavernosa","Florida",NA,NA,NA
+"30450","GO:0071380","cellular response to prostaglandin E stimulus","BP",0.032553671,"M.cavernosa","Florida",NA,NA,NA
+"30452","GO:0071455","cellular response to hyperoxia","BP",0.018665681,"M.cavernosa","Florida",NA,NA,NA
+"30464","GO:0071817","MMXD complex","CC",0.011806576,"M.cavernosa","Florida",NA,NA,NA
+"30466","GO:0071900","regulation of protein serine/threonine kinase activity","BP",0.013966092,"M.cavernosa","Florida",NA,NA,NA
+"30468","GO:0071902","positive regulation of protein serine/threonine kinase activity","BP",0.024758684,"M.cavernosa","Florida",NA,NA,NA
+"30497","GO:0072488","ammonium transmembrane transport","BP",0.019601482,"M.cavernosa","Florida",NA,NA,NA
+"30548","GO:0075044","positive regulation by symbiont of host autophagy","BP",0.010771441,"M.cavernosa","Florida","autophagy of host cells during interaction with symbiont","other metabolic processes","P"
+"30999","GO:0080144","amino acid homeostasis","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"31039","GO:0090155","negative regulation of sphingolipid biosynthetic process","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"31040","GO:0090156","cellular sphingolipid homeostasis","BP",0.011406658,"M.cavernosa","Florida",NA,NA,NA
+"31044","GO:0090298","negative regulation of mitochondrial DNA replication","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"31045","GO:0090303","positive regulation of wound healing","BP",0.038440499,"M.cavernosa","Florida",NA,NA,NA
+"31053","GO:0097065","anterior head development","BP",0.031983885,"M.cavernosa","Florida",NA,NA,NA
+"31063","GO:0097361","CIA complex","CC",0.017506403,"M.cavernosa","Florida",NA,NA,NA
+"31067","GO:0097428","protein maturation by iron-sulfur cluster transfer","BP",0.024796912,"M.cavernosa","Florida",NA,NA,NA
+"31075","GO:0098691","dopaminergic synapse","CC",0.032318253,"M.cavernosa","Florida",NA,NA,NA
+"31078","GO:0098821","BMP receptor activity","MF",0.005289377,"M.cavernosa","Florida",NA,NA,NA
+"31084","GO:0099523","presynaptic cytosol","CC",0.049087065,"M.cavernosa","Florida",NA,NA,NA
+"31085","GO:0099635","voltage-gated calcium channel activity involved in positive regulation of presynaptic cytosolic calcium levels","MF",0.02031177,"M.cavernosa","Florida",NA,NA,NA
+"31086","GO:0099638","endosome to plasma membrane protein transport","BP",0.010266755,"M.cavernosa","Florida",NA,NA,NA
+"31087","GO:0099703","induction of synaptic vesicle exocytosis by positive regulation of presynaptic cytosolic calcium ion concentration","BP",0.010251631,"M.cavernosa","Florida",NA,NA,NA
+"31107","GO:0140537",NA,NA,0.024226068,"M.cavernosa","Florida",NA,NA,NA
+"31108","GO:0140640",NA,NA,0.047385992,"M.cavernosa","Florida",NA,NA,NA
+"31124","GO:1901741","positive regulation of myoblast fusion","BP",0.013201201,"M.cavernosa","Florida",NA,NA,NA
+"31128","GO:1901888","regulation of cell junction assembly","BP",0.011237536,"M.cavernosa","Florida",NA,NA,NA
+"31130","GO:1901890","positive regulation of cell junction assembly","BP",0.009954662,"M.cavernosa","Florida",NA,NA,NA
+"31133","GO:1902043","positive regulation of extrinsic apoptotic signaling pathway via death domain receptors","BP",0.01099736,"M.cavernosa","Florida",NA,NA,NA
+"31134","GO:1902074","response to salt","BP",0.028231322,"M.cavernosa","Florida",NA,NA,NA
+"31146","GO:1902617","response to fluoride","BP",0.010614114,"M.cavernosa","Florida",NA,NA,NA
+"31152","GO:1902731","negative regulation of chondrocyte proliferation","BP",0.009746732,"M.cavernosa","Florida",NA,NA,NA
+"31155","GO:1902895","positive regulation of pri-miRNA transcription by RNA polymerase II","BP",0.041691004,"M.cavernosa","Florida",NA,NA,NA
+"31160","GO:1903044","protein localization to membrane raft","BP",0.019942825,"M.cavernosa","Florida",NA,NA,NA
+"31163","GO:1903204","negative regulation of oxidative stress-induced neuron death","BP",0.034494398,"M.cavernosa","Florida",NA,NA,NA
+"31167","GO:1903602","thermospermine catabolic process","BP",0.004225595,"M.cavernosa","Florida",NA,NA,NA
+"31168","GO:1903609","negative regulation of inward rectifier potassium channel activity","BP",0.009151091,"M.cavernosa","Florida",NA,NA,NA
+"31169","GO:1903706","regulation of hemopoiesis","BP",0.022135443,"M.cavernosa","Florida",NA,NA,NA
+"31179","GO:1904313","response to methamphetamine hydrochloride","BP",0.008770611,"M.cavernosa","Florida",NA,NA,NA
+"31182","GO:1904414","positive regulation of cardiac ventricle development","BP",0.005289377,"M.cavernosa","Florida",NA,NA,NA
+"31189","GO:1904707","positive regulation of vascular smooth muscle cell proliferation","BP",0.046221738,"M.cavernosa","Florida",NA,NA,NA
+"31190","GO:1904719","positive regulation of AMPA glutamate receptor clustering","BP",0.005106591,"M.cavernosa","Florida",NA,NA,NA
+"31203","GO:1905285","fibrous ring of heart morphogenesis","BP",0.005289377,"M.cavernosa","Florida",NA,NA,NA
+"31212","GO:1990090","cellular response to nerve growth factor stimulus","BP",0.006368957,"M.cavernosa","Florida",NA,NA,NA
+"31213","GO:1990111","spermatoproteasome complex","CC",0.021631493,"M.cavernosa","Florida",NA,NA,NA
+"31218","GO:1990504","dense core granule exocytosis","BP",0.012706826,"M.cavernosa","Florida",NA,NA,NA
+"31223","GO:1990712","HFE-transferrin receptor complex","CC",0.005289377,"M.cavernosa","Florida",NA,NA,NA
+"31231","GO:2000049","positive regulation of cell-cell adhesion mediated by cadherin","BP",0.020297038,"M.cavernosa","Florida",NA,NA,NA
+"31244","GO:2000619","negative regulation of histone H4-K16 acetylation","BP",0.005654587,"M.cavernosa","Florida",NA,NA,NA
+"31245","GO:2000650","negative regulation of sodium ion transmembrane transporter activity","BP",0.012856776,"M.cavernosa","Florida",NA,NA,NA
+"31250","GO:2000772","regulation of cellular senescence","BP",0.010394311,"M.cavernosa","Florida",NA,NA,NA
+"31258","GO:2001024","negative regulation of response to drug","BP",0.012706826,"M.cavernosa","Florida",NA,NA,NA
+"31260","GO:2001031","positive regulation of cellular glucuronidation","BP",0.009110924,"M.cavernosa","Florida",NA,NA,NA

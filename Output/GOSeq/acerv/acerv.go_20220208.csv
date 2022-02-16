@@ -1,0 +1,391 @@
+"","GO.IDs","term","ontology","over_represented_pvalue","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"48","GO:0000055","ribosomal large subunit export from nucleus","BP",0.020514623,"A.cervicornis","Florida","ribosomal large subunit export from nucleus","transport","P"
+"143","GO:0000145","exocyst","CC",0.042984627,"A.cervicornis","Florida","exocyst","other cellular component","C"
+"187","GO:0000183","rDNA heterochromatin assembly","BP",0.044079209,"A.cervicornis","Florida","chromatin silencing at rDNA","RNA metabolism","P"
+"387","GO:0000398","mRNA splicing, via spliceosome","BP",0.034957595,"A.cervicornis","Florida","nuclear mRNA splicing, via spliceosome","RNA metabolism","P"
+"401","GO:0000412","histone peptidyl-prolyl isomerization","BP",0.030716833,"A.cervicornis","Florida","histone peptidyl-prolyl isomerization","protein metabolism","P"
+"402","GO:0000412","histone peptidyl-prolyl isomerization","BP",0.030716833,"A.cervicornis","Florida","histone peptidyl-prolyl isomerization","cell organization and biogenesis","P"
+"437","GO:0000438","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,"A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"438","GO:0000439","transcription factor TFIIH core complex","CC",0.046210721,"A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"462","GO:0000463","maturation of LSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)","BP",0.048184647,"A.cervicornis","Florida","maturation of LSU-rRNA from tricistronic rRNA transcript (SSU-rRNA, 5.8S rRNA, LSU-rRNA)","RNA metabolism","P"
+"545","GO:0000720","pyrimidine dimer repair by nucleotide-excision repair","BP",0.023199075,"A.cervicornis","Florida","pyrimidine dimer repair by nucleotide-excision repair","DNA metabolism","P"
+"546","GO:0000720","pyrimidine dimer repair by nucleotide-excision repair","BP",0.023199075,"A.cervicornis","Florida","pyrimidine dimer repair by nucleotide-excision repair","stress response","P"
+"633","GO:0000793","condensed chromosome","CC",0.014598654,"A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"655","GO:0000814","ESCRT II complex","CC",0.043509597,"A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"656","GO:0000814","ESCRT II complex","CC",0.043509597,"A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"840","GO:0001533","cornified envelope","CC",0.027822697,"A.cervicornis","Florida","cornified envelope","cytoskeleton","C"
+"856","GO:0001550","ovarian cumulus expansion","BP",0.031712692,"A.cervicornis","Florida","ovarian cumulus expansion","developmental processes","P"
+"898","GO:0001595","angiotensin receptor activity","MF",0.022782273,"A.cervicornis","Florida","angiotensin receptor activity","signal transduction activity","F"
+"957","GO:0001675","acrosome assembly","BP",0.042846884,"A.cervicornis","Florida","acrosome assembly","cell organization and biogenesis","P"
+"1006","GO:0001733","galactosylceramide sulfotransferase activity","MF",0.045450337,"A.cervicornis","Florida","galactosylceramide sulfotransferase activity","other molecular function","F"
+"1018","GO:0001744","optic lobe placode formation","BP",0.021408568,"A.cervicornis","Florida","optic lobe placode formation","developmental processes","P"
+"1020","GO:0001746","Bolwig's organ morphogenesis","BP",0.021408568,"A.cervicornis","Florida","Bolwig's organ morphogenesis","developmental processes","P"
+"1035","GO:0001763","morphogenesis of a branching structure","BP",0.027822697,"A.cervicornis","Florida","morphogenesis of a branching structure","other biological processes","P"
+"1058","GO:0001784","phosphotyrosine residue binding","MF",0.011361643,"A.cervicornis","Florida","phosphotyrosine binding","other molecular function","F"
+"1096","GO:0001818","negative regulation of cytokine production","BP",0.045218401,"A.cervicornis","Florida","negative regulation of cytokine production","other biological processes","P"
+"1230","GO:0001934","positive regulation of protein phosphorylation","BP",0.008243205,"A.cervicornis","Florida","positive regulation of protein amino acid phosphorylation","protein metabolism","P"
+"1234","GO:0001938","positive regulation of endothelial cell proliferation","BP",0.020910948,"A.cervicornis","Florida","positive regulation of endothelial cell proliferation","cell cycle and proliferation","P"
+"1248","GO:0001953","negative regulation of cell-matrix adhesion","BP",0.028053253,"A.cervicornis","Florida","negative regulation of cell-matrix adhesion","cell adhesion","P"
+"1373","GO:0002063","chondrocyte development","BP",0.017488452,"A.cervicornis","Florida","chondrocyte development","developmental processes","P"
+"1468","GO:0002165","instar larval or pupal development","BP",0.032890629,"A.cervicornis","Florida","instar larval or pupal development","developmental processes","P"
+"1500","GO:0002227","innate immune response in mucosa","BP",0.02140892,"A.cervicornis","Florida","innate immune response in mucosa","stress response","P"
+"1526","GO:0002253","activation of immune response","BP",0.047518818,"A.cervicornis","Florida","activation of immune response","other biological processes","P"
+"1553","GO:0002280","monocyte activation involved in immune response","BP",0.045156981,"A.cervicornis","Florida","monocyte activation during immune response","other biological processes","P"
+"1878","GO:0002574","thrombocyte differentiation","BP",0.026292165,"A.cervicornis","Florida","thrombocyte differentiation","developmental processes","P"
+"1910","GO:0002606","positive regulation of dendritic cell antigen processing and presentation","BP",0.02140892,"A.cervicornis","Florida","positive regulation of dendritic cell antigen processing and presentation","other biological processes","P"
+"2038","GO:0002732","positive regulation of dendritic cell cytokine production","BP",0.02140892,"A.cervicornis","Florida","positive regulation of dendritic cell cytokine production","other biological processes","P"
+"2153","GO:0002821","positive regulation of adaptive immune response","BP",0.023199075,"A.cervicornis","Florida","positive regulation of adaptive immune response","other biological processes","P"
+"2162","GO:0002830","positive regulation of type 2 immune response","BP",0.02140892,"A.cervicornis","Florida","positive regulation of T-helper 2 type immune response","other biological processes","P"
+"2269","GO:0002925","positive regulation of humoral immune response mediated by circulating immunoglobulin","BP",0.02140892,"A.cervicornis","Florida","positive regulation of humoral immune response mediated by circulating immunoglobulin","other biological processes","P"
+"2406","GO:0003337","mesenchymal to epithelial transition involved in metanephros morphogenesis","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"2421","GO:0003690","double-stranded DNA binding","MF",0.004158618,"A.cervicornis","Florida","double-stranded DNA binding","nucleic acid binding activity","F"
+"2449","GO:0003723","RNA binding","MF",0.026488352,"A.cervicornis","Florida","RNA binding","nucleic acid binding activity","F"
+"2586","GO:0003968","RNA-directed 5'-3' RNA polymerase activity","MF",0.042348194,"A.cervicornis","Florida","RNA-directed RNA polymerase activity","other molecular function","F"
+"2692","GO:0004089","carbonate dehydratase activity","MF",0.045886458,"A.cervicornis","Florida","carbonate dehydratase activity","other molecular function","F"
+"2765","GO:0004165","dodecenoyl-CoA delta-isomerase activity","MF",0.026387443,"A.cervicornis","Florida","dodecenoyl-CoA delta-isomerase activity","other molecular function","F"
+"2887","GO:0004415","hyalurononglucosaminidase activity","MF",0.048080123,"A.cervicornis","Florida","hyalurononglucosaminidase activity","other molecular function","F"
+"2991","GO:0004532","exoribonuclease activity","MF",0.044274366,"A.cervicornis","Florida","exoribonuclease activity","other molecular function","F"
+"3408","GO:0005001","transmembrane receptor protein tyrosine phosphatase activity","MF",0.026197771,"A.cervicornis","Florida","transmembrane receptor protein tyrosine phosphatase activity","signal transduction activity","F"
+"3439","GO:0005025","transforming growth factor beta receptor activity, type I","MF",0.031712692,"A.cervicornis","Florida","transforming growth factor beta receptor activity, type I","kinase activity","F"
+"3440","GO:0005025","transforming growth factor beta receptor activity, type I","MF",0.031712692,"A.cervicornis","Florida","transforming growth factor beta receptor activity, type I","signal transduction activity","F"
+"3544","GO:0005161","platelet-derived growth factor receptor binding","MF",0.048939659,"A.cervicornis","Florida","platelet-derived growth factor receptor binding","signal transduction activity","F"
+"3681","GO:0005381","iron ion transmembrane transporter activity","MF",0.029949103,"A.cervicornis","Florida","iron ion transmembrane transporter activity","transporter activity","F"
+"3748","GO:0005543","phospholipid binding","MF",0.001147086,"A.cervicornis","Florida","phospholipid binding","other molecular function","F"
+"3824","GO:0005642","annulate lamellae","CC",0.043005025,"A.cervicornis","Florida","annulate lamellae","other membranes","C"
+"3833","GO:0005658","alpha DNA polymerase:primase complex","CC",0.044497493,"A.cervicornis","Florida","alpha DNA polymerase:primase complex","nucleus","C"
+"3841","GO:0005669","transcription factor TFIID complex","CC",0.006189877,"A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3938","GO:0005770","late endosome","CC",0.037718377,"A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"3968","GO:0005794","Golgi apparatus","CC",0.03647959,"A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"3994","GO:0005834","heterotrimeric G-protein complex","CC",0.022310891,"A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"3995","GO:0005834","heterotrimeric G-protein complex","CC",0.022310891,"A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"4407","GO:0006269","DNA replication, synthesis of RNA primer","BP",0.044497493,"A.cervicornis","Florida","DNA replication, synthesis of RNA primer","RNA metabolism","P"
+"4408","GO:0006269","DNA replication, synthesis of RNA primer","BP",0.044497493,"A.cervicornis","Florida","DNA replication, synthesis of RNA primer","DNA metabolism","P"
+"4496","GO:0006346","DNA methylation-dependent heterochromatin assembly","BP",0.044113717,"A.cervicornis","Florida","methylation-dependent chromatin silencing","cell organization and biogenesis","P"
+"4497","GO:0006346","DNA methylation-dependent heterochromatin assembly","BP",0.044113717,"A.cervicornis","Florida","methylation-dependent chromatin silencing","RNA metabolism","P"
+"4520","GO:0006367","transcription initiation from RNA polymerase II promoter","BP",0.011477729,"A.cervicornis","Florida","transcription initiation from RNA polymerase II promoter","RNA metabolism","P"
+"4521","GO:0006367","transcription initiation from RNA polymerase II promoter","BP",0.011477729,"A.cervicornis","Florida","transcription initiation from RNA polymerase II promoter","cell organization and biogenesis","P"
+"4549","GO:0006398","mRNA 3'-end processing by stem-loop binding and cleavage","BP",0.03432239,"A.cervicornis","Florida","histone mRNA 3'-end processing","RNA metabolism","P"
+"4752","GO:0006606","protein import into nucleus","BP",0.010483073,"A.cervicornis","Florida","protein import into nucleus","transport","P"
+"4786","GO:0006638","neutral lipid metabolic process","BP",0.023669888,"A.cervicornis","Florida","neutral lipid metabolic process","other metabolic processes","P"
+"4790","GO:0006642","triglyceride mobilization","BP",0.023199075,"A.cervicornis","Florida","triglyceride mobilization","other metabolic processes","P"
+"4811","GO:0006664","glycolipid metabolic process","BP",0.045450337,"A.cervicornis","Florida","glycolipid metabolic process","other metabolic processes","P"
+"4912","GO:0006777","Mo-molybdopterin cofactor biosynthetic process","BP",0.023879772,"A.cervicornis","Florida","Mo-molybdopterin cofactor biosynthetic process","protein metabolism","P"
+"5001","GO:0006887","exocytosis","BP",0.037719625,"A.cervicornis","Florida","exocytosis","transport","P"
+"5033","GO:0006915","apoptotic process","BP",0.032676852,"A.cervicornis","Florida","apoptosis","death","P"
+"5067","GO:0006952","defense response","BP",0.034325645,"A.cervicornis","Florida","defense response","stress response","P"
+"5069","GO:0006954","inflammatory response","BP",0.045397275,"A.cervicornis","Florida","inflammatory response","stress response","P"
+"5083","GO:0006965","positive regulation of biosynthetic process of antibacterial peptides active against Gram-positive bacteria","BP",0.02140892,"A.cervicornis","Florida","positive regulation of biosynthetic process of antibacterial peptides active against Gram-positive bacteria","other metabolic processes","P"
+"5084","GO:0006965","positive regulation of biosynthetic process of antibacterial peptides active against Gram-positive bacteria","BP",0.02140892,"A.cervicornis","Florida","positive regulation of biosynthetic process of antibacterial peptides active against Gram-positive bacteria","stress response","P"
+"5128","GO:0006996","organelle organization","BP",0.003994456,"A.cervicornis","Florida","organelle organization","cell organization and biogenesis","P"
+"5158","GO:0007030","Golgi organization","BP",0.016914428,"A.cervicornis","Florida","Golgi organization","cell organization and biogenesis","P"
+"5570","GO:0007390","germ-band shortening","BP",0.032890629,"A.cervicornis","Florida","germ-band shortening","developmental processes","P"
+"5641","GO:0007458","progression of morphogenetic furrow involved in compound eye morphogenesis","BP",0.032890629,"A.cervicornis","Florida","progression of morphogenetic furrow during compound eye morphogenesis","developmental processes","P"
+"5683","GO:0007501","mesodermal cell fate specification","BP",0.042735035,"A.cervicornis","Florida","mesodermal cell fate specification","developmental processes","P"
+"5767","GO:0007591","molting cycle, chitin-based cuticle","BP",0.032890629,"A.cervicornis","Florida","molting cycle, chitin-based cuticle","other biological processes","P"
+"5784","GO:0007610","behavior","BP",0.029789836,"A.cervicornis","Florida","behavior","other biological processes","P"
+"5785","GO:0007611","learning or memory","BP",0.016329401,"A.cervicornis","Florida","learning or memory","other biological processes","P"
+"5954","GO:0008180","COP9 signalosome","CC",0.032416611,"A.cervicornis","Florida","signalosome","nucleus","C"
+"6012","GO:0008254","3'-nucleotidase activity","MF",0.026805507,"A.cervicornis","Florida","3'-nucleotidase activity","other molecular function","F"
+"6016","GO:0008258","head involution","BP",0.032890629,"A.cervicornis","Florida","head involution","developmental processes","P"
+"6118","GO:0008362","chitin-based embryonic cuticle biosynthetic process","BP",0.032890629,"A.cervicornis","Florida","chitin-based embryonic cuticle biosynthetic process","developmental processes","P"
+"6882","GO:0009247","glycolipid biosynthetic process","BP",0.045450337,"A.cervicornis","Florida","glycolipid biosynthetic process","other metabolic processes","P"
+"6902","GO:0009267","cellular response to starvation","BP",0.045587819,"A.cervicornis","Florida","cellular response to starvation","stress response","P"
+"7063","GO:0009452","7-methylguanosine RNA capping","BP",0.034668541,"A.cervicornis","Florida","RNA capping","RNA metabolism","P"
+"7190","GO:0009629","response to gravity","BP",0.045584324,"A.cervicornis","Florida","response to gravity","other biological processes","P"
+"7350","GO:0009792","embryo development ending in birth or egg hatching","BP",0.029388933,"A.cervicornis","Florida","embryonic development ending in birth or egg hatching","developmental processes","P"
+"7470","GO:0009909","regulation of flower development","BP",0.030716833,"A.cervicornis","Florida","regulation of flower development","developmental processes","P"
+"7495","GO:0009933","meristem structural organization","BP",0.030716833,"A.cervicornis","Florida","meristem structural organization","developmental processes","P"
+"7528","GO:0009967","positive regulation of signal transduction","BP",0.02321327,"A.cervicornis","Florida","positive regulation of signal transduction","signal transduction","P"
+"7602","GO:0010046","response to mycotoxin","BP",0.023199075,"A.cervicornis","Florida","response to mycotoxin","other biological processes","P"
+"7639","GO:0010082","regulation of root meristem growth","BP",0.030716833,"A.cervicornis","Florida","regulation of root meristem growth","developmental processes","P"
+"7710","GO:0010154","fruit development","BP",0.021410748,"A.cervicornis","Florida","fruit development","other biological processes","P"
+"7859","GO:0010305","leaf vascular tissue pattern formation","BP",0.030716833,"A.cervicornis","Florida","leaf vascular tissue pattern formation","developmental processes","P"
+"7892","GO:0010338","leaf formation","BP",0.030716833,"A.cervicornis","Florida","leaf formation","developmental processes","P"
+"7912","GO:0010358","leaf shaping","BP",0.030716833,"A.cervicornis","Florida","leaf shaping","developmental processes","P"
+"8039","GO:0010466","negative regulation of peptidase activity","BP",0.045201483,"A.cervicornis","Florida","negative regulation of peptidase activity","other biological processes","P"
+"8082","GO:0010506","regulation of autophagy","BP",0.005764748,"A.cervicornis","Florida","regulation of autophagy","other metabolic processes","P"
+"8220","GO:0010629","negative regulation of gene expression","BP",0.036726776,"A.cervicornis","Florida","negative regulation of gene expression","other metabolic processes","P"
+"8238","GO:0010647","positive regulation of cell communication","BP",0.022565333,"A.cervicornis","Florida","positive regulation of cell communication","other biological processes","P"
+"8293","GO:0010698","acetyltransferase activator activity","MF",0.021414665,"A.cervicornis","Florida","acetyltransferase activator activity","enzyme regulator activity","F"
+"8349","GO:0010744","positive regulation of macrophage derived foam cell differentiation","BP",0.024248516,"A.cervicornis","Florida","positive regulation of foam cell differentiation","developmental processes","P"
+"8364","GO:0010759","positive regulation of macrophage chemotaxis","BP",0.021654746,"A.cervicornis","Florida","positive regulation of macrophage chemotaxis","other biological processes","P"
+"8492","GO:0010847","regulation of chromatin assembly","BP",0.042406086,"A.cervicornis","Florida","regulation of chromatin assembly","cell organization and biogenesis","P"
+"8521","GO:0010875","positive regulation of cholesterol efflux","BP",0.001812239,"A.cervicornis","Florida","positive regulation of cholesterol efflux","transport","P"
+"8529","GO:0010883","regulation of lipid storage","BP",0.04520816,"A.cervicornis","Florida","regulation of lipid storage","other biological processes","P"
+"8532","GO:0010886","positive regulation of cholesterol storage","BP",0.046995633,"A.cervicornis","Florida","positive regulation of cholesterol storage","other biological processes","P"
+"8602","GO:0010951","negative regulation of endopeptidase activity","BP",0.003187129,"A.cervicornis","Florida","negative regulation of endopeptidase activity","other biological processes","P"
+"8606","GO:0010955","negative regulation of protein processing","BP",0.042535074,"A.cervicornis","Florida","negative regulation of protein maturation by peptide bond cleavage","protein metabolism","P"
+"8897","GO:0014857","regulation of skeletal muscle cell proliferation","BP",0.021408568,"A.cervicornis","Florida","regulation of skeletal muscle cell proliferation","cell cycle and proliferation","P"
+"8898","GO:0014858","positive regulation of skeletal muscle cell proliferation","BP",0.023199075,"A.cervicornis","Florida","positive regulation of skeletal muscle cell proliferation","cell cycle and proliferation","P"
+"9762","GO:0015966","diadenosine tetraphosphate biosynthetic process","BP",0.021654746,"A.cervicornis","Florida","diadenosine tetraphosphate biosynthetic process","other metabolic processes","P"
+"9821","GO:0016034","maleylacetoacetate isomerase activity","MF",0.022991107,"A.cervicornis","Florida","maleylacetoacetate isomerase activity","other molecular function","F"
+"9832","GO:0016045","detection of bacterium","BP",0.02140892,"A.cervicornis","Florida","detection of bacterium","other biological processes","P"
+"9843","GO:0016055","Wnt signaling pathway","BP",0.04168485,"A.cervicornis","Florida","Wnt receptor signaling pathway","signal transduction","P"
+"9858","GO:0016074","snoRNA metabolic process","BP",0.021409265,"A.cervicornis","Florida","snoRNA metabolic process","RNA metabolism","P"
+"10024","GO:0016247","channel regulator activity","MF",0.021364539,"A.cervicornis","Florida","channel regulator activity","other molecular function","F"
+"10028","GO:0016251","RNA polymerase II general transcription initiation factor activity","MF",0.01439035,"A.cervicornis","Florida","general RNA polymerase II transcription factor activity","transcription regulatory activity","F"
+"10118","GO:0016361","activin receptor activity, type I","MF",0.031712692,"A.cervicornis","Florida","activin receptor activity, type I","signal transduction activity","F"
+"10119","GO:0016361","activin receptor activity, type I","MF",0.031712692,"A.cervicornis","Florida","activin receptor activity, type I","kinase activity","F"
+"10574","GO:0016929","SUMO-specific protease activity","MF",0.042104504,"A.cervicornis","Florida","SUMO-specific protease activity","other molecular function","F"
+"10958","GO:0018193","peptidyl-amino acid modification","BP",0.014025163,"A.cervicornis","Florida","peptidyl-amino acid modification","protein metabolism","P"
+"11709","GO:0019008","molybdopterin synthase complex","CC",0.023879772,"A.cervicornis","Florida","molybdopterin synthase complex","other cellular component","C"
+"12579","GO:0019966","interleukin-1 binding","MF",0.02140892,"A.cervicornis","Florida","interleukin-1 binding","other molecular function","F"
+"12594","GO:0019985","translesion synthesis","BP",0.042364837,"A.cervicornis","Florida","bypass DNA synthesis","stress response","P"
+"12595","GO:0019985","translesion synthesis","BP",0.042364837,"A.cervicornis","Florida","bypass DNA synthesis","DNA metabolism","P"
+"12682","GO:0021537","telencephalon development","BP",0.028170726,"A.cervicornis","Florida","telencephalon development","developmental processes","P"
+"13334","GO:0022603","regulation of anatomical structure morphogenesis","BP",0.03029894,"A.cervicornis","Florida","regulation of anatomical structure morphogenesis","other biological processes","P"
+"13434","GO:0023056","positive regulation of signaling","BP",0.038646019,"A.cervicornis","Florida",NA,NA,NA
+"13586","GO:0030162","regulation of proteolysis","BP",0.016539524,"A.cervicornis","Florida","regulation of proteolysis","protein metabolism","P"
+"13593","GO:0030169","low-density lipoprotein particle binding","MF",0.024248516,"A.cervicornis","Florida","low-density lipoprotein binding","other molecular function","F"
+"13626","GO:0030207","chondroitin sulfate catabolic process","BP",0.021153966,"A.cervicornis","Florida","chondroitin sulfate catabolic process","other metabolic processes","P"
+"13632","GO:0030213","hyaluronan biosynthetic process","BP",0.021153966,"A.cervicornis","Florida","hyaluronan biosynthetic process","other metabolic processes","P"
+"13633","GO:0030214","hyaluronan catabolic process","BP",0.021153966,"A.cervicornis","Florida","hyaluronan catabolic process","other metabolic processes","P"
+"13650","GO:0030234","enzyme regulator activity","MF",0.034102806,"A.cervicornis","Florida","enzyme regulator activity","enzyme regulator activity","F"
+"13700","GO:0030277","maintenance of gastrointestinal epithelium","BP",0.04236284,"A.cervicornis","Florida","maintenance of gastrointestinal epithelium","other biological processes","P"
+"13701","GO:0030278","regulation of ossification","BP",0.004434431,"A.cervicornis","Florida","regulation of ossification","developmental processes","P"
+"13731","GO:0030308","negative regulation of cell growth","BP",0.023418679,"A.cervicornis","Florida","negative regulation of cell growth","other biological processes","P"
+"13781","GO:0030366","molybdopterin synthase activity","MF",0.023879772,"A.cervicornis","Florida","Mo-molybdopterin synthase activity","other molecular function","F"
+"13830","GO:0030422","production of siRNA involved in RNA interference","BP",0.042361699,"A.cervicornis","Florida","RNA interference, production of siRNA","RNA metabolism","P"
+"13920","GO:0030544","Hsp70 protein binding","MF",0.001864512,"A.cervicornis","Florida","Hsp70 protein binding","other molecular function","F"
+"14053","GO:0030687","preribosome, large subunit precursor","CC",0.006899836,"A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14258","GO:0030878","thyroid gland development","BP",0.00463762,"A.cervicornis","Florida","thyroid gland development","developmental processes","P"
+"14569","GO:0031143","pseudopodium","CC",0.021654746,"A.cervicornis","Florida","pseudopodium","other cellular component","C"
+"14858","GO:0031393","negative regulation of prostaglandin biosynthetic process","BP",0.023199075,"A.cervicornis","Florida","negative regulation of prostaglandin biosynthetic process","other metabolic processes","P"
+"14863","GO:0031398","positive regulation of protein ubiquitination","BP",0.036609559,"A.cervicornis","Florida","positive regulation of protein ubiquitination","protein metabolism","P"
+"15491","GO:0031966","mitochondrial membrane","CC",0.011394667,"A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"15492","GO:0031966","mitochondrial membrane","CC",0.011394667,"A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15609","GO:0032071","regulation of endodeoxyribonuclease activity","BP",0.023199075,"A.cervicornis","Florida","regulation of endodeoxyribonuclease activity","other biological processes","P"
+"15626","GO:0032088","negative regulation of NF-kappaB transcription factor activity","BP",0.015181716,"A.cervicornis","Florida","negative regulation of NF-kappaB transcription factor activity","RNA metabolism","P"
+"15798","GO:0032240","negative regulation of nucleobase-containing compound transport","BP",0.032049452,"A.cervicornis","Florida","negative regulation of nucleobase, nucleoside, nucleotide and nucleic acid transport","transport","P"
+"15828","GO:0032269","negative regulation of cellular protein metabolic process","BP",0.004842216,"A.cervicornis","Florida","negative regulation of cellular protein metabolic process","protein metabolism","P"
+"15872","GO:0032299","ribonuclease H2 complex","CC",0.023264949,"A.cervicornis","Florida","ribonuclease H2 complex","other cellular component","C"
+"15897","GO:0032324","molybdopterin cofactor biosynthetic process","BP",0.023879772,"A.cervicornis","Florida","molybdopterin cofactor biosynthetic process","protein metabolism","P"
+"15903","GO:0032330","regulation of chondrocyte differentiation","BP",0.042396549,"A.cervicornis","Florida","regulation of chondrocyte differentiation","developmental processes","P"
+"15967","GO:0032386","regulation of intracellular transport","BP",0.004612023,"A.cervicornis","Florida","regulation of intracellular transport","transport","P"
+"16042","GO:0032456","endocytic recycling","BP",0.013229814,"A.cervicornis","Florida","endocytic recycling","transport","P"
+"16086","GO:0032498","detection of muramyl dipeptide","BP",0.02140892,"A.cervicornis","Florida","detection of muramyl dipeptide","other biological processes","P"
+"16088","GO:0032500","muramyl dipeptide binding","MF",0.02140892,"A.cervicornis","Florida","muramyl dipeptide binding","other molecular function","F"
+"16143","GO:0032555","purine ribonucleotide binding","MF",0.004566405,"A.cervicornis","Florida","purine ribonucleotide binding","other molecular function","F"
+"16305","GO:0032701","negative regulation of interleukin-18 production","BP",0.02140892,"A.cervicornis","Florida","negative regulation of interleukin-18 production","other biological processes","P"
+"16332","GO:0032728","positive regulation of interferon-beta production","BP",0.007466085,"A.cervicornis","Florida","positive regulation of interferon-beta production","other biological processes","P"
+"16344","GO:0032740","positive regulation of interleukin-17 production","BP",0.02140892,"A.cervicornis","Florida","positive regulation of interleukin-17 production","other biological processes","P"
+"17001","GO:0033339","pectoral fin development","BP",0.030458925,"A.cervicornis","Florida","pectoral fin development","developmental processes","P"
+"17028","GO:0033365","protein localization to organelle","BP",0.017619837,"A.cervicornis","Florida","protein localization in organelle","other biological processes","P"
+"17287","GO:0033553","rDNA heterochromatin","CC",0.044114003,"A.cervicornis","Florida","rDNA heterochromatin","other cellular component","C"
+"17288","GO:0033554","cellular response to stress","BP",0.00793137,"A.cervicornis","Florida","cellular response to stress","stress response","P"
+"17888","GO:0034124","regulation of MyD88-dependent toll-like receptor signaling pathway","BP",0.023448705,"A.cervicornis","Florida","regulation of MyD88-dependent toll-like receptor signaling pathway","stress response","P"
+"17889","GO:0034124","regulation of MyD88-dependent toll-like receptor signaling pathway","BP",0.023448705,"A.cervicornis","Florida","regulation of MyD88-dependent toll-like receptor signaling pathway","signal transduction","P"
+"18194","GO:0034362","low-density lipoprotein particle","CC",0.024248516,"A.cervicornis","Florida","low-density lipoprotein particle","non-structural extracellular","C"
+"18213","GO:0034381","plasma lipoprotein particle clearance","BP",0.024248516,"A.cervicornis","Florida","lipoprotein particle clearance","cell organization and biogenesis","P"
+"18223","GO:0034391","regulation of smooth muscle cell apoptotic process","BP",0.023199075,"A.cervicornis","Florida","regulation of smooth muscle cell apoptosis","death","P"
+"18576","GO:0034711","inhibin binding","MF",0.031712692,"A.cervicornis","Florida","inhibin binding","other molecular function","F"
+"18858","GO:0034983","peptidyl-lysine deacetylation","BP",0.044116784,"A.cervicornis","Florida","peptidyl-lysine deacetylation","protein metabolism","P"
+"18910","GO:0035023","regulation of Rho protein signal transduction","BP",0.029697422,"A.cervicornis","Florida","regulation of Rho protein signal transduction","signal transduction","P"
+"18947","GO:0035064","methylated histone binding","MF",0.04916871,"A.cervicornis","Florida","methylated histone residue binding","other molecular function","F"
+"18994","GO:0035098","ESC/E(Z) complex","CC",0.007984054,"A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19046","GO:0035147","branch fusion, open tracheal system","BP",0.043476762,"A.cervicornis","Florida","branch fusion, open tracheal system","developmental processes","P"
+"19176","GO:0035271","ring gland development","BP",0.021408568,"A.cervicornis","Florida","ring gland development","developmental processes","P"
+"19235","GO:0035356","cellular triglyceride homeostasis","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"19236","GO:0035358","regulation of peroxisome proliferator activated receptor signaling pathway","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"19239","GO:0035811","negative regulation of urine volume","BP",0.021414665,"A.cervicornis","Florida",NA,NA,NA
+"19240","GO:0035812","renal sodium excretion","BP",0.021414665,"A.cervicornis","Florida",NA,NA,NA
+"19250","GO:0036117","hyaluranon cable","CC",0.021153966,"A.cervicornis","Florida",NA,NA,NA
+"19251","GO:0036120","cellular response to platelet-derived growth factor stimulus","BP",0.005329679,"A.cervicornis","Florida",NA,NA,NA
+"19255","GO:0036261","7-methylguanosine cap hypermethylation","BP",0.034668541,"A.cervicornis","Florida",NA,NA,NA
+"19257","GO:0036359","renal potassium excretion","BP",0.021414665,"A.cervicornis","Florida",NA,NA,NA
+"19259","GO:0036477","somatodendritic compartment","CC",0.011094153,"A.cervicornis","Florida",NA,NA,NA
+"19267","GO:0038127","ERBB signaling pathway","BP",0.021654746,"A.cervicornis","Florida",NA,NA,NA
+"19287","GO:0040013","negative regulation of locomotion","BP",0.022310891,"A.cervicornis","Florida","negative regulation of locomotion","other biological processes","P"
+"19293","GO:0040019","positive regulation of embryonic development","BP",0.024369084,"A.cervicornis","Florida","positive regulation of embryonic development","developmental processes","P"
+"19585","GO:0042274","ribosomal small subunit biogenesis","BP",0.024073989,"A.cervicornis","Florida","ribosomal small subunit biogenesis","other biological processes","P"
+"19636","GO:0042330","taxis","BP",0.021285279,"A.cervicornis","Florida","taxis","other biological processes","P"
+"19698","GO:0042391","regulation of membrane potential","BP",0.003613918,"A.cervicornis","Florida","regulation of membrane potential","other biological processes","P"
+"19861","GO:0042531","positive regulation of tyrosine phosphorylation of STAT protein","BP",0.042744181,"A.cervicornis","Florida","positive regulation of tyrosine phosphorylation of STAT protein","signal transduction","P"
+"19862","GO:0042531","positive regulation of tyrosine phosphorylation of STAT protein","BP",0.042744181,"A.cervicornis","Florida","positive regulation of tyrosine phosphorylation of STAT protein","protein metabolism","P"
+"19922","GO:0042595","behavioral response to starvation","BP",0.023199075,"A.cervicornis","Florida","behavioral response to starvation","stress response","P"
+"20173","GO:0042834","peptidoglycan binding","MF",0.02140892,"A.cervicornis","Florida","peptidoglycan binding","other molecular function","F"
+"20548","GO:0043204","perikaryon","CC",0.025500536,"A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20634","GO:0043282","pharyngeal muscle development","BP",0.021408568,"A.cervicornis","Florida","pharyngeal muscle development","developmental processes","P"
+"20692","GO:0043328","protein transport to vacuole involved in ubiquitin-dependent protein catabolic process via the multivesicular body sorting pathway","BP",0.043509597,"A.cervicornis","Florida","protein targeting to vacuole during ubiquitin-dependent protein catabolic process via the MVB pathway","protein metabolism","P"
+"20693","GO:0043328","protein transport to vacuole involved in ubiquitin-dependent protein catabolic process via the multivesicular body sorting pathway","BP",0.043509597,"A.cervicornis","Florida","protein targeting to vacuole during ubiquitin-dependent protein catabolic process via the MVB pathway","transport","P"
+"20696","GO:0043330","response to exogenous dsRNA","BP",0.003430418,"A.cervicornis","Florida","response to exogenous dsRNA","other biological processes","P"
+"20775","GO:0043422","protein kinase B binding","MF",0.00310528,"A.cervicornis","Florida","protein kinase B binding","other molecular function","F"
+"20881","GO:0043518","negative regulation of DNA damage response, signal transduction by p53 class mediator","BP",0.047219471,"A.cervicornis","Florida","negative regulation of DNA damage response, signal transduction by p53 class mediator","stress response","P"
+"20882","GO:0043518","negative regulation of DNA damage response, signal transduction by p53 class mediator","BP",0.047219471,"A.cervicornis","Florida","negative regulation of DNA damage response, signal transduction by p53 class mediator","signal transduction","P"
+"20918","GO:0043552","positive regulation of phosphatidylinositol 3-kinase activity","BP",0.042361924,"A.cervicornis","Florida","positive regulation of phosphoinositide 3-kinase activity","other metabolic processes","P"
+"21036","GO:0043657","host cell","CC",0.042291183,"A.cervicornis","Florida","host cell","non-structural extracellular","C"
+"21353","GO:0043972","histone H3-K23 acetylation","BP",0.021414665,"A.cervicornis","Florida","histone H3-K23 acetylation","cell organization and biogenesis","P"
+"21354","GO:0043972","histone H3-K23 acetylation","BP",0.021414665,"A.cervicornis","Florida","histone H3-K23 acetylation","protein metabolism","P"
+"21496","GO:0044092","negative regulation of molecular function","BP",0.019317243,"A.cervicornis","Florida","negative regulation of molecular function","other biological processes","P"
+"21514","GO:0044154","histone H3-K14 acetylation","BP",0.043877015,"A.cervicornis","Florida",NA,NA,NA
+"21556","GO:0044291","cell-cell contact zone","CC",0.015719267,"A.cervicornis","Florida",NA,NA,NA
+"21562","GO:0044344","cellular response to fibroblast growth factor stimulus","BP",0.003624805,"A.cervicornis","Florida",NA,NA,NA
+"21636","GO:0044854","plasma membrane raft assembly","BP",0.029697422,"A.cervicornis","Florida",NA,NA,NA
+"21653","GO:0045014","carbon catabolite repression of transcription by glucose","BP",0.031028744,"A.cervicornis","Florida","negative regulation of transcription by glucose","RNA metabolism","P"
+"21732","GO:0045087","innate immune response","BP",0.047720622,"A.cervicornis","Florida","innate immune response","stress response","P"
+"21945","GO:0045294","alpha-catenin binding","MF",0.048708753,"A.cervicornis","Florida","alpha-catenin binding","other molecular function","F"
+"21968","GO:0045322","unmethylated CpG binding","MF",0.048350137,"A.cervicornis","Florida","unmethylated CpG binding","nucleic acid binding activity","F"
+"21996","GO:0045348","positive regulation of MHC class II biosynthetic process","BP",0.045286654,"A.cervicornis","Florida","positive regulation of MHC class II biosynthetic process","other metabolic processes","P"
+"22091","GO:0045444","fat cell differentiation","BP",0.043494567,"A.cervicornis","Florida","fat cell differentiation","other biological processes","P"
+"22241","GO:0045590","negative regulation of regulatory T cell differentiation","BP",0.023448705,"A.cervicornis","Florida","negative regulation of regulatory T cell differentiation","developmental processes","P"
+"22247","GO:0045596","negative regulation of cell differentiation","BP",0.030148793,"A.cervicornis","Florida","negative regulation of cell differentiation","other biological processes","P"
+"22441","GO:0045785","positive regulation of cell adhesion","BP",0.007375547,"A.cervicornis","Florida","positive regulation of cell adhesion","cell adhesion","P"
+"22614","GO:0045944","positive regulation of transcription by RNA polymerase II","BP",0.034163324,"A.cervicornis","Florida","positive regulation of transcription from RNA polymerase II promoter","RNA metabolism","P"
+"23049","GO:0046373","L-arabinose metabolic process","BP",0.021409242,"A.cervicornis","Florida","L-arabinose metabolic process","other metabolic processes","P"
+"23148","GO:0046477","glycosylceramide catabolic process","BP",0.044450646,"A.cervicornis","Florida","glycosylceramide catabolic process","other metabolic processes","P"
+"23224","GO:0046556","alpha-L-arabinofuranosidase activity","MF",0.021409242,"A.cervicornis","Florida","alpha-N-arabinofuranosidase activity","other molecular function","F"
+"23663","GO:0046969","NAD-dependent histone deacetylase activity (H3-K9 specific)","MF",0.023199075,"A.cervicornis","Florida","NAD-dependent histone deacetylase activity (H3-K9 specific)","other molecular function","F"
+"24150","GO:0047464","heparosan-N-sulfate-glucuronate 5-epimerase activity","MF",0.021409287,"A.cervicornis","Florida","heparosan-N-sulfate-glucuronate 5-epimerase activity","other molecular function","F"
+"24170","GO:0047485","protein N-terminus binding","MF",0.010487785,"A.cervicornis","Florida","protein N-terminus binding","other molecular function","F"
+"24828","GO:0048179","activin receptor complex","CC",0.031712692,"A.cervicornis","Florida","activin receptor complex","plasma membrane","C"
+"24829","GO:0048179","activin receptor complex","CC",0.031712692,"A.cervicornis","Florida","activin receptor complex","other membranes","C"
+"24873","GO:0048215","positive regulation of Golgi vesicle fusion to target membrane","BP",0.021427953,"A.cervicornis","Florida","positive regulation of Golgi vesicle fusion to target membrane","transport","P"
+"24874","GO:0048215","positive regulation of Golgi vesicle fusion to target membrane","BP",0.021427953,"A.cervicornis","Florida","positive regulation of Golgi vesicle fusion to target membrane","cell organization and biogenesis","P"
+"25036","GO:0048367","shoot system development","BP",0.042013392,"A.cervicornis","Florida","shoot development","developmental processes","P"
+"25081","GO:0048440","carpel development","BP",0.030716833,"A.cervicornis","Florida","carpel development","developmental processes","P"
+"25084","GO:0048443","stamen development","BP",0.030716833,"A.cervicornis","Florida","stamen development","developmental processes","P"
+"25094","GO:0048453","sepal formation","BP",0.030716833,"A.cervicornis","Florida","sepal formation","developmental processes","P"
+"25117","GO:0048477","oogenesis","BP",0.02890184,"A.cervicornis","Florida","oogenesis","other biological processes","P"
+"25178","GO:0048538","thymus development","BP",0.006719674,"A.cervicornis","Florida","thymus development","developmental processes","P"
+"25182","GO:0048542","lymph gland development","BP",0.032890629,"A.cervicornis","Florida","lymph gland development","developmental processes","P"
+"25230","GO:0048585","negative regulation of response to stimulus","BP",0.029278108,"A.cervicornis","Florida","negative regulation of response to stimulus","other biological processes","P"
+"25285","GO:0048643","positive regulation of skeletal muscle tissue development","BP",0.029697422,"A.cervicornis","Florida","positive regulation of skeletal muscle tissue development","developmental processes","P"
+"25501","GO:0048806","genitalia development","BP",0.029949103,"A.cervicornis","Florida","genitalia development","developmental processes","P"
+"25525","GO:0048827","phyllome development","BP",0.021410748,"A.cervicornis","Florida","phyllome development","developmental processes","P"
+"25644","GO:0048935","peripheral nervous system neuron development","BP",0.042367032,"A.cervicornis","Florida","peripheral nervous system neuron development","developmental processes","P"
+"26033","GO:0050379","UDP-glucuronate 5'-epimerase activity","MF",0.021409287,"A.cervicornis","Florida","UDP-glucuronate 5'-epimerase activity","other molecular function","F"
+"26147","GO:0050501","hyaluronan synthase activity","MF",0.021153966,"A.cervicornis","Florida","hyaluronan synthase activity","other molecular function","F"
+"26323","GO:0050679","positive regulation of epithelial cell proliferation","BP",0.040360479,"A.cervicornis","Florida","positive regulation of epithelial cell proliferation","cell cycle and proliferation","P"
+"26338","GO:0050694","galactose 3-O-sulfotransferase activity","MF",0.045450337,"A.cervicornis","Florida","galactose 3-O-sulfotransferase activity","other molecular function","F"
+"26344","GO:0050700","CARD domain binding","MF",0.02140892,"A.cervicornis","Florida","CARD domain binding","other molecular function","F"
+"26375","GO:0050731","positive regulation of peptidyl-tyrosine phosphorylation","BP",0.01560516,"A.cervicornis","Florida","positive regulation of peptidyl-tyrosine phosphorylation","protein metabolism","P"
+"26455","GO:0050804","modulation of chemical synaptic transmission","BP",0.045280817,"A.cervicornis","Florida","regulation of synaptic transmission","cell-cell signaling","P"
+"26523","GO:0050871","positive regulation of B cell activation","BP",0.042373838,"A.cervicornis","Florida","positive regulation of B cell activation","other biological processes","P"
+"26524","GO:0050872","white fat cell differentiation","BP",0.023199075,"A.cervicornis","Florida","white fat cell differentiation","other biological processes","P"
+"26556","GO:0050907","detection of chemical stimulus involved in sensory perception","BP",0.021285279,"A.cervicornis","Florida","detection of chemical stimulus involved in sensory perception","other biological processes","P"
+"26604","GO:0050955","thermoception","BP",0.021285279,"A.cervicornis","Florida","thermoception","other biological processes","P"
+"26610","GO:0050961","detection of temperature stimulus involved in sensory perception","BP",0.021285279,"A.cervicornis","Florida","detection of temperature stimulus involved in sensory perception","other biological processes","P"
+"26701","GO:0051050","positive regulation of transport","BP",0.026336294,"A.cervicornis","Florida","positive regulation of transport","transport","P"
+"26750","GO:0051097","negative regulation of helicase activity","BP",0.023199075,"A.cervicornis","Florida","negative regulation of helicase activity","other biological processes","P"
+"26808","GO:0051152","positive regulation of smooth muscle cell differentiation","BP",0.023199075,"A.cervicornis","Florida","positive regulation of smooth muscle cell differentiation","other biological processes","P"
+"27055","GO:0051382","kinetochore assembly","BP",0.033559155,"A.cervicornis","Florida","kinetochore assembly","cell organization and biogenesis","P"
+"27267","GO:0051574","positive regulation of histone H3-K9 methylation","BP",0.023199075,"A.cervicornis","Florida","positive regulation of histone H3-K9 methylation","protein metabolism","P"
+"27268","GO:0051574","positive regulation of histone H3-K9 methylation","BP",0.023199075,"A.cervicornis","Florida","positive regulation of histone H3-K9 methylation","cell organization and biogenesis","P"
+"27276","GO:0051580","regulation of neurotransmitter uptake","BP",0.029697422,"A.cervicornis","Florida","regulation of neurotransmitter uptake","transport","P"
+"27277","GO:0051580","regulation of neurotransmitter uptake","BP",0.029697422,"A.cervicornis","Florida","regulation of neurotransmitter uptake","cell-cell signaling","P"
+"27312","GO:0051607","defense response to virus","BP",0.010345631,"A.cervicornis","Florida","defense response to virus","stress response","P"
+"27610","GO:0051879","Hsp90 protein binding","MF",0.039628326,"A.cervicornis","Florida","Hsp90 protein binding","other molecular function","F"
+"28148","GO:0052381","tRNA dimethylallyltransferase activity","MF",0.025600312,"A.cervicornis","Florida",NA,NA,NA
+"28263","GO:0052834","inositol monophosphate phosphatase activity","MF",0.026805507,"A.cervicornis","Florida",NA,NA,NA
+"28489","GO:0060074","synapse maturation","BP",0.021427953,"A.cervicornis","Florida","synapse maturation","developmental processes","P"
+"28490","GO:0060074","synapse maturation","BP",0.021427953,"A.cervicornis","Florida","synapse maturation","cell organization and biogenesis","P"
+"28554","GO:0060125","negative regulation of growth hormone secretion","BP",0.048778735,"A.cervicornis","Florida","negative regulation of growth hormone secretion","cell-cell signaling","P"
+"28555","GO:0060125","negative regulation of growth hormone secretion","BP",0.048778735,"A.cervicornis","Florida","negative regulation of growth hormone secretion","transport","P"
+"28743","GO:0060291","long-term synaptic potentiation","BP",0.009677982,"A.cervicornis","Florida","long-term synaptic potentiation","cell-cell signaling","P"
+"28780","GO:0060324","face development","BP",0.042592659,"A.cervicornis","Florida","face development","other biological processes","P"
+"28789","GO:0060333","interferon-gamma-mediated signaling pathway","BP",0.023448705,"A.cervicornis","Florida","interferon-gamma-mediated signaling pathway","signal transduction","P"
+"28792","GO:0060336","negative regulation of interferon-gamma-mediated signaling pathway","BP",0.043761092,"A.cervicornis","Florida","negative regulation of interferon-gamma-mediated signaling pathway","signal transduction","P"
+"28907","GO:0060440","trachea formation","BP",0.042592659,"A.cervicornis","Florida","trachea formation","developmental processes","P"
+"29039","GO:0060548","negative regulation of cell death","BP",0.039230804,"A.cervicornis","Florida","negative regulation of cell death","death","P"
+"29084","GO:0060585","positive regulation of prostaglandin-endoperoxide synthase activity","BP",0.02140892,"A.cervicornis","Florida","positive regulation of prostaglandin-endoperoxidase synthase activity","other biological processes","P"
+"29134","GO:0060627","regulation of vesicle-mediated transport","BP",0.003012716,"A.cervicornis","Florida","regulation of vesicle-mediated transport","transport","P"
+"29338","GO:0060907","positive regulation of macrophage cytokine production","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"29345","GO:0061051","positive regulation of cell growth involved in cardiac muscle cell development","BP",0.046858676,"A.cervicornis","Florida",NA,NA,NA
+"29351","GO:0061308","cardiac neural crest cell development involved in heart development","BP",0.021654746,"A.cervicornis","Florida",NA,NA,NA
+"29364","GO:0062063","BBSome binding","MF",0.030458925,"A.cervicornis","Florida",NA,NA,NA
+"29494","GO:0070097","delta-catenin binding","MF",0.026197771,"A.cervicornis","Florida","delta-catenin binding","other molecular function","F"
+"29845","GO:0070371","ERK1 and ERK2 cascade","BP",0.048263201,"A.cervicornis","Florida","ERK1 and ERK2 cascade","signal transduction","P"
+"29877","GO:0070403","NAD+ binding","MF",0.004704611,"A.cervicornis","Florida","NAD binding","other molecular function","F"
+"29917","GO:0070431","nucleotide-binding oligomerization domain containing 2 signaling pathway","BP",0.02140892,"A.cervicornis","Florida","nucleotide-binding oligomerization domain containing 2 signaling pathway","stress response","P"
+"29918","GO:0070431","nucleotide-binding oligomerization domain containing 2 signaling pathway","BP",0.02140892,"A.cervicornis","Florida","nucleotide-binding oligomerization domain containing 2 signaling pathway","signal transduction","P"
+"30183","GO:0070652","HAUS complex","CC",0.021260705,"A.cervicornis","Florida","HAUS complex","cytoskeleton","C"
+"30331","GO:0070776","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,"A.cervicornis","Florida",NA,"nucleus","None"
+"30403","GO:0070849","response to epidermal growth factor","BP",0.043099814,"A.cervicornis","Florida",NA,NA,NA
+"30404","GO:0070857","regulation of bile acid biosynthetic process","BP",0.043317952,"A.cervicornis","Florida",NA,NA,NA
+"30405","GO:0070887","cellular response to chemical stimulus","BP",0.005174816,"A.cervicornis","Florida",NA,NA,NA
+"30406","GO:0070900","mitochondrial tRNA modification","BP",0.025600312,"A.cervicornis","Florida",NA,NA,NA
+"30408","GO:0070925","organelle assembly","BP",0.013872272,"A.cervicornis","Florida",NA,NA,NA
+"30433","GO:0071034","CUT catabolic process","BP",0.021409265,"A.cervicornis","Florida",NA,NA,NA
+"30434","GO:0071035","nuclear polyadenylation-dependent rRNA catabolic process","BP",0.043180453,"A.cervicornis","Florida",NA,NA,NA
+"30435","GO:0071048","nuclear retention of unspliced pre-mRNA at the site of transcription","BP",0.021409265,"A.cervicornis","Florida",NA,NA,NA
+"30436","GO:0071164","RNA trimethylguanosine synthase activity","MF",0.034668541,"A.cervicornis","Florida",NA,NA,NA
+"30438","GO:0071224","cellular response to peptidoglycan","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"30439","GO:0071225","cellular response to muramyl dipeptide","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"30442","GO:0071303","cellular response to vitamin B3","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"30445","GO:0071347","cellular response to interleukin-1","BP",0.033364516,"A.cervicornis","Florida",NA,NA,NA
+"30446","GO:0071356","cellular response to tumor necrosis factor","BP",0.005725533,"A.cervicornis","Florida",NA,NA,NA
+"30448","GO:0071360","cellular response to exogenous dsRNA","BP",0.029697422,"A.cervicornis","Florida",NA,NA,NA
+"30451","GO:0071441","negative regulation of histone H3-K14 acetylation","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"30456","GO:0071493","cellular response to UV-B","BP",0.021153966,"A.cervicornis","Florida",NA,NA,NA
+"30459","GO:0071639","positive regulation of monocyte chemotactic protein-1 production","BP",0.042386376,"A.cervicornis","Florida",NA,NA,NA
+"30471","GO:0071944","cell periphery","CC",0.01490574,"A.cervicornis","Florida",NA,NA,NA
+"30473","GO:0071985","multivesicular body sorting pathway","BP",0.021364539,"A.cervicornis","Florida",NA,NA,NA
+"30476","GO:0072038","mesenchymal stem cell maintenance involved in nephron morphogenesis","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"30485","GO:0072095","regulation of branch elongation involved in ureteric bud branching","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"30486","GO:0072107","positive regulation of ureteric bud formation","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"30487","GO:0072137","condensed mesenchymal cell proliferation","BP",0.042303313,"A.cervicornis","Florida",NA,NA,NA
+"30488","GO:0072161","mesenchymal cell differentiation involved in kidney development","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"30498","GO:0072584","caveolin-mediated endocytosis","BP",0.021654746,"A.cervicornis","Florida",NA,NA,NA
+"30503","GO:0072697","protein localization to cell cortex","BP",0.021427953,"A.cervicornis","Florida",NA,NA,NA
+"30854","GO:0075732","viral penetration into host nucleus","BP",0.049341815,"A.cervicornis","Florida",NA,NA,NA
+"30990","GO:0080134","regulation of response to stress","BP",0.040906836,"A.cervicornis","Florida","regulation of response to stress","stress response","P"
+"31002","GO:0089720","caspase binding","MF",0.042535074,"A.cervicornis","Florida",NA,NA,NA
+"31034","GO:0090022","regulation of neutrophil chemotaxis","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"31042","GO:0090170","regulation of Golgi inheritance","BP",0.042592659,"A.cervicornis","Florida",NA,NA,NA
+"31046","GO:0090312","positive regulation of protein deacetylation","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31048","GO:0090400","stress-induced premature senescence","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31058","GO:0097168","mesenchymal stem cell proliferation","BP",0.021408568,"A.cervicornis","Florida",NA,NA,NA
+"31061","GO:0097242","amyloid-beta clearance","BP",0.047940813,"A.cervicornis","Florida",NA,NA,NA
+"31069","GO:0097553","calcium ion transmembrane import into cytosol","BP",0.045259361,"A.cervicornis","Florida",NA,NA,NA
+"31071","GO:0097657","3',5'-nucleotide bisphosphate phosphatase activity","MF",0.026805507,"A.cervicornis","Florida",NA,NA,NA
+"31074","GO:0098588","bounding membrane of organelle","CC",0.025640408,"A.cervicornis","Florida",NA,NA,NA
+"31076","GO:0098793","presynapse","CC",0.00534615,"A.cervicornis","Florida",NA,NA,NA
+"31077","GO:0098821","BMP receptor activity","MF",0.031712692,"A.cervicornis","Florida",NA,NA,NA
+"31101","GO:0120036","plasma membrane bounded cell projection organization","BP",0.047923355,"A.cervicornis","Florida",NA,NA,NA
+"31102","GO:0120041","positive regulation of macrophage proliferation","BP",0.021654746,"A.cervicornis","Florida",NA,NA,NA
+"31106","GO:0140268","endoplasmic reticulum-plasma membrane contact site","CC",0.008392615,"A.cervicornis","Florida",NA,NA,NA
+"31112","GO:1900106","positive regulation of hyaluranon cable assembly","BP",0.021153966,"A.cervicornis","Florida",NA,NA,NA
+"31113","GO:1900113","negative regulation of histone H3-K9 trimethylation","BP",0.042755269,"A.cervicornis","Florida",NA,NA,NA
+"31115","GO:1900208","regulation of cardiolipin metabolic process","BP",0.029949103,"A.cervicornis","Florida",NA,NA,NA
+"31120","GO:1901416","regulation of response to ethanol","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31123","GO:1901698","response to nitrogen compound","BP",0.021406369,"A.cervicornis","Florida",NA,NA,NA
+"31127","GO:1901842","negative regulation of high voltage-gated calcium channel activity","BP",0.023378402,"A.cervicornis","Florida",NA,NA,NA
+"31131","GO:1901890","positive regulation of cell junction assembly","BP",0.029697422,"A.cervicornis","Florida",NA,NA,NA
+"31132","GO:1902043","positive regulation of extrinsic apoptotic signaling pathway via death domain receptors","BP",0.002156658,"A.cervicornis","Florida",NA,NA,NA
+"31135","GO:1902166","negative regulation of intrinsic apoptotic signaling pathway in response to DNA damage by p53 class mediator","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31136","GO:1902176","negative regulation of oxidative stress-induced intrinsic apoptotic signaling pathway","BP",0.044108662,"A.cervicornis","Florida",NA,NA,NA
+"31137","GO:1902216","positive regulation of interleukin-4-mediated signaling pathway","BP",0.043761092,"A.cervicornis","Florida",NA,NA,NA
+"31142","GO:1902523","positive regulation of protein K63-linked ubiquitination","BP",0.044381204,"A.cervicornis","Florida",NA,NA,NA
+"31143","GO:1902531","regulation of intracellular signal transduction","BP",0.001161044,"A.cervicornis","Florida",NA,NA,NA
+"31144","GO:1902570","protein localization to nucleolus","BP",0.020514623,"A.cervicornis","Florida",NA,NA,NA
+"31147","GO:1902624","positive regulation of neutrophil migration","BP",0.043230355,"A.cervicornis","Florida",NA,NA,NA
+"31151","GO:1902731","negative regulation of chondrocyte proliferation","BP",0.031712692,"A.cervicornis","Florida",NA,NA,NA
+"31153","GO:1902732","positive regulation of chondrocyte proliferation","BP",0.038677081,"A.cervicornis","Florida",NA,NA,NA
+"31156","GO:1902915","negative regulation of protein polyubiquitination","BP",0.023378402,"A.cervicornis","Florida",NA,NA,NA
+"31158","GO:1902957","negative regulation of mitochondrial electron transport, NADH to ubiquinone","BP",0.029949103,"A.cervicornis","Florida",NA,NA,NA
+"31164","GO:1903220","positive regulation of malate dehydrogenase (decarboxylating) (NADP+) activity","BP",0.032890629,"A.cervicornis","Florida",NA,NA,NA
+"31165","GO:1903445","protein transport from ciliary membrane to plasma membrane","BP",0.030458925,"A.cervicornis","Florida",NA,NA,NA
+"31172","GO:1903772","regulation of viral budding via host ESCRT complex","BP",0.021364539,"A.cervicornis","Florida",NA,NA,NA
+"31175","GO:1904179","positive regulation of adipose tissue development","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31180","GO:1904373","response to kainic acid","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31185","GO:1904638","response to resveratrol","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31186","GO:1904644","cellular response to curcumin","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31187","GO:1904645","response to amyloid-beta","BP",0.042787873,"A.cervicornis","Florida",NA,NA,NA
+"31188","GO:1904648","cellular response to rotenone","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31193","GO:1904872","regulation of telomerase RNA localization to Cajal body","BP",0.042388097,"A.cervicornis","Florida",NA,NA,NA
+"31194","GO:1904893","negative regulation of receptor signaling pathway via STAT","BP",0.026197771,"A.cervicornis","Florida",NA,NA,NA
+"31201","GO:1905246","negative regulation of aspartic-type peptidase activity","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"31210","GO:1905776","positive regulation of DNA helicase activity","BP",0.025341352,"A.cervicornis","Florida",NA,NA,NA
+"31215","GO:1990254","keratin filament binding","MF",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31217","GO:1990417","snoRNA release from pre-rRNA","BP",0.023287271,"A.cervicornis","Florida",NA,NA,NA
+"31222","GO:1990712","HFE-transferrin receptor complex","CC",0.031712692,"A.cervicornis","Florida",NA,NA,NA
+"31232","GO:2000110","negative regulation of macrophage apoptotic process","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"31233","GO:2000111","positive regulation of macrophage apoptotic process","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31238","GO:2000363","positive regulation of prostaglandin-E synthase activity","BP",0.02140892,"A.cervicornis","Florida",NA,NA,NA
+"31240","GO:2000481","positive regulation of cAMP-dependent protein kinase activity","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31242","GO:2000614","positive regulation of thyroid-stimulating hormone secretion","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31243","GO:2000619","negative regulation of histone H4-K16 acetylation","BP",0.045177814,"A.cervicornis","Florida",NA,NA,NA
+"31246","GO:2000655","negative regulation of cellular response to testosterone stimulus","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31247","GO:2000697","negative regulation of epithelial cell differentiation involved in kidney development","BP",0.021409242,"A.cervicornis","Florida",NA,NA,NA
+"31252","GO:2000774","positive regulation of cellular senescence","BP",0.023199075,"A.cervicornis","Florida",NA,NA,NA
+"31265","GO:2001161","negative regulation of histone H3-K79 methylation","BP",0.021414665,"A.cervicornis","Florida",NA,NA,NA

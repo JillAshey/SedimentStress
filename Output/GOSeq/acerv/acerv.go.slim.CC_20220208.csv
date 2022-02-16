@@ -1,0 +1,150 @@
+"","GO.IDs","gene_id","term","ontology","over_represented_pvalue","log2FoldChange","padj","Treatment_Compare","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"146","GO:0000145","Acerv_evm.model.Segkk384_pilon.7","exocyst","CC",0.042984627,-1.517728143,0.01369827,"CvsT2","A.cervicornis","Florida","exocyst","other cellular component","C"
+"147","GO:0000145","Acerv_evm.model.Segkk384_pilon.7","exocyst","CC",0.042984627,-1.793280034,0.007015269,"CvsT4","A.cervicornis","Florida","exocyst","other cellular component","C"
+"446","GO:0000438","Acerv_evm.model.Segkk3047_pilon.5","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,-2.85672963,6.79e-08,"CvsT4","A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"447","GO:0000438","Acerv_evm.model.Segkk3047_pilon.5","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,-2.727694155,2.07e-06,"CvsT1","A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"448","GO:0000438","Acerv_evm.model.Segkk3047_pilon.5","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,-3.30114616,1.16e-12,"CvsT2","A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"449","GO:0000438","Acerv_evm.model.Segkk3047_pilon.5","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,-2.818322328,1.71e-08,"CvsT3","A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"450","GO:0000439","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIIH core complex","CC",0.046210721,-2.727694155,2.07e-06,"CvsT1","A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"451","GO:0000439","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIIH core complex","CC",0.046210721,-2.818322328,1.71e-08,"CvsT3","A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"452","GO:0000439","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIIH core complex","CC",0.046210721,-3.30114616,1.16e-12,"CvsT2","A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"453","GO:0000439","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIIH core complex","CC",0.046210721,-2.85672963,6.79e-08,"CvsT4","A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"647","GO:0000793","Acerv_evm.model.Segkk3394_pilon.16","condensed chromosome","CC",0.014598654,-5.146010627,1.03e-40,"CvsT3","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"648","GO:0000793","Acerv_evm.model.Segkk1793_pilon.1","condensed chromosome","CC",0.014598654,-3.449929833,2.18e-09,"CvsT3","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"649","GO:0000793","Acerv_evm.model.Segkk1793_pilon.1","condensed chromosome","CC",0.014598654,-2.986722204,4.54e-06,"CvsT4","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"650","GO:0000793","Acerv_evm.model.Segkk3394_pilon.16","condensed chromosome","CC",0.014598654,-5.668645984,2.23e-43,"CvsT4","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"651","GO:0000793","Acerv_evm.model.Segkk3394_pilon.16","condensed chromosome","CC",0.014598654,-5.367576715,9.06e-45,"CvsT2","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"652","GO:0000793","Acerv_evm.model.Segkk1793_pilon.1","condensed chromosome","CC",0.014598654,-3.646884739,4.38e-09,"CvsT1","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"653","GO:0000793","Acerv_evm.model.Segkk3394_pilon.16","condensed chromosome","CC",0.014598654,-5.21903369,1.07e-35,"CvsT1","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"654","GO:0000793","Acerv_evm.model.Segkk1793_pilon.1","condensed chromosome","CC",0.014598654,-3.342112868,6.7e-09,"CvsT2","A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"676","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-1.907117848,0.003129276,"CvsT3","A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"677","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-1.907117848,0.003129276,"CvsT3","A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"678","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-1.81313044,0.019991259,"CvsT4","A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"679","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-1.81313044,0.019991259,"CvsT4","A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"680","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-2.143028793,0.000200263,"CvsT2","A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"681","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-2.143028793,0.000200263,"CvsT2","A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"682","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-2.106918486,0.003247754,"CvsT1","A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"683","GO:0000814","Acerv_evm.model.Segkk223_pilon.4","ESCRT II complex","CC",0.043509597,-2.106918486,0.003247754,"CvsT1","A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"867","GO:0001533","Acerv_evm.model.Segkk1929_pilon.4","cornified envelope","CC",0.027822697,-0.786410041,0.018969586,"CvsT2","A.cervicornis","Florida","cornified envelope","cytoskeleton","C"
+"3890","GO:0005642","Acerv_evm.model.Segkk384_pilon.7","annulate lamellae","CC",0.043005025,-1.793280034,0.007015269,"CvsT4","A.cervicornis","Florida","annulate lamellae","other membranes","C"
+"3891","GO:0005642","Acerv_evm.model.Segkk384_pilon.7","annulate lamellae","CC",0.043005025,-1.517728143,0.01369827,"CvsT2","A.cervicornis","Florida","annulate lamellae","other membranes","C"
+"3900","GO:0005658","Acerv_evm.model.Segkk2935_pilon.2","alpha DNA polymerase:primase complex","CC",0.044497493,-2.274624131,0.011105016,"CvsT3","A.cervicornis","Florida","alpha DNA polymerase:primase complex","nucleus","C"
+"3901","GO:0005658","Acerv_evm.model.Segkk2935_pilon.2","alpha DNA polymerase:primase complex","CC",0.044497493,-2.677797844,0.000338881,"CvsT2","A.cervicornis","Florida","alpha DNA polymerase:primase complex","nucleus","C"
+"3902","GO:0005658","Acerv_evm.model.Segkk2935_pilon.2","alpha DNA polymerase:primase complex","CC",0.044497493,-2.324160081,0.017863022,"CvsT4","A.cervicornis","Florida","alpha DNA polymerase:primase complex","nucleus","C"
+"3910","GO:0005669","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIID complex","CC",0.006189877,-2.727694155,2.07e-06,"CvsT1","A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3911","GO:0005669","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIID complex","CC",0.006189877,-2.818322328,1.71e-08,"CvsT3","A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3912","GO:0005669","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIID complex","CC",0.006189877,-2.85672963,6.79e-08,"CvsT4","A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3913","GO:0005669","Acerv_evm.model.Segkk3047_pilon.5","transcription factor TFIID complex","CC",0.006189877,-3.30114616,1.16e-12,"CvsT2","A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3914","GO:0005669","Acerv_evm.model.Segkk2701_pilon.2","transcription factor TFIID complex","CC",0.006189877,-1.344041019,0.007410038,"CvsT2","A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"4011","GO:0005770","Acerv_evm.model.Segkk1945_pilon.2","late endosome","CC",0.037718377,-2.971983022,0.000211784,"CvsT3","A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"4012","GO:0005770","Acerv_evm.model.Segkk2585_pilon.5","late endosome","CC",0.037718377,-1.227653055,0.037119122,"CvsT2","A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"4013","GO:0005770","Acerv_evm.model.Segkk1945_pilon.2","late endosome","CC",0.037718377,-2.495587387,0.00470295,"CvsT2","A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"4014","GO:0005770","Acerv_evm.model.Segkk1945_pilon.2","late endosome","CC",0.037718377,-2.953644154,0.001690962,"CvsT1","A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"4015","GO:0005770","Acerv_evm.model.Segkk3091_pilon.8","late endosome","CC",0.037718377,-1.831256115,0.043619104,"T1vsT2","A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"4045","GO:0005794","Acerv_evm.model.Segkk4318_pilon.2","Golgi apparatus","CC",0.03647959,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4046","GO:0005794","Acerv_evm.model.Segkk4047_pilon.16","Golgi apparatus","CC",0.03647959,2.504049974,0.027846019,"T2vsT3","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4047","GO:0005794","Acerv_evm.model.Segkk1945_pilon.2","Golgi apparatus","CC",0.03647959,-2.971983022,0.000211784,"CvsT3","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4048","GO:0005794","Acerv_evm.model.Segkk3450_pilon.3","Golgi apparatus","CC",0.03647959,-0.872868173,0.014871409,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4049","GO:0005794","Acerv_evm.model.Segkk3419_pilon.10","Golgi apparatus","CC",0.03647959,-2.277502973,0.043986163,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4050","GO:0005794","Acerv_evm.model.Segkk3419_pilon.10","Golgi apparatus","CC",0.03647959,-2.875865615,0.011902611,"CvsT1","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4051","GO:0005794","Acerv_evm.model.Segkk3419_pilon.10","Golgi apparatus","CC",0.03647959,-2.517370874,0.04991833,"CvsT4","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4052","GO:0005794","Acerv_evm.model.Segkk2585_pilon.5","Golgi apparatus","CC",0.03647959,-1.227653055,0.037119122,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4053","GO:0005794","Acerv_evm.model.Segkk1945_pilon.2","Golgi apparatus","CC",0.03647959,-2.953644154,0.001690962,"CvsT1","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4054","GO:0005794","Acerv_evm.model.Segkk4047_pilon.16","Golgi apparatus","CC",0.03647959,-2.129740896,0.016658027,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4055","GO:0005794","Acerv_evm.model.Segkk1945_pilon.2","Golgi apparatus","CC",0.03647959,-2.495587387,0.00470295,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4056","GO:0005794","Acerv_evm.model.Segkk3419_pilon.10","Golgi apparatus","CC",0.03647959,-2.431610742,0.045581587,"CvsT3","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4057","GO:0005794","Acerv_evm.model.Segkk2909_pilon.1","Golgi apparatus","CC",0.03647959,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4058","GO:0005794","Acerv_evm.model.Segkk1732_pilon.65","Golgi apparatus","CC",0.03647959,1.121450192,0.026158834,"CvsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4059","GO:0005794","Acerv_evm.model.Segkk4047_pilon.16","Golgi apparatus","CC",0.03647959,-2.782061204,0.009909287,"T1vsT2","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4060","GO:0005794","Acerv_evm.model.Segkk3450_pilon.3","Golgi apparatus","CC",0.03647959,-0.938500769,0.032596441,"CvsT4","A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"4086","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.571409273,1.54e-91,"CvsT3","A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"4087","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.571409273,1.54e-91,"CvsT3","A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"4088","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.433317876,1.9e-77,"CvsT4","A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"4089","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.433317876,1.9e-77,"CvsT4","A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"4090","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.500485914,1.96e-78,"CvsT1","A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"4091","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.500485914,1.96e-78,"CvsT1","A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"4092","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.312290118,3.42e-84,"CvsT2","A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"4093","GO:0005834","Acerv_evm.model.Segkk3422_pilon.23","heterotrimeric G-protein complex","CC",0.022310891,-6.312290118,3.42e-84,"CvsT2","A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"6106","GO:0008180","Acerv_evm.model.Segkk1895_pilon.6","COP9 signalosome","CC",0.032416611,-1.181838233,0.011105016,"CvsT3","A.cervicornis","Florida","signalosome","nucleus","C"
+"6107","GO:0008180","Acerv_evm.model.Segkk1575_pilon.7","COP9 signalosome","CC",0.032416611,-1.945563206,0.009435072,"CvsT2","A.cervicornis","Florida","signalosome","nucleus","C"
+"6108","GO:0008180","Acerv_evm.model.Segkk1895_pilon.6","COP9 signalosome","CC",0.032416611,-1.306032646,0.010735538,"CvsT1","A.cervicornis","Florida","signalosome","nucleus","C"
+"11922","GO:0019008","Acerv_evm.model.Segkk68_pilon.68","molybdopterin synthase complex","CC",0.023879772,-1.780302179,0.005295639,"CvsT2","A.cervicornis","Florida","molybdopterin synthase complex","other cellular component","C"
+"14289","GO:0030687","Acerv_evm.model.Segkk3087_pilon.2","preribosome, large subunit precursor","CC",0.006899836,-3.168032468,2.77e-10,"CvsT1","A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14290","GO:0030687","Acerv_evm.model.Segkk893_pilon.2","preribosome, large subunit precursor","CC",0.006899836,-0.760589572,0.013316569,"CvsT2","A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14291","GO:0030687","Acerv_evm.model.Segkk3087_pilon.2","preribosome, large subunit precursor","CC",0.006899836,-3.08881108,8.44e-12,"CvsT2","A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14292","GO:0030687","Acerv_evm.model.Segkk3087_pilon.2","preribosome, large subunit precursor","CC",0.006899836,-3.190539144,1.35e-11,"CvsT4","A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14293","GO:0030687","Acerv_evm.model.Segkk3087_pilon.2","preribosome, large subunit precursor","CC",0.006899836,-3.011216852,8.44e-11,"CvsT3","A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14815","GO:0031143","Acerv_evm.model.Segkk1945_pilon.2","pseudopodium","CC",0.021654746,-2.971983022,0.000211784,"CvsT3","A.cervicornis","Florida","pseudopodium","other cellular component","C"
+"14816","GO:0031143","Acerv_evm.model.Segkk1945_pilon.2","pseudopodium","CC",0.021654746,-2.495587387,0.00470295,"CvsT2","A.cervicornis","Florida","pseudopodium","other cellular component","C"
+"14817","GO:0031143","Acerv_evm.model.Segkk1945_pilon.2","pseudopodium","CC",0.021654746,-2.953644154,0.001690962,"CvsT1","A.cervicornis","Florida","pseudopodium","other cellular component","C"
+"15739","GO:0031966","Acerv_evm.model.Segkk1991_pilon.4","mitochondrial membrane","CC",0.011394667,-1.554017345,0.006726111,"CvsT4","A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15740","GO:0031966","Acerv_evm.model.Segkk1991_pilon.4","mitochondrial membrane","CC",0.011394667,-1.554017345,0.006726111,"CvsT4","A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"15741","GO:0031966","Acerv_evm.model.Segkk1991_pilon.4","mitochondrial membrane","CC",0.011394667,-1.171529562,0.03869906,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15742","GO:0031966","Acerv_evm.model.Segkk1991_pilon.4","mitochondrial membrane","CC",0.011394667,-1.171529562,0.03869906,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"15743","GO:0031966","Acerv_evm.model.Segkk2909_pilon.1","mitochondrial membrane","CC",0.011394667,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15744","GO:0031966","Acerv_evm.model.Segkk2909_pilon.1","mitochondrial membrane","CC",0.011394667,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"15745","GO:0031966","Acerv_evm.model.Segkk4318_pilon.2","mitochondrial membrane","CC",0.011394667,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15746","GO:0031966","Acerv_evm.model.Segkk4318_pilon.2","mitochondrial membrane","CC",0.011394667,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"16130","GO:0032299","Acerv_evm.model.Segkk2518_pilon.2","ribonuclease H2 complex","CC",0.023264949,-1.867803479,0.047726234,"CvsT4","A.cervicornis","Florida","ribonuclease H2 complex","other cellular component","C"
+"16131","GO:0032299","Acerv_evm.model.Segkk2518_pilon.2","ribonuclease H2 complex","CC",0.023264949,-1.989399563,0.00425927,"CvsT2","A.cervicornis","Florida","ribonuclease H2 complex","other cellular component","C"
+"16132","GO:0032299","Acerv_evm.model.Segkk2518_pilon.2","ribonuclease H2 complex","CC",0.023264949,-1.965494875,0.028957628,"CvsT1","A.cervicornis","Florida","ribonuclease H2 complex","other cellular component","C"
+"17567","GO:0033553","Acerv_evm.model.Segkk3209_pilon.11","rDNA heterochromatin","CC",0.044114003,1.258191844,0.005323492,"CvsT2","A.cervicornis","Florida","rDNA heterochromatin","other cellular component","C"
+"18482","GO:0034362","Acerv_evm.model.Segkk1424_pilon.6","low-density lipoprotein particle","CC",0.024248516,1.550610759,0.009909287,"T1vsT2","A.cervicornis","Florida","low-density lipoprotein particle","non-structural extracellular","C"
+"19286","GO:0035098","Acerv_evm.model.Segkk1630_pilon.6","ESC/E(Z) complex","CC",0.007984054,-4.30478372,1.09e-28,"CvsT3","A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19287","GO:0035098","Acerv_evm.model.Segkk1630_pilon.6","ESC/E(Z) complex","CC",0.007984054,-4.237812934,8.07e-28,"CvsT2","A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19288","GO:0035098","Acerv_evm.model.Segkk3209_pilon.11","ESC/E(Z) complex","CC",0.007984054,1.258191844,0.005323492,"CvsT2","A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19289","GO:0035098","Acerv_evm.model.Segkk1630_pilon.6","ESC/E(Z) complex","CC",0.007984054,-4.588610748,3.35e-30,"CvsT4","A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19290","GO:0035098","Acerv_evm.model.Segkk1630_pilon.6","ESC/E(Z) complex","CC",0.007984054,-4.895151783,7.7e-34,"CvsT1","A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19545","GO:0036117","Acerv_evm.model.Segkk4124_pilon.3","hyaluranon cable","CC",0.021153966,1.96437116,0.017452579,"T1vsT2","A.cervicornis","Florida",NA,NA,NA
+"19554","GO:0036477","Acerv_evm.model.Segkk1991_pilon.4","somatodendritic compartment","CC",0.011094153,-1.554017345,0.006726111,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"19555","GO:0036477","Acerv_evm.model.Segkk2909_pilon.1","somatodendritic compartment","CC",0.011094153,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"19556","GO:0036477","Acerv_evm.model.Segkk1022_pilon.1","somatodendritic compartment","CC",0.011094153,-1.925826755,0.045581587,"CvsT3","A.cervicornis","Florida",NA,NA,NA
+"19557","GO:0036477","Acerv_evm.model.Segkk1022_pilon.1","somatodendritic compartment","CC",0.011094153,-2.29057356,0.001685307,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"19558","GO:0036477","Acerv_evm.model.Segkk1991_pilon.4","somatodendritic compartment","CC",0.011094153,-1.171529562,0.03869906,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"19559","GO:0036477","Acerv_evm.model.Segkk4318_pilon.2","somatodendritic compartment","CC",0.011094153,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"19560","GO:0036477","Acerv_evm.model.Segkk1022_pilon.1","somatodendritic compartment","CC",0.011094153,-2.491016805,0.001208032,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"20854","GO:0043204","Acerv_evm.model.Segkk1945_pilon.2","perikaryon","CC",0.025500536,-2.971983022,0.000211784,"CvsT3","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20855","GO:0043204","Acerv_evm.model.Segkk1929_pilon.4","perikaryon","CC",0.025500536,-0.786410041,0.018969586,"CvsT2","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20856","GO:0043204","Acerv_evm.model.Segkk3525_pilon.1","perikaryon","CC",0.025500536,-2.525395035,1.26e-05,"CvsT2","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20857","GO:0043204","Acerv_evm.model.Segkk1945_pilon.2","perikaryon","CC",0.025500536,-2.495587387,0.00470295,"CvsT2","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20858","GO:0043204","Acerv_evm.model.Segkk3525_pilon.1","perikaryon","CC",0.025500536,-2.726034346,1.66e-05,"CvsT1","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20859","GO:0043204","Acerv_evm.model.Segkk3525_pilon.1","perikaryon","CC",0.025500536,-2.565548995,4.75e-05,"CvsT4","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20860","GO:0043204","Acerv_evm.model.Segkk1945_pilon.2","perikaryon","CC",0.025500536,-2.953644154,0.001690962,"CvsT1","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"20861","GO:0043204","Acerv_evm.model.Segkk3525_pilon.1","perikaryon","CC",0.025500536,-2.55061998,1.03e-05,"CvsT3","A.cervicornis","Florida","perikaryon","other cellular component","C"
+"21364","GO:0043657","Acerv_evm.model.Segkk3158_pilon.3","host cell","CC",0.042291183,-1.782543561,0.013304888,"CvsT4","A.cervicornis","Florida","host cell","non-structural extracellular","C"
+"21365","GO:0043657","Acerv_evm.model.Segkk3158_pilon.3","host cell","CC",0.042291183,-1.782289602,0.005433561,"CvsT2","A.cervicornis","Florida","host cell","non-structural extracellular","C"
+"21366","GO:0043657","Acerv_evm.model.Segkk3158_pilon.3","host cell","CC",0.042291183,-1.843570483,0.0200113,"CvsT1","A.cervicornis","Florida","host cell","non-structural extracellular","C"
+"21896","GO:0044291","Acerv_evm.model.Segkk1895_pilon.6","cell-cell contact zone","CC",0.015719267,-1.181838233,0.011105016,"CvsT3","A.cervicornis","Florida",NA,NA,NA
+"21897","GO:0044291","Acerv_evm.model.Segkk1895_pilon.6","cell-cell contact zone","CC",0.015719267,-1.306032646,0.010735538,"CvsT1","A.cervicornis","Florida",NA,NA,NA
+"21898","GO:0044291","Acerv_evm.model.Segkk1929_pilon.4","cell-cell contact zone","CC",0.015719267,-0.786410041,0.018969586,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"25203","GO:0048179","Acerv_evm.model.Segkk4124_pilon.10","activin receptor complex","CC",0.031712692,-3.779735827,0.007353092,"CvsT1","A.cervicornis","Florida","activin receptor complex","other membranes","C"
+"25204","GO:0048179","Acerv_evm.model.Segkk4124_pilon.10","activin receptor complex","CC",0.031712692,-3.779735827,0.007353092,"CvsT1","A.cervicornis","Florida","activin receptor complex","plasma membrane","C"
+"30597","GO:0070652","Acerv_evm.model.Segkk1822_pilon.2","HAUS complex","CC",0.021260705,-2.470860242,0.00227523,"CvsT4","A.cervicornis","Florida","HAUS complex","cytoskeleton","C"
+"30598","GO:0070652","Acerv_evm.model.Segkk1822_pilon.2","HAUS complex","CC",0.021260705,-2.749254352,1.51e-05,"CvsT2","A.cervicornis","Florida","HAUS complex","cytoskeleton","C"
+"30745","GO:0070776","Acerv_evm.model.Segkk3394_pilon.16","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,-5.367576715,9.06e-45,"CvsT2","A.cervicornis","Florida",NA,"nucleus","None"
+"30746","GO:0070776","Acerv_evm.model.Segkk3394_pilon.16","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,-5.146010627,1.03e-40,"CvsT3","A.cervicornis","Florida",NA,"nucleus","None"
+"30747","GO:0070776","Acerv_evm.model.Segkk3394_pilon.16","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,-5.668645984,2.23e-43,"CvsT4","A.cervicornis","Florida",NA,"nucleus","None"
+"30748","GO:0070776","Acerv_evm.model.Segkk3394_pilon.16","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,-5.21903369,1.07e-35,"CvsT1","A.cervicornis","Florida",NA,"nucleus","None"
+"30882","GO:0071944","Acerv_evm.model.Segkk4345_pilon.12","cell periphery","CC",0.01490574,-1.646249274,0.005891771,"CvsT1","A.cervicornis","Florida",NA,NA,NA
+"30883","GO:0071944","Acerv_evm.model.Segkk4318_pilon.2","cell periphery","CC",0.01490574,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"30884","GO:0071944","Acerv_evm.model.Segkk2909_pilon.1","cell periphery","CC",0.01490574,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"30885","GO:0071944","Acerv_evm.model.Segkk1078_pilon.63","cell periphery","CC",0.01490574,-1.57323862,0.007820659,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"30886","GO:0071944","Acerv_evm.model.Segkk1078_pilon.63","cell periphery","CC",0.01490574,-1.574922739,0.021534056,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"31465","GO:0098588","Acerv_evm.model.Segkk4318_pilon.2","bounding membrane of organelle","CC",0.025640408,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31466","GO:0098588","Acerv_evm.model.Segkk1991_pilon.4","bounding membrane of organelle","CC",0.025640408,-1.171529562,0.03869906,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31467","GO:0098588","Acerv_evm.model.Segkk1991_pilon.4","bounding membrane of organelle","CC",0.025640408,-1.554017345,0.006726111,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"31468","GO:0098588","Acerv_evm.model.Segkk2909_pilon.1","bounding membrane of organelle","CC",0.025640408,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31469","GO:0098793","Acerv_evm.model.Segkk1022_pilon.1","presynapse","CC",0.00534615,-1.925826755,0.045581587,"CvsT3","A.cervicornis","Florida",NA,NA,NA
+"31470","GO:0098793","Acerv_evm.model.Segkk3525_pilon.1","presynapse","CC",0.00534615,-2.726034346,1.66e-05,"CvsT1","A.cervicornis","Florida",NA,NA,NA
+"31471","GO:0098793","Acerv_evm.model.Segkk3525_pilon.1","presynapse","CC",0.00534615,-2.565548995,4.75e-05,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"31472","GO:0098793","Acerv_evm.model.Segkk1022_pilon.1","presynapse","CC",0.00534615,-2.491016805,0.001208032,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"31473","GO:0098793","Acerv_evm.model.Segkk3525_pilon.1","presynapse","CC",0.00534615,-2.55061998,1.03e-05,"CvsT3","A.cervicornis","Florida",NA,NA,NA
+"31474","GO:0098793","Acerv_evm.model.Segkk3525_pilon.1","presynapse","CC",0.00534615,-2.525395035,1.26e-05,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31475","GO:0098793","Acerv_evm.model.Segkk1022_pilon.1","presynapse","CC",0.00534615,-2.29057356,0.001685307,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31476","GO:0098793","Acerv_evm.model.Segkk4318_pilon.2","presynapse","CC",0.00534615,-1.374689274,0.022123716,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31477","GO:0098793","Acerv_evm.model.Segkk1991_pilon.4","presynapse","CC",0.00534615,-1.554017345,0.006726111,"CvsT4","A.cervicornis","Florida",NA,NA,NA
+"31478","GO:0098793","Acerv_evm.model.Segkk1991_pilon.4","presynapse","CC",0.00534615,-1.171529562,0.03869906,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31479","GO:0098793","Acerv_evm.model.Segkk2909_pilon.1","presynapse","CC",0.00534615,0.696595103,0.017750505,"CvsT2","A.cervicornis","Florida",NA,NA,NA
+"31486","GO:0140268","Acerv_evm.model.Segkk3914_pilon.1","endoplasmic reticulum-plasma membrane contact site","CC",0.008392615,-1.348994207,0.010735538,"CvsT1","A.cervicornis","Florida",NA,NA,NA
+"31487","GO:0140268","Acerv_evm.model.Segkk4025_pilon.2","endoplasmic reticulum-plasma membrane contact site","CC",0.008392615,-0.842605507,0.032737812,"T1vsT2","A.cervicornis","Florida",NA,NA,NA
+"31551","GO:1990712","Acerv_evm.model.Segkk4124_pilon.10","HFE-transferrin receptor complex","CC",0.031712692,-3.779735827,0.007353092,"CvsT1","A.cervicornis","Florida",NA,NA,NA

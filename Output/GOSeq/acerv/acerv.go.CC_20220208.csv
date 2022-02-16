@@ -1,0 +1,39 @@
+"","GO.IDs","term","ontology","over_represented_pvalue","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"143","GO:0000145","exocyst","CC",0.042984627,"A.cervicornis","Florida","exocyst","other cellular component","C"
+"437","GO:0000438","core TFIIH complex portion of holo TFIIH complex","CC",0.025341352,"A.cervicornis","Florida","core TFIIH complex portion of holo TFIIH complex","nucleus","C"
+"438","GO:0000439","transcription factor TFIIH core complex","CC",0.046210721,"A.cervicornis","Florida","core TFIIH complex","nucleus","C"
+"633","GO:0000793","condensed chromosome","CC",0.014598654,"A.cervicornis","Florida","condensed chromosome","other cellular component","C"
+"655","GO:0000814","ESCRT II complex","CC",0.043509597,"A.cervicornis","Florida","ESCRT II complex","other cytoplasmic organelle","C"
+"656","GO:0000814","ESCRT II complex","CC",0.043509597,"A.cervicornis","Florida","ESCRT II complex","other membranes","C"
+"840","GO:0001533","cornified envelope","CC",0.027822697,"A.cervicornis","Florida","cornified envelope","cytoskeleton","C"
+"3824","GO:0005642","annulate lamellae","CC",0.043005025,"A.cervicornis","Florida","annulate lamellae","other membranes","C"
+"3833","GO:0005658","alpha DNA polymerase:primase complex","CC",0.044497493,"A.cervicornis","Florida","alpha DNA polymerase:primase complex","nucleus","C"
+"3841","GO:0005669","transcription factor TFIID complex","CC",0.006189877,"A.cervicornis","Florida","transcription factor TFIID complex","nucleus","C"
+"3938","GO:0005770","late endosome","CC",0.037718377,"A.cervicornis","Florida","late endosome","other cytoplasmic organelle","C"
+"3968","GO:0005794","Golgi apparatus","CC",0.03647959,"A.cervicornis","Florida","Golgi apparatus","ER/Golgi","C"
+"3994","GO:0005834","heterotrimeric G-protein complex","CC",0.022310891,"A.cervicornis","Florida","heterotrimeric G-protein complex","plasma membrane","C"
+"3995","GO:0005834","heterotrimeric G-protein complex","CC",0.022310891,"A.cervicornis","Florida","heterotrimeric G-protein complex","other membranes","C"
+"5954","GO:0008180","COP9 signalosome","CC",0.032416611,"A.cervicornis","Florida","signalosome","nucleus","C"
+"11709","GO:0019008","molybdopterin synthase complex","CC",0.023879772,"A.cervicornis","Florida","molybdopterin synthase complex","other cellular component","C"
+"14053","GO:0030687","preribosome, large subunit precursor","CC",0.006899836,"A.cervicornis","Florida","preribosome, large subunit precursor","other cellular component","C"
+"14569","GO:0031143","pseudopodium","CC",0.021654746,"A.cervicornis","Florida","pseudopodium","other cellular component","C"
+"15491","GO:0031966","mitochondrial membrane","CC",0.011394667,"A.cervicornis","Florida","mitochondrial membrane","other membranes","C"
+"15492","GO:0031966","mitochondrial membrane","CC",0.011394667,"A.cervicornis","Florida","mitochondrial membrane","mitochondrion","C"
+"15872","GO:0032299","ribonuclease H2 complex","CC",0.023264949,"A.cervicornis","Florida","ribonuclease H2 complex","other cellular component","C"
+"17287","GO:0033553","rDNA heterochromatin","CC",0.044114003,"A.cervicornis","Florida","rDNA heterochromatin","other cellular component","C"
+"18194","GO:0034362","low-density lipoprotein particle","CC",0.024248516,"A.cervicornis","Florida","low-density lipoprotein particle","non-structural extracellular","C"
+"18994","GO:0035098","ESC/E(Z) complex","CC",0.007984054,"A.cervicornis","Florida","ESC/E(Z) complex","nucleus","C"
+"19250","GO:0036117","hyaluranon cable","CC",0.021153966,"A.cervicornis","Florida",NA,NA,NA
+"19259","GO:0036477","somatodendritic compartment","CC",0.011094153,"A.cervicornis","Florida",NA,NA,NA
+"20548","GO:0043204","perikaryon","CC",0.025500536,"A.cervicornis","Florida","perikaryon","other cellular component","C"
+"21036","GO:0043657","host cell","CC",0.042291183,"A.cervicornis","Florida","host cell","non-structural extracellular","C"
+"21556","GO:0044291","cell-cell contact zone","CC",0.015719267,"A.cervicornis","Florida",NA,NA,NA
+"24828","GO:0048179","activin receptor complex","CC",0.031712692,"A.cervicornis","Florida","activin receptor complex","plasma membrane","C"
+"24829","GO:0048179","activin receptor complex","CC",0.031712692,"A.cervicornis","Florida","activin receptor complex","other membranes","C"
+"30183","GO:0070652","HAUS complex","CC",0.021260705,"A.cervicornis","Florida","HAUS complex","cytoskeleton","C"
+"30331","GO:0070776","MOZ/MORF histone acetyltransferase complex","CC",0.043877015,"A.cervicornis","Florida",NA,"nucleus","None"
+"30471","GO:0071944","cell periphery","CC",0.01490574,"A.cervicornis","Florida",NA,NA,NA
+"31074","GO:0098588","bounding membrane of organelle","CC",0.025640408,"A.cervicornis","Florida",NA,NA,NA
+"31076","GO:0098793","presynapse","CC",0.00534615,"A.cervicornis","Florida",NA,NA,NA
+"31106","GO:0140268","endoplasmic reticulum-plasma membrane contact site","CC",0.008392615,"A.cervicornis","Florida",NA,NA,NA
+"31222","GO:1990712","HFE-transferrin receptor complex","CC",0.031712692,"A.cervicornis","Florida",NA,NA,NA

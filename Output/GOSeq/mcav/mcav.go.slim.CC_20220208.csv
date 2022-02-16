@@ -1,0 +1,56 @@
+"","GO.IDs","gene_id","term","ontology","over_represented_pvalue","log2FoldChange","padj","Treatment_Compare","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"501","GO:0000502","Mcavernosa30571","proteasome complex","CC",0.030201637,3.975067304,1.61e-07,"CvsT3","M.cavernosa","Florida","proteasome complex","other cellular component","C"
+"502","GO:0000502","Mcavernosa30571","proteasome complex","CC",0.030201637,3.02436151,0.000328235,"CvsT4","M.cavernosa","Florida","proteasome complex","other cellular component","C"
+"503","GO:0000502","Mcavernosa30571","proteasome complex","CC",0.030201637,4.512290209,2.02e-09,"CvsT1","M.cavernosa","Florida","proteasome complex","other cellular component","C"
+"504","GO:0000502","Mcavernosa30571","proteasome complex","CC",0.030201637,3.292573354,3.45e-05,"CvsT2","M.cavernosa","Florida","proteasome complex","other cellular component","C"
+"629","GO:0000786","Mcavernosa29012","nucleosome","CC",0.042634936,-1.170659109,0.019439523,"CvsT3","M.cavernosa","Florida","nucleosome","other cellular component","C"
+"1048","GO:0001772","Mcavernosa02339","immunological synapse","CC",0.03500846,1.071517133,0.018244336,"CvsT2","M.cavernosa","Florida","immunological synapse","plasma membrane","C"
+"1049","GO:0001772","Mcavernosa02339","immunological synapse","CC",0.03500846,1.071517133,0.018244336,"CvsT2","M.cavernosa","Florida","immunological synapse","other membranes","C"
+"1233","GO:0001931","Mcavernosa25973","uropod","CC",0.017055801,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","uropod","other cellular component","C"
+"1234","GO:0001931","Mcavernosa25973","uropod","CC",0.017055801,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","uropod","other cellular component","C"
+"3958","GO:0005769","Mcavernosa25973","early endosome","CC",0.014625799,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","early endosome","other cytoplasmic organelle","C"
+"3959","GO:0005769","Mcavernosa25973","early endosome","CC",0.014625799,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","early endosome","other cytoplasmic organelle","C"
+"3960","GO:0005769","Mcavernosa24806","early endosome","CC",0.014625799,-0.991656755,0.041178809,"CvsT2","M.cavernosa","Florida","early endosome","other cytoplasmic organelle","C"
+"3961","GO:0005769","Mcavernosa02339","early endosome","CC",0.014625799,1.071517133,0.018244336,"CvsT2","M.cavernosa","Florida","early endosome","other cytoplasmic organelle","C"
+"4095","GO:0005912","Mcavernosa25973","adherens junction","CC",0.010302974,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","adherens junction","other membranes","C"
+"4096","GO:0005912","Mcavernosa25973","adherens junction","CC",0.010302974,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","adherens junction","plasma membrane","C"
+"4097","GO:0005912","Mcavernosa25973","adherens junction","CC",0.010302974,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","adherens junction","other membranes","C"
+"4098","GO:0005912","Mcavernosa25973","adherens junction","CC",0.010302974,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","adherens junction","plasma membrane","C"
+"4099","GO:0005912","Mcavernosa21617","adherens junction","CC",0.010302974,1.018044844,0.0402567,"CvsT2","M.cavernosa","Florida","adherens junction","other membranes","C"
+"4100","GO:0005912","Mcavernosa21617","adherens junction","CC",0.010302974,1.018044844,0.0402567,"CvsT2","M.cavernosa","Florida","adherens junction","plasma membrane","C"
+"6955","GO:0009277","Mcavernosa15302","fungal-type cell wall","CC",0.009197955,-5.344808043,0.01764079,"CvsT3","M.cavernosa","Florida","fungal-type cell wall","other cellular component","C"
+"7114","GO:0009505","Mcavernosa01252","plant-type cell wall","CC",0.014385395,-2.691997683,0.000245061,"CvsT2","M.cavernosa","Florida","plant-type cell wall","other cellular component","C"
+"7115","GO:0009505","Mcavernosa01252","plant-type cell wall","CC",0.014385395,-2.078152054,0.039662932,"CvsT1","M.cavernosa","Florida","plant-type cell wall","other cellular component","C"
+"7499","GO:0009897","Mcavernosa25973","external side of plasma membrane","CC",0.029453952,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","external side of plasma membrane","other membranes","C"
+"7500","GO:0009897","Mcavernosa25973","external side of plasma membrane","CC",0.029453952,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","external side of plasma membrane","plasma membrane","C"
+"7501","GO:0009897","Mcavernosa25973","external side of plasma membrane","CC",0.029453952,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","external side of plasma membrane","other membranes","C"
+"7502","GO:0009897","Mcavernosa25973","external side of plasma membrane","CC",0.029453952,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","external side of plasma membrane","plasma membrane","C"
+"7503","GO:0009897","Mcavernosa15503","external side of plasma membrane","CC",0.029453952,-1.847841721,0.036764989,"CvsT2","M.cavernosa","Florida","external side of plasma membrane","other membranes","C"
+"7504","GO:0009897","Mcavernosa15503","external side of plasma membrane","CC",0.029453952,-1.847841721,0.036764989,"CvsT2","M.cavernosa","Florida","external side of plasma membrane","plasma membrane","C"
+"7505","GO:0009897","Mcavernosa15503","external side of plasma membrane","CC",0.029453952,-2.09934597,0.008148406,"CvsT3","M.cavernosa","Florida","external side of plasma membrane","other membranes","C"
+"7506","GO:0009897","Mcavernosa15503","external side of plasma membrane","CC",0.029453952,-2.09934597,0.008148406,"CvsT3","M.cavernosa","Florida","external side of plasma membrane","plasma membrane","C"
+"10372","GO:0016600","Mcavernosa25973","flotillin complex","CC",0.027739417,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","flotillin complex","other membranes","C"
+"10373","GO:0016600","Mcavernosa25973","flotillin complex","CC",0.027739417,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","flotillin complex","plasma membrane","C"
+"10374","GO:0016600","Mcavernosa25973","flotillin complex","CC",0.027739417,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","flotillin complex","other membranes","C"
+"10375","GO:0016600","Mcavernosa25973","flotillin complex","CC",0.027739417,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","flotillin complex","plasma membrane","C"
+"13539","GO:0030027","Mcavernosa18547","lamellipodium","CC",0.038552729,-2.68666738,4.73e-07,"CvsT3","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13540","GO:0030027","Mcavernosa25973","lamellipodium","CC",0.038552729,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13541","GO:0030027","Mcavernosa18547","lamellipodium","CC",0.038552729,-2.479373075,2.3e-05,"CvsT4","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13542","GO:0030027","Mcavernosa18547","lamellipodium","CC",0.038552729,-2.18273819,0.000320485,"CvsT2","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13543","GO:0030027","Mcavernosa18547","lamellipodium","CC",0.038552729,-2.295514097,8.89e-05,"CvsT1","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"13544","GO:0030027","Mcavernosa25973","lamellipodium","CC",0.038552729,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida","lamellipodium","other cellular component","C"
+"20652","GO:0043226","Mcavernosa21617","organelle","CC",0.025512308,1.018044844,0.0402567,"CvsT2","M.cavernosa","Florida","organelle","other cellular component","C"
+"20653","GO:0043226","Mcavernosa02620","organelle","CC",0.025512308,-2.782782023,0.003814831,"CvsT2","M.cavernosa","Florida","organelle","other cellular component","C"
+"21635","GO:0044291","Mcavernosa25973","cell-cell contact zone","CC",0.022525308,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"21636","GO:0044291","Mcavernosa25973","cell-cell contact zone","CC",0.022525308,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida",NA,NA,NA
+"24791","GO:0048046","Mcavernosa01252","apoplast","CC",0.009217614,-2.691997683,0.000245061,"CvsT2","M.cavernosa","Florida","apoplast","non-structural extracellular","C"
+"24792","GO:0048046","Mcavernosa01252","apoplast","CC",0.009217614,-2.078152054,0.039662932,"CvsT1","M.cavernosa","Florida","apoplast","non-structural extracellular","C"
+"30490","GO:0071203","Mcavernosa02339","WASH complex","CC",0.029235944,1.071517133,0.018244336,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"30498","GO:0071817","Mcavernosa25968","MMXD complex","CC",0.011806576,-3.394989178,0.001201334,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"31041","GO:0097361","Mcavernosa25968","CIA complex","CC",0.017506403,-3.394989178,0.001201334,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"31043","GO:0098691","Mcavernosa25973","dopaminergic synapse","CC",0.032318253,-2.719399108,0.000239703,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"31044","GO:0098691","Mcavernosa25973","dopaminergic synapse","CC",0.032318253,2.726494755,0.002353914,"T2vsT3","M.cavernosa","Florida",NA,NA,NA
+"31047","GO:0099523","Mcavernosa03157","presynaptic cytosol","CC",0.049087065,-2.306681698,0.013384452,"CvsT2","M.cavernosa","Florida",NA,NA,NA
+"31090","GO:1990111","Mcavernosa22344","spermatoproteasome complex","CC",0.021631493,-4.008289508,0.017345891,"CvsT4","M.cavernosa","Florida",NA,NA,NA
+"31092","GO:1990712","Mcavernosa15503","HFE-transferrin receptor complex","CC",0.005289377,-2.09934597,0.008148406,"CvsT3","M.cavernosa","Florida",NA,NA,NA
+"31093","GO:1990712","Mcavernosa15503","HFE-transferrin receptor complex","CC",0.005289377,-1.847841721,0.036764989,"CvsT2","M.cavernosa","Florida",NA,NA,NA

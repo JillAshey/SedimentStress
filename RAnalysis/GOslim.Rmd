@@ -16,157 +16,179 @@ library(tidyverse)
 
 This code uses GO term annotation generated in Nov-Dec 2021 and Jan 2022
 
+# Read in go slim info
+```{r}
+go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
+colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
+```
+
 ## Acerv
 ```{r}
 # Read in acerv DEG GO terms 
 acerv.go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)
-acerv.go <- select(acerv.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
-colnames(acerv.go)[1] <-"GO.IDs"
+acerv.go <- select(acerv.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(acerv.go)[2] <-"GO.IDs"
 acerv.go$Species <- "A.cervicornis"
 acerv.go$Site <- "Florida"
 acerv.go <- unique(acerv.go)
 length(unique(acerv.go$GO.IDs)) # 366 unique GO terms 
 
-# Subset by BP
-acerv.go.BP <- subset(acerv.go, ontology == "BP")
-acerv.go.BP <- unique(acerv.go.BP)
-length(unique(acerv.go.BP$GO.IDs)) # 278 unique BP GO terms 
+# Merge w/ GO slim and subset by ontology
+acerv.go.slim <- merge(acerv.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(acerv.go.slim, "Output/GOSeq/acerv/acerv.go.slim_20220208.csv")
 
-# Subset by CC
-acerv.go.CC <- subset(acerv.go, ontology == "CC")
-acerv.go.CC <- unique(acerv.go.CC)
-length(unique(acerv.go.CC$GO.IDs)) # 34 unique CC GO terms 
+acerv.go.slim.BP <- subset(acerv.go.slim, ontology == "BP")
+acerv.go.slim.BP <- unique(acerv.go.slim.BP)
+length(unique(acerv.go.slim.BP$GO.IDs)) # 278 unique BP GO terms 
+write.csv(acerv.go.slim.BP, "Output/GOSeq/acerv/acerv.go.slim.BP_20220208.csv")
 
-# Subset by MF
-acerv.go.MF <- subset(acerv.go, ontology == "MF")
-acerv.go.MF <- unique(acerv.go.MF)
-length(unique(acerv.go.MF$GO.IDs)) # 54 unique MF GO terms 
+
+acerv.go.slim.CC <- subset(acerv.go.slim, ontology == "CC")
+acerv.go.slim.CC <- unique(acerv.go.slim.CC)
+length(unique(acerv.go.slim.CC$GO.IDs)) # 34 unique CC GO terms 
+write.csv(acerv.go.slim.CC, "Output/GOSeq/acerv/acerv.go.slim.CC_20220208.csv")
+
+acerv.go.slim.MF <- subset(acerv.go.slim, ontology == "MF")
+acerv.go.slim.MF <- unique(acerv.go.slim.MF)
+length(unique(acerv.go.slim.MF$GO.IDs)) # 54 unique MF GO terms 
+write.csv(acerv.go.slim.MF, "Output/GOSeq/acerv/acerv.go.slim.MF_20220208.csv")
 ```
 
 ## Mcav
 ```{r}
 # Read in Mcav DEG GO terms 
 mcav.go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)
-mcav.go <- select(mcav.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
-colnames(mcav.go)[1] <-"GO.IDs"
+mcav.go <- select(mcav.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(mcav.go)[2] <-"GO.IDs"
 mcav.go$Species <- "M.cavernosa"
 mcav.go$Site <- "Florida"
 mcav.go <- unique(mcav.go)
 length(unique(mcav.go$GO.IDs)) # 220 unique GO terms 
 
-# Subset by BP
-mcav.go.BP <- subset(mcav.go, ontology == "BP")
-mcav.go.BP <- unique(mcav.go.BP)
-length(unique(mcav.go.BP$GO.IDs)) # 158 unique BP GO terms 
+# Merge w/ GO slim and subset by ontology
+mcav.go.slim <- merge(mcav.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(mcav.go.slim, "Output/GOSeq/mcav/mcav.go.slim_20220208.csv")
 
-# Subset by CC
-mcav.go.CC <- subset(mcav.go, ontology == "CC")
-mcav.go.CC <- unique(mcav.go.CC)
-length(unique(mcav.go.CC$GO.IDs)) # 21 unique CC GO terms 
+mcav_all.go.slim.BP <- subset(mcav.go.slim, ontology == "BP")
+mcav_all.go.slim.BP <- unique(mcav_all.go.slim.BP)
+length(unique(mcav_all.go.slim.BP$GO.IDs)) # 158 unique BP GO terms 
+write.csv(mcav_all.go.slim.BP, "Output/GOSeq/mcav/mcav.go.slim.BP_20220208.csv")
 
-# Subset by MF
-mcav.go.MF <- subset(mcav.go, ontology == "MF")
-mcav.go.MF <- unique(mcav.go.MF)
-length(unique(mcav.go.MF$GO.IDs)) # 39 unique MF GO terms 
+mcav_all.go.slim.CC <- subset(mcav.go.slim, ontology == "CC")
+mcav_all.go.slim.CC <- unique(mcav_all.go.slim.CC)
+length(unique(mcav_all.go.slim.CC$GO.IDs)) # 21 unique BP GO terms 
+write.csv(mcav_all.go.slim.CC, "Output/GOSeq/mcav/mcav.go.slim.CC_20220208.csv")
+
+mcav_all.go.slim.MF <- subset(mcav.go.slim, ontology == "MF")
+mcav_all.go.slim.MF <- unique(mcav_all.go.slim.MF)
+length(unique(mcav_all.go.slim.MF$GO.IDs)) # 39 unique BP GO terms 
+write.csv(mcav_all.go.slim.MF, "Output/GOSeq/mcav/mcav.go.slim.MF_20220208.csv")
 ```
 
 ## Ofav
 ```{r}
 # Read in Ofav DEG GO terms 
 ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
-ofav.go <- select(ofav.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
-colnames(ofav.go)[1] <-"GO.IDs"
+ofav.go <- select(ofav.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(ofav.go)[2] <-"GO.IDs"
 ofav.go$Species <- "O.faveolata"
 ofav.go$Site <- "Florida"
 ofav.go <- unique(ofav.go)
 length(unique(ofav.go$GO.IDs)) # 39 unique GO terms 
 
-# Subset by BP
-ofav.go.BP <- subset(ofav.go, ontology == "BP")
-ofav.go.BP <- unique(ofav.go.BP)
-length(unique(ofav.go.BP$GO.IDs)) # 27 unique BP GO terms 
 
-# Subset by CC
-ofav.go.CC <- subset(ofav.go, ontology == "CC")
-ofav.go.CC <- unique(ofav.go.CC)
-length(unique(ofav.go.CC$GO.IDs)) # 3 unique CC GO terms 
+# Merge w/ GO slim and subset by ontology
+ofav.go.slim <- merge(ofav.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(ofav.go.slim, "Output/GOSeq/ofav/ofav.go.slim_20220208.csv")
 
-# Subset by BP
-ofav.go.MF <- subset(ofav.go, ontology == "MF")
-ofav.go.MF <- unique(ofav.go.MF)
-length(unique(ofav.go.MF$GO.IDs)) # 9 unique MF GO terms 
+ofav_all.go.slim.BP <- subset(ofav.go.slim, ontology == "BP")
+ofav_all.go.slim.BP <- unique(ofav_all.go.slim.BP)
+length(unique(ofav_all.go.slim.BP$GO.IDs)) # 27 unique BP GO terms 
+write.csv(ofav_all.go.slim.BP, "Output/GOSeq/ofav/ofav.go.slim.BP_20220208.csv")
+
+ofav_all.go.slim.CC <- subset(ofav.go.slim, ontology == "CC")
+ofav_all.go.slim.CC <- unique(ofav_all.go.slim.CC)
+length(unique(ofav_all.go.slim.CC$GO.IDs)) # 3 unique BP GO terms 
+write.csv(ofav_all.go.slim.CC, "Output/GOSeq/ofav/ofav.go.slim.CC_20220208.csv")
+
+ofav_all.go.slim.MF <- subset(ofav.go.slim, ontology == "MF")
+ofav_all.go.slim.MF <- unique(ofav_all.go.slim.MF)
+length(unique(ofav_all.go.slim.MF$GO.IDs)) # 9 unique BP GO terms 
+write.csv(ofav_all.go.slim.MF, "Output/GOSeq/ofav/ofav.go.slim.MF_20220208.csv")
 ```
 
 ## Pacuta 
 ```{r}
 # Read in pacuta DEG GO terms
 pacuta.go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)
-pacuta.go <- select(pacuta.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
-colnames(pacuta.go)[1] <-"GO.IDs"
+pacuta.go <- select(pacuta.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(pacuta.go)[2] <-"GO.IDs"
 pacuta.go$Species <- "P.acuta"
 pacuta.go$Site <- "Hawaii"
 pacuta.go <- unique(pacuta.go)
 length(unique(pacuta.go$GO.IDs)) # 532 unique GO terms 
 
-# Subset by BP
-pacuta.go.BP <- subset(pacuta.go, ontology == "BP")
-pacuta.go.BP <- unique(pacuta.go.BP)
-length(unique(pacuta.go.BP$GO.IDs)) # 380 unique BP GO terms 
+# Merge w/ GO slim and subset by ontology
+pacuta.go.slim <- merge(pacuta.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(pacuta.go.slim, "Output/GOSeq/pacuta/pacuta.go.slim_20220208.csv")
 
-# Subset by CC
-pacuta.go.CC <- subset(pacuta.go, ontology == "CC")
-pacuta.go.CC <- unique(pacuta.go.CC)
-length(unique(pacuta.go.CC$GO.IDs)) # 25 unique CC GO terms 
+pacuta_all.go.slim.BP <- subset(pacuta.go.slim, ontology == "BP")
+pacuta_all.go.slim.BP <- unique(pacuta_all.go.slim.BP)
+length(unique(pacuta_all.go.slim.BP$GO.IDs)) # 380 unique BP GO terms 
+write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/pacuta/pacuta.go.slim.BP_20220208.csv")
 
-# Subset by MF
-pacuta.go.MF <- subset(pacuta.go, ontology == "MF")
-pacuta.go.MF <- unique(pacuta.go.MF)
-length(unique(pacuta.go.MF$GO.IDs)) # 126 unique MF GO terms 
+pacuta_all.go.slim.CC <- subset(pacuta.go.slim, ontology == "CC")
+pacuta_all.go.slim.CC <- unique(pacuta_all.go.slim.CC)
+length(unique(pacuta_all.go.slim.CC$GO.IDs)) # 25 unique BP GO terms 
+write.csv(pacuta_all.go.slim.CC, "Output/GOSeq/pacuta/pacuta.go.slim.CC_20220208.csv")
+
+pacuta_all.go.slim.MF <- subset(pacuta.go.slim, ontology == "MF")
+pacuta_all.go.slim.MF <- unique(pacuta_all.go.slim.MF)
+length(unique(pacuta_all.go.slim.MF$GO.IDs)) # 126 unique BP GO terms 
+write.csv(pacuta_all.go.slim.MF, "Output/GOSeq/pacuta/pacuta.go.slim.MF_20220208.csv")
+
 ```
 
 ## Plob 
 ```{r}
 # Read in plob DEG GO terms
 plob.go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)
-plob.go <- select(plob.go, c("category", "term", "ontology", "over_represented_pvalue")) # can add treatment compare if interested 
-colnames(plob.go)[1] <-"GO.IDs"
+plob.go <- select(plob.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(plob.go)[2] <-"GO.IDs"
 plob.go$Species <- "P.lobata"
 plob.go$Site <- "Hawaii"
 plob.go <- unique(plob.go)
 length(unique(plob.go$GO.IDs)) # 279 unique GO terms 
 
-# Subset by BP
-plob.go.BP <- subset(plob.go, ontology == "BP")
-plob.go.BP <- unique(plob.go.BP)
-length(unique(plob.go.BP$GO.IDs)) # 198 unique BP GO terms 
+# Merge w/ GO slim and subset by ontology
+plob.go.slim <- merge(plob.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(plob.go.slim, "Output/GOSeq/plob/plob.go.slim_20220208.csv")
 
-# Subset by CC
-plob.go.CC <- subset(plob.go, ontology == "CC")
-plob.go.CC <- unique(plob.go.CC)
-length(unique(plob.go.CC$GO.IDs)) # 31 unique CC GO terms 
+plob_all.go.slim.BP <- subset(plob.go.slim, ontology == "BP")
+plob_all.go.slim.BP <- unique(plob_all.go.slim.BP)
+length(unique(plob_all.go.slim.BP$GO.IDs)) # 198 unique BP GO terms 
+write.csv(plob_all.go.slim.BP, "Output/GOSeq/plob/plob.go.slim.BP_20220208.csv")
 
-# Subset by MF
-plob.go.MF <- subset(plob.go, ontology == "MF")
-plob.go.MF <- unique(plob.go.MF)
-length(unique(plob.go.MF$GO.IDs)) # 50 unique MF GO terms 
+plob_all.go.slim.CC <- subset(plob.go.slim, ontology == "CC")
+plob_all.go.slim.CC <- unique(plob_all.go.slim.CC)
+length(unique(plob_all.go.slim.CC$GO.IDs)) # 31 unique BP GO terms 
+write.csv(plob_all.go.slim.CC, "Output/GOSeq/plob/plob.go.slim.CC_20220208.csv")
+
+plob_all.go.slim.MF <- subset(plob.go.slim, ontology == "MF")
+plob_all.go.slim.MF <- unique(plob_all.go.slim.MF)
+length(unique(plob_all.go.slim.MF$GO.IDs)) # 50 unique BP GO terms 
+write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
 ```
 
-
-## Merge w/ GO slim terms 
+## Combine GO slim terms with all species in single df 
 ```{r}
-# Read in go slim info
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-
-# Bind all species df together for GO slim plot and merge w/ GO slim terms
-all.go <- rbind(acerv.go, 
-                     mcav.go, 
-                     ofav.go,
-                     pacuta.go, 
-                     plob.go)
-write.csv(all.go, "Output/GOSeq/all.go_20220121.csv")
-all.go.slim <- merge(all.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220121.csv")
+# Bind all species df together for GO slim plot 
+all.go.slim <- rbind(acerv.go.slim, 
+                     mcav.go.slim, 
+                     ofav.go.slim,
+                     pacuta.go.slim, 
+                     plob.go.slim)
+write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220208.csv")
 
 # Plot 
 all.go.slim <- na.omit(all.go.slim)
@@ -185,15 +207,13 @@ ggsave("Output/Figs/all_GOslim_20220121.pdf", GO.all, width = 40, height = 40, u
 
 
 
-# Bind all species df together for BP GO slim plot and merge w/ GO slim terms
-all.go.BP <- rbind(acerv.go.BP, 
-                     mcav.go.BP, 
-                     ofav.go.BP,
-                     pacuta.go.BP, 
-                     plob.go.BP)
-write.csv(all.go.BP, "Output/GOSeq/all.go.BP_20220121.csv")
-all.go.BP.slim <- merge(all.go.BP, go.slim, by="GO.IDs", all = TRUE)
-write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220121.csv")
+# Bind all species df together for BP GO slim plot 
+all.go.BP.slim <- rbind(acerv.go.slim.BP, 
+                     mcav_all.go.slim.BP, 
+                     ofav_all.go.slim.BP,
+                     pacuta_all.go.slim.BP, 
+                     plob_all.go.slim.BP)
+write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220208.csv")
 
 # Plot 
 all.go.BP.slim <- na.omit(all.go.BP.slim)
@@ -209,15 +229,13 @@ GO.BP.all
 ggsave("Output/Figs/all_GOslim.BP_20220121.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
 
 
-# Bind all species df together for CC GO slim plot and merge w/ GO slim terms
-all.go.CC <- rbind(acerv.go.CC, 
-                     mcav.go.CC, 
-                     ofav.go.CC,
-                     pacuta.go.CC, 
-                     plob.go.CC)
-write.csv(all.go.CC, "Output/GOSeq/all.go.CC_20220125.csv")
-all.go.CC.slim <- merge(all.go.CC, go.slim, by="GO.IDs", all = TRUE)
-write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220125.csv")
+# Bind all species df together for CC GO slim plot 
+all.go.CC.slim <- rbind(acerv.go.slim.CC, 
+                     mcav_all.go.slim.CC, 
+                     ofav_all.go.slim.CC,
+                     pacuta_all.go.slim.CC, 
+                     plob_all.go.slim.CC)
+write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220208.csv")
 
 # Plot 
 all.go.CC.slim <- na.omit(all.go.CC.slim)
@@ -234,14 +252,12 @@ ggsave("Output/Figs/all_GOslim.CC_20220125.pdf", GO.CC.all, width = 40, height =
 
 
 # Bind all species df together for MF GO slim plot and merge w/ GO slim terms
-all.go.MF <- rbind(acerv.go.MF, 
-                     mcav.go.MF, 
-                     ofav.go.MF,
-                     pacuta.go.MF, 
-                     plob.go.MF)
-write.csv(all.go.MF, "Output/GOSeq/all.go.MF_20220125.csv")
-all.go.MF.slim <- merge(all.go.MF, go.slim, by="GO.IDs", all = TRUE)
-write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220125.csv")
+all.go.MF.slim <- rbind(acerv.go.slim.MF, 
+                     mcav_all.go.slim.MF, 
+                     ofav_all.go.slim.MF,
+                     pacuta_all.go.slim.MF, 
+                     plob_all.go.slim.MF)
+write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220208.csv")
 
 # Plot 
 all.go.MF.slim <- na.omit(all.go.MF.slim)
@@ -262,7 +278,11 @@ Make bar chart for go slim term counts for all species
 unique(all.go.BP.slim$Species)
 # "A.cervicornis" "P.lobata"      "P.acuta"       "M.cavernosa"  "O.faveolata"  
 
-count_by_group <- all.go.BP.slim %>%
+## plotting unique GO terms only - if I plot with all.go.BP.slim, I get duplicate GO slim terms bc its duplicating based on gene id/treatment?
+test <- select(all.go.BP.slim, c("GO.IDs", "term", "Species", "GO.Slim.Term"))
+test <- unique(test)
+
+count_by_group <- test %>%
   count(Species, GO.Slim.Term)
 count_by_group
 
@@ -270,6 +290,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
   geom_bar(position = "dodge", stat = "identity") +
 #  geom_text(aes(label = n), vjust = 0) +
   theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
+  theme(axis.text=element_text(size=50)) + 
+  theme(legend.key.size = unit(2, 'cm'), legend.text = element_text(size=30)) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"))
 count
 ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220207.pdf", count, width = 40, height = 40, units = c("in"))

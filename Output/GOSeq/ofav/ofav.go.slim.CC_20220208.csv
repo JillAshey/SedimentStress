@@ -1,0 +1,9 @@
+"","GO.IDs","gene_id","term","ontology","over_represented_pvalue","log2FoldChange","padj","Treatment_Compare","Species","Site","GO.Term","GO.Slim.Term","Cat"
+"3781","GO:0005622","LOC110045321","intracellular","CC",0.044978235,-1.645674615,0.006645657,"CvsT3","O.faveolata","Florida","intracellular","other cellular component","C"
+"7469","GO:0009941","LOC110045321","chloroplast envelope","CC",0.003095816,-1.645674615,0.006645657,"CvsT3","O.faveolata","Florida","chloroplast envelope","other cellular component","C"
+"30280","GO:0071944","LOC110047898","cell periphery","CC",0.000500808,-9.449587794,5.35e-06,"CvsT3","O.faveolata","Florida",NA,NA,NA
+"30281","GO:0071944","LOC110044078","cell periphery","CC",0.000500808,-3.163505819,0.026412438,"CvsT1","O.faveolata","Florida",NA,NA,NA
+"30282","GO:0071944","LOC110044078","cell periphery","CC",0.000500808,-3.276836382,0.006645657,"CvsT3","O.faveolata","Florida",NA,NA,NA
+"30283","GO:0071944","LOC110047898","cell periphery","CC",0.000500808,-9.1881256,1.55e-05,"CvsT1","O.faveolata","Florida",NA,NA,NA
+"30284","GO:0071944","LOC110047898","cell periphery","CC",0.000500808,-9.13858917,2.04e-05,"CvsT2","O.faveolata","Florida",NA,NA,NA
+"30285","GO:0071944","LOC110047898","cell periphery","CC",0.000500808,-9.454277194,4.84e-06,"CvsT4","O.faveolata","Florida",NA,NA,NA

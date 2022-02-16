@@ -21,8 +21,8 @@ b) Generate genome index
 
 Forgot that STAR needs transcript_id identifier to run properly, so added that identifier for Pacuta in R. Renamed gff file as Pacuta.gff.annotations.fixed_transcript.gff3
 
-Create genome index file in ```/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR
-``` and run genome index step of STAR
+
+Run genome index step of STAR
 
 ```
 mkdir GenomeIndex_pacuta
@@ -34,11 +34,6 @@ STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillas
 
 Said it was starting, but I stopped it after 20 mins because it shouldn't be taking that long. There was nothing in the GenomeIndex_pacuta directory either. 
 
-```
-Jan 10 13:30:46 ..... started STAR run
-Jan 10 13:30:47 ... starting to generate Genome files
-^C
-```
 
 Write as a script and submit as job 
 

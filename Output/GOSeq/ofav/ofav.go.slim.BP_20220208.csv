@@ -1,0 +1,31 @@
+,GO.IDs,gene_id,term,ontology,over_represented_pvalue,log2FoldChange,padj,Treatment_Compare,Species,Site,GO.Term,GO.Slim.Term,Cat
+19348,GO:0042127,LOC110045321,regulation of cell population proliferation,BP,0.015339655,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,regulation of cell proliferation,cell cycle and proliferation,P
+20325,GO:0043065,LOC110044078,positive regulation of apoptotic process,BP,0.029316197,-3.163505819,0.026412438,CvsT1,O.faveolata,Florida,positive regulation of apoptosis,death,P
+20326,GO:0043065,LOC110044078,positive regulation of apoptotic process,BP,0.029316197,-3.276836382,0.006645657,CvsT3,O.faveolata,Florida,positive regulation of apoptosis,death,P
+20327,GO:0043066,LOC110045321,negative regulation of apoptotic process,BP,0.045032743,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,negative regulation of apoptosis,death,P
+972,GO:0001701,LOC110045321,in utero embryonic development,BP,0.026484492,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,in utero embryonic development,developmental processes,P
+1370,GO:0002063,LOC110045321,chondrocyte development,BP,0.004319822,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,chondrocyte development,developmental processes,P
+7317,GO:0009791,LOC110045321,post-embryonic development,BP,0.011839576,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,post-embryonic development,developmental processes,P
+19984,GO:0042733,LOC110045321,embryonic digit morphogenesis,BP,0.009820697,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,embryonic digit morphogenesis,developmental processes,P
+25296,GO:0048703,LOC110045321,embryonic viscerocranium morphogenesis,BP,0.006742538,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,embryonic viscerocranium morphogenesis,developmental processes,P
+19191,GO:0036342,LOC110045321,post-anal tail morphogenesis,BP,0.011091127,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+30278,GO:0071260,LOC110045321,cellular response to mechanical stimulus,BP,0.011615123,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+30279,GO:0071864,LOC110045321,positive regulation of cell proliferation in bone marrow,BP,0.003035148,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+30810,GO:0090050,LOC110045321,positive regulation of cell migration involved in sprouting angiogenesis,BP,0.00540391,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+30811,GO:1900745,LOC110045321,positive regulation of p38MAPK cascade,BP,0.006778953,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+30812,GO:2000773,LOC110045321,negative regulation of cellular senescence,BP,0.00613043,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,NA,NA,NA
+2273,GO:0003008,LOC110045321,system process,BP,0.020798646,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,system process,other biological processes,P
+5042,GO:0006955,LOC110044078,immune response,BP,0.020787742,-3.163505819,0.026412438,CvsT1,O.faveolata,Florida,immune response,other biological processes,P
+5043,GO:0006955,LOC110044078,immune response,BP,0.020787742,-3.276836382,0.006645657,CvsT3,O.faveolata,Florida,immune response,other biological processes,P
+5732,GO:0007585,LOC110045321,respiratory gaseous exchange by respiratory system,BP,0.003487398,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,respiratory gaseous exchange,other biological processes,P
+16625,GO:0033037,LOC110045321,polysaccharide localization,BP,0.002260624,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,polysaccharide localization,other biological processes,P
+25134,GO:0048589,LOC110045321,developmental growth,BP,0.011876848,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,developmental growth,other biological processes,P
+26442,GO:0050896,LOC110045321,response to stimulus,BP,0.04222065,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,response to stimulus,other biological processes,P
+13586,GO:0030206,LOC110045321,chondroitin sulfate biosynthetic process,BP,0.00439936,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,chondroitin sulfate biosynthetic process,other metabolic processes,P
+26197,GO:0050655,LOC110045321,dermatan sulfate proteoglycan metabolic process,BP,0.00076144,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,dermatan sulfate proteoglycan metabolic process,other metabolic processes,P
+23364,GO:0046777,LOC110045321,protein autophosphorylation,BP,0.025265162,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,protein amino acid autophosphorylation,protein metabolism,P
+22453,GO:0045893,LOC110045321,"positive regulation of transcription, DNA-templated",BP,0.039556963,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,"positive regulation of transcription, DNA-dependent",RNA metabolism,P
+7495,GO:0009967,LOC110044078,positive regulation of signal transduction,BP,0.023515805,-3.276836382,0.006645657,CvsT3,O.faveolata,Florida,positive regulation of signal transduction,signal transduction,P
+7496,GO:0009967,LOC110044078,positive regulation of signal transduction,BP,0.023515805,-3.163505819,0.026412438,CvsT1,O.faveolata,Florida,positive regulation of signal transduction,signal transduction,P
+13848,GO:0030512,LOC110045321,negative regulation of transforming growth factor beta receptor signaling pathway,BP,0.011992008,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,negative regulation of transforming growth factor beta receptor signaling pathway,signal transduction,P
+20376,GO:0043123,LOC110045321,positive regulation of I-kappaB kinase/NF-kappaB signaling,BP,0.012093367,-1.645674615,0.006645657,CvsT3,O.faveolata,Florida,positive regulation of I-kappaB kinase/NF-kappaB cascade,signal transduction,P

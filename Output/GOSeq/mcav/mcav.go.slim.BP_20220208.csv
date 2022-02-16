@@ -1,0 +1,318 @@
+,GO.IDs,gene_id,term,ontology,over_represented_pvalue,log2FoldChange,padj,Treatment_Compare,Species,Site,GO.Term,GO.Slim.Term,Cat
+818,GO:0001502,Mcavernosa15503,cartilage condensation,BP,0.043304951,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,cartilage condensation,cell adhesion,P
+820,GO:0001502,Mcavernosa15503,cartilage condensation,BP,0.043304951,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,cartilage condensation,cell adhesion,P
+8498,GO:0010811,Mcavernosa03157,positive regulation of cell-substrate adhesion,BP,0.035030598,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,positive regulation of cell-substrate adhesion,cell adhesion,P
+17968,GO:0034116,Mcavernosa25973,positive regulation of heterotypic cell-cell adhesion,BP,0.009416404,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of heterotypic cell-cell adhesion,cell adhesion,P
+17970,GO:0034116,Mcavernosa25973,positive regulation of heterotypic cell-cell adhesion,BP,0.009416404,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of heterotypic cell-cell adhesion,cell adhesion,P
+1046,GO:0001770,Mcavernosa02339,establishment of natural killer cell polarity,BP,0.005106591,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,establishment of natural killer cell polarity,cell organization and biogenesis,P
+1407,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of receptor internalization,cell organization and biogenesis,P
+1410,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of receptor internalization,cell organization and biogenesis,P
+8681,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.650718202,0.004011494,CvsT3,M.cavernosa,Florida,positive regulation of neuron projection development,cell organization and biogenesis,P
+8683,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.845778008,0.000320485,CvsT2,M.cavernosa,Florida,positive regulation of neuron projection development,cell organization and biogenesis,P
+8685,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.621453401,0.008349794,CvsT4,M.cavernosa,Florida,positive regulation of neuron projection development,cell organization and biogenesis,P
+8687,GO:0010976,Mcavernosa24806,positive regulation of neuron projection development,BP,0.032260528,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,positive regulation of neuron projection development,cell organization and biogenesis,P
+8689,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.980691766,6.33E-05,CvsT1,M.cavernosa,Florida,positive regulation of neuron projection development,cell organization and biogenesis,P
+13261,GO:0021955,Mcavernosa13005,central nervous system neuron axonogenesis,BP,0.015510461,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,central nervous system neuron axonogenesis,cell organization and biogenesis,P
+13263,GO:0021955,Mcavernosa13005,central nervous system neuron axonogenesis,BP,0.015510461,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,central nervous system neuron axonogenesis,cell organization and biogenesis,P
+13427,GO:0022617,Mcavernosa25973,extracellular matrix disassembly,BP,0.036526514,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,extracellular matrix disassembly,cell organization and biogenesis,P
+13428,GO:0022617,Mcavernosa25973,extracellular matrix disassembly,BP,0.036526514,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,extracellular matrix disassembly,cell organization and biogenesis,P
+19087,GO:0035093,Mcavernosa22344,"spermatogenesis, exchange of chromosomal proteins",BP,0.024326431,-4.008289508,0.017345891,CvsT4,M.cavernosa,Florida,"spermatogenesis, exchange of chromosomal proteins",cell organization and biogenesis,P
+15871,GO:0032226,Mcavernosa25973,"positive regulation of synaptic transmission, dopaminergic",BP,0.00902976,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,"positive regulation of synaptic transmission, dopaminergic",cell-cell signaling,P
+15872,GO:0032226,Mcavernosa25973,"positive regulation of synaptic transmission, dopaminergic",BP,0.00902976,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,"positive regulation of synaptic transmission, dopaminergic",cell-cell signaling,P
+15876,GO:0032230,Mcavernosa03157,"positive regulation of synaptic transmission, GABAergic",BP,0.047755981,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,"positive regulation of synaptic transmission, GABAergic",cell-cell signaling,P
+27351,GO:0051580,Mcavernosa25973,regulation of neurotransmitter uptake,BP,0.009300416,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of neurotransmitter uptake,cell-cell signaling,P
+27353,GO:0051580,Mcavernosa25973,regulation of neurotransmitter uptake,BP,0.009300416,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of neurotransmitter uptake,cell-cell signaling,P
+817,GO:0001502,Mcavernosa15503,cartilage condensation,BP,0.043304951,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,cartilage condensation,developmental processes,P
+819,GO:0001502,Mcavernosa15503,cartilage condensation,BP,0.043304951,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,cartilage condensation,developmental processes,P
+861,GO:0001550,Mcavernosa15503,ovarian cumulus expansion,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,ovarian cumulus expansion,developmental processes,P
+862,GO:0001550,Mcavernosa15503,ovarian cumulus expansion,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,ovarian cumulus expansion,developmental processes,P
+1176,GO:0001880,Mcavernosa15503,Mullerian duct regression,BP,0.010454942,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,Mullerian duct regression,developmental processes,P
+1177,GO:0001880,Mcavernosa15503,Mullerian duct regression,BP,0.010454942,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,Mullerian duct regression,developmental processes,P
+1597,GO:0002315,Mcavernosa03628,marginal zone B cell differentiation,BP,0.013569657,-3.563927207,0.006769312,CvsT1,M.cavernosa,Florida,marginal zone B cell differentiation,developmental processes,P
+1598,GO:0002315,Mcavernosa03628,marginal zone B cell differentiation,BP,0.013569657,-3.231938334,0.019021379,CvsT2,M.cavernosa,Florida,marginal zone B cell differentiation,developmental processes,P
+5614,GO:0007398,Mcavernosa15503,ectoderm development,BP,0.01918799,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,ectoderm development,developmental processes,P
+5615,GO:0007398,Mcavernosa15503,ectoderm development,BP,0.01918799,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,ectoderm development,developmental processes,P
+5742,GO:0007525,Mcavernosa24806,somatic muscle development,BP,0.011051174,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,somatic muscle development,developmental processes,P
+7709,GO:0010102,Mcavernosa20093,lateral root morphogenesis,BP,0.003669778,-0.762978102,0.0261073,CvsT2,M.cavernosa,Florida,lateral root morphogenesis,developmental processes,P
+8682,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.650718202,0.004011494,CvsT3,M.cavernosa,Florida,positive regulation of neuron projection development,developmental processes,P
+8684,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.845778008,0.000320485,CvsT2,M.cavernosa,Florida,positive regulation of neuron projection development,developmental processes,P
+8686,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.621453401,0.008349794,CvsT4,M.cavernosa,Florida,positive regulation of neuron projection development,developmental processes,P
+8688,GO:0010976,Mcavernosa24806,positive regulation of neuron projection development,BP,0.032260528,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,positive regulation of neuron projection development,developmental processes,P
+8690,GO:0010976,Mcavernosa12043,positive regulation of neuron projection development,BP,0.032260528,-1.980691766,6.33E-05,CvsT1,M.cavernosa,Florida,positive regulation of neuron projection development,developmental processes,P
+8771,GO:0014032,Mcavernosa15503,neural crest cell development,BP,0.001144569,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,neural crest cell development,developmental processes,P
+8772,GO:0014032,Mcavernosa08717,neural crest cell development,BP,0.001144569,-1.43965391,0.003623942,CvsT2,M.cavernosa,Florida,neural crest cell development,developmental processes,P
+8773,GO:0014032,Mcavernosa15503,neural crest cell development,BP,0.001144569,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,neural crest cell development,developmental processes,P
+8774,GO:0014032,Mcavernosa08717,neural crest cell development,BP,0.001144569,-1.323861668,0.016213107,CvsT3,M.cavernosa,Florida,neural crest cell development,developmental processes,P
+8775,GO:0014032,Mcavernosa08717,neural crest cell development,BP,0.001144569,-1.411252966,0.006769312,CvsT1,M.cavernosa,Florida,neural crest cell development,developmental processes,P
+10044,GO:0016203,Mcavernosa24806,muscle attachment,BP,0.016953688,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,muscle attachment,developmental processes,P
+12899,GO:0021680,Mcavernosa13005,cerebellar Purkinje cell layer development,BP,0.026704721,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,cerebellar Purkinje cell layer development,developmental processes,P
+12900,GO:0021680,Mcavernosa13005,cerebellar Purkinje cell layer development,BP,0.026704721,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,cerebellar Purkinje cell layer development,developmental processes,P
+13110,GO:0021860,Mcavernosa13005,pyramidal neuron development,BP,0.024419533,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,pyramidal neuron development,developmental processes,P
+13111,GO:0021860,Mcavernosa13005,pyramidal neuron development,BP,0.024419533,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,pyramidal neuron development,developmental processes,P
+13262,GO:0021955,Mcavernosa13005,central nervous system neuron axonogenesis,BP,0.015510461,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,central nervous system neuron axonogenesis,developmental processes,P
+13264,GO:0021955,Mcavernosa13005,central nervous system neuron axonogenesis,BP,0.015510461,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,central nervous system neuron axonogenesis,developmental processes,P
+13314,GO:0021983,Mcavernosa15503,pituitary gland development,BP,0.040156638,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,pituitary gland development,developmental processes,P
+13315,GO:0021983,Mcavernosa15503,pituitary gland development,BP,0.040156638,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,pituitary gland development,developmental processes,P
+13331,GO:0021998,Mcavernosa15503,neural plate mediolateral regionalization,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,neural plate mediolateral pattern formation,developmental processes,P
+13332,GO:0021998,Mcavernosa15503,neural plate mediolateral regionalization,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,neural plate mediolateral pattern formation,developmental processes,P
+14052,GO:0030587,Mcavernosa24806,sorocarp development,BP,0.030752658,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,sorocarp development,developmental processes,P
+15993,GO:0032332,Mcavernosa15503,positive regulation of chondrocyte differentiation,BP,0.018036683,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of chondrocyte differentiation,developmental processes,P
+15994,GO:0032332,Mcavernosa15503,positive regulation of chondrocyte differentiation,BP,0.018036683,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of chondrocyte differentiation,developmental processes,P
+17967,GO:0034116,Mcavernosa25973,positive regulation of heterotypic cell-cell adhesion,BP,0.009416404,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of heterotypic cell-cell adhesion,developmental processes,P
+17969,GO:0034116,Mcavernosa25973,positive regulation of heterotypic cell-cell adhesion,BP,0.009416404,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of heterotypic cell-cell adhesion,developmental processes,P
+19135,GO:0035137,Mcavernosa15503,hindlimb morphogenesis,BP,0.023531025,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,hindlimb morphogenesis,developmental processes,P
+19136,GO:0035137,Mcavernosa15503,hindlimb morphogenesis,BP,0.023531025,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,hindlimb morphogenesis,developmental processes,P
+19374,GO:0040024,Mcavernosa03157,dauer larval development,BP,0.021352902,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,dauer larval development,developmental processes,P
+25092,GO:0048352,Mcavernosa15503,paraxial mesoderm structural organization,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,paraxial mesoderm structural organization,developmental processes,P
+25093,GO:0048352,Mcavernosa15503,paraxial mesoderm structural organization,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,paraxial mesoderm structural organization,developmental processes,P
+25119,GO:0048378,Mcavernosa15503,regulation of lateral mesodermal cell fate specification,BP,0.025614247,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,regulation of lateral mesodermal cell fate specification,developmental processes,P
+25120,GO:0048378,Mcavernosa15503,regulation of lateral mesodermal cell fate specification,BP,0.025614247,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,regulation of lateral mesodermal cell fate specification,developmental processes,P
+25124,GO:0048382,Mcavernosa15503,mesendoderm development,BP,0.023890922,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,mesendoderm development,developmental processes,P
+25125,GO:0048382,Mcavernosa15503,mesendoderm development,BP,0.023890922,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,mesendoderm development,developmental processes,P
+25310,GO:0048592,Mcavernosa09510,eye morphogenesis,BP,0.000512722,-1.087361575,0.047484759,CvsT3,M.cavernosa,Florida,eye morphogenesis,developmental processes,P
+25311,GO:0048592,Mcavernosa21617,eye morphogenesis,BP,0.000512722,1.018044844,0.0402567,CvsT2,M.cavernosa,Florida,eye morphogenesis,developmental processes,P
+25359,GO:0048643,Mcavernosa25973,positive regulation of skeletal muscle tissue development,BP,0.019897887,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of skeletal muscle tissue development,developmental processes,P
+25360,GO:0048643,Mcavernosa25973,positive regulation of skeletal muscle tissue development,BP,0.019897887,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of skeletal muscle tissue development,developmental processes,P
+28525,GO:0060041,Mcavernosa15503,retina development in camera-type eye,BP,0.012608109,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,retina development in camera-type eye,developmental processes,P
+28526,GO:0060041,Mcavernosa15503,retina development in camera-type eye,BP,0.012608109,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,retina development in camera-type eye,developmental processes,P
+28527,GO:0060041,Mcavernosa21617,retina development in camera-type eye,BP,0.012608109,1.018044844,0.0402567,CvsT2,M.cavernosa,Florida,retina development in camera-type eye,developmental processes,P
+28886,GO:0060350,Mcavernosa15503,endochondral bone morphogenesis,BP,0.018251139,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,endochondral bone morphogenesis,developmental processes,P
+28887,GO:0060350,Mcavernosa15503,endochondral bone morphogenesis,BP,0.018251139,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,endochondral bone morphogenesis,developmental processes,P
+28963,GO:0060412,Mcavernosa15503,ventricular septum morphogenesis,BP,0.042771719,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,ventricular septum morphogenesis,developmental processes,P
+28964,GO:0060412,Mcavernosa15503,ventricular septum morphogenesis,BP,0.042771719,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,ventricular septum morphogenesis,developmental processes,P
+2408,GO:0003183,Mcavernosa15503,mitral valve morphogenesis,BP,0.015257808,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2409,GO:0003183,Mcavernosa15503,mitral valve morphogenesis,BP,0.015257808,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+2410,GO:0003186,Mcavernosa15503,tricuspid valve morphogenesis,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+2411,GO:0003186,Mcavernosa15503,tricuspid valve morphogenesis,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2412,GO:0003215,Mcavernosa15503,cardiac right ventricle morphogenesis,BP,0.029716596,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2413,GO:0003215,Mcavernosa15503,cardiac right ventricle morphogenesis,BP,0.029716596,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+2414,GO:0003222,Mcavernosa15503,ventricular trabecula myocardium morphogenesis,BP,0.022580629,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+2415,GO:0003222,Mcavernosa15503,ventricular trabecula myocardium morphogenesis,BP,0.022580629,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2416,GO:0003223,Mcavernosa15503,ventricular compact myocardium morphogenesis,BP,0.024379728,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+2417,GO:0003223,Mcavernosa15503,ventricular compact myocardium morphogenesis,BP,0.024379728,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2418,GO:0003272,Mcavernosa15503,endocardial cushion formation,BP,0.010683252,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+2419,GO:0003272,Mcavernosa15503,endocardial cushion formation,BP,0.010683252,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19335,GO:0035669,Mcavernosa03157,TRAM-dependent toll-like receptor 4 signaling pathway,BP,0.009110924,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19336,GO:0035912,Mcavernosa15503,dorsal aorta morphogenesis,BP,0.009898896,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+19337,GO:0035912,Mcavernosa15503,dorsal aorta morphogenesis,BP,0.009898896,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19338,GO:0035999,Mcavernosa02968,tetrahydrofolate interconversion,BP,0.024185742,-2.385831049,0.0402567,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19339,GO:0036010,Mcavernosa30410,protein localization to endosome,BP,0.023811038,-4.840038259,0.031070178,CvsT4,M.cavernosa,Florida,NA,NA,NA
+19341,GO:0036120,Mcavernosa03157,cellular response to platelet-derived growth factor stimulus,BP,0.043272832,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19344,GO:0038096,Mcavernosa03157,Fc-gamma receptor signaling pathway involved in phagocytosis,BP,0.014184481,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19345,GO:0038180,Mcavernosa24806,nerve growth factor signaling pathway,BP,0.018529139,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,NA,NA,NA
+19346,GO:0039521,Mcavernosa13005,suppression by virus of host autophagy,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+19347,GO:0039521,Mcavernosa13005,suppression by virus of host autophagy,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+19348,GO:0039689,Mcavernosa13005,negative stranded viral RNA replication,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+19349,GO:0039689,Mcavernosa13005,negative stranded viral RNA replication,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+21704,GO:0044854,Mcavernosa25973,plasma membrane raft assembly,BP,0.005284331,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+21705,GO:0044854,Mcavernosa25973,plasma membrane raft assembly,BP,0.005284331,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29416,GO:0060914,Mcavernosa15503,heart formation,BP,0.020112146,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+29417,GO:0060914,Mcavernosa15503,heart formation,BP,0.020112146,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29418,GO:0060928,Mcavernosa15503,atrioventricular node cell development,BP,0.009679747,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+29419,GO:0060928,Mcavernosa15503,atrioventricular node cell development,BP,0.009679747,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29420,GO:0061028,Mcavernosa24806,establishment of endothelial barrier,BP,0.021079837,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29421,GO:0061312,Mcavernosa15503,BMP signaling pathway involved in heart development,BP,0.009502871,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+29422,GO:0061312,Mcavernosa15503,BMP signaling pathway involved in heart development,BP,0.009502871,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29423,GO:0061626,Mcavernosa15503,pharyngeal arch artery morphogenesis,BP,0.014362501,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+29424,GO:0061626,Mcavernosa15503,pharyngeal arch artery morphogenesis,BP,0.014362501,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+29425,GO:0061684,Mcavernosa13005,chaperone-mediated autophagy,BP,0.011025332,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+29426,GO:0061684,Mcavernosa13005,chaperone-mediated autophagy,BP,0.011025332,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+30491,GO:0071315,Mcavernosa13005,cellular response to morphine,BP,0.009650168,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+30492,GO:0071315,Mcavernosa13005,cellular response to morphine,BP,0.009650168,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+30493,GO:0071360,Mcavernosa25973,cellular response to exogenous dsRNA,BP,0.025118304,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+30494,GO:0071360,Mcavernosa25973,cellular response to exogenous dsRNA,BP,0.025118304,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+30495,GO:0071380,Mcavernosa03157,cellular response to prostaglandin E stimulus,BP,0.032553671,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+30496,GO:0071455,Mcavernosa13005,cellular response to hyperoxia,BP,0.018665681,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+30497,GO:0071455,Mcavernosa13005,cellular response to hyperoxia,BP,0.018665681,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+30499,GO:0071900,Mcavernosa24806,regulation of protein serine/threonine kinase activity,BP,0.013966092,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,NA,NA,NA
+30500,GO:0071902,Mcavernosa15503,positive regulation of protein serine/threonine kinase activity,BP,0.024758684,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+30501,GO:0071902,Mcavernosa15503,positive regulation of protein serine/threonine kinase activity,BP,0.024758684,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+30502,GO:0072488,Mcavernosa20093,ammonium transmembrane transport,BP,0.019601482,-0.762978102,0.0261073,CvsT2,M.cavernosa,Florida,NA,NA,NA
+30997,GO:0080144,Mcavernosa13005,amino acid homeostasis,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+30998,GO:0080144,Mcavernosa13005,amino acid homeostasis,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31030,GO:0090155,Mcavernosa13005,negative regulation of sphingolipid biosynthetic process,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31031,GO:0090155,Mcavernosa13005,negative regulation of sphingolipid biosynthetic process,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31032,GO:0090156,Mcavernosa13005,cellular sphingolipid homeostasis,BP,0.011406658,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31033,GO:0090156,Mcavernosa13005,cellular sphingolipid homeostasis,BP,0.011406658,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31034,GO:0090298,Mcavernosa13005,negative regulation of mitochondrial DNA replication,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31035,GO:0090298,Mcavernosa13005,negative regulation of mitochondrial DNA replication,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31036,GO:0090303,Mcavernosa03157,positive regulation of wound healing,BP,0.038440499,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31037,GO:0097065,Mcavernosa12043,anterior head development,BP,0.031983885,-1.845778008,0.000320485,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31038,GO:0097065,Mcavernosa12043,anterior head development,BP,0.031983885,-1.980691766,6.33E-05,CvsT1,M.cavernosa,Florida,NA,NA,NA
+31039,GO:0097065,Mcavernosa12043,anterior head development,BP,0.031983885,-1.621453401,0.008349794,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31040,GO:0097065,Mcavernosa12043,anterior head development,BP,0.031983885,-1.650718202,0.004011494,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31042,GO:0097428,Mcavernosa25968,protein maturation by iron-sulfur cluster transfer,BP,0.024796912,-3.394989178,0.001201334,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31049,GO:0099638,Mcavernosa02339,endosome to plasma membrane protein transport,BP,0.010266755,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31050,GO:0099703,Mcavernosa33068,induction of synaptic vesicle exocytosis by positive regulation of presynaptic cytosolic calcium ion concentration,BP,0.010251631,-1.046864772,0.0261073,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31057,GO:1901741,Mcavernosa25973,positive regulation of myoblast fusion,BP,0.013201201,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31058,GO:1901741,Mcavernosa25973,positive regulation of myoblast fusion,BP,0.013201201,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+31059,GO:1901888,Mcavernosa24806,regulation of cell junction assembly,BP,0.011237536,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31060,GO:1901890,Mcavernosa25973,positive regulation of cell junction assembly,BP,0.009954662,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31061,GO:1901890,Mcavernosa25973,positive regulation of cell junction assembly,BP,0.009954662,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+31062,GO:1902043,Mcavernosa15503,positive regulation of extrinsic apoptotic signaling pathway via death domain receptors,BP,0.01099736,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31063,GO:1902043,Mcavernosa15503,positive regulation of extrinsic apoptotic signaling pathway via death domain receptors,BP,0.01099736,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31064,GO:1902074,Mcavernosa03157,response to salt,BP,0.028231322,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31065,GO:1902617,Mcavernosa13005,response to fluoride,BP,0.010614114,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31066,GO:1902617,Mcavernosa13005,response to fluoride,BP,0.010614114,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31067,GO:1902731,Mcavernosa15503,negative regulation of chondrocyte proliferation,BP,0.009746732,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31068,GO:1902731,Mcavernosa15503,negative regulation of chondrocyte proliferation,BP,0.009746732,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31069,GO:1902895,Mcavernosa15503,positive regulation of pri-miRNA transcription by RNA polymerase II,BP,0.041691004,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31070,GO:1902895,Mcavernosa15503,positive regulation of pri-miRNA transcription by RNA polymerase II,BP,0.041691004,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31071,GO:1903044,Mcavernosa25973,protein localization to membrane raft,BP,0.019942825,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31072,GO:1903044,Mcavernosa25973,protein localization to membrane raft,BP,0.019942825,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+31073,GO:1903204,Mcavernosa13005,negative regulation of oxidative stress-induced neuron death,BP,0.034494398,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31074,GO:1903204,Mcavernosa13005,negative regulation of oxidative stress-induced neuron death,BP,0.034494398,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31075,GO:1903602,Mcavernosa01252,thermospermine catabolic process,BP,0.004225595,-2.691997683,0.000245061,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31076,GO:1903602,Mcavernosa01252,thermospermine catabolic process,BP,0.004225595,-2.078152054,0.039662932,CvsT1,M.cavernosa,Florida,NA,NA,NA
+31077,GO:1903609,Mcavernosa02339,negative regulation of inward rectifier potassium channel activity,BP,0.009151091,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31078,GO:1903706,Mcavernosa13005,regulation of hemopoiesis,BP,0.022135443,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31079,GO:1903706,Mcavernosa13005,regulation of hemopoiesis,BP,0.022135443,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31080,GO:1904313,Mcavernosa02339,response to methamphetamine hydrochloride,BP,0.008770611,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31081,GO:1904414,Mcavernosa15503,positive regulation of cardiac ventricle development,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31082,GO:1904414,Mcavernosa15503,positive regulation of cardiac ventricle development,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31083,GO:1904707,Mcavernosa15503,positive regulation of vascular smooth muscle cell proliferation,BP,0.046221738,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31084,GO:1904707,Mcavernosa15503,positive regulation of vascular smooth muscle cell proliferation,BP,0.046221738,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31085,GO:1904719,Mcavernosa02339,positive regulation of AMPA glutamate receptor clustering,BP,0.005106591,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31086,GO:1905285,Mcavernosa15503,fibrous ring of heart morphogenesis,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31087,GO:1905285,Mcavernosa15503,fibrous ring of heart morphogenesis,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31088,GO:1990090,Mcavernosa02339,cellular response to nerve growth factor stimulus,BP,0.006368957,1.071517133,0.018244336,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31089,GO:1990090,Mcavernosa30410,cellular response to nerve growth factor stimulus,BP,0.006368957,-4.840038259,0.031070178,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31091,GO:1990504,Mcavernosa03157,dense core granule exocytosis,BP,0.012706826,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31094,GO:2000049,Mcavernosa25973,positive regulation of cell-cell adhesion mediated by cadherin,BP,0.020297038,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31095,GO:2000049,Mcavernosa25973,positive regulation of cell-cell adhesion mediated by cadherin,BP,0.020297038,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,NA,NA,NA
+31096,GO:2000619,Mcavernosa13005,negative regulation of histone H4-K16 acetylation,BP,0.005654587,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,NA,NA,NA
+31097,GO:2000619,Mcavernosa13005,negative regulation of histone H4-K16 acetylation,BP,0.005654587,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31098,GO:2000650,Mcavernosa03157,negative regulation of sodium ion transmembrane transporter activity,BP,0.012856776,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31099,GO:2000772,Mcavernosa15503,regulation of cellular senescence,BP,0.010394311,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31100,GO:2000772,Mcavernosa15503,regulation of cellular senescence,BP,0.010394311,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,NA,NA,NA
+31101,GO:2001024,Mcavernosa03157,negative regulation of response to drug,BP,0.012706826,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+31102,GO:2001031,Mcavernosa03157,positive regulation of cellular glucuronidation,BP,0.009110924,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,NA,NA,NA
+1060,GO:0001782,Mcavernosa03628,B cell homeostasis,BP,0.026048226,-3.231938334,0.019021379,CvsT2,M.cavernosa,Florida,B cell homeostasis,other biological processes,P
+1061,GO:0001782,Mcavernosa03628,B cell homeostasis,BP,0.026048226,-3.563927207,0.006769312,CvsT1,M.cavernosa,Florida,B cell homeostasis,other biological processes,P
+1563,GO:0002281,Mcavernosa03157,macrophage activation involved in immune response,BP,0.022248911,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,macrophage activation during immune response,other biological processes,P
+5817,GO:0007606,Mcavernosa03157,sensory perception of chemical stimulus,BP,0.016289886,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,sensory perception of chemical stimulus,other biological processes,P
+5843,GO:0007635,Mcavernosa03157,chemosensory behavior,BP,0.023269311,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,chemosensory behavior,other biological processes,P
+7067,GO:0009411,Mcavernosa09510,response to UV,BP,0.049569621,-1.087361575,0.047484759,CvsT3,M.cavernosa,Florida,response to UV,other biological processes,P
+8273,GO:0010634,Mcavernosa03157,positive regulation of epithelial cell migration,BP,0.005596614,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,positive regulation of epithelial cell migration,other biological processes,P
+8274,GO:0010634,Mcavernosa15302,positive regulation of epithelial cell migration,BP,0.005596614,-5.344808043,0.01764079,CvsT3,M.cavernosa,Florida,positive regulation of epithelial cell migration,other biological processes,P
+8616,GO:0010917,Mcavernosa03157,negative regulation of mitochondrial membrane potential,BP,0.026092869,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,negative regulation of mitochondrial membrane potential,other biological processes,P
+9016,GO:0014912,Mcavernosa15503,negative regulation of smooth muscle cell migration,BP,0.019935896,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,negative regulation of smooth muscle cell migration,other biological processes,P
+9017,GO:0014912,Mcavernosa15503,negative regulation of smooth muscle cell migration,BP,0.019935896,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,negative regulation of smooth muscle cell migration,other biological processes,P
+9885,GO:0016032,Mcavernosa30570,viral process,BP,0.02823049,3.770755151,8.67E-08,CvsT3,M.cavernosa,Florida,viral reproduction,other biological processes,P
+9886,GO:0016032,Mcavernosa30570,viral process,BP,0.02823049,3.419651689,4.43E-06,CvsT2,M.cavernosa,Florida,viral reproduction,other biological processes,P
+9887,GO:0016032,Mcavernosa30570,viral process,BP,0.02823049,3.786712496,4.06E-08,CvsT1,M.cavernosa,Florida,viral reproduction,other biological processes,P
+9888,GO:0016032,Mcavernosa30570,viral process,BP,0.02823049,2.919238186,0.000160161,CvsT4,M.cavernosa,Florida,viral reproduction,other biological processes,P
+11768,GO:0018991,Mcavernosa02620,oviposition,BP,0.029098814,-2.782782023,0.003814831,CvsT2,M.cavernosa,Florida,oviposition,other biological processes,P
+16619,GO:0032915,Mcavernosa15503,positive regulation of transforming growth factor beta2 production,BP,0.005289377,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of transforming growth factor-beta2 production,other biological processes,P
+16620,GO:0032915,Mcavernosa15503,positive regulation of transforming growth factor beta2 production,BP,0.005289377,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of transforming growth factor-beta2 production,other biological processes,P
+20991,GO:0043547,Mcavernosa03628,positive regulation of GTPase activity,BP,0.013626736,-3.231938334,0.019021379,CvsT2,M.cavernosa,Florida,positive regulation of GTPase activity,other biological processes,P
+20992,GO:0043547,Mcavernosa03628,positive regulation of GTPase activity,BP,0.013626736,-3.563927207,0.006769312,CvsT1,M.cavernosa,Florida,positive regulation of GTPase activity,other biological processes,P
+20993,GO:0043547,Mcavernosa24806,positive regulation of GTPase activity,BP,0.013626736,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,positive regulation of GTPase activity,other biological processes,P
+26601,GO:0050877,Mcavernosa13005,nervous system process,BP,0.027694513,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,neurological system process,other biological processes,P
+26602,GO:0050877,Mcavernosa13005,nervous system process,BP,0.027694513,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,neurological system process,other biological processes,P
+26603,GO:0050877,Mcavernosa21617,nervous system process,BP,0.027694513,1.018044844,0.0402567,CvsT2,M.cavernosa,Florida,neurological system process,other biological processes,P
+26619,GO:0050893,Mcavernosa03157,sensory processing,BP,0.034578607,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,sensory processing,other biological processes,P
+26652,GO:0050927,Mcavernosa03157,positive regulation of positive chemotaxis,BP,0.016411549,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,positive regulation of positive chemotaxis,other biological processes,P
+26700,GO:0050975,Mcavernosa03157,sensory perception of touch,BP,0.029285013,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,sensory perception of touch,other biological processes,P
+26880,GO:0051148,Mcavernosa15503,negative regulation of muscle cell differentiation,BP,0.015343969,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,negative regulation of muscle cell differentiation,other biological processes,P
+26881,GO:0051148,Mcavernosa15503,negative regulation of muscle cell differentiation,BP,0.015343969,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,negative regulation of muscle cell differentiation,other biological processes,P
+27325,GO:0051562,Mcavernosa03157,negative regulation of mitochondrial calcium ion concentration,BP,0.012706826,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,reduction of mitochondrial calcium ion concentration,other biological processes,P
+28815,GO:0060284,Mcavernosa13005,regulation of cell development,BP,0.043690888,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,regulation of cell development,other biological processes,P
+28816,GO:0060284,Mcavernosa13005,regulation of cell development,BP,0.043690888,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,regulation of cell development,other biological processes,P
+28892,GO:0060355,Mcavernosa25973,positive regulation of cell adhesion molecule production,BP,0.019442068,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of cell adhesion molecule production,other biological processes,P
+28893,GO:0060355,Mcavernosa25973,positive regulation of cell adhesion molecule production,BP,0.019442068,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of cell adhesion molecule production,other biological processes,P
+416,GO:0000422,Mcavernosa13005,autophagy of mitochondrion,BP,0.024445749,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,mitochondrion degradation,other metabolic processes,P
+417,GO:0000422,Mcavernosa13005,autophagy of mitochondrion,BP,0.024445749,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,mitochondrion degradation,other metabolic processes,P
+4265,GO:0006071,Mcavernosa24249,glycerol metabolic process,BP,0.031802858,-3.986139509,0.015242565,CvsT4,M.cavernosa,Florida,glycerol metabolic process,other metabolic processes,P
+4718,GO:0006544,Mcavernosa01732,glycine metabolic process,BP,0.018851804,-1.794675121,0.015425471,CvsT2,M.cavernosa,Florida,glycine metabolic process,other metabolic processes,P
+4818,GO:0006641,Mcavernosa24249,triglyceride metabolic process,BP,0.03877324,-3.986139509,0.015242565,CvsT4,M.cavernosa,Florida,triglyceride metabolic process,other metabolic processes,P
+4879,GO:0006703,Mcavernosa15503,estrogen biosynthetic process,BP,0.020076201,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,estrogen biosynthetic process,other metabolic processes,P
+4880,GO:0006703,Mcavernosa15503,estrogen biosynthetic process,BP,0.020076201,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,estrogen biosynthetic process,other metabolic processes,P
+4967,GO:0006807,Mcavernosa30571,nitrogen compound metabolic process,BP,0.017626361,4.512290209,2.02E-09,CvsT1,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4968,GO:0006807,Mcavernosa30575,nitrogen compound metabolic process,BP,0.017626361,4.506256497,1.46E-09,CvsT1,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4969,GO:0006807,Mcavernosa30575,nitrogen compound metabolic process,BP,0.017626361,4.207624689,3.09E-08,CvsT3,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4970,GO:0006807,Mcavernosa30571,nitrogen compound metabolic process,BP,0.017626361,3.975067304,1.61E-07,CvsT3,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4971,GO:0006807,Mcavernosa30571,nitrogen compound metabolic process,BP,0.017626361,3.292573354,3.45E-05,CvsT2,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4972,GO:0006807,Mcavernosa30571,nitrogen compound metabolic process,BP,0.017626361,3.02436151,0.000328235,CvsT4,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4973,GO:0006807,Mcavernosa30575,nitrogen compound metabolic process,BP,0.017626361,3.080140443,0.000116994,CvsT4,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+4974,GO:0006807,Mcavernosa30575,nitrogen compound metabolic process,BP,0.017626361,3.351164074,1.34E-05,CvsT2,M.cavernosa,Florida,nitrogen compound metabolic process,other metabolic processes,P
+9825,GO:0015966,Mcavernosa26093,diadenosine tetraphosphate biosynthetic process,BP,0.009090382,-2.078882671,0.001419634,CvsT2,M.cavernosa,Florida,diadenosine tetraphosphate biosynthetic process,other metabolic processes,P
+9826,GO:0015966,Mcavernosa26093,diadenosine tetraphosphate biosynthetic process,BP,0.009090382,-2.005559371,0.003516066,CvsT3,M.cavernosa,Florida,diadenosine tetraphosphate biosynthetic process,other metabolic processes,P
+9827,GO:0015966,Mcavernosa26093,diadenosine tetraphosphate biosynthetic process,BP,0.009090382,-2.065820478,0.002377438,CvsT1,M.cavernosa,Florida,diadenosine tetraphosphate biosynthetic process,other metabolic processes,P
+13510,GO:0022900,Mcavernosa30573,electron transport chain,BP,0.001919699,2.429376336,2.41E-05,CvsT2,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13511,GO:0022900,Mcavernosa30572,electron transport chain,BP,0.001919699,2.536921528,2.30E-05,CvsT4,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13512,GO:0022900,Mcavernosa30572,electron transport chain,BP,0.001919699,2.454734168,1.50E-05,CvsT1,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13513,GO:0022900,Mcavernosa30572,electron transport chain,BP,0.001919699,2.52336795,1.34E-05,CvsT2,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13514,GO:0022900,Mcavernosa30573,electron transport chain,BP,0.001919699,2.621605005,1.71E-06,CvsT3,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13515,GO:0022900,Mcavernosa30573,electron transport chain,BP,0.001919699,2.642152981,1.36E-06,CvsT1,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13516,GO:0022900,Mcavernosa30572,electron transport chain,BP,0.001919699,2.621084843,1.71E-06,CvsT3,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13517,GO:0022900,Mcavernosa30573,electron transport chain,BP,0.001919699,1.877006536,0.007611554,CvsT4,M.cavernosa,Florida,electron transport chain,other metabolic processes,P
+13680,GO:0030166,Mcavernosa15503,proteoglycan biosynthetic process,BP,0.034080184,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,proteoglycan biosynthetic process,other metabolic processes,P
+13681,GO:0030166,Mcavernosa15503,proteoglycan biosynthetic process,BP,0.034080184,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,proteoglycan biosynthetic process,other metabolic processes,P
+22675,GO:0045937,Mcavernosa24806,positive regulation of phosphate metabolic process,BP,0.007668244,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,positive regulation of phosphate metabolic process,other metabolic processes,P
+22937,GO:0046167,Mcavernosa24249,glycerol-3-phosphate biosynthetic process,BP,0.00504164,-3.986139509,0.015242565,CvsT4,M.cavernosa,Florida,glycerol-3-phosphate biosynthetic process,other metabolic processes,P
+22969,GO:0046203,Mcavernosa01252,spermidine catabolic process,BP,0.004225595,-2.691997683,0.000245061,CvsT2,M.cavernosa,Florida,spermidine catabolic process,other metabolic processes,P
+22970,GO:0046203,Mcavernosa01252,spermidine catabolic process,BP,0.004225595,-2.078152054,0.039662932,CvsT1,M.cavernosa,Florida,spermidine catabolic process,other metabolic processes,P
+22975,GO:0046208,Mcavernosa01252,spermine catabolic process,BP,0.004225595,-2.691997683,0.000245061,CvsT2,M.cavernosa,Florida,spermine catabolic process,other metabolic processes,P
+22976,GO:0046208,Mcavernosa01252,spermine catabolic process,BP,0.004225595,-2.078152054,0.039662932,CvsT1,M.cavernosa,Florida,spermine catabolic process,other metabolic processes,P
+26721,GO:0050996,Mcavernosa03157,positive regulation of lipid catabolic process,BP,0.009110924,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,positive regulation of lipid catabolic process,other metabolic processes,P
+30547,GO:0075044,Mcavernosa13005,positive regulation by symbiont of host autophagy,BP,0.010771441,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,autophagy of host cells during interaction with symbiont,other metabolic processes,P
+30548,GO:0075044,Mcavernosa13005,positive regulation by symbiont of host autophagy,BP,0.010771441,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,autophagy of host cells during interaction with symbiont,other metabolic processes,P
+1408,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of receptor internalization,protein metabolism,P
+1411,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of receptor internalization,protein metabolism,P
+4606,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.078882671,0.001419634,CvsT2,M.cavernosa,Florida,glycyl-tRNA aminoacylation,protein metabolism,P
+4608,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.005559371,0.003516066,CvsT3,M.cavernosa,Florida,glycyl-tRNA aminoacylation,protein metabolism,P
+4610,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.065820478,0.002377438,CvsT1,M.cavernosa,Florida,glycyl-tRNA aminoacylation,protein metabolism,P
+4674,GO:0006497,Mcavernosa13005,protein lipidation,BP,0.021325233,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,protein amino acid lipidation,protein metabolism,P
+4675,GO:0006497,Mcavernosa13005,protein lipidation,BP,0.021325233,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,protein amino acid lipidation,protein metabolism,P
+4686,GO:0006513,Mcavernosa08717,protein monoubiquitination,BP,0.047496768,-1.411252966,0.006769312,CvsT1,M.cavernosa,Florida,protein monoubiquitination,protein metabolism,P
+4687,GO:0006513,Mcavernosa08717,protein monoubiquitination,BP,0.047496768,-1.43965391,0.003623942,CvsT2,M.cavernosa,Florida,protein monoubiquitination,protein metabolism,P
+4688,GO:0006513,Mcavernosa08717,protein monoubiquitination,BP,0.047496768,-1.323861668,0.016213107,CvsT3,M.cavernosa,Florida,protein monoubiquitination,protein metabolism,P
+8120,GO:0010499,Mcavernosa22344,proteasomal ubiquitin-independent protein catabolic process,BP,0.016437567,-4.008289508,0.017345891,CvsT4,M.cavernosa,Florida,proteasomal ubiquitin-independent protein catabolic process,protein metabolism,P
+8557,GO:0010862,Mcavernosa15503,positive regulation of pathway-restricted SMAD protein phosphorylation,BP,0.04356632,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of pathway-restricted SMAD protein phosphorylation,protein metabolism,P
+8559,GO:0010862,Mcavernosa15503,positive regulation of pathway-restricted SMAD protein phosphorylation,BP,0.04356632,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of pathway-restricted SMAD protein phosphorylation,protein metabolism,P
+14951,GO:0031396,Mcavernosa13005,regulation of protein ubiquitination,BP,0.038019541,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,regulation of protein ubiquitination,protein metabolism,P
+14952,GO:0031396,Mcavernosa13005,regulation of protein ubiquitination,BP,0.038019541,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,regulation of protein ubiquitination,protein metabolism,P
+26449,GO:0050730,Mcavernosa03157,regulation of peptidyl-tyrosine phosphorylation,BP,0.022968759,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,regulation of peptidyl-tyrosine phosphorylation,protein metabolism,P
+4607,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.078882671,0.001419634,CvsT2,M.cavernosa,Florida,glycyl-tRNA aminoacylation,RNA metabolism,P
+4609,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.005559371,0.003516066,CvsT3,M.cavernosa,Florida,glycyl-tRNA aminoacylation,RNA metabolism,P
+4611,GO:0006426,Mcavernosa26093,glycyl-tRNA aminoacylation,BP,0.00377484,-2.065820478,0.002377438,CvsT1,M.cavernosa,Florida,glycyl-tRNA aminoacylation,RNA metabolism,P
+5380,GO:0007178,Mcavernosa15503,transmembrane receptor protein serine/threonine kinase signaling pathway,BP,0.033629173,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,transmembrane receptor protein serine/threonine kinase signaling pathway,signal transduction,P
+5381,GO:0007178,Mcavernosa15503,transmembrane receptor protein serine/threonine kinase signaling pathway,BP,0.033629173,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,transmembrane receptor protein serine/threonine kinase signaling pathway,signal transduction,P
+8556,GO:0010862,Mcavernosa15503,positive regulation of pathway-restricted SMAD protein phosphorylation,BP,0.04356632,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of pathway-restricted SMAD protein phosphorylation,signal transduction,P
+8558,GO:0010862,Mcavernosa15503,positive regulation of pathway-restricted SMAD protein phosphorylation,BP,0.04356632,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of pathway-restricted SMAD protein phosphorylation,signal transduction,P
+15263,GO:0031663,Mcavernosa03157,lipopolysaccharide-mediated signaling pathway,BP,0.023025443,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,lipopolysaccharide-mediated signaling pathway,signal transduction,P
+16163,GO:0032486,Mcavernosa24806,Rap protein signal transduction,BP,0.007407729,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,Rap protein signal transduction,signal transduction,P
+18016,GO:0034141,Mcavernosa25973,positive regulation of toll-like receptor 3 signaling pathway,BP,0.009328119,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of toll-like receptor 3 signaling pathway,signal transduction,P
+18018,GO:0034141,Mcavernosa25973,positive regulation of toll-like receptor 3 signaling pathway,BP,0.009328119,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of toll-like receptor 3 signaling pathway,signal transduction,P
+19005,GO:0035023,Mcavernosa25973,regulation of Rho protein signal transduction,BP,0.010385489,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of Rho protein signal transduction,signal transduction,P
+19006,GO:0035023,Mcavernosa25973,regulation of Rho protein signal transduction,BP,0.010385489,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of Rho protein signal transduction,signal transduction,P
+19008,GO:0035025,Mcavernosa18547,positive regulation of Rho protein signal transduction,BP,0.033433478,-2.68666738,4.73E-07,CvsT3,M.cavernosa,Florida,positive regulation of Rho protein signal transduction,signal transduction,P
+19009,GO:0035025,Mcavernosa18547,positive regulation of Rho protein signal transduction,BP,0.033433478,-2.479373075,2.30E-05,CvsT4,M.cavernosa,Florida,positive regulation of Rho protein signal transduction,signal transduction,P
+19010,GO:0035025,Mcavernosa18547,positive regulation of Rho protein signal transduction,BP,0.033433478,-2.295514097,8.89E-05,CvsT1,M.cavernosa,Florida,positive regulation of Rho protein signal transduction,signal transduction,P
+19011,GO:0035025,Mcavernosa18547,positive regulation of Rho protein signal transduction,BP,0.033433478,-2.18273819,0.000320485,CvsT2,M.cavernosa,Florida,positive regulation of Rho protein signal transduction,signal transduction,P
+24755,GO:0048009,Mcavernosa03157,insulin-like growth factor receptor signaling pathway,BP,0.021801135,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,insulin-like growth factor receptor signaling pathway,signal transduction,P
+28934,GO:0060391,Mcavernosa15503,positive regulation of SMAD protein signal transduction,BP,0.027745706,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of SMAD protein nuclear translocation,signal transduction,P
+28936,GO:0060391,Mcavernosa15503,positive regulation of SMAD protein signal transduction,BP,0.027745706,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of SMAD protein nuclear translocation,signal transduction,P
+30109,GO:0070528,Mcavernosa25973,protein kinase C signaling,BP,0.02815273,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,protein kinase C signaling cascade,signal transduction,P
+30110,GO:0070528,Mcavernosa25973,protein kinase C signaling,BP,0.02815273,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,protein kinase C signaling cascade,signal transduction,P
+14051,GO:0030587,Mcavernosa24806,sorocarp development,BP,0.030752658,-0.991656755,0.041178809,CvsT2,M.cavernosa,Florida,sorocarp development,stress response,P
+18015,GO:0034141,Mcavernosa25973,positive regulation of toll-like receptor 3 signaling pathway,BP,0.009328119,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,positive regulation of toll-like receptor 3 signaling pathway,stress response,P
+18017,GO:0034141,Mcavernosa25973,positive regulation of toll-like receptor 3 signaling pathway,BP,0.009328119,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,positive regulation of toll-like receptor 3 signaling pathway,stress response,P
+18546,GO:0034614,Mcavernosa13005,cellular response to reactive oxygen species,BP,0.0323525,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,cellular response to reactive oxygen species,stress response,P
+18547,GO:0034614,Mcavernosa13005,cellular response to reactive oxygen species,BP,0.0323525,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,cellular response to reactive oxygen species,stress response,P
+1406,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of receptor internalization,transport,P
+1409,GO:0002090,Mcavernosa25973,regulation of receptor internalization,BP,0.029506907,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of receptor internalization,transport,P
+9778,GO:0015918,Mcavernosa15302,sterol transport,BP,0.032841677,-5.344808043,0.01764079,CvsT3,M.cavernosa,Florida,sterol transport,transport,P
+15863,GO:0032218,Mcavernosa11724,riboflavin transport,BP,0.019211729,-0.688347848,0.046691844,CvsT4,M.cavernosa,Florida,riboflavin transport,transport,P
+16974,GO:0033227,Mcavernosa25973,dsRNA transport,BP,0.022817482,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,dsRNA transport,transport,P
+16975,GO:0033227,Mcavernosa25973,dsRNA transport,BP,0.022817482,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,dsRNA transport,transport,P
+27018,GO:0051280,Mcavernosa03157,negative regulation of release of sequestered calcium ion into cytosol,BP,0.012706826,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,negative regulation of release of sequestered calcium ion into cytosol,transport,P
+27352,GO:0051580,Mcavernosa25973,regulation of neurotransmitter uptake,BP,0.009300416,-2.719399108,0.000239703,CvsT2,M.cavernosa,Florida,regulation of neurotransmitter uptake,transport,P
+27354,GO:0051580,Mcavernosa25973,regulation of neurotransmitter uptake,BP,0.009300416,2.726494755,0.002353914,T2vsT3,M.cavernosa,Florida,regulation of neurotransmitter uptake,transport,P
+28933,GO:0060391,Mcavernosa15503,positive regulation of SMAD protein signal transduction,BP,0.027745706,-2.09934597,0.008148406,CvsT3,M.cavernosa,Florida,positive regulation of SMAD protein nuclear translocation,transport,P
+28935,GO:0060391,Mcavernosa15503,positive regulation of SMAD protein signal transduction,BP,0.027745706,-1.847841721,0.036764989,CvsT2,M.cavernosa,Florida,positive regulation of SMAD protein nuclear translocation,transport,P
+29780,GO:0070257,Mcavernosa13005,positive regulation of mucus secretion,BP,7.15E-05,1.240011733,0.014007039,CvsT3,M.cavernosa,Florida,positive regulation of mucus secretion,transport,P
+29781,GO:0070257,Mcavernosa03157,positive regulation of mucus secretion,BP,7.15E-05,-2.306681698,0.013384452,CvsT2,M.cavernosa,Florida,positive regulation of mucus secretion,transport,P
+29782,GO:0070257,Mcavernosa13005,positive regulation of mucus secretion,BP,7.15E-05,1.258737966,0.015242565,CvsT4,M.cavernosa,Florida,positive regulation of mucus secretion,transport,P
+30081,GO:0070509,Mcavernosa33068,calcium ion import,BP,0.043535909,-1.046864772,0.0261073,CvsT2,M.cavernosa,Florida,calcium ion import,transport,P
