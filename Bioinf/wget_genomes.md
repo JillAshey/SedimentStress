@@ -4,15 +4,23 @@
 
 #### [M. capitata](http://cyanophora.rutgers.edu/montipora/) 
 
-###### Citation: Shumaker et al. (2019). Genome analysis of the rice coral Montipora capitata.
+###### Citation: Stephens, T.G., Strand, E.L., et al. Divergent life history strategies and response to stress in two sympatric Hawaiian coral species. Under Review
 
-Genome file: ```wget http://cyanophora.rutgers.edu/montipora/Mcap.genome_assembly.fa.gz```
+Using Version 2
 
-Annotation file: ```http://cyanophora.rutgers.edu/montipora/Mcap.GFFannotation.gff```
+Genome file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.assembly.fasta.gz```
+
+Annotation file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.gff3.gz```
+
+Protein file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.pep.faa.gz```
+
+Transcript file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.cds.fna.gz```
 
 #### [P. compressa](http://cyanophora.rutgers.edu/porites_compressa/) 
 
 ###### Citation: Lee et al. (2020). Coral genome size variation may be explained by isolation in the Hawaiian Archipelago.
+
+New version?
 
 Genome file: ```wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_contigs.fasta.gz```
 
@@ -33,6 +41,10 @@ Genome file: ```wget http://plut.reefgenomics.org/download/plut_final_2.1.fasta.
 
 Annotation file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.genes.gff3.gz```
 
+Protein file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.proteins.fasta.gz```
+
+Transcript file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.transcripts.fasta.gz```
+
 
 ### Florida species 
 
@@ -50,6 +62,10 @@ Permission to use from Drs. Shelia Kitchen & Iliana Baums
 Genome File: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_genomic.fna.gz```
 
 Annotation file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_genomic.gff.gz```
+
+Protein file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_protein.faa.gz```
+
+Transcript file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_rna.fna.gz```
 
 #### [Montastraea cavernosa](https://www.dropbox.com/s/0inwmljv6ti643o/Mcavernosa_genome.tgz?dl=0&file_subpath=%2FMcav_genome)
 ###### Matz lab (https://matzlab.weebly.com/data--code.html)
