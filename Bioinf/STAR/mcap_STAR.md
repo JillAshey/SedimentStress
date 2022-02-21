@@ -71,3 +71,10 @@ sbatch star_index_mcap.sh
 ```
 
 Submitted batch job 1978534
+
+20220219 - okay so it ran, but something got messed up. there is no info in the genome index for sjdbList files. It might be because of how I separated out the transcript_id in R? Going to go back now and check code
+
+20220221 - I separated out the transcript_id in R using a different method, copied the new gff fixed file to server, and now going to re-run ```star_index_mcap.sh```
+
+Submitted batch job 1979176
+
