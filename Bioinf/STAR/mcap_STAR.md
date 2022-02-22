@@ -78,3 +78,58 @@ Submitted batch job 1978534
 
 Submitted batch job 1979176
 
+It seems to have worked! Good amount of info in the sjdbList files. Now to align reads against mcap
+
+c) Align reads 
+
+The mcap samples are: `5_2.fastq.gz, 10_2.fastq.gz, 13_2.fastq.gz, 14_2.fastq.gz, 15_2.fastq.gz, 16_2.fastq.gz, 19_2.fastq.gz, 20_2.fastq.gz, 40_2.fastq.gz, 45_2.fastq.gz, 48_2.fastq.gz`. Going to separate them out to run on STAR first and then will run all other samples
+
+
+Link to trimmed files 
+
+```
+mkdir AlignReads_mcapV2
+cd AlignReads_mcapV2
+ln -s /data/putnamlab/jillashey/Francois_data/Hawaii/data/trimmed/*trim.fq .
+```
+
+Move mcap samples to their own directory 
+
+```
+mkdir mcap_only
+mv 5_2.fastq.trim.fq 10_2.fastq.trim.fq 13_2.fastq.trim.fq 14_2.fastq.trim.fq 15_2.fastq.trim.fq 16_2.fastq.trim.fq 19_2.fastq.trim.fq 20_2.fastq.trim.fq 40_2.fastq.trim.fq 45_2.fastq.trim.fq 48_2.fastq.trim.fq mcap_only/
+cd mcap_only
+```
+
+Let's do a test sample first 
+
+```
+nano test_5_2_align.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="test_align_mcap_out_error"
+#SBATCH --output="test_align_mcap_out_error"
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2 --readFilesIn 5_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 5_2_test.
+
+sbatch test_5_2_align.sh
+```
+
+Submitted batch job 1979184
+
+Keep getting this error: EXITING because of fatal ERROR: could not make temporary directory: /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/
+SOLUTION: (i) please check the path and writing permissions 
+ (ii) if you specified --outTmpDir, and this directory exists - please remove it before running STAR
+
+Feb 21 23:43:57 ...... FATAL ERROR, exiting
+
+Not sure wju
