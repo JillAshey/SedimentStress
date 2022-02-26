@@ -119,7 +119,7 @@ nano test_5_2_align.sh
 
 module load STAR/2.5.3a-foss-2016b
 
-STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2 --readFilesIn 5_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 5_2_test.
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/test_TMP --readFilesIn 5_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 5_2_test.
 
 sbatch test_5_2_align.sh
 ```
@@ -132,4 +132,37 @@ SOLUTION: (i) please check the path and writing permissions
 
 Feb 21 23:43:57 ...... FATAL ERROR, exiting
 
-Not sure wju
+Not sure why... going to try later 
+
+Okay tried again. I had the --outTmpDir going to `/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2` but changed it so it would go to `/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/test_TMP `. Submitted batch job 1979524. Success! Took ~75 mins 
+
+Now will run w/ all mcap samples 
+
+```
+nano AlignReads_mcap_only.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_mcap_only_out_error"
+#SBATCH --output="Align_mcap_only_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2/mcap_only
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch --array=1-11 AlignReads_mcap_only.sh # submit as an array job 
+```
+
+Submitted batch job 1979526
