@@ -6,7 +6,7 @@ For sediment stress paper, we initially did not have Mcap metadata and so did no
 
 Deleted old Mcap genome directory off of server bc those files were all of old Mcap version. Now using files from http://cyanophora.rutgers.edu/montipora/ (version 2). Download and unzip all files before moving forward.
 
-File quality and trimming has already been done for these samples, so will go right into STAR
+File quality and trimming has already been done for these reads, so will go right into STAR
 
 a) After downloading onto server, unzip files 
 
@@ -166,3 +166,124 @@ sbatch --array=1-11 AlignReads_mcap_only.sh # submit as an array job
 ```
 
 Submitted batch job 1979526
+
+Cool it ran in a few hours. 3 samples still running. Now will align the rest of samples against mcap genome 
+
+```
+nano AlignReads_mcap.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="Align_mcap_out_error"
+#SBATCH --output="Align_only_out"
+
+module load STAR/2.5.3a-foss-2016b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2
+
+array1=($(ls $F/*trim.fq))
+for i in ${array1[@]}
+do
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir ${i}_TMP --readFilesIn ${i} --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix ${i}.
+done 
+
+sbatch --array=1-53%15 AlignReads_mcap.sh # submit as an array job 
+```
+
+Submitted batch job 1979560
+
+d) Perform gene counts with stringTie
+
+Make folders for stringtie results 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star
+mkdir mcap_V2
+cd mcap_V2
+mkdir BAM GTF GTF_merge
+```
+
+Move BAM files to stringTie folder 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/AlignReads_mcapV2/mcap_only
+mv *Aligned.sortedByCoord.out.bam /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+```
+
+For some reason the 14_2, 19_2, and 45_2 BAM files is empty? so something must have gone wrong in STAR, but it still gave me % mapping and all that. going back to STAR to rerun. 
+
+When checking file sizes with `ls -l`, it looks like all the files in the STAR folder are okay except for 45_2. So why is 14_2 and 19_2 empty? Weird. it looks like some samples just take longer to align in STAR? Maybe because that particular sample has a lot of reads, but looking at raw read counts, thats not necessarily true. Maybe STAR just quit early? Maybe its an issue with running jobs as an array. idk. this is not ideal, but im just going to align them with their own scripts 
+
+14_2 alignment
+
+```
+nano 14_2_align.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="14_2_align_mcap_out_error"
+#SBATCH --output="14_2_align_mcap_out_error"
+
+module load STAR/2.5.3a-foss-2016b
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/test_TMP --readFilesIn 14_2.fastq.trim.fq --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_mcapV2/ --twopassMode Basic --twopass1readsN -1 --outStd Log BAM_Unsorted BAM_Quant --outSAMtype BAM Unsorted SortedByCoordinate --outReadsUnmapped Fastx --outFileNamePrefix 14_2.
+
+sbatch 14_2_align.sh
+```
+
+Submitted batch job 1979568 - canceled, was still pending. waiting for other STAR alignment to finish running 
+
+also may need to do 48_2? Very confusing...when I look at the Log.final.out file, it gives me % mapped and all the other stats. But when I look at the Log.progress.out file, it doesn't finish mapping...But when I look at the Log.out file, it says all done at the bottom.
+
+Samples that did not finish mapping (according to Log.progress.out file): 15_2, 20_2,
+
+40_2 doesnt even have any data in Log.progress.out file. Ugh in the Log.out file, it only got to loading the genome. How does it have a Log.final.out file then?
+
+okay just let everyhing run. looks like everything was just still running and i was jumping the gun moving forward w/ the analysis. 
+
+NOW assemble and estimate reads 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+
+nano stringTie_mcap_assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="assemble_mcap_out_error"
+#SBATCH --output="assemble_mcap_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}; do
+	stringtie -G /data/putnamlab/jillashey/genome/Mcap/Mcap.gff.annotations.fixed_transcript.gff3 -e -o ${i}.gtf ${i}
+	echo "${i}"
+done
+
+sbatch stringTie_mcap_assemble.sh
+```
+
+Still need to submit job!!!!

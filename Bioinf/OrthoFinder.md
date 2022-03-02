@@ -30,9 +30,22 @@ ln -s /data/putnamlab/jillashey/genome/Mcav/Mcavernosa_annotation/Mcavernosa.mak
 ln -s /data/putnamlab/jillashey/genome/Ofav/GCF_002042975.1_ofav_dov_v1_protein.faa
 ln -s /data/putnamlab/jillashey/genome/Pacuta/Pocillopora_acuta_HIv1.genes.pep.faa 
 ln -s /data/putnamlab/jillashey/genome/Plutea/plut2v1.1.proteins.fasta
+
 ```
 
+20220227
+
+We added Mcap to our sediment stress analysis because the mcap metadata was found. So I need to rerun OrthoFinder w/ Mcap
+
 Run OrthoFinder 
+
+
+
+
+
+
+
+
 
 Code from HP Mcap/Pacuta
 
@@ -70,6 +83,12 @@ sbatch orthofinder.sh
 ```
 
 Submitted batch job 1963934
+
+
+
+
+
+Results prior to 20220226 (prior to mcap addition)
 
 Lets see if this works. Worked! 
 
@@ -163,6 +182,4 @@ scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/OrthoFinder/protein
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Jan25/Gene_Trees/OG0000000_tree.txt .
 
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Jan25/Gene_Duplication_Events/SpeciesTree_Gene_Duplications_0.5_Support.txt .
-
-
 ```
