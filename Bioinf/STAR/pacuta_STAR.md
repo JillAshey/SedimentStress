@@ -573,3 +573,63 @@ wc -l
 ```
 
 Because of the number of MSTRG/STRG gene ids that are generated, I am going to use ```gene_count_pacuta_matrix_merge.csv``` to analyze gene counts. In R, I will merge this csv file w/ ```stringtie_pacuta_merged.gtf``` to match MSTRG/STRG ids w/ gene ids from original gff.
+
+20220310
+
+Running STAR to try to align Pacuta transcriptome against Pacuta genome (doing this after convo w/ Kevin yesterday about him trying to do the same thing for Past). going to run this code on Andromeda (so using different version of star than I usually do on bluewaves 
+
+First, need to make genome index w/ new STAR version 
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/
+mkdir transcriptome_pacuta
+cd transcriptome_pacuta/
+
+nano index_transcriptome_pacuta.sh
+
+#!/bin/bash
+#SBATCH -t 48:00:00
+#SBATCH --nodes=1 --ntasks-per-node=2
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="index_transcriptome_pacuta_out_error"
+#SBATCH --output="index_transcriptome_pacuta_out"
+
+module load STAR/2.7.2b-GCC-8.3.0
+
+STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/transcriptome_pacuta/GenomeIndex_transcriptome_pacuta --genomeFastaFiles /data/putnamlab/jillashey/genome/Pacuta/Pocillopora_acuta_HIv1.assembly.purged.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Pacuta/Pacuta.gff.annotations.fixed_transcript.gff3
+
+sbatch index_transcriptome_pacuta.sh
+```
+
+Submitted batch job 117868
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/
+mkdir AlignTranscriptome_pacuta
+cd AlignTranscriptome_pacuta/
+
+nano transcriptome_align.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="transcriptome_align_out_error"
+#SBATCH --output="transcriptome_align_out"
+
+module load STAR/2.7.2b-GCC-8.3.0
+
+STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/transcriptome_TMP --readFilesIn /data/putnamlab/jillashey/genome/Pacuta/braker_v1.codingseq.fasta --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_pacuta/ --outSAMtype BAM Unsorted SortedByCoordinate --outFileNamePrefix transcriptome_align.
+
+sbatch transcriptome_align.sh
+```
+
+Submitted batch job 117866
