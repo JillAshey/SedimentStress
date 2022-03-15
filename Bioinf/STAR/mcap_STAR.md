@@ -255,6 +255,8 @@ okay just let everyhing run. looks like everything was just still running and i 
 
 NOW assemble and estimate reads 
 
+Assemble reads w/ genome annotation
+
 ```
 cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
 
@@ -286,4 +288,99 @@ done
 sbatch stringTie_mcap_assemble.sh
 ```
 
-Still need to submit job!!!!
+Submitted batch job 1981735. Finished in ~1hr
+
+Merge stringTie gtf results 
+
+```
+# move gtf files to their own folder 
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+mv *gtf ../GTF
+cd ../GTF
+
+ls *gtf > mcap_mergelist.txt
+cat mcap_mergelist.txt
+module load StringTie/2.1.1-GCCcore-7.3.0
+stringtie --merge -p 8 -G /data/putnamlab/jillashey/genome/Mcap/Mcap.gff.annotations.fixed_transcript.gff3 -o stringtie_mcap_merged.gtf mcap_mergelist.txt
+```
+
+Assess assembly quality 
+
+```
+module load gffcompare/0.11.5-foss-2018b
+
+gffcompare -r /data/putnamlab/jillashey/genome/Mcap/Mcap.gff.annotations.fixed_transcript.gff3 -o Mcap.merged stringtie_mcap_merged.gtf
+	55086 reference transcripts loaded.
+	55086 query transfrags loaded.
+# good, same # of protein seqs
+```
+
+Re-estimate assembly 
+
+```
+nano stringTie_mcap_re-assemble.sh
+
+#!/bin/bash
+#SBATCH -t 100:00:00
+#SBATCH --nodes=1 --ntasks-per-node=20
+#SBATCH --export=NONE
+#SBATCH --mem=100GB
+#SBATCH --mail-type=BEGIN,END,FAIL
+#SBATCH --mail-user=jillashey@uri.edu
+#SBATCH --account=putnamlab
+#SBATCH --error="re-assemble_mcap_out_error"
+#SBATCH --output="re-assemble_mcap_out"
+
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load gffcompare/0.11.5-foss-2018b
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+
+array1=($(ls $F/*bam))
+for i in ${array1[@]}
+do
+stringtie -e -G /data/putnamlab/jillashey/genome/Mcap/Mcap.gff.annotations.fixed_transcript.gff3 -o ${i}.merge.gtf ${i}
+echo "${i}"
+done
+
+sbatch stringTie_mcap_re-assemble.sh
+```
+
+Submitted batch job 1981736
+
+Create gene matrix 
+
+```
+# copy python script to mcap folder 
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/pacuta/GTF_merge
+cp prepDE.py ../../mcap_V2/GTF_merge/
+
+# move merge.gtf files to their own folder 
+cd /data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/BAM
+mv * merge.gtf ../GTF_merge
+cd ../GTF_merge
+
+# make gene matrix 
+module load StringTie/2.1.1-GCCcore-7.3.0
+module load Python/2.7.15-foss-2018b
+
+F=/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/GTF_merge/
+
+array2=($(ls *merge.gtf))
+
+for i in ${array2[@]}
+do
+echo "${i} $F${i}" >> sample_list_mcap.txt
+done
+
+python prepDE.py -g gene_count_mcap_matrix.csv -i sample_list_mcap.txt
+```
+
+HOORAY!!!!!!! FINALLY a gene count matrix for mcap!!!
+
+Secure-copy gene counts onto local computer
+
+```
+
+```

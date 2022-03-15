@@ -14,8 +14,8 @@ Make new directories
 
 ```
 cd /data/putnamlab/jillashey
-mkdir mkdir OrthoFinder
-cd mkdir OrthoFinder
+mkdir OrthoFinder
+cd OrthoFinder
 ```
 
 Put protein sequences of interest for all species in folder together 
@@ -33,21 +33,7 @@ ln -s /data/putnamlab/jillashey/genome/Plutea/plut2v1.1.proteins.fasta
 
 ```
 
-20220227
-
-We added Mcap to our sediment stress analysis because the mcap metadata was found. So I need to rerun OrthoFinder w/ Mcap
-
-Run OrthoFinder 
-
-
-
-
-
-
-
-
-
-Code from HP Mcap/Pacuta
+Code 
 
 ```
 nano orthofinder.sh 
@@ -83,10 +69,6 @@ sbatch orthofinder.sh
 ```
 
 Submitted batch job 1963934
-
-
-
-
 
 Results prior to 20220226 (prior to mcap addition)
 
@@ -183,3 +165,25 @@ scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/OrthoFinder/protein_se
 
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Jan25/Gene_Duplication_Events/SpeciesTree_Gene_Duplications_0.5_Support.txt .
 ```
+
+
+20220315
+
+I ended up adding Mcap to my analysis, so now I need to rerun OrthoFinder including mcap in the code. 
+
+Put mcap protein sequences of interest folder for all species proteins
+
+```
+cd /data/putnamlab/jillashey/OrthoFinder/protein_seqs
+
+ln -s /data/putnamlab/jillashey/genome/Mcap/Montipora_capitata_HIv2.genes.pep.faa
+```
+
+Okay now i can just rerun the orthofinder code, i dont need to change anything in the script
+
+```
+cd /data/putnamlab/jillashey/OrthoFinder
+sbatch orthofinder.sh 
+```
+
+Submitted batch job 1981737
