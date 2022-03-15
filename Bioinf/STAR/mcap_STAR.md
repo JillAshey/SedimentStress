@@ -382,5 +382,5 @@ HOORAY!!!!!!! FINALLY a gene count matrix for mcap!!!
 Secure-copy gene counts onto local computer
 
 ```
-
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/mcap_V2/GTF_merge/gene_count_mcap_matrix.csv /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcap
 ```
