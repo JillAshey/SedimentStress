@@ -1,15 +1,16 @@
-"","Time","Sample.ID","Sample.name","Rep","Species","Treatment","Days","Location","SampleID"
-"X5_1",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X5_1"
-"X5_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X5_2"
-"X10_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X10_2"
-"X13_1",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X13_1"
-"X13_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X13_2"
-"X14_1",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X14_1"
-"X14_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X14_2"
-"X15_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X15_2"
-"X16_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X16_2"
-"X19_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X19_2"
-"X20_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X20_2"
-"X40_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X40_2"
-"X45_1",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X45_1"
-"X45_2",NA,NA,NA,NA,"Montipora capitata","unknown","unknown","HIMB","X45_2"
+Time,Sample.ID,Sample.name,Rep,Species,Treatment,Days,Location,SampleID
+NA,NA,5_T1_Mc_39_day7,NA,Montipora capitata,control,seven,HIMB,5_1.fastq.gz
+NA,NA,5_T1_Mc_39_day7,NA,Montipora capitata,control,seven,HIMB,5_2.fastq.gz
+NA,NA,10_T4_Mc_3_day4,NA,Montipora capitata,mid,four,HIMB,10_2.fastq.gz
+NA,NA,13_T6_Mc_2_day4,NA,Montipora capitata,control,four,HIMB,13_1.fastq.gz
+NA,NA,13_T6_Mc_2_day4,NA,Montipora capitata,control,four,HIMB,13_2.fastq.gz
+NA,NA,14_T6_Mc_15_day7,NA,Montipora capitata,control,seven,HIMB,14_1.fastq.gz
+NA,NA,14_T6_Mc_15_day7,NA,Montipora capitata,control,seven,HIMB,14_2.fastq.gz
+NA,NA,15_T2_Mc_37_day7,NA,Montipora capitata,mid,seven,HIMB,15_2.fastq.gz
+NA,NA,16_T5_Mc_11_day7,NA,Montipora capitata,high,seven,HIMB,16_2.fastq.gz
+NA,NA,19_T4_Mc_14_day7,NA,Montipora capitata,mid,seven,HIMB,19_2.fastq.gz
+NA,NA,20_T9_Mc_7_day4,NA,Montipora capitata,mid,four,HIMB,20_2.fastq.gz
+NA,NA,40_T7_Mc_10_day4,NA,Montipora capitata,high,four,HIMB,40_2.fastq.gz
+NA,NA,45_T8_Mc_8_day4,NA,Montipora capitata,control,four,HIMB,45_1.fastq.gz
+NA,NA,45_T8_Mc_8_day4,NA,Montipora capitata,control,four,HIMB,45_2.fastq.gz
+NA,NA,48_T3_Mc_35_day7,NA,Montipora capitata,high,seven,HIMB,48_2.fastq.gz
