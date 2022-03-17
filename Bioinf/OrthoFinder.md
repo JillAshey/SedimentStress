@@ -191,12 +191,66 @@ Submitted batch job 1981737
 took about ~3 hours. Let's check out the results 
 
 ```
+cd /data/putnamlab/jillashey/OrthoFinder
+less OrthoFinder_out
+
+# some info from the OrthoFinder_out file 
+Writing orthogroups to file
+---------------------------
+Orthogroups have been written to tab-delimited files:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.tsv
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.txt (OrthoMCL format)
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups_UnassignedGenes.tsv
+Sequences for orthogroups:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroup_Sequences/
+
+Inferring gene and species trees
+--------------------------------
+
+9216 trees had all species present and will be used by STAG to infer the species tree
+
+Writing results files
+=====================
+2022-03-16 00:40:46 : Done orthologues
+Orthogroups have been written to tab-delimited files:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.tsv
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.txt (OrthoMCL format)
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups_UnassignedGenes.tsv
+Sequences for orthogroups:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroup_Sequences/
+
+
+Gene trees:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Gene_Trees/
+
+Rooted species tree:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Species_Tree/SpeciesTree_rooted.txt
+
+Species-by-species orthologues directory:
+   /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/
+
+Orthogroup statistics:
+   Statistics_PerSpecies.tsv   Statistics_Overall.tsv   Orthogroups_SpeciesOverlaps.tsv
+
+OrthoFinder assigned 175301 genes (81.1% of total) to 21688 orthogroups. Fifty percent of all genes were in orthogroups with 7 or more genes (G50 was 7) and were contained in the largest 7643 orthogroups (O50 was 7643). There were 9216 orthogroups with all species present and 2765 of these consisted entirely of single-copy genes.
+
+CITATION:
+ When publishing work that uses OrthoFinder please cite:
+ Emms D.M. & Kelly S. (2015), Genome Biology 16:157
+
+ If you use the species tree in your work then please also cite:
+ Emms D.M. & Kelly S. (2017), MBE 34(12): 3267-3278
+ Emms D.M. & Kelly S. (2018), bioRxiv https://doi.org/10.1101/267914
+
+```
+
+81.1% of genes were assigned to orthogroups. It's good to see at least 80% of genes assigned to orthogroups. 
+
+```
 cd /data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/
 ```
 
 Let's first look at the stats in the `Comparative_Genomics_Statistics` directory
-
-QC: percentage of genes in orthogroups
 
 ```
 less Statistics_Overall.tsv 
@@ -220,7 +274,7 @@ Number of orthogroups with all species present  9216
 Number of single-copy orthogroups       2765
 ```
 
-OrthoFinder assigned 175301 genes (81.1% of total) to 21688 orthogroupds. This is good, we want to see ~80% of genes assigned to orthogroups. 
+Single copy orthogroups? what does this mean
 
 Now let's check out the species tree. 
 
@@ -230,5 +284,18 @@ cd ../Species_Tree/SpeciesTree_rooted.txt
 (plut2v1.1.proteins:0.118973,((Montipora_capitata_HIv2.genes.pep:0.215654,Acerv_assembly_v1.0.protein:0.226262)0.754991:0.104758,(Pocillopora_acuta_HIv1.genes.pep:0.199534,(Mcavernosa.maker.proteins:0.217807,GCF_002042975.1_ofav_dov_v1_protein:0.121675)0.719401:0.107009)0.643121:0.0746942)1:0.118973);
 ```
 
-Put this info into the ETE Toolkit tree viewer in web browser: 
+Put this info^^ into the [ETE Toolkit tree viewer](http://etetoolkit.org/treeview/) in web browser
 
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/SpeciesTree_OrthoFinder.png?token=GHSAT0AAAAAABJCIK77GUTOI3ZZETFQDV2WYRR4DSA)
+
+add picture of published tree for comparison
+
+Orthogroups 
+
+From [OrthoFinder Tutorial: Exploring OrthoFinder results](https://davidemms.github.io/orthofinder_tutorials/exploring-orthofinders-results.html): 
+
+"Often we’re interested in group-wise species comparisons, that is comparisons across a clade of species rather than between a pair of species. The generalisation of orthology to multiple species is the orthogroup. Just like orthologues are the genes descended from a single gene in the last common ancestor of a pair of species an orthogroup is the set of genes descended from a single gene in a group of species. Each gene tree from OrthoFinder, for example the one above, is for one orthogroup. The orthogroup gene tree is the tree we need to look at if we want it to include all pairwise orthologues. And even though some of the genes within an orthogroup can be paralogs of one another, if we tried to take any genes out then we would also be removing orthologs too.
+
+So if we want to do a comparison of the ‘equivalent’ genes in a set of species, we need to do the comparison across the genes in an othogroup. The orthogroups are in the file Orthogroups/Orthogroups.tsv. This table has one orthogroup per line and one spcies per column and is ordered from largest orthogroup to smallest. There is also a file in the legacy OrthoMCL format: Orthogroups/Orthogroups.txt."
+
+Going to copy `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.tsv` onto local computer and look at it in R (code [here](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd))

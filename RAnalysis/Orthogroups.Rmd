@@ -20,7 +20,7 @@ ran OrthoFinder on bluewaves, got lots of output. One file (xxx) has the Orthogr
 # Read in orthofinder data 
 ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 #ortho <- na.omit(ortho)
-colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Pacuta", "Plobata")
+colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Mcapitata", "Pacuta", "Plobata")
 ```
 
 ```{r}
@@ -28,6 +28,7 @@ colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "
 acerv_ortho <- select(ortho, c("Orthogroup", "Acervicornis"))
 mcav_ortho <- select(ortho, c("Orthogroup", "Mcavernosa"))
 ofav_ortho <- select(ortho, c("Orthogroup", "Ofaveolata"))
+mcap_ortho <- select(ortho, c("Orthogroup", "Mcapitata"))
 pacuta_ortho <- select(ortho, c("Orthogroup", "Pacuta"))
 plob_ortho <- select(ortho, c("Orthogroup", "Plobata"))
 
@@ -43,6 +44,10 @@ mcav_ortho <- na.omit(mcav_ortho)
 ofav_ortho <- ofav_ortho %>% mutate(Ofaveolata = strsplit(as.character(Ofaveolata), ",")) %>% 
     unnest(Ofaveolata)
 ofav_ortho <- na.omit(ofav_ortho)
+
+mcap_ortho <- mcap_ortho %>% mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
+    unnest(Mcapitata)
+mcap_ortho <- na.omit(mcap_ortho)
 
 pacuta_ortho <- pacuta_ortho %>% mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
     unnest(Pacuta)
@@ -160,19 +165,20 @@ length(unique(plob$Orthogroup)) # 58 orthogroups
 ## Plot shared orthogroups 
 venn.plot <- venn.diagram(
 	x = list(
-		A.cervicornis = acerv$Orthogroup,
-		M.cavernosa = mcav$Orthogroup,
-		O.faveolata = ofav$Orthogroup,
-		P.acuta = pacuta$Orthogroup,
-		P.lobata = plob$Orthogroup
+		A.cervicornis = acerv_ortho$Orthogroup,
+		M.cavernosa = mcav_ortho$Orthogroup,
+		O.faveolata = ofav_ortho$Orthogroup,
+		M.capitata = mcap_ortho$Orthogroup,
+		P.acuta = pacuta_ortho$Orthogroup,
+		P.lobata = plob_ortho$Orthogroup
 		),
-	filename = "Output/Figs/Venn/venn_Orthogroup_20220206.png",
+	filename = "Output/Figs/Venn/venn_Orthogroup_20220316.png",
 	col = "black",
-	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "gray28"),
 	alpha = 0.50,
 	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
 	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
-	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "gray28"),
 	cat.cex = 1.5,
 	cat.fontface = "bold",
 	margin = 0.1
@@ -182,6 +188,40 @@ venn.plot <- venn.diagram(
 intersect(acerv$Orthogroup, pacuta$Orthogroup)
 ```
 
+
+
+
+
+```{r}
+library(UpSetR)
+movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
+    header = T, sep = ";")
+
+upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
+    mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
+    text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
+
+# my data 
+# adding species names 
+colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
+acerv_ortho$Species <- "Acerv"
+colnames(mcav_ortho) <- c("Orthogroup", "gene_id")
+mcav_ortho$Species <- "Mcav"
+colnames(ofav_ortho) <- c("Orthogroup", "gene_id")
+ofav_ortho$Species <- "Ofav"
+colnames(mcap_ortho) <- c("Orthogroup", "gene_id")
+mcap_ortho$Species <- "Mcap"
+colnames(pacuta_ortho) <- c("Orthogroup", "gene_id")
+pacuta_ortho$Species <- "Pacuta"
+colnames(plob_ortho) <- c("Orthogroup", "gene_id")
+plob_ortho$Species <- "Plob"
+
+all <- rbind(acerv_ortho, mcav_ortho, ofav_ortho, mcap_ortho, pacuta_ortho, plob_ortho)
+all <- subset(all, select = -gene_id)
+all <- unique(all)
+
+upset(all, nsets = 6)
+```
 
 
 
