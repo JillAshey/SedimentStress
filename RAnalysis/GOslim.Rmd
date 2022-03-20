@@ -275,27 +275,53 @@ ggsave("Output/Figs/all_GOslim.MF_20220125.pdf", GO.MF.all, width = 40, height =
 
 Make bar chart for go slim term counts for all species
 ```{r}
+all.go.BP.slim <- read.csv("Output/GOSeq/all.go.BP.slim_20220208.csv", header = T)
+
 unique(all.go.BP.slim$Species)
 # "A.cervicornis" "P.lobata"      "P.acuta"       "M.cavernosa"  "O.faveolata"  
+
+# for this plot, remove "other biological processes" and "other metabolic processes"
+all.go.BP.slim <- all.go.BP.slim[!(all.go.BP.slim$GO.Slim.Term == "other biological processes") | (all.go.BP.slim$GO.Slim.Term == "other metabolic processes"),]
 
 ## plotting unique GO terms only - if I plot with all.go.BP.slim, I get duplicate GO slim terms bc its duplicating based on gene id/treatment?
 test <- select(all.go.BP.slim, c("GO.IDs", "term", "Species", "GO.Slim.Term"))
 test <- unique(test)
+test <- na.omit(test)
 
 count_by_group <- test %>%
   count(Species, GO.Slim.Term)
 count_by_group
 
+# plot 
 count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
-  geom_bar(position = "dodge", stat = "identity") +
-#  geom_text(aes(label = n), vjust = 0) +
-  theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1)) + 
-  theme(axis.text=element_text(size=50)) + 
-  theme(legend.key.size = unit(2, 'cm'), legend.text = element_text(size=30)) + 
+  geom_bar(position = "dodge", 
+           stat = "identity", 
+           width = 0.9) +
+  # geom_text(aes(label = n), 
+  #           position = position_dodge(0.9), 
+  #           size = 10, 
+  #           face = "bold") +
+  labs(title="Counts of GO Slim Categories", x ="", y = "Counts") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 65, 
+                                   #vjust = 0.5, 
+                                   hjust= 1, 
+                                   size=60)) + 
+  theme(axis.text.y = element_text(size = 60)) +
+  theme(axis.title.y = element_text(size = 40)) +
+  theme(plot.title = element_text(size = 100, hjust = 0.5)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 100)) + 
+  theme(legend.title = element_text(size = 60), 
+        legend.key.size = unit(2, "cm"),
+        legend.text = element_text(size=60), 
+        legend.position = c(0.85, 0.85), 
+        legend.justification = c("right", "top"),
+        legend.box.just = "right",
+        legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220207.pdf", count, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220207.png", count, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.pdf", count, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.png", count, width = 40, height = 40, units = c("in"))
 
 # include other biological/metabolic processes?
 ```
