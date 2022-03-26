@@ -68,11 +68,10 @@ rownames(countdata) <- countdata$gene_id
 
 ## Load metadata 
 ```{r}
-metadata_pacuta <- read.csv("Data/pdam_metadata_raw_filtered_cleaned.csv")
-metadata_pacuta <- na.omit(metadata_pacuta) # remove samples that have no metadata 
-metadata_pacuta$SampleID <- gsub("X", "", metadata_pacuta$SampleID)
+metadata_pacuta <- read.csv("Data/pacuta_metadata_raw_filtered.csv")
+metadata_pacuta <- na.omit(metadata_pacuta)
+metadata_pacuta$SampleID <- gsub(".fastq.gz", "", metadata_pacuta$SampleID)
 rownames(metadata_pacuta) <- metadata_pacuta$SampleID
-metadata_pacuta$Species <- "Pocillopora acuta" # change species from pdam to pacuta 
 ```
 
 # Subset count data for only pacuta samples with metadata based on SampleID and make sure rows of metadata = cols of count data
@@ -90,7 +89,7 @@ keep <- count_pacuta[tfil,] # identify genes to keep based on filter
 gn.keep <- rownames(keep)
 pacuta_counts_filt <- as.matrix(count_pacuta[which(rownames(count_pacuta) %in% gn.keep),]) 
 storage.mode(pacuta_counts_filt) <- "integer" # stores count data as integer 
-write.csv(pacuta_counts_filt, "Output/DESeq2/pacuta/pacuta_counts_filt_20220116.csv")
+#write.csv(pacuta_counts_filt, "Output/DESeq2/pacuta/pacuta_counts_filt_20220116.csv")
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(metadata_pacuta) %in% colnames(pacuta_counts_filt)) # must come out TRUE
 ```
@@ -159,7 +158,7 @@ DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_m
 #    specify fitType='local' or 'mean' to avoid this message next time.
 DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list))
 DEG_control_vs_mid.sig.list_full <- cbind(DEG_control_vs_mid.sig, DEG_control_vs_mid.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_mid.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_Mid_DEG_20220116.csv")
+#write.csv(DEG_control_vs_mid.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_Mid_DEG_20220116.csv")
 ```
 
 ### Compare control and high
@@ -177,7 +176,7 @@ DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_cont
 DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize
 DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list))
 DEG_control_vs_high.sig.list_full <- cbind(DEG_control_vs_high.sig, DEG_control_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_High_DEG_20220116.csv")
+#write.csv(DEG_control_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_C_vs_High_DEG_20220116.csv")
 ```
 
 ### Compare mid and high
@@ -195,7 +194,7 @@ DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_h
 DEG_mid_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize
 DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list))
 DEG_mid_vs_high.sig.list_full <- cbind(DEG_mid_vs_high.sig, DEG_mid_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_mid_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_Mid_vs_High_DEG_20220116.csv")
+#write.csv(DEG_mid_vs_high.sig.list_full, "Output/DESeq2/pacuta/pacuta_Mid_vs_High_DEG_20220116.csv")
 ```
 
 ## Make full list of differentially expressed genes and treatments 
@@ -214,13 +213,13 @@ DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full,
                   DEG_mid_vs_high.sig.list_full) # make sure column names are the same in all dfs before binding!
 dim(DEGs.all) # 339 x 20
 length(unique(DEGs.all$gene_id)) # 263 unique genes between all treatments 
-write.csv(DEGs.all, "Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220116.csv")
+#write.csv(DEGs.all, "Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220116.csv")
 
 # Bind all genes
 gene.all <- rbind(DEG_control_vs_mid,
                   DEG_control_vs_high,
                   DEG_mid_vs_high)
-write.csv(gene.all, "Output/DESeq2/pacuta/pacuta_AllGenes_AllTreatments_20220116.csv")
+#write.csv(gene.all, "Output/DESeq2/pacuta/pacuta_AllGenes_AllTreatments_20220116.csv")
 ```
 
 ## Identify unique genes from DEGs in CvsMid, CvsHigh, MidvsHigh
@@ -234,7 +233,7 @@ dim(DEGs.all_pacuta) # 263 unique DEGs among treatment comparisons
 ## 
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_pacuta$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv")
+#write.csv(counts(unique.sig.list), file = "Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
@@ -246,28 +245,26 @@ pacuta_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnDa
 percentVar_pca_pacuta <- round(100*attr(pacuta_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
 pacuta_DEGPCAplot <- ggplot(pacuta_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=6) +
+  geom_point(size=8) +
   xlab(paste0("PC1: ",percentVar_pca_pacuta[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_pacuta[2],"% variance")) +
   scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
   coord_fixed() +
   ggtitle(label = "P. acuta") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 10),
-        axis.title = element_text(size=15),
-        legend.position = "right",
-        panel.border = element_blank(), # Set border
-        #panel.grid.major = element_blank(), #Set major gridlines
-        #panel.grid.minor = element_blank(), #Set minor gridlines
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
-        axis.line = element_line(colour = "black"), #Set axes color
-        plot.background=element_blank()) #Set the plot background
+  theme(legend.text = element_text(size=18), 
+        #legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=18, face="bold"), 
+        axis.text = element_text(size=18), 
+        axis.title = element_text(size=18,  face="bold"), 
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
 pacuta_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- pacuta_DEGPCAplot$data
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220116.jpeg", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220116.pdf", pacuta_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220326.jpeg", pacuta_DEGPCAplot, width = 20, height = 25, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220326.pdf", pacuta_DEGPCAplot, width = 20, height = 25, units = "cm")
 ```
 
 

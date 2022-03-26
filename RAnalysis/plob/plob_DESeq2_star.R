@@ -61,7 +61,7 @@ gn.keep <- rownames(keep)
 plob_counts_filt <- as.matrix(count_plob[which(rownames(count_plob) %in% gn.keep),]) 
 dim(plob_counts_filt) # 15369 x 12
 storage.mode(plob_counts_filt) <- "integer" # stores count data as integer 
-write.csv(plob_counts_filt, "~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob_counts_filt.csv")
+#write.csv(plob_counts_filt, "~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/plob_counts_filt.csv")
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(metadata_plob) %in% colnames(plob_counts_filt)) # must come out TRUE
 # Set Treatment as a factor
@@ -119,7 +119,7 @@ DEG_control_vs_mid.sig["Treatment_Compare"] <- "CvsMid" # adding treatment compa
 DEG_control_vs_mid.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_mid.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_mid.sig.list <- as.data.frame(counts(DEG_control_vs_mid.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_mid.sig.list_full <- cbind(DEG_control_vs_mid.sig, DEG_control_vs_mid.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_mid.sig.list_full, file = "~/Desktop/plob_control_vs_mid_DEG_full_20210326.csv") # write out csv
+#write.csv(DEG_control_vs_mid.sig.list_full, file = "~/Desktop/plob_control_vs_mid_DEG_full_20210326.csv") # write out csv
 DEG_control_vs_mid.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_mid.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare C and high 
@@ -135,7 +135,7 @@ DEG_control_vs_high.sig["Treatment_Compare"] <- "CvsHigh" # adding treatment com
 DEG_control_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_high.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_high.sig.list <- as.data.frame(counts(DEG_control_vs_high.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_high.sig.list_full <- cbind(DEG_control_vs_high.sig, DEG_control_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_high.sig.list_full, file = "~/Desktop/plob_control_vs_high_DEG_full_20210326.csv") # write out csv
+#write.csv(DEG_control_vs_high.sig.list_full, file = "~/Desktop/plob_control_vs_high_DEG_full_20210326.csv") # write out csv
 DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare mid and high 
@@ -151,7 +151,7 @@ DEG_mid_vs_high.sig["Treatment_Compare"] <- "MidvsHigh" # adding treatment compa
 DEG_mid_vs_high.sig.list <- data[which(rownames(data) %in% rownames(DEG_mid_vs_high.sig)),] # subset list of significant genes from original count data 
 DEG_mid_vs_high.sig.list <- as.data.frame(counts(DEG_mid_vs_high.sig.list)) # make list of sig gene counts into a df
 DEG_mid_vs_high.sig.list_full <- cbind(DEG_mid_vs_high.sig, DEG_mid_vs_high.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_mid_vs_high.sig.list_full, file = "~/Desktop/plob_mid_vs_high_DEG_full_20210326.csv") # write out csv
+#write.csv(DEG_mid_vs_high.sig.list_full, file = "~/Desktop/plob_mid_vs_high_DEG_full_20210326.csv") # write out csv
 DEG_control_vs_high.vst.sig <- varianceStabilizingTransformation(DEG_mid_vs_high.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Make full list of genes and treatments
@@ -167,7 +167,7 @@ DEGs.all <- rbind(DEG_control_vs_mid.sig.list_full,
                   DEG_mid_vs_high.sig.list_full)
 dim(DEGs.all) # 219 x 20
 length(unique(DEGs.all$gene_id)) # 153 unique genes between all treatments 
-write.csv(DEGs.all, file = "~/Desktop/plob_DEGs.all_treatment_20210326.csv")
+#write.csv(DEGs.all, file = "~/Desktop/plob_DEGs.all_treatment_20210326.csv")
 
 ## Find intersections and unique results between treatments 
 # interactions
@@ -185,7 +185,7 @@ DEGs.all_plob <- as.data.frame(DEGs.all_plob)
 dim(DEGs.all_plob) # 153 unique DEGs among treatment comparisons 
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_plob$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "~/Desktop/plob_unique.sig.list_20210326.csv")
+#write.csv(counts(unique.sig.list), file = "~/Desktop/plob_unique.sig.list_20210326.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
@@ -198,30 +198,27 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
-
 plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=6) +
+  geom_point(size=8) +
   xlab(paste0("PC1: ",percentVar_pca_plob[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_plob[2],"% variance")) +
   scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
   coord_fixed() +
   ggtitle(label = "P. lobata") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 10),
-        axis.title = element_text(size=15),
-        legend.position = "right",
-        panel.border = element_blank(), # Set border
-        #panel.grid.major = element_blank(), #Set major gridlines
-        #panel.grid.minor = element_blank(), #Set minor gridlines
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
-        axis.line = element_line(colour = "black"), #Set axes color
-        plot.background=element_blank()) #Set the plot background
+  theme(legend.text = element_text(size=18), 
+        #legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=18, face="bold"), 
+        axis.text = element_text(size=18), 
+        axis.title = element_text(size=18,  face="bold"), 
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
 plob_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- plob_DEGPCAplot$data
-#ggsave("Output/Figs/plob/plob_DEGs_PCA_20211223.jpeg", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
-ggsave("Output/Figs/plob/plob_DEGs_PCA_20211223.pdf", plob_DEGPCAplot, width = 25, height = 25, units = "cm")
+ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.jpeg", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
+ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.pdf", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
 
 
 

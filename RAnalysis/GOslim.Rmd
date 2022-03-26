@@ -42,7 +42,6 @@ acerv.go.slim.BP <- unique(acerv.go.slim.BP)
 length(unique(acerv.go.slim.BP$GO.IDs)) # 278 unique BP GO terms 
 write.csv(acerv.go.slim.BP, "Output/GOSeq/acerv/acerv.go.slim.BP_20220208.csv")
 
-
 acerv.go.slim.CC <- subset(acerv.go.slim, ontology == "CC")
 acerv.go.slim.CC <- unique(acerv.go.slim.CC)
 length(unique(acerv.go.slim.CC$GO.IDs)) # 34 unique CC GO terms 
@@ -275,24 +274,28 @@ ggsave("Output/Figs/all_GOslim.MF_20220125.pdf", GO.MF.all, width = 40, height =
 
 Make bar chart for go slim term counts for all species
 ```{r}
+# read in data
 all.go.BP.slim <- read.csv("Output/GOSeq/all.go.BP.slim_20220208.csv", header = T)
 
+# Check species names
 unique(all.go.BP.slim$Species)
 # "A.cervicornis" "P.lobata"      "P.acuta"       "M.cavernosa"  "O.faveolata"  
 
 # for this plot, remove "other biological processes" and "other metabolic processes"
-all.go.BP.slim <- all.go.BP.slim[!(all.go.BP.slim$GO.Slim.Term == "other biological processes") | (all.go.BP.slim$GO.Slim.Term == "other metabolic processes"),]
+all.go.BP.slim <- subset(all.go.BP.slim, !GO.Slim.Term == "other biological processes" & !GO.Slim.Term == "other metabolic processes")
 
+# plot by species 
 ## plotting unique GO terms only - if I plot with all.go.BP.slim, I get duplicate GO slim terms bc its duplicating based on gene id/treatment?
 test <- select(all.go.BP.slim, c("GO.IDs", "term", "Species", "GO.Slim.Term"))
 test <- unique(test)
 test <- na.omit(test)
 
+# count GOslim by species
 count_by_group <- test %>%
   count(Species, GO.Slim.Term)
 count_by_group
 
-# plot 
+# plot
 count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
   geom_bar(position = "dodge", 
            stat = "identity", 
@@ -320,10 +323,96 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.pdf", count, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.png", count, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.pdf", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.png", count, width = 40, height = 30, units = c("in"))
 
-# include other biological/metabolic processes?
+# plot by location/sediment type
+all.go.BP.slim <- all.go.BP.slim %>% mutate(Location = 
+                                              case_when(Species == "A.cervicornis" ~ "Florida", 
+                                                        Species == "M.cavernosa" ~ "Florida",
+                                                        Species == "O.faveolata" ~ "Florida",
+                                                        Species == "P.acuta" ~ "Hawaii",
+                                                        Species == "P.lobata" ~ "Hawaii"))
+
+# count GOslim by location
+count_by_location <- all.go.BP.slim %>%
+  count(Location, GO.Slim.Term)
+count_by_location
+
+# plot
+count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x = GO.Slim.Term)) +
+  geom_bar(position = "dodge", 
+           stat = "identity", 
+           width = 0.9) +
+  # geom_text(aes(label = n), 
+  #           position = position_dodge(0.9), 
+  #           size = 10, 
+  #           face = "bold") +
+  labs(title="Counts of GO Slim Categories by Location", x ="", y = "Counts") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 65, 
+                                   #vjust = 0.5, 
+                                   hjust= 1, 
+                                   size=60)) + 
+  theme(axis.text.y = element_text(size = 60)) +
+  theme(axis.title.y = element_text(size = 40)) +
+  theme(plot.title = element_text(size = 100, hjust = 0.5)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 600)) + 
+  theme(legend.title = element_text(size = 60), 
+        legend.key.size = unit(2, "cm"),
+        legend.text = element_text(size=60), 
+        legend.position = c(0.85, 0.85), 
+        legend.justification = c("right", "top"),
+        legend.box.just = "right",
+        legend.background = element_rect(fill = "white", color = "black")) + 
+  scale_fill_manual(values = c("chartreuse3", "chocolate2"))
+count_location_plot
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220324.pdf", count_location_plot, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220324.png", count_location_plot, width = 40, height = 30, units = c("in"))
+
+# plot by morphology type
+all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology = 
+                                              case_when(Species == "A.cervicornis" ~ "Branching", 
+                                                        Species == "M.cavernosa" ~ "Massive",
+                                                        Species == "O.faveolata" ~ "Massive",
+                                                        Species == "P.acuta" ~ "Branching",
+                                                        Species == "P.lobata" ~ "Massive"))
+
+# count GOslim by morphology
+count_by_morph <- all.go.BP.slim %>%
+  count(Morphology, GO.Slim.Term)
+count_by_morph
+
+# plot
+count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.Slim.Term)) +
+  geom_bar(position = "dodge", 
+           stat = "identity", 
+           width = 0.9) +
+  # geom_text(aes(label = n), 
+  #           position = position_dodge(0.9), 
+  #           size = 10, 
+  #           face = "bold") +
+  labs(title="Counts of GO Slim Categories by Morphology", x ="", y = "Counts") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 65, 
+                                   #vjust = 0.5, 
+                                   hjust= 1, 
+                                   size=60)) + 
+  theme(axis.text.y = element_text(size = 60)) +
+  theme(axis.title.y = element_text(size = 40)) +
+  theme(plot.title = element_text(size = 100, hjust = 0.5)) +
+  scale_y_continuous(expand = c(0, 0), limits = c(0, 650)) + 
+  theme(legend.title = element_text(size = 60), 
+        legend.key.size = unit(2, "cm"),
+        legend.text = element_text(size=60), 
+        legend.position = c(0.85, 0.85), 
+        legend.justification = c("right", "top"),
+        legend.box.just = "right",
+        legend.background = element_rect(fill = "white", color = "black")) + 
+  scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+count_morph_plot
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220324.pdf", count_morph_plot, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220324.png", count_morph_plot, width = 40, height = 30, units = c("in"))
 ```
 
 

@@ -78,7 +78,7 @@ keep <- count_ofav[tfil,] # identify genes to keep based on filter
 gn.keep <- rownames(keep)
 ofav_counts_filt <- as.matrix(count_ofav[which(rownames(count_ofav) %in% gn.keep),]) 
 storage.mode(ofav_counts_filt) <- "integer" # stores count data as integer 
-write.csv(ofav_counts_filt, "Output/DESeq2/ofav/ofav_counts_filt_20220111.csv")
+#write.csv(ofav_counts_filt, "Output/DESeq2/ofav/ofav_counts_filt_20220111.csv")
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(ofav_metadata_sub) %in% colnames(ofav_counts_filt)) # must come out TRUE
 ```
@@ -153,7 +153,7 @@ DEG_control_vs_T1.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T1
 # Estimated rdf < 1.0; not estimating variance
 DEG_control_vs_T1.sig.list <- as.data.frame(counts(DEG_control_vs_T1.sig.list))
 DEG_control_vs_T1.sig.list_full <- cbind(DEG_control_vs_T1.sig, DEG_control_vs_T1.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T1.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T1_DEG_20220111.csv")
+#write.csv(DEG_control_vs_T1.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T1_DEG_20220111.csv")
 ```
 
 ### Compare control and T2
@@ -176,7 +176,7 @@ DEG_control_vs_T2.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T2
 # Estimated rdf < 1.0; not estimating variance
 DEG_control_vs_T2.sig.list <- as.data.frame(counts(DEG_control_vs_T2.sig.list))
 DEG_control_vs_T2.sig.list_full <- cbind(DEG_control_vs_T2.sig, DEG_control_vs_T2.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T2.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T2_DEG_20220111.csv")
+#write.csv(DEG_control_vs_T2.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T2_DEG_20220111.csv")
 ```
 
 ### Compare control and T3
@@ -199,7 +199,7 @@ DEG_control_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T3
 # Estimated rdf < 1.0; not estimating variance
 DEG_control_vs_T3.sig.list <- as.data.frame(counts(DEG_control_vs_T3.sig.list))
 DEG_control_vs_T3.sig.list_full <- cbind(DEG_control_vs_T3.sig, DEG_control_vs_T3.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T3.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T3_DEG_20220111.csv")
+#write.csv(DEG_control_vs_T3.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T3_DEG_20220111.csv")
 ```
 
 ### Compare control and T4
@@ -222,7 +222,7 @@ DEG_control_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T4
 # Estimated rdf < 1.0; not estimating variance
 DEG_control_vs_T4.sig.list <- as.data.frame(counts(DEG_control_vs_T4.sig.list))
 DEG_control_vs_T4.sig.list_full <- cbind(DEG_control_vs_T4.sig, DEG_control_vs_T4.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T4.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T4_DEG_20220111.csv")
+#write.csv(DEG_control_vs_T4.sig.list_full, "Output/DESeq2/ofav/ofav_C_vs_T4_DEG_20220111.csv")
 ```
 
 ### Compare T1 and T2
@@ -311,14 +311,14 @@ DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full,
                   DEG_control_vs_T4.sig.list_full) # make sure column names are the same in all dfs before binding!
 dim(DEGs.all) # 15 x 22
 length(unique(DEGs.all$gene_id)) # 8 unique genes between all treatments 
-write.csv(DEGs.all, "Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20220111.csv")
+#write.csv(DEGs.all, "Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20220111.csv")
 
 # Bind all genes
 gene.all <- rbind(DEG_control_vs_T1,
                   DEG_control_vs_T2,
                   DEG_control_vs_T3,
                   DEG_control_vs_T4)
-write.csv(gene.all, "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20220111.csv")
+#write.csv(gene.all, "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20220111.csv")
 ```
 
 ## Identify unique genes from DEGs in CvsMid, CvsHigh, MidvsHigh
@@ -332,7 +332,7 @@ dim(DEGs.all_ofav) # 8 unique DEGs among treatment comparisons
 ## 
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_ofav$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv")
+#write.csv(counts(unique.sig.list), file = "Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
@@ -346,31 +346,25 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 ofav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_ofav <- round(100*attr(ofav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 ofav_DEGPCAplot <- ggplot(ofav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=6) +
+  geom_point(size=8) +
   xlab(paste0("PC1: ",percentVar_pca_ofav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_ofav[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
   ggtitle(label = "O. favelota") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 10),
-        axis.title = element_text(size=15),
-        legend.position = "right",
-        panel.border = element_blank(), # Set border
-        #panel.grid.major = element_blank(), #Set major gridlines
-        #panel.grid.minor = element_blank(), #Set minor gridlines
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
-        axis.line = element_line(colour = "black"), #Set axes color
-        plot.background=element_blank()) #Set the plot background
-
-
-
-
+  theme(legend.text = element_text(size=18), 
+        #legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=18, face="bold"), 
+        axis.text = element_text(size=18), 
+        axis.title = element_text(size=18,  face="bold"), 
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
 ofav_DEGPCAplot
 # PCA plot is of differentially expressed genes only
-#PC.info <- pdam_DEGPCAplot$data
-#ggsave("~/Desktop/pdam_DEGs_PCA_20210705.jpeg", pdam_DEGPCAplot, width = 10, height = 10, units = "cm")
-ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220111.pdf", ofav_DEGPCAplot, width = 25, height = 25, units = "cm")
+PC.info <- mcav_DEG_PCA_plot$data
+ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220326.jpeg", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
+ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220326.pdf", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
 ```
 
 # Heatmap of DEGs

@@ -11,6 +11,8 @@ knitr::opts_chunk$set(echo = TRUE)
 # Load libraries
 library(VennDiagram)
 library(tidyverse)
+library("ggVennDiagram")
+
 ```
 
 Test code from [here](https://www.r-graph-gallery.com/14-venn-diagramm.html)
@@ -71,9 +73,9 @@ all <- all[,-c(1)] # remove weird first col
 
 ## subset by species 
 acerv <- all %>% filter(Species=="A.cervicornis")
-length(unique(acerv$GO.IDs)) # 266 - there are some duplicates because certain terms matched to multiple GO slim terms 
+length(unique(acerv$GO.IDs)) # 366 - there are some duplicates because certain terms matched to multiple GO slim terms 
 mcav <- all %>% filter(Species=="M.cavernosa")
-length(unique(mcav$GO.IDs)) # 22- - there are some duplicates because certain terms matched to multiple GO slim terms 
+length(unique(mcav$GO.IDs)) # 220- - there are some duplicates because certain terms matched to multiple GO slim terms 
 ofav <- all %>% filter(Species=="O.faveolata")
 length(unique(ofav$GO.IDs)) # 39 - there are some duplicates because certain terms matched to multiple GO slim terms 
 pacuta <- all %>% filter(Species=="P.acuta") 
@@ -101,6 +103,38 @@ venn.plot <- venn.diagram(
 	cat.fontface = "bold",
 	margin = 0.1
 	)
+
+## test plots 
+venn.diagram(
+  x = list(
+    all %>% filter(Species == "A.cervicornis") %>% select(GO.IDs) %>% unlist(),
+    all %>% filter(Species == "M.cavernosa") %>% select(GO.IDs) %>% unlist(),
+    all %>% filter(Species == "O.faveolata") %>% select(GO.IDs) %>% unlist(),
+    all %>% filter(Species == "P.acuta") %>% select(GO.IDs) %>% unlist(),
+    all %>% filter(Species == "P.lobata") %>% select(GO.IDs) %>% unlist(),
+    ),
+  category.names = c("A.cervicornis" , "M.cavernosa" , "O.faveolata", "P.acuta", "P.lobata"),
+	filename = "Output/Figs/Venn/test_GO.png",
+  output = TRUE ,
+          imagetype="png" ,
+          height = 480 , 
+          width = 480 , 
+          resolution = 300,
+          compression = "lzw",
+          lwd = 1,
+	        col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+          fill = c(alpha("dodgerblue",0.3), alpha('goldenrod1',0.3), alpha('darkorange1',0.3), alpha('seagreen3',0.3), alpha('orchid3',0.3)),
+          cex = 0.5,
+          fontfamily = "sans",
+          cat.cex = 0.3,
+          cat.default.pos = "outer",
+          cat.pos = c(-27, 27, 135),
+          cat.dist = c(0.055, 0.055, 0.085),
+          cat.fontfamily = "sans",
+	        cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+          rotation = 1
+        )
+
 ```
 
 Venn diagram - ONLY BP

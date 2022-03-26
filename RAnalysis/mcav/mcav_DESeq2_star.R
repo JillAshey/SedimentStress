@@ -82,7 +82,7 @@ tfil <- genefilter(mcav_counts, filt) # create filter for counts data
 keep <- mcav_counts[tfil,] # identify genes to keep based on filter
 gn.keep <- rownames(keep)
 mcav_counts_filt <- as.matrix(mcav_counts[which(rownames(mcav_counts) %in% gn.keep),]) 
-write.csv(mcav_counts_filt, "~/Desktop/mcav_counts_filtered.csv")
+#write.csv(mcav_counts_filt, "~/Desktop/mcav_counts_filtered.csv")
 storage.mode(mcav_counts_filt) <- "integer" # stores count data as integer 
 # Checking to make sure rownames in metadata == colnames in counts data 
 all(rownames(mcav_metadata) %in% colnames(mcav_counts_filt)) # must come out TRUE
@@ -135,7 +135,7 @@ DEG_control_vs_T1 <- results(DEG.int, contrast = c("Treatment", "control", "Trea
 DEG_control_vs_T1 
 DEG_control_vs_T1 <- as.data.frame(DEG_control_vs_T1) # make results into a df
 DEG_control_vs_T1["Treatment_Compare"] <- "CvsT1" # adding treatment comparison column
-write.csv(DEG_control_vs_T1, file = "~/Desktop/mcav_control_vs_T1_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_T1, file = "~/Desktop/mcav_control_vs_T1_all_genes.csv") # maybe include gene counts too?
 DEG_control_vs_T1.sig.num <- sum(DEG_control_vs_T1$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_control_vs_T1.sig.num
 # 19 DEGs
@@ -144,7 +144,7 @@ DEG_control_vs_T1.sig["Treatment_Compare"] <- "CvsT1" # adding treatment compari
 DEG_control_vs_T1.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T1.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_T1.sig.list <- as.data.frame(counts(DEG_control_vs_T1.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_T1.sig.list_full <- cbind(DEG_control_vs_T1.sig, DEG_control_vs_T1.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T1.sig.list_full, file = "~/Desktop/mcav_control_vs_T1_DEG_full.csv") # write out csv
+#write.csv(DEG_control_vs_T1.sig.list_full, file = "~/Desktop/mcav_control_vs_T1_DEG_full.csv") # write out csv
 DEG_control_vs_T1.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T1.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 # function: y = a/x + b, and a local regression fit was automatically substituted.
@@ -155,7 +155,7 @@ DEG_control_vs_T2 <- results(DEG.int, contrast = c("Treatment", "control", "Trea
 DEG_control_vs_T2 
 DEG_control_vs_T2 <- as.data.frame(DEG_control_vs_T2) # make results into a df
 DEG_control_vs_T2["Treatment_Compare"] <- "CvsT2" # adding treatment comparison column
-write.csv(DEG_control_vs_T2, file = "~/Desktop/mcav_control_vs_T2_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_T2, file = "~/Desktop/mcav_control_vs_T2_all_genes.csv") # maybe include gene counts too?
 DEG_control_vs_T2.sig.num <- sum(DEG_control_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_control_vs_T2.sig.num
 # 43 DEGs
@@ -164,7 +164,7 @@ DEG_control_vs_T2.sig["Treatment_Compare"] <- "CvsT2" # adding treatment compari
 DEG_control_vs_T2.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T2.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_T2.sig.list <- as.data.frame(counts(DEG_control_vs_T2.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_T2.sig.list_full <- cbind(DEG_control_vs_T2.sig, DEG_control_vs_T2.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T2.sig.list_full, file = "~/Desktop/mcav_control_vs_T2_DEG_full.csv") # write out csv
+#write.csv(DEG_control_vs_T2.sig.list_full, file = "~/Desktop/mcav_control_vs_T2_DEG_full.csv") # write out csv
 DEG_control_vs_T2.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T2.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 # function: y = a/x + b, and a local regression fit was automatically substituted.
@@ -175,7 +175,7 @@ DEG_control_vs_T3 <- results(DEG.int, contrast = c("Treatment", "control", "Trea
 DEG_control_vs_T3
 DEG_control_vs_T3 <- as.data.frame(DEG_control_vs_T3) # make results into a df
 DEG_control_vs_T3["Treatment_Compare"] <- "CvsT3" # adding treatment comparison column
-write.csv(DEG_control_vs_T3, file = "~/Desktop/mcav_control_vs_T3_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_T3, file = "~/Desktop/mcav_control_vs_T3_all_genes.csv") # maybe include gene counts too?
 DEG_control_vs_T3.sig.num <- sum(DEG_control_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_control_vs_T3.sig.num
 # 26 DEGs
@@ -184,7 +184,7 @@ DEG_control_vs_T3.sig["Treatment_Compare"] <- "CvsT3" # adding treatment compari
 DEG_control_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T3.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_T3.sig.list <- as.data.frame(counts(DEG_control_vs_T3.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_T3.sig.list_full <- cbind(DEG_control_vs_T3.sig, DEG_control_vs_T3.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T3.sig.list_full, file = "~/Desktop/mcav_control_vs_T3_DEG_full.csv") # write out csv
+#write.csv(DEG_control_vs_T3.sig.list_full, file = "~/Desktop/mcav_control_vs_T3_DEG_full.csv") # write out csv
 DEG_control_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare C vs T4
@@ -192,7 +192,7 @@ DEG_control_vs_T4 <- results(DEG.int, contrast = c("Treatment", "control", "Trea
 DEG_control_vs_T4
 DEG_control_vs_T4 <- as.data.frame(DEG_control_vs_T4) # make results into a df
 DEG_control_vs_T4["Treatment_Compare"] <- "CvsT4" # adding treatment comparison column
-write.csv(DEG_control_vs_T4, file = "~/Desktop/mcav_control_vs_T4_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_control_vs_T4, file = "~/Desktop/mcav_control_vs_T4_all_genes.csv") # maybe include gene counts too?
 DEG_control_vs_T4.sig.num <- sum(DEG_control_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_control_vs_T4.sig.num
 # 18 DEGs
@@ -201,7 +201,7 @@ DEG_control_vs_T4.sig["Treatment_Compare"] <- "CvsT4" # adding treatment compari
 DEG_control_vs_T4.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T4.sig)),] # subset list of significant genes from original count data 
 DEG_control_vs_T4.sig.list <- as.data.frame(counts(DEG_control_vs_T4.sig.list)) # make list of sig gene counts into a df
 DEG_control_vs_T4.sig.list_full <- cbind(DEG_control_vs_T4.sig, DEG_control_vs_T4.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_control_vs_T4.sig.list_full, file = "~/Desktop/mcav_control_vs_T4_DEG_full.csv") # write out csv
+#write.csv(DEG_control_vs_T4.sig.list_full, file = "~/Desktop/mcav_control_vs_T4_DEG_full.csv") # write out csv
 DEG_control_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare T1 vs T2
@@ -209,7 +209,7 @@ DEG_T1_vs_T2 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatm
 DEG_T1_vs_T2
 DEG_T1_vs_T2 <- as.data.frame(DEG_T1_vs_T2) # make results into a df
 DEG_T1_vs_T2["Treatment_Compare"] <- "T1vsT2" # adding treatment comparison column
-write.csv(DEG_T1_vs_T2, file = "~/Desktop/mcav_T1_vs_T2_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T1_vs_T2, file = "~/Desktop/mcav_T1_vs_T2_all_genes.csv") # maybe include gene counts too?
 DEG_T1_vs_T2.sig.num <- sum(DEG_T1_vs_T2$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T1_vs_T2.sig.num
 # 0 DEGs
@@ -219,7 +219,7 @@ DEG_T1_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatm
 DEG_T1_vs_T3
 DEG_T1_vs_T3 <- as.data.frame(DEG_T1_vs_T3) # make results into a df
 DEG_T1_vs_T3["Treatment_Compare"] <- "T1vsT3" # adding treatment comparison column
-write.csv(DEG_T1_vs_T3, file = "~/Desktop/mcav_T1_vs_T3_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T1_vs_T3, file = "~/Desktop/mcav_T1_vs_T3_all_genes.csv") # maybe include gene counts too?
 DEG_T1_vs_T3.sig.num <- sum(DEG_T1_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T1_vs_T3.sig.num
 # 1 DEGs
@@ -228,7 +228,7 @@ DEG_T1_vs_T3.sig["Treatment_Compare"] <- "T1vsT3" # adding treatment comparison 
 DEG_T1_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_T1_vs_T3.sig)),] # subset list of significant genes from original count data 
 DEG_T1_vs_T3.sig.list <- as.data.frame(counts(DEG_T1_vs_T3.sig.list)) # make list of sig gene counts into a df
 DEG_T1_vs_T3.sig.list_full <- cbind(DEG_T1_vs_T3.sig, DEG_T1_vs_T3.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_T1_vs_T3.sig.list_full, file = "~/Desktop/mcav_T1_vs_T3_DEG_full.csv") # write out csv
+#write.csv(DEG_T1_vs_T3.sig.list_full, file = "~/Desktop/mcav_T1_vs_T3_DEG_full.csv") # write out csv
 DEG_T1_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_T1_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare T1 vs T4
@@ -236,7 +236,7 @@ DEG_T1_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment1", "Treatm
 DEG_T1_vs_T4
 DEG_T1_vs_T4 <- as.data.frame(DEG_T1_vs_T4) # make results into a df
 DEG_T1_vs_T4["Treatment_Compare"] <- "T1vsT4" # adding treatment comparison column
-write.csv(DEG_T1_vs_T4, file = "~/Desktop/mcav_T1_vs_T4_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T1_vs_T4, file = "~/Desktop/mcav_T1_vs_T4_all_genes.csv") # maybe include gene counts too?
 DEG_T1_vs_T4.sig.num <- sum(DEG_T1_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T1_vs_T4.sig.num
 # 0 DEGs
@@ -246,7 +246,7 @@ DEG_T2_vs_T3 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatm
 DEG_T2_vs_T3
 DEG_T2_vs_T3 <- as.data.frame(DEG_T2_vs_T3) # make results into a df
 DEG_T2_vs_T3["Treatment_Compare"] <- "T2vsT3" # adding treatment comparison column
-write.csv(DEG_T2_vs_T3, file = "~/Desktop/mcav_T2_vs_T3_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T2_vs_T3, file = "~/Desktop/mcav_T2_vs_T3_all_genes.csv") # maybe include gene counts too?
 DEG_T2_vs_T3.sig.num <- sum(DEG_T2_vs_T3$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T2_vs_T3.sig.num
 # 1 DEG
@@ -255,7 +255,7 @@ DEG_T2_vs_T3.sig["Treatment_Compare"] <- "T2vsT3" # adding treatment comparison 
 DEG_T2_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_T2_vs_T3.sig)),] # subset list of significant genes from original count data 
 DEG_T2_vs_T3.sig.list <- as.data.frame(counts(DEG_T2_vs_T3.sig.list)) # make list of sig gene counts into a df
 DEG_T2_vs_T3.sig.list_full <- cbind(DEG_T2_vs_T3.sig, DEG_T2_vs_T3.sig.list) # bind results with gene counts for DEGs
-write.csv(DEG_T2_vs_T3.sig.list_full, file = "~/Desktop/mcav_T2_vs_T3_DEG_full.csv") # write out csv
+#write.csv(DEG_T2_vs_T3.sig.list_full, file = "~/Desktop/mcav_T2_vs_T3_DEG_full.csv") # write out csv
 DEG_T2_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_T3_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
 
 # Compare T2 vs T4
@@ -263,7 +263,7 @@ DEG_T2_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment2", "Treatm
 DEG_T2_vs_T4
 DEG_T2_vs_T4 <- as.data.frame(DEG_T2_vs_T4) # make results into a df
 DEG_T2_vs_T4["Treatment_Compare"] <- "T2vsT4" # adding treatment comparison column
-write.csv(DEG_T2_vs_T4, file = "~/Desktop/mcav_T2_vs_T4_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T2_vs_T4, file = "~/Desktop/mcav_T2_vs_T4_all_genes.csv") # maybe include gene counts too?
 DEG_T2_vs_T4.sig.num <- sum(DEG_T2_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T2_vs_T4.sig.num
 # 0 DEG
@@ -273,7 +273,7 @@ DEG_T3_vs_T4 <- results(DEG.int, contrast = c("Treatment", "Treatment3", "Treatm
 DEG_T3_vs_T4
 DEG_T3_vs_T4 <- as.data.frame(DEG_T3_vs_T4) # make results into a df
 DEG_T3_vs_T4["Treatment_Compare"] <- "T3vsT4" # adding treatment comparison column
-write.csv(DEG_T3_vs_T4, file = "~/Desktop/mcav_T3_vs_T4_all_genes.csv") # maybe include gene counts too?
+#write.csv(DEG_T3_vs_T4, file = "~/Desktop/mcav_T3_vs_T4_all_genes.csv") # maybe include gene counts too?
 DEG_T3_vs_T4.sig.num <- sum(DEG_T3_vs_T4$padj <0.05, na.rm = T) # identify # of significant pvalues with 5%FDR (padj<0.05) 
 DEG_T3_vs_T4.sig.num
 # 0 DEG
@@ -302,7 +302,7 @@ DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full,
 
 dim(DEGs.all) # 108 x 23
 length(unique(DEGs.all$gene_id)) # 62 unique genes between all treatments 
-write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment_20210208.csv")
+#write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment_20210208.csv")
 
 ## Find intersections and unique results between treatments 
 # interactions
@@ -345,7 +345,7 @@ DEGs.all_mcav <- as.data.frame(DEGs.all_mcav)
 dim(DEGs.all_mcav) # 62 unique DEGs among treatment comparisons 
 
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcav$DEGs), ] # subset list of sig transcripts from original count data
-write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list_20210208.csv")
+#write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list_20210208.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
 unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library 
@@ -362,32 +362,25 @@ mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData
 percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
 mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=6) +
+  geom_point(size=8) +
   xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
   coord_fixed() +
   ggtitle(label = "M. cavernosa") +
   theme_bw() + #Set background color
-  theme(axis.text = element_text(size = 10),
-        axis.title = element_text(size=15),
-        legend.position = "right",
-        panel.border = element_blank(), # Set border
-        #panel.grid.major = element_blank(), #Set major gridlines
-        #panel.grid.minor = element_blank(), #Set minor gridlines
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5),
-        axis.line = element_line(colour = "black"), #Set axes color
-        plot.background=element_blank()) #Set the plot background
+  theme(legend.text = element_text(size=18), 
+        #legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=18, face="bold"), 
+        axis.text = element_text(size=18), 
+        axis.title = element_text(size=18,  face="bold"), 
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
 mcav_DEG_PCA_plot
-
-
 # PCA plot is of differentially expressed genes only
 PC.info <- mcav_DEG_PCA_plot$data
-#ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20211223.jpeg", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
-ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20211223.pdf", mcav_DEG_PCA_plot, width = 25, height = 25, units = "cm")
-
-
-
+ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20220326.jpeg", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20220326.pdf", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 
 
 ## Heatmap of DEGs

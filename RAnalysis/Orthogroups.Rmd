@@ -58,6 +58,10 @@ plob_ortho <- plob_ortho %>% mutate(Plobata = strsplit(as.character(Plobata), ",
 plob_ortho <- na.omit(plob_ortho)
 ```
 
+Figure out how to make upset plots for these so that it does frequency counts of each orthogroup for each species and shows shared ones? 
+
+
+
 Read DEGs in and merge w/ orthogroup by gene for each species 
 ### Acerv 
 ```{r}
