@@ -258,13 +258,14 @@ pacuta_DEGPCAplot <- ggplot(pacuta_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
         legend.title = element_text(size=18, face="bold"), 
         axis.text = element_text(size=18), 
         axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5)) +
+  coord_equal(ratio = 1.3)
 pacuta_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- pacuta_DEGPCAplot$data
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220326.jpeg", pacuta_DEGPCAplot, width = 20, height = 25, units = "cm")
-ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220326.pdf", pacuta_DEGPCAplot, width = 20, height = 25, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220328.jpeg", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
+ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220328.pdf", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
 ```
 
 

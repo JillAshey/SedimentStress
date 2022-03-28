@@ -232,12 +232,13 @@ mcap_DEGPCAplot <- ggplot(mcap_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
         legend.title = element_text(size=18, face="bold"), 
         axis.text = element_text(size=18), 
         axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 25, face = "italic", hjust = 0.5)) +
+  coord_equal(ratio = 2)
 mcap_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcap_DEGPCAplot$data
-ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220326.jpeg", mcap_DEGPCAplot, width = 15, height = 25, units = "cm")
-ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220326.pdf", mcap_DEGPCAplot, width = 15, height = 25, units = "cm")
+ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.jpeg", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
+ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.pdf", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
 ```
 
 

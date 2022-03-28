@@ -292,7 +292,7 @@ test <- na.omit(test)
 
 # count GOslim by species
 count_by_group <- test %>%
-  count(Species, GO.Slim.Term)
+  dplyr::count(Species, GO.Slim.Term)
 count_by_group
 
 # plot
@@ -336,39 +336,47 @@ all.go.BP.slim <- all.go.BP.slim %>% mutate(Location =
 
 # count GOslim by location
 count_by_location <- all.go.BP.slim %>%
-  count(Location, GO.Slim.Term)
+  dplyr::count(Location, GO.Slim.Term)
 count_by_location
 
 # plot
 count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x = GO.Slim.Term)) +
   geom_bar(position = "dodge", 
            stat = "identity", 
-           width = 0.9) +
+           colour="black",
+           width = 0.9,
+           size = 2) +
   # geom_text(aes(label = n), 
   #           position = position_dodge(0.9), 
   #           size = 10, 
   #           face = "bold") +
-  labs(title="Counts of GO Slim Categories by Location", x ="", y = "Counts") +
+  ylab("GO Term Counts\n") + 
+  #ggtitle(label = "Counts of GO Slim Categories by Location") +
+  #coord_flip() +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 65, 
+  theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
-                                   size=60)) + 
-  theme(axis.text.y = element_text(size = 60)) +
-  theme(axis.title.y = element_text(size = 40)) +
-  theme(plot.title = element_text(size = 100, hjust = 0.5)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 600)) + 
-  theme(legend.title = element_text(size = 60), 
+                                   size=80, 
+                                   colour = "black"), 
+        axis.text.y = element_text(size = 60, colour = "black"),
+        axis.title.y = element_text(size = 80, face = "bold"),
+        axis.line = element_line(colour = 'black', size = 2),
+        plot.title = element_text(size = 100, hjust = 0.5),
+        plot.margin = margin(3,3,3,3, "cm")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 600)) + 
+  theme(legend.title = element_text(size = 80), 
         legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=60), 
+        legend.text = element_text(size=80), 
         legend.position = c(0.85, 0.85), 
         legend.justification = c("right", "top"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black")) + 
-  scale_fill_manual(values = c("chartreuse3", "chocolate2"))
+        legend.background = element_rect(fill = "white", color = "black"),
+        legend.box.background = element_rect(color="black", size=2)) +
+        scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220324.pdf", count_location_plot, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220324.png", count_location_plot, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220328.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220328.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology = 
@@ -380,40 +388,76 @@ all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology =
 
 # count GOslim by morphology
 count_by_morph <- all.go.BP.slim %>%
-  count(Morphology, GO.Slim.Term)
+  dplyr::count(Morphology, GO.Slim.Term)
 count_by_morph
 
 # plot
 count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.Slim.Term)) +
-  geom_bar(position = "dodge", 
+    geom_bar(position = "dodge", 
            stat = "identity", 
-           width = 0.9) +
+           colour="black",
+           width = 0.9,
+           size = 2) +
   # geom_text(aes(label = n), 
   #           position = position_dodge(0.9), 
   #           size = 10, 
   #           face = "bold") +
-  labs(title="Counts of GO Slim Categories by Morphology", x ="", y = "Counts") +
+  ylab("GO Term Counts\n") + 
+  #ggtitle(label = "Counts of GO Slim Categories by Morphology") +
+  #coord_flip() +
   theme_bw() +
-  theme(axis.text.x = element_text(angle = 65, 
+  theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
-                                   size=60)) + 
-  theme(axis.text.y = element_text(size = 60)) +
-  theme(axis.title.y = element_text(size = 40)) +
-  theme(plot.title = element_text(size = 100, hjust = 0.5)) +
-  scale_y_continuous(expand = c(0, 0), limits = c(0, 650)) + 
-  theme(legend.title = element_text(size = 60), 
+                                   size=80, 
+                                   colour = "black"), 
+        axis.text.y = element_text(size = 60, colour = "black"),
+        axis.title.y = element_text(size = 80, face = "bold"),
+        axis.line = element_line(colour = 'black', size = 2),
+        plot.title = element_text(size = 100, hjust = 0.5),
+        plot.margin = margin(3,3,3,3, "cm")) +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 650)) + 
+  theme(legend.title = element_text(size = 80), 
         legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=60), 
+        legend.text = element_text(size=80), 
         legend.position = c(0.85, 0.85), 
         legend.justification = c("right", "top"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black")) + 
-  scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+        legend.background = element_rect(fill = "white", color = "black"),
+        legend.box.background = element_rect(color="black", size=2)) +
+        scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220324.pdf", count_morph_plot, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220324.png", count_morph_plot, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
+
+## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
+```{r}
+# By location
+tabl1 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
+rowSums(tabl1)
+colSums(tabl1)
+prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)) * 100
+chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
+#	Pearson's Chi-squared test
+#
+# data:  all.go.BP.slim$GO.Slim.Term and all.go.BP.slim$Location
+# X-squared = 118.64, df = 11, p-value < 2.2e-16
+
+
+# By morphology 
+tabl2 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
+rowSums(tabl2)
+colSums(tabl2)
+prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)) * 100
+chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
+# Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
+# 
+# data:  all.go.BP.slim$GO.Slim.Term and all.go.BP.slim$Morphology
+# X-squared = 68.59, df = 11, p-value = 2.262e-10
+```
+
 
 
 

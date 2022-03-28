@@ -421,8 +421,9 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # PCA plot of diff-expressed genes 
 acerv_sub_DEG_PCA <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_acerv_sub <- round(100*attr(acerv_sub_DEG_PCA, "percentVar")) #plot PCA of samples with all data
+
 acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color = Treatment)) +
-  geom_point(size=8) +
+  geom_point(size=10) +
   xlab(paste0("PC1: ",percentVar_pca_acerv_sub[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_acerv_sub[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
@@ -430,17 +431,17 @@ acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color = Treatm
   ggtitle(label = "A. cervicornis") +
   theme_bw() + #Set background color
   theme(legend.text = element_text(size=18), 
-       #legend.position="none",
-       plot.background = element_blank(),
-       legend.title = element_text(size=18, face="bold"), 
-       axis.text = element_text(size=18), 
-       axis.title = element_text(size=18,  face="bold"), 
-       plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        #legend.position="none",
+        plot.background = element_blank(),
+        legend.title = element_text(size=18, face="bold"), 
+        axis.text = element_text(size=20), 
+        axis.title = element_text(size=20,  face="bold"), 
+        plot.title = element_text(size = 27, face = "italic", hjust = 0.5))
 acerv_sub_DEG_PCA_plot
 # PCA plot is of differentially expressed genes only
 PC.info <- acerv_sub_DEG_PCA_plot$data
-ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220326.jpeg", acerv_sub_DEG_PCA_plot, width = 20, height = 10, units = "cm")
-ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220326.pdf", acerv_sub_DEG_PCA_plot, width = 20, height = 10, units = "cm")
+ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.jpeg", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.pdf", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 
 
 
