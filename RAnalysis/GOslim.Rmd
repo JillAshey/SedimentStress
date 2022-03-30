@@ -435,9 +435,38 @@ ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.png", count_morph_plot, 
 ```{r}
 # By location
 tabl1 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
+tabl1
+  #                                 Florida Hawaii
+  # cell adhesion                          8     26
+  # cell cycle and proliferation          11     42
+  # cell organization and biogenesis      44    119
+  # cell-cell signaling                   18     14
+  # death                                 14      6
+  # developmental processes              174    595
+  # DNA metabolism                         7     32
+  # protein metabolism                    53     92
+  # RNA metabolism                        52     61
+  # signal transduction                   52     84
+  # stress response                       46     84
+  # transport                             63     40
+
 rowSums(tabl1)
 colSums(tabl1)
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)) * 100
+  #                                    Florida     Hawaii
+  # cell adhesion                     0.4605642  1.4968336
+  # cell cycle and proliferation      0.6332758  2.4179620
+  # cell organization and biogenesis  2.5331031  6.8508923
+  # cell-cell signaling               1.0362694  0.8059873
+  # death                             0.8059873  0.3454231
+  # developmental processes          10.0172712 34.2544617
+  # DNA metabolism                    0.4029937  1.8422568
+  # protein metabolism                3.0512378  5.2964882
+  # RNA metabolism                    2.9936672  3.5118020
+  # signal transduction               2.9936672  4.8359240
+  # stress response                   2.6482441  4.8359240
+  # transport                         3.6269430  2.3028210
+
 chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
 #	Pearson's Chi-squared test
 #
@@ -447,9 +476,38 @@ chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
 
 # By morphology 
 tabl2 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
+tabl2
+  #                                  Branching Massive
+  # cell adhesion                           28       6
+  # cell cycle and proliferation            43      10
+  # cell organization and biogenesis       105      58
+  # cell-cell signaling                     26       6
+  # death                                   15       5
+  # developmental processes                635     134
+  # DNA metabolism                          17      22
+  # protein metabolism                      99      46
+  # RNA metabolism                          91      22
+  # signal transduction                     96      40
+  # stress response                        109      21
+  # transport                               81      22
+
 rowSums(tabl2)
 colSums(tabl2)
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)) * 100
+  #                                   Branching    Massive
+  # cell adhesion                     1.6119747  0.3454231
+  # cell cycle and proliferation      2.4755325  0.5757052
+  # cell organization and biogenesis  6.0449050  3.3390904
+  # cell-cell signaling               1.4968336  0.3454231
+  # death                             0.8635579  0.2878526
+  # developmental processes          36.5572827  7.7144502
+  # DNA metabolism                    0.9786989  1.2665515
+  # protein metabolism                5.6994819  2.6482441
+  # RNA metabolism                    5.2389177  1.2665515
+  # signal transduction               5.5267703  2.3028210
+  # stress response                   6.2751871  1.2089810
+  # transport                         4.6632124  1.2665515
+
 chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
 # Chi-squared approximation may be incorrect
 # 	Pearson's Chi-squared test
