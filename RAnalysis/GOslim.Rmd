@@ -451,7 +451,17 @@ tabl1
   # transport                             63     40
 
 rowSums(tabl1)
+       #  cell adhesion     cell cycle and proliferation cell organization and biogenesis              cell-cell signaling 
+       #             34                               53                              163                               32 
+       #          death          developmental processes                   DNA metabolism               protein metabolism 
+       #             20                              769                               39                              145 
+       # RNA metabolism              signal transduction                  stress response                        transport 
+       #            113                              136                              130                              103 
+
 colSums(tabl1)
+# Florida  Hawaii 
+#     542    1195
+    
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)) * 100
   #                                    Florida     Hawaii
   # cell adhesion                     0.4605642  1.4968336
@@ -492,7 +502,16 @@ tabl2
   # transport                               81      22
 
 rowSums(tabl2)
+# cell adhesion     cell cycle and proliferation cell organization and biogenesis              cell-cell signaling 
+#    34                               53                              163                               32 
+# death          developmental processes                   DNA metabolism               protein metabolism 
+#  20                              769                               39                              145 
+# RNA metabolism              signal transduction                  stress response                        transport 
+# 113                              136                              130                              103 
+
 colSums(tabl2)
+# Branching   Massive 
+#      1345       392
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)) * 100
   #                                   Branching    Massive
   # cell adhesion                     1.6119747  0.3454231
