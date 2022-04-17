@@ -72,7 +72,13 @@ ofav_go <- read_csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20211117.csv")
 length(unique(ofav_go$gene_id)) # 7 unique DEGs w/ GO terms
 length(unique(ofav_go$category)) # 20 unique GO terms
 
-# pact
+mcap_go <- read_csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv")
+length(unique(mcap_go$gene_id)) # 85 unique DEGs w/ GO terms
+length(unique(mcap_go$category)) # 343 unique GO terms
+
+pacuta_go <- read_csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv")
+length(unique(pacuta_go$gene_id)) # 147 unique DEGs w/ GO terms
+length(unique(pacuta_go$category)) # 532 unique GO terms
 
 plob_go <- read_csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv")
 length(unique(plob_go$gene_id)) # 83 unique DEGs w/ GO terms

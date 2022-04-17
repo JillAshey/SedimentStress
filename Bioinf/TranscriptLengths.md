@@ -54,6 +54,26 @@ awk 'BEGIN{FS="[>]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_
 
 ## Hawaii
 
+### Mcap
+
+Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
+
+```
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' Montipora_capitata_HIv1.genesNoCopies.gff3_polished.cds.fna > newfile_RNA_Mcap.fasta
+
+awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' Montipora_capitata_HIv1.genesNoCopies.gff3_polished.pep.faa > newfile_Protein_Mcap.fasta
+```
+
+Now gene lengths can be calculated 
+
+```
+# Transcript lengths
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Mcap.fasta > length.mRNA_Mcap.txt
+
+# Protein lengths 
+awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Mcap.fasta > length.protein_Mcap.txt
+```
+
 ### Pacuta 
 
 Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
@@ -73,29 +93,6 @@ awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Pac
 
 # Protein lengths 
 awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Pacuta.fasta > length.protein_Pacuta.txt
-
-```
-
-### Pdam 
-
-Sequences were tab-deliminated in the fasta file. I had to convert the 'multi-line' fasta to a single line fasta 
-
-```
-awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' GCF_003704095.1_ASM370409v1_rna.fna > newfile_RNA_Pdam.fasta
-
-awk '{if(NR==1) {print $0} else {if($0 ~ /^>/) {print "\n"$0} else {printf $0}}}' GCF_003704095.1_ASM370409v1_protein.faa > newfile_Protein_Pdam.fasta
-
-```
-
-Now gene lengths can be calculated 
-
-```
-# Transcript lengths
-awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_RNA_Pdam.fasta > length.mRNA_Pdam.txt
-
-# Protein lengths 
-awk 'BEGIN{FS="[> ]"} /^>/{val=$2;next}  {print val,length($0)}' newfile_Protein_Pdam.fasta > length.protein_Pdam.txt
-
 ```
 
 ### Plob 
