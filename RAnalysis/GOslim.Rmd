@@ -22,7 +22,9 @@ go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
 colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
 ```
 
-## Acerv
+## Florida 
+
+### Acerv
 ```{r}
 # Read in acerv DEG GO terms 
 acerv.go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)
@@ -35,25 +37,25 @@ length(unique(acerv.go$GO.IDs)) # 366 unique GO terms
 
 # Merge w/ GO slim and subset by ontology
 acerv.go.slim <- merge(acerv.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(acerv.go.slim, "Output/GOSeq/acerv/acerv.go.slim_20220208.csv")
+#write.csv(acerv.go.slim, "Output/GOSeq/acerv/acerv.go.slim_20220208.csv")
 
 acerv.go.slim.BP <- subset(acerv.go.slim, ontology == "BP")
 acerv.go.slim.BP <- unique(acerv.go.slim.BP)
 length(unique(acerv.go.slim.BP$GO.IDs)) # 278 unique BP GO terms 
-write.csv(acerv.go.slim.BP, "Output/GOSeq/acerv/acerv.go.slim.BP_20220208.csv")
+#write.csv(acerv.go.slim.BP, "Output/GOSeq/acerv/acerv.go.slim.BP_20220208.csv")
 
 acerv.go.slim.CC <- subset(acerv.go.slim, ontology == "CC")
 acerv.go.slim.CC <- unique(acerv.go.slim.CC)
 length(unique(acerv.go.slim.CC$GO.IDs)) # 34 unique CC GO terms 
-write.csv(acerv.go.slim.CC, "Output/GOSeq/acerv/acerv.go.slim.CC_20220208.csv")
+#write.csv(acerv.go.slim.CC, "Output/GOSeq/acerv/acerv.go.slim.CC_20220208.csv")
 
 acerv.go.slim.MF <- subset(acerv.go.slim, ontology == "MF")
 acerv.go.slim.MF <- unique(acerv.go.slim.MF)
 length(unique(acerv.go.slim.MF$GO.IDs)) # 54 unique MF GO terms 
-write.csv(acerv.go.slim.MF, "Output/GOSeq/acerv/acerv.go.slim.MF_20220208.csv")
+#write.csv(acerv.go.slim.MF, "Output/GOSeq/acerv/acerv.go.slim.MF_20220208.csv")
 ```
 
-## Mcav
+### Mcav
 ```{r}
 # Read in Mcav DEG GO terms 
 mcav.go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)
@@ -66,25 +68,25 @@ length(unique(mcav.go$GO.IDs)) # 220 unique GO terms
 
 # Merge w/ GO slim and subset by ontology
 mcav.go.slim <- merge(mcav.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(mcav.go.slim, "Output/GOSeq/mcav/mcav.go.slim_20220208.csv")
+#write.csv(mcav.go.slim, "Output/GOSeq/mcav/mcav.go.slim_20220208.csv")
 
 mcav_all.go.slim.BP <- subset(mcav.go.slim, ontology == "BP")
 mcav_all.go.slim.BP <- unique(mcav_all.go.slim.BP)
 length(unique(mcav_all.go.slim.BP$GO.IDs)) # 158 unique BP GO terms 
-write.csv(mcav_all.go.slim.BP, "Output/GOSeq/mcav/mcav.go.slim.BP_20220208.csv")
+#write.csv(mcav_all.go.slim.BP, "Output/GOSeq/mcav/mcav.go.slim.BP_20220208.csv")
 
 mcav_all.go.slim.CC <- subset(mcav.go.slim, ontology == "CC")
 mcav_all.go.slim.CC <- unique(mcav_all.go.slim.CC)
 length(unique(mcav_all.go.slim.CC$GO.IDs)) # 21 unique BP GO terms 
-write.csv(mcav_all.go.slim.CC, "Output/GOSeq/mcav/mcav.go.slim.CC_20220208.csv")
+#write.csv(mcav_all.go.slim.CC, "Output/GOSeq/mcav/mcav.go.slim.CC_20220208.csv")
 
 mcav_all.go.slim.MF <- subset(mcav.go.slim, ontology == "MF")
 mcav_all.go.slim.MF <- unique(mcav_all.go.slim.MF)
 length(unique(mcav_all.go.slim.MF$GO.IDs)) # 39 unique BP GO terms 
-write.csv(mcav_all.go.slim.MF, "Output/GOSeq/mcav/mcav.go.slim.MF_20220208.csv")
+#write.csv(mcav_all.go.slim.MF, "Output/GOSeq/mcav/mcav.go.slim.MF_20220208.csv")
 ```
 
-## Ofav
+### Ofav
 ```{r}
 # Read in Ofav DEG GO terms 
 ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
@@ -98,25 +100,58 @@ length(unique(ofav.go$GO.IDs)) # 39 unique GO terms
 
 # Merge w/ GO slim and subset by ontology
 ofav.go.slim <- merge(ofav.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(ofav.go.slim, "Output/GOSeq/ofav/ofav.go.slim_20220208.csv")
+#write.csv(ofav.go.slim, "Output/GOSeq/ofav/ofav.go.slim_20220208.csv")
 
 ofav_all.go.slim.BP <- subset(ofav.go.slim, ontology == "BP")
 ofav_all.go.slim.BP <- unique(ofav_all.go.slim.BP)
 length(unique(ofav_all.go.slim.BP$GO.IDs)) # 27 unique BP GO terms 
-write.csv(ofav_all.go.slim.BP, "Output/GOSeq/ofav/ofav.go.slim.BP_20220208.csv")
+#write.csv(ofav_all.go.slim.BP, "Output/GOSeq/ofav/ofav.go.slim.BP_20220208.csv")
 
 ofav_all.go.slim.CC <- subset(ofav.go.slim, ontology == "CC")
 ofav_all.go.slim.CC <- unique(ofav_all.go.slim.CC)
 length(unique(ofav_all.go.slim.CC$GO.IDs)) # 3 unique BP GO terms 
-write.csv(ofav_all.go.slim.CC, "Output/GOSeq/ofav/ofav.go.slim.CC_20220208.csv")
+#write.csv(ofav_all.go.slim.CC, "Output/GOSeq/ofav/ofav.go.slim.CC_20220208.csv")
 
 ofav_all.go.slim.MF <- subset(ofav.go.slim, ontology == "MF")
 ofav_all.go.slim.MF <- unique(ofav_all.go.slim.MF)
 length(unique(ofav_all.go.slim.MF$GO.IDs)) # 9 unique BP GO terms 
-write.csv(ofav_all.go.slim.MF, "Output/GOSeq/ofav/ofav.go.slim.MF_20220208.csv")
+#write.csv(ofav_all.go.slim.MF, "Output/GOSeq/ofav/ofav.go.slim.MF_20220208.csv")
 ```
 
-## Pacuta 
+## Hawaii
+
+### Mcap 
+```{r}
+# Read in mcap DEG GO terms
+mcap.go <- read.csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", header = T)
+mcap.go <- select(mcap.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
+colnames(mcap.go)[2] <-"GO.IDs"
+mcap.go$Species <- "M.capitata"
+mcap.go$Site <- "Hawaii"
+mcap.go <- unique(mcap.go)
+length(unique(mcap.go$GO.IDs)) # 343 unique GO terms 
+
+# Merge w/ GO slim and subset by ontology
+mcap.go.slim <- merge(mcap.go, go.slim, by="GO.IDs", all = TRUE)
+write.csv(mcap.go.slim, "Output/GOSeq/mcap/mcap.go.slim_20220417.csv")
+
+mcap_all.go.slim.BP <- subset(mcap.go.slim, ontology == "BP")
+mcap_all.go.slim.BP <- unique(mcap_all.go.slim.BP)
+length(unique(mcap_all.go.slim.BP$GO.IDs)) # 237 unique BP GO terms 
+write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/mcap/mcap.go.slim.BP_20220417.csv")
+
+mcap_all.go.slim.CC <- subset(mcap.go.slim, ontology == "CC")
+mcap_all.go.slim.CC <- unique(mcap_all.go.slim.CC)
+length(unique(mcap_all.go.slim.CC$GO.IDs)) # 40 unique BP GO terms 
+write.csv(mcap_all.go.slim.CC, "Output/GOSeq/mcap/mcap.go.slim.CC_20220417.csv")
+
+mcap_all.go.slim.MF <- subset(mcap.go.slim, ontology == "MF")
+mcap_all.go.slim.MF <- unique(mcap_all.go.slim.MF)
+length(unique(mcap_all.go.slim.MF$GO.IDs)) # 65 unique BP GO terms 
+write.csv(mcap_all.go.slim.MF, "Output/GOSeq/mcap/mcap.go.slim.MF_20220417.csv")
+```
+
+### Pacuta 
 ```{r}
 # Read in pacuta DEG GO terms
 pacuta.go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)
@@ -129,26 +164,25 @@ length(unique(pacuta.go$GO.IDs)) # 532 unique GO terms
 
 # Merge w/ GO slim and subset by ontology
 pacuta.go.slim <- merge(pacuta.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(pacuta.go.slim, "Output/GOSeq/pacuta/pacuta.go.slim_20220208.csv")
+#write.csv(pacuta.go.slim, "Output/GOSeq/pacuta/pacuta.go.slim_20220208.csv")
 
 pacuta_all.go.slim.BP <- subset(pacuta.go.slim, ontology == "BP")
 pacuta_all.go.slim.BP <- unique(pacuta_all.go.slim.BP)
 length(unique(pacuta_all.go.slim.BP$GO.IDs)) # 380 unique BP GO terms 
-write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/pacuta/pacuta.go.slim.BP_20220208.csv")
+#write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/pacuta/pacuta.go.slim.BP_20220208.csv")
 
 pacuta_all.go.slim.CC <- subset(pacuta.go.slim, ontology == "CC")
 pacuta_all.go.slim.CC <- unique(pacuta_all.go.slim.CC)
 length(unique(pacuta_all.go.slim.CC$GO.IDs)) # 25 unique BP GO terms 
-write.csv(pacuta_all.go.slim.CC, "Output/GOSeq/pacuta/pacuta.go.slim.CC_20220208.csv")
+#write.csv(pacuta_all.go.slim.CC, "Output/GOSeq/pacuta/pacuta.go.slim.CC_20220208.csv")
 
 pacuta_all.go.slim.MF <- subset(pacuta.go.slim, ontology == "MF")
 pacuta_all.go.slim.MF <- unique(pacuta_all.go.slim.MF)
 length(unique(pacuta_all.go.slim.MF$GO.IDs)) # 126 unique BP GO terms 
-write.csv(pacuta_all.go.slim.MF, "Output/GOSeq/pacuta/pacuta.go.slim.MF_20220208.csv")
-
+#write.csv(pacuta_all.go.slim.MF, "Output/GOSeq/pacuta/pacuta.go.slim.MF_20220208.csv")
 ```
 
-## Plob 
+### Plob 
 ```{r}
 # Read in plob DEG GO terms
 plob.go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)
@@ -161,22 +195,22 @@ length(unique(plob.go$GO.IDs)) # 279 unique GO terms
 
 # Merge w/ GO slim and subset by ontology
 plob.go.slim <- merge(plob.go, go.slim, by="GO.IDs", all = TRUE)
-write.csv(plob.go.slim, "Output/GOSeq/plob/plob.go.slim_20220208.csv")
+#write.csv(plob.go.slim, "Output/GOSeq/plob/plob.go.slim_20220208.csv")
 
 plob_all.go.slim.BP <- subset(plob.go.slim, ontology == "BP")
 plob_all.go.slim.BP <- unique(plob_all.go.slim.BP)
 length(unique(plob_all.go.slim.BP$GO.IDs)) # 198 unique BP GO terms 
-write.csv(plob_all.go.slim.BP, "Output/GOSeq/plob/plob.go.slim.BP_20220208.csv")
+#write.csv(plob_all.go.slim.BP, "Output/GOSeq/plob/plob.go.slim.BP_20220208.csv")
 
 plob_all.go.slim.CC <- subset(plob.go.slim, ontology == "CC")
 plob_all.go.slim.CC <- unique(plob_all.go.slim.CC)
 length(unique(plob_all.go.slim.CC$GO.IDs)) # 31 unique BP GO terms 
-write.csv(plob_all.go.slim.CC, "Output/GOSeq/plob/plob.go.slim.CC_20220208.csv")
+#write.csv(plob_all.go.slim.CC, "Output/GOSeq/plob/plob.go.slim.CC_20220208.csv")
 
 plob_all.go.slim.MF <- subset(plob.go.slim, ontology == "MF")
 plob_all.go.slim.MF <- unique(plob_all.go.slim.MF)
 length(unique(plob_all.go.slim.MF$GO.IDs)) # 50 unique BP GO terms 
-write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
+#write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
 ```
 
 ## Combine GO slim terms with all species in single df 
@@ -185,9 +219,10 @@ write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
 all.go.slim <- rbind(acerv.go.slim, 
                      mcav.go.slim, 
                      ofav.go.slim,
+                     mcap.go.slim,
                      pacuta.go.slim, 
                      plob.go.slim)
-write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220208.csv")
+write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220417.csv")
 
 # Plot 
 all.go.slim <- na.omit(all.go.slim)
@@ -200,19 +235,17 @@ GO.all <- ggplot(all.go.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.all
-ggsave("Output/Figs/all_GOslim_20220121.pdf", GO.all, width = 40, height = 40, units = c("in"))
-
-
-
+ggsave("Output/Figs/all_GOslim_20220417.pdf", GO.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for BP GO slim plot 
 all.go.BP.slim <- rbind(acerv.go.slim.BP, 
                      mcav_all.go.slim.BP, 
                      ofav_all.go.slim.BP,
+                     mcap_all.go.slim.BP,
                      pacuta_all.go.slim.BP, 
                      plob_all.go.slim.BP)
-write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220208.csv")
+write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220417.csv")
 
 # Plot 
 all.go.BP.slim <- na.omit(all.go.BP.slim)
@@ -225,16 +258,17 @@ GO.BP.all <- ggplot(all.go.BP.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.BP.all
-ggsave("Output/Figs/all_GOslim.BP_20220121.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim.BP_20220417.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for CC GO slim plot 
 all.go.CC.slim <- rbind(acerv.go.slim.CC, 
                      mcav_all.go.slim.CC, 
                      ofav_all.go.slim.CC,
+                     mcap_all.go.slim.CC,
                      pacuta_all.go.slim.CC, 
                      plob_all.go.slim.CC)
-write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220208.csv")
+write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220417.csv")
 
 # Plot 
 all.go.CC.slim <- na.omit(all.go.CC.slim)
@@ -247,7 +281,7 @@ GO.CC.all <- ggplot(all.go.CC.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.CC.all
-ggsave("Output/Figs/all_GOslim.CC_20220125.pdf", GO.CC.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim.CC_20220417.pdf", GO.CC.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for MF GO slim plot and merge w/ GO slim terms
@@ -256,7 +290,7 @@ all.go.MF.slim <- rbind(acerv.go.slim.MF,
                      ofav_all.go.slim.MF,
                      pacuta_all.go.slim.MF, 
                      plob_all.go.slim.MF)
-write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220208.csv")
+write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220417.csv")
 
 # Plot 
 all.go.MF.slim <- na.omit(all.go.MF.slim)
@@ -269,17 +303,17 @@ GO.MF.all <- ggplot(all.go.MF.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.MF.all
-ggsave("Output/Figs/all_GOslim.MF_20220125.pdf", GO.MF.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/all_GOslim.MF_20220417.pdf", GO.MF.all, width = 40, height = 40, units = c("in"))
 ```
 
 Make bar chart for go slim term counts for all species
 ```{r}
 # read in data
-all.go.BP.slim <- read.csv("Output/GOSeq/all.go.BP.slim_20220208.csv", header = T)
+all.go.BP.slim <- read.csv("Output/GOSeq/all.go.BP.slim_20220417.csv", header = T)
 
 # Check species names
 unique(all.go.BP.slim$Species)
-# "A.cervicornis" "P.lobata"      "P.acuta"       "M.cavernosa"  "O.faveolata"  
+# "A.cervicornis" "M.cavernosa"   "O.faveolata"   "M.capitata"   "P.acuta"       "P.lobata"  
 
 # for this plot, remove "other biological processes" and "other metabolic processes"
 all.go.BP.slim <- subset(all.go.BP.slim, !GO.Slim.Term == "other biological processes" & !GO.Slim.Term == "other metabolic processes")
@@ -321,16 +355,17 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.justification = c("right", "top"),
         legend.box.just = "right",
         legend.background = element_rect(fill = "white", color = "black")) + 
-  scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"))
+  scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220320.png", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Location = 
                                               case_when(Species == "A.cervicornis" ~ "Florida", 
                                                         Species == "M.cavernosa" ~ "Florida",
                                                         Species == "O.faveolata" ~ "Florida",
+                                                        Species == "M.capitata" ~ "Hawaii",
                                                         Species == "P.acuta" ~ "Hawaii",
                                                         Species == "P.lobata" ~ "Hawaii"))
 
@@ -364,7 +399,7 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 600)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 750)) + 
   theme(legend.title = element_text(size = 80), 
         legend.key.size = unit(2, "cm"),
         legend.text = element_text(size=80), 
@@ -375,14 +410,15 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220328.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220328.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology = 
                                               case_when(Species == "A.cervicornis" ~ "Branching", 
                                                         Species == "M.cavernosa" ~ "Massive",
                                                         Species == "O.faveolata" ~ "Massive",
+                                                        Species == "M.capitata" ~ "Branching",
                                                         Species == "P.acuta" ~ "Branching",
                                                         Species == "P.lobata" ~ "Massive"))
 
@@ -416,7 +452,7 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 650)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 775)) + 
   theme(legend.title = element_text(size = 80), 
         legend.key.size = unit(2, "cm"),
         legend.text = element_text(size=80), 
@@ -427,8 +463,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 ## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
@@ -436,103 +472,107 @@ ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220328.png", count_morph_plot, 
 # By location
 tabl1 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
 tabl1
-  #                                 Florida Hawaii
-  # cell adhesion                          8     26
-  # cell cycle and proliferation          11     42
-  # cell organization and biogenesis      44    119
-  # cell-cell signaling                   18     14
-  # death                                 14      6
-  # developmental processes              174    595
-  # DNA metabolism                         7     32
-  # protein metabolism                    53     92
-  # RNA metabolism                        52     61
-  # signal transduction                   52     84
-  # stress response                       46     84
-  # transport                             63     40
+  #                                  Florida Hawaii
+  # cell adhesion                          8     38
+  # cell cycle and proliferation          11     72
+  # cell organization and biogenesis      44    153
+  # cell-cell signaling                   18     18
+  # death                                 14     12
+  # developmental processes              174    695
+  # DNA metabolism                         7     34
+  # protein metabolism                    53    109
+  # RNA metabolism                        52     75
+  # signal transduction                   52     96
+  # stress response                       46    101
+  # transport                             63     66
 
 rowSums(tabl1)
-       #  cell adhesion     cell cycle and proliferation cell organization and biogenesis              cell-cell signaling 
-       #             34                               53                              163                               32 
-       #          death          developmental processes                   DNA metabolism               protein metabolism 
-       #             20                              769                               39                              145 
-       # RNA metabolism              signal transduction                  stress response                        transport 
-       #            113                              136                              130                              103 
+             #       cell adhesion     cell cycle and proliferation cell organization and biogenesis 
+             #                  46                               83                              197 
+             # cell-cell signaling                            death          developmental processes 
+             #                  36                               26                              869 
+             #      DNA metabolism               protein metabolism                   RNA metabolism 
+             #                  41                              162                              127 
+             # signal transduction                  stress response                        transport 
+             #                 148                              147                              129 
 
 colSums(tabl1)
 # Florida  Hawaii 
-#     542    1195
+#     542    1469
     
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)) * 100
-  #                                    Florida     Hawaii
-  # cell adhesion                     0.4605642  1.4968336
-  # cell cycle and proliferation      0.6332758  2.4179620
-  # cell organization and biogenesis  2.5331031  6.8508923
-  # cell-cell signaling               1.0362694  0.8059873
-  # death                             0.8059873  0.3454231
-  # developmental processes          10.0172712 34.2544617
-  # DNA metabolism                    0.4029937  1.8422568
-  # protein metabolism                3.0512378  5.2964882
-  # RNA metabolism                    2.9936672  3.5118020
-  # signal transduction               2.9936672  4.8359240
-  # stress response                   2.6482441  4.8359240
-  # transport                         3.6269430  2.3028210
+  #                                     Florida     Hawaii
+  # cell adhesion                     0.3978120  1.8896072
+  # cell cycle and proliferation      0.5469915  3.5803083
+  # cell organization and biogenesis  2.1879662  7.6081551
+  # cell-cell signaling               0.8950771  0.8950771
+  # death                             0.6961711  0.5967181
+  # developmental processes           8.6524117 34.5599204
+  # DNA metabolism                    0.3480855  1.6907011
+  # protein metabolism                2.6355047  5.4201890
+  # RNA metabolism                    2.5857782  3.7294878
+  # signal transduction               2.5857782  4.7737444
+  # stress response                   2.2874192  5.0223769
+  # transport                         3.1327698  3.2819493
 
 chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
-#	Pearson's Chi-squared test
-#
+# 	Pearson's Chi-squared test
+# 
 # data:  all.go.BP.slim$GO.Slim.Term and all.go.BP.slim$Location
-# X-squared = 118.64, df = 11, p-value < 2.2e-16
+# X-squared = 107.86, df = 11, p-value < 2.2e-16
 
 
 # By morphology 
 tabl2 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
 tabl2
   #                                  Branching Massive
-  # cell adhesion                           28       6
-  # cell cycle and proliferation            43      10
-  # cell organization and biogenesis       105      58
-  # cell-cell signaling                     26       6
-  # death                                   15       5
-  # developmental processes                635     134
-  # DNA metabolism                          17      22
-  # protein metabolism                      99      46
-  # RNA metabolism                          91      22
-  # signal transduction                     96      40
-  # stress response                        109      21
-  # transport                               81      22
+  # cell adhesion                           40       6
+  # cell cycle and proliferation            73      10
+  # cell organization and biogenesis       139      58
+  # cell-cell signaling                     30       6
+  # death                                   21       5
+  # developmental processes                735     134
+  # DNA metabolism                          19      22
+  # protein metabolism                     116      46
+  # RNA metabolism                         105      22
+  # signal transduction                    108      40
+  # stress response                        126      21
+  # transport                              107      22
 
 rowSums(tabl2)
-# cell adhesion     cell cycle and proliferation cell organization and biogenesis              cell-cell signaling 
-#    34                               53                              163                               32 
-# death          developmental processes                   DNA metabolism               protein metabolism 
-#  20                              769                               39                              145 
-# RNA metabolism              signal transduction                  stress response                        transport 
-# 113                              136                              130                              103 
+             #       cell adhesion     cell cycle and proliferation cell organization and biogenesis 
+             #                  46                               83                              197 
+             # cell-cell signaling                            death          developmental processes 
+             #                  36                               26                              869 
+             #      DNA metabolism               protein metabolism                   RNA metabolism 
+             #                  41                              162                              127 
+             # signal transduction                  stress response                        transport 
+             #                 148                              147                              129 
 
 colSums(tabl2)
 # Branching   Massive 
-#      1345       392
+#      1619       392
+
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)) * 100
   #                                   Branching    Massive
-  # cell adhesion                     1.6119747  0.3454231
-  # cell cycle and proliferation      2.4755325  0.5757052
-  # cell organization and biogenesis  6.0449050  3.3390904
-  # cell-cell signaling               1.4968336  0.3454231
-  # death                             0.8635579  0.2878526
-  # developmental processes          36.5572827  7.7144502
-  # DNA metabolism                    0.9786989  1.2665515
-  # protein metabolism                5.6994819  2.6482441
-  # RNA metabolism                    5.2389177  1.2665515
-  # signal transduction               5.5267703  2.3028210
-  # stress response                   6.2751871  1.2089810
-  # transport                         4.6632124  1.2665515
+  # cell adhesion                     1.9890602  0.2983590
+  # cell cycle and proliferation      3.6300348  0.4972650
+  # cell organization and biogenesis  6.9119841  2.8841372
+  # cell-cell signaling               1.4917951  0.2983590
+  # death                             1.0442566  0.2486325
+  # developmental processes          36.5489806  6.6633516
+  # DNA metabolism                    0.9448036  1.0939831
+  # protein metabolism                5.7682745  2.2874192
+  # RNA metabolism                    5.2212829  1.0939831
+  # signal transduction               5.3704625  1.9890602
+  # stress response                   6.2655395  1.0442566
+  # transport                         5.3207360  1.0939831
 
 chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
-# Chi-squared approximation may be incorrect
-# 	Pearson's Chi-squared test
+# Pearson's Chi-squared test
 # 
 # data:  all.go.BP.slim$GO.Slim.Term and all.go.BP.slim$Morphology
-# X-squared = 68.59, df = 11, p-value = 2.262e-10
+# X-squared = 73.386, df = 11, p-value = 2.762e-11
 ```
 
 
@@ -545,13 +585,15 @@ In the manuscript, only the BP terms will be presented. The CC and MF terms will
 ### Determine all categories to plot by
 ```{r}
 unique(all.go.BP.slim$GO.Slim.Term)
-#  [1] "transport"                        "RNA metabolism"                   "cell organization and biogenesis" "protein metabolism"              
-#  [5] "DNA metabolism"                   "stress response"                  "developmental processes"          "other biological processes"      
-#  [9] "cell cycle and proliferation"     "cell adhesion"                    "other metabolic processes"        "death"                           
-# [13] "signal transduction"              "cell-cell signaling"                                      
+#  [1] "transport"                        "RNA metabolism"                  
+#  [3] "cell organization and biogenesis" "protein metabolism"              
+#  [5] "DNA metabolism"                   "stress response"                 
+#  [7] "developmental processes"          "cell cycle and proliferation"    
+#  [9] "cell adhesion"                    "death"                           
+# [11] "signal transduction"              "cell-cell signaling"  
 ```
 
-Look at all_GOslim.BP plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot by GOslim terms that appear in all_GOslim.BP_20220121.pdf: 
+Look at all_GOslim.BP plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. 
 
 (1) "cell adhesion"
 (2) "cell cycle and proliferation"
@@ -560,8 +602,8 @@ Look at all_GOslim.BP plot to see which GOslim term has the most associated GO t
 (5) "death"
 (6) "developmental processes"
 (7) "DNA metabolism"
-(8) "other biological processes"
-(9) "other metabolic processes"
+#(8) "other biological processes"
+#(9) "other metabolic processes"
 (10) "protein metabolism"
 (11) "RNA metabolism"
 (12) "signal transduction" 
@@ -584,7 +626,7 @@ GO.CA.subset <- ggplot(go.slim.CA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CA.subset
-ggsave("Output/Figs/CA.Subset_GOslim.BP_20220121.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/CA.Subset_GOslim.BP_20220417.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -601,7 +643,7 @@ GO.CCP.subset <- ggplot(go.slim.CCP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCP.subset
-ggsave("Output/Figs/CCP.Subset_GOslim.BP_20220121.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/CCP.Subset_GOslim.BP_20220417.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -618,7 +660,7 @@ GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.COB.subset
-ggsave("Output/Figs/COB.Subset_GOslim.BP_20220121.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/COB.Subset_GOslim.BP_20220417.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -635,7 +677,7 @@ GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCS.subset
-ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220121.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220417.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -652,7 +694,7 @@ GO.death.subset <- ggplot(go.slim.Death.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.death.subset
-ggsave("Output/Figs/Death.Subset_GOslim.BP_20220121.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) "developmental processes"
@@ -668,7 +710,7 @@ GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DP.subset
-ggsave("Output/Figs/DP.Subset_GOslim.BP_20220121.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/DP.Subset_GOslim.BP_20220417.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -685,39 +727,39 @@ GO.DNAM.subset <- ggplot(go.slim.DNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DNAM.subset
-ggsave("Output/Figs/DNAM.Subset_GOslim.BP_20220121.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/DNAM.Subset_GOslim.BP_20220417.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) "other biological processes"
 ```{r}
-go.slim.OBP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other biological processes")
-
-GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.OBP.subset
-ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220121.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+# go.slim.OBP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other biological processes")
+# 
+# GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) + 
+#   geom_tile(aes(fill =over_represented_pvalue)) + 
+#   facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+#   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+#                      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+#                      strip.text.y = element_text(angle=0, size = 25),
+#                      strip.text.x = element_text(size = 25),
+#                      axis.text = element_text(size = 30))
+# GO.OBP.subset
+# ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220121.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (9) "other metabolic processes"
 ```{r}
-go.slim.OMP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other metabolic processes")
-
-GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
-  theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
-                     panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
-                     strip.text.x = element_text(size = 25),
-                     axis.text = element_text(size = 30))
-GO.OMP.subset
-ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220121.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+# go.slim.OMP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="other metabolic processes")
+# 
+# GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) + 
+#   geom_tile(aes(fill =over_represented_pvalue)) + 
+#   facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+#   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
+#                      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
+#                      strip.text.y = element_text(angle=0, size = 25),
+#                      strip.text.x = element_text(size = 25),
+#                      axis.text = element_text(size = 30))
+# GO.OMP.subset
+# ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220121.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (10) "protein metabolism"
@@ -733,9 +775,8 @@ GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PM.subset
-ggsave("Output/Figs/PM.Subset_GOslim.BP_20220121.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/PM.Subset_GOslim.BP_20220417.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
 ```
-
 
 (11) "RNA metabolism"
 ```{r}
@@ -750,7 +791,7 @@ GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.RNAM.subset
-ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220121.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220417.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (12) "signal transduction"
@@ -766,7 +807,7 @@ GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ST.subset
-ggsave("Output/Figs/ST.Subset_GOslim.BP_20220121.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/ST.Subset_GOslim.BP_20220417.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (13) "stress response"
@@ -782,7 +823,7 @@ GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.SR.subset
-ggsave("Output/Figs/SR.Subset_GOslim.BP_20220121.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/SR.Subset_GOslim.BP_20220417.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (14) "transport"
@@ -798,18 +839,56 @@ GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.T.subset
-ggsave("Output/Figs/Transport.Subset_GOslim.BP_20220121.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/Transport.Subset_GOslim.BP_20220417.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+still need to do as of 4/17/22
 
 ## CC
 ### Determine all categories to plot by
 ```{r}
 unique(all.go.CC.slim$GO.Slim.Term)
-# [1] "nucleus"                      "other cellular component"     "other membranes"              "other cytoplasmic organelle" 
-# [5] "cytoskeleton"                 "plasma membrane"              "non-structural extracellular" "mitochondrion"               
-# [9] "ER/Golgi"                                      
+# [1] "other cellular component"     "nucleus"                      "other membranes"             
+#  [4] "other cytoplasmic organelle"  "cytoskeleton"                 "ER/Golgi"                    
+#  [7] "plasma membrane"              "mitochondrion"                "non-structural extracellular"
+# [10] "cytosol"                      "translational apparatus"                                       
 ```
 
 Look at all_GOslim.CC plot to see which GOslim term has the most associated GO terms. Then, plot by that GOslim term. Going to subset and plot by GOslim terms that appear in all_GOslim.CC_20220125.pdf: 
