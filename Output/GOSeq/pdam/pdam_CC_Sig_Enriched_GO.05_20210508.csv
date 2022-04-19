@@ -1,6 +1,0 @@
-"","category","over_represented_pvalue","under_represented_pvalue","numDEInCat","numInCat","term","ontology"
-"32","GO:0015934",0.0137822632382309,0.999357431981266,2,8,"large ribosomal subunit","CC"
-"39","GO:0030117",0.04510502683411,0.995614112272304,2,14,"membrane coat","CC"
-"40","GO:0030121",0.0249708294555116,1,1,1,"AP-1 adaptor complex","CC"
-"42","GO:0031464",0.023837728741634,1,1,1,"Cul4A-RING E3 ubiquitin ligase complex","CC"
-"49","GO:0090730",0.0233770076472829,1,1,1,"Las1 complex","CC"
