@@ -315,8 +315,10 @@ all.go.BP.slim <- read.csv("Output/GOSeq/all.go.BP.slim_20220417.csv", header = 
 unique(all.go.BP.slim$Species)
 # "A.cervicornis" "M.cavernosa"   "O.faveolata"   "M.capitata"   "P.acuta"       "P.lobata"  
 
-# for this plot, remove "other biological processes" and "other metabolic processes"
-all.go.BP.slim <- subset(all.go.BP.slim, !GO.Slim.Term == "other biological processes" & !GO.Slim.Term == "other metabolic processes")
+# for this plot, remove "other biological processes",  "other metabolic processes", and NA
+#all.go.BP.slim <- subset(all.go.BP.slim, !GO.Slim.Term == "other biological processes" & !GO.Slim.Term == "other metabolic processes")
+all.go.BP.slim <- subset(all.go.BP.slim, !GO.Slim.Term == "NA")
+
 
 # plot by species 
 ## plotting unique GO terms only - if I plot with all.go.BP.slim, I get duplicate GO slim terms bc its duplicating based on gene id/treatment?

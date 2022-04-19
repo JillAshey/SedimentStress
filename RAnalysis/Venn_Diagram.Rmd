@@ -12,7 +12,6 @@ knitr::opts_chunk$set(echo = TRUE)
 library(VennDiagram)
 library(tidyverse)
 library("ggVennDiagram")
-
 ```
 
 Test code from [here](https://www.r-graph-gallery.com/14-venn-diagramm.html)
@@ -139,10 +138,53 @@ venn.diagram(
 
 Venn diagram - ONLY BP
 ```{r}
-# 5-set Venn Diagram
+library(venn); library(tidyverse); library(stringr); 
+
+p_th = 0.0;
+
+data <- read_csv("finaldf.csv")
+data
+
+venn = 
+  list(A = 
+     data %>% 
+     filter(CVA > p_th) %>% 
+     .$phrase,
+   B = 
+     data %>% 
+     filter(IHD > p_th) %>% 
+     .$phrase,
+   C = 
+     data %>% 
+     filter(CM > p_th) %>% 
+     .$phrase,
+   D = 
+     data %>% 
+     filter(ARR > p_th) %>% 
+     .$phrase,
+   E = 
+     data %>% 
+     filter(VD > p_th) %>% 
+     .$phrase,
+   G = 
+     data %>% 
+     filter(CHD > p_th) %>% 
+     .$phrase);
+
+png("ven.png", width = 800, height = 800)
+
+venn.result =
+  venn(venn, ilabels = TRUE, 
+       zcolor = "style", size = 25, cexil = 1.2, cexsn = 1.5);
+
+
+dev.off()
+
+
+# 6-set Venn Diagram
 
 ## read in data 
-all.BP  <- read.csv("Output/GOSeq/all.go.BP_20220121.csv")
+all.BP  <- read.csv("Output/GOSeq/all.go.BP.slim_20220417.csv")
 head(all.BP)
 all.BP <- all.BP[,-c(1)] # remove weird first col
 
@@ -153,6 +195,8 @@ mcav <- all.BP %>% filter(Species=="M.cavernosa")
 length(unique(mcav$GO.IDs)) # 158 - there are some duplicates because certain terms matched to multiple GO slim terms 
 ofav <- all.BP %>% filter(Species=="O.faveolata")
 length(unique(ofav$GO.IDs)) # 27 - there are some duplicates because certain terms matched to multiple GO slim terms 
+mcap <- all.BP %>% filter(Species=="M.capitata") 
+length(unique(mcap$GO.IDs)) # 237 - there are some duplicates because certain terms matched to multiple GO slim terms
 pacuta <- all.BP %>% filter(Species=="P.acuta") 
 length(unique(pacuta$GO.IDs)) # 380 - there are some duplicates because certain terms matched to multiple GO slim terms 
 plob <- all.BP %>% filter(Species=="P.lobata") 
@@ -164,30 +208,117 @@ venn.plot <- venn.diagram(
 		A.cervicornis = acerv$GO.IDs,
 		M.cavernosa = mcav$GO.IDs,
 		O.faveolata = ofav$GO.IDs,
+		M.capitata = mcap$GO.IDs,
 		P.acuta = pacuta$GO.IDs,
 		P.lobata = plob$GO.IDs
 		),
-	filename = "Output/Figs/Venn/venn_GO.BP.png",
+	filename = "Output/Figs/Venn/venn_GO.BP_20220418.png",
 	col = "black",
-	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"),
 	alpha = 0.50,
 	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
 	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
-	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3"),
+	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"),
 	cat.cex = 1.5,
 	cat.fontface = "bold",
 	margin = 0.1
 	)
+```
 
+```{r}
 # intersections to check against figure 
-intersect(acerv$GO.IDs, mcav$GO.IDs)
-intersect(acerv$GO.IDs, ofav$GO.IDs)
-intersect(acerv$GO.IDs, pacuta$GO.IDs)
-intersect(acerv$GO.IDs, plob$GO.IDs)
-intersect(pacuta$GO.IDs, mcav$GO.IDs)
-intersect(plob$GO.IDs, mcav$GO.IDs)
-intersect(pacuta$GO.IDs, ofav$GO.IDs)
-intersect(pacuta$GO.IDs, plob$GO.IDs)
+intersect(acerv$GO.Term, mcav$GO.Term)
+# [1] "ovarian cumulus expansion (GO:0001550)" - developmental processes                             
+# [2] NA                                                         
+# [3] "diadenosine tetraphosphate biosynthetic process (GO:0015966)" - other metabolic processes	
+# [4] "regulation of Rho protein signal transduction (GO:0035023)" - signal transduction	
+# [5] "positive regulation of skeletal muscle tissue development (GO:0048643)" - developmental processes
+# [6] "regulation of neurotransmitter uptake (GO:0051580)" - cell-cell signaling, transport 
+
+intersect(acerv$GO.Term, ofav$GO.Term)
+# [1] "chondrocyte development (GO:0002063)" -      developmental processes                             
+# [2] NA                                          
+# [3] "positive regulation of signal transduction (GO:0009967)" - signal transduction
+
+intersect(acerv$GO.Term, mcap$GO.Term)
+# [1] NA                                                         
+# [2] "positive regulation of skeletal muscle tissue development (GO:0048643)" - developmental processes
+
+intersect(acerv$GO.Term, pacuta$GO.Term)
+# [1] NA                                              
+# [2] "Mo-molybdopterin cofactor biosynthetic process (GO:0006777)" - protein metabolism
+# [3] "cellular response to starvation (GO:0009267)" - stress response             
+# [4] "Wnt receptor signaling pathway (GO:0016055)" - signal transduction                
+# [5] "maintenance of gastrointestinal epithelium (GO:0030277)" - other biological processes	
+
+intersect(acerv$GO.Term, plob$GO.Term)
+# [1] NA                                                               
+# [2] "methylation-dependent chromatin silencing (GO:0006346)" - cell organization and biogenesis, RNA metabolism	
+# [3] "positive regulation of transcription from RNA polymerase II promoter (GO:0045944)" - RNA metabolism	
+
+intersect(mcav$GO.Term, ofav$GO.Term)
+# [1] NA
+
+intersect(mcav$GO.Term, mcap$GO.Term)
+# [1] NA                                                         
+# [2] "negative regulation of mitochondrial membrane potential (GO:0010917)" - other biological processes	
+# [3] "positive regulation of neuron projection development (GO:0010976)" - cell organization and biogenesis, developmental processes
+# [4] "riboflavin transport (GO:0032218)" - transport                 
+# [5] "positive regulation of skeletal muscle tissue development (GO:0048643)" - developmental processes
+# [6] "retina development in camera-type eye (GO:0060041)" - developmental processes
+
+intersect(mcav$GO.Term, pacuta$GO.Term)
+# [1] NA 
+# [2] "ectoderm development (GO:0007398)" - developmental processes
+# [3] "riboflavin transport (GO:0032218)" - transport  
+
+intersect(mcav$GO.Term, plob$GO.Term)
+# [1] NA                           
+# [2] "somatic muscle development (GO:0007525)" - developmental processes
+
+intersect(ofav$GO.Term, mcap$GO.Term)
+# [1] NA
+
+intersect(ofav$GO.Term, pacuta$GO.Term)
+# [1] NA                     
+# [2] "response to stimulus (GO:0050896)" - other biological processes
+
+intersect(ofav$GO.Term, plob$GO.Term)
+# [1] NA
+
+intersect(mcap$GO.Term, pacuta$GO.Term)
+#  [1] NA                                                    
+#  [2] "microtubule-based process (GO:0007017)" - other biological processes                      
+#  [3] "heterophilic cell adhesion (GO:0007157)" - cell adhesion
+#  [4] "response to pH (GO:0009268)" - other biological processes                
+#  [5] "blue light signaling pathway (GO:0009785)" - signal transduction                        
+#  [6] "response to activity (GO:0014823)" - other biological processes            
+#  [7] "carbon dioxide transport (GO:0015670)" - transport            
+#  [8] "riboflavin transport (GO:0032218)" - transport                
+#  [9] "positive regulation of cellular pH reduction (GO:0032849)" - other biological processes              
+# [10] "response to glucagon stimulus (GO:0033762)" - other biological processes                     
+# [11] "embryonic hindlimb morphogenesis (GO:0035116)" - developmental processes                     
+# [12] "positive regulation of osteoclast differentiation (GO:0045672)" - developmental processes                     
+# [13] "positive regulation of bone resorption (GO:0045780)" - other biological processes                                
+# [14] "secretion (GO:0046903)" - transport                           
+# [15] "response to pain (GO:0048265)" - stress response              
+# [16] "positive regulation of transcription factor activity (GO:0051091)" - RNA metabolism
+# [17] "oxidation reduction (GO:0055114)" - other metabolic processes	
+
+intersect(mcap$GO.Term, plob$GO.Term)
+# [1] NA                          
+# [2] "microtubule-based process (GO:0007017)" - other biological processes
+
+intersect(pacuta$GO.Term, plob$GO.Term)
+# [1] "embryonic axis specification (GO:0000578)" - developmental processes              
+# [2] "eye development (GO:0001654)" - developmental processes        
+# [3] NA                                               
+# [4] "microtubule-based process (GO:0007017)" - other biological processes                   
+# [5] "neural crest cell fate specification (GO:0014036)" - cell organization and biogenesis, developmental processes 
+# [6] "neural plate anterioposterior pattern formation (GO:0021999)" - developmental processes  
+# [7] "regulation of circadian rhythm (GO:0042752)" - other biological processes	
+# [8] "embryonic organ development (GO:0048568)" - developmental processes                  
+# [9] "Spemann organizer formation (GO:0060061)" - cell-cell signaling 
 ```
 
 Venn diagram - ONLY CC
