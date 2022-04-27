@@ -168,7 +168,7 @@ DEG_control_vs_T2.sig.num # 2 DEGs
 DEG_control_vs_T2.sig <- subset(DEG_control_vs_T2, padj <0.05) # identify and subset significant pvalues
 DEG_control_vs_T2.sig["Treatment_Compare"] <- "CvsT2" # add treatment comparison col
 DEG_control_vs_T2.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T2.sig)),] # subset list of significant genes from original count data 
-DEG_control_vs_T2.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T2.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+#DEG_control_vs_T2.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T2.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
 # error from vst:
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 #    function: y = a/x + b, and a local regression fit was automatically substituted.
@@ -191,7 +191,7 @@ DEG_control_vs_T3.sig.num # 8 DEGs
 DEG_control_vs_T3.sig <- subset(DEG_control_vs_T3, padj <0.05) # identify and subset significant pvalues
 DEG_control_vs_T3.sig["Treatment_Compare"] <- "CvsT3" # add treatment comparison col
 DEG_control_vs_T3.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T3.sig)),] # subset list of significant genes from original count data 
-DEG_control_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+#DEG_control_vs_T3.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T3.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
 # error from vst:
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 #    function: y = a/x + b, and a local regression fit was automatically substituted.
@@ -214,7 +214,7 @@ DEG_control_vs_T4.sig.num # 2 DEGs
 DEG_control_vs_T4.sig <- subset(DEG_control_vs_T4, padj <0.05) # identify and subset significant pvalues
 DEG_control_vs_T4.sig["Treatment_Compare"] <- "CvsT4" # add treatment comparison col
 DEG_control_vs_T4.sig.list <- data[which(rownames(data) %in% rownames(DEG_control_vs_T4.sig)),] # subset list of significant genes from original count data 
-DEG_control_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
+#DEG_control_vs_T4.vst.sig <- varianceStabilizingTransformation(DEG_control_vs_T4.sig.list, blind = FALSE) # apply a regularized log transformation to minimize effects of small counts and normalize wrt library. Specify fit type???
 # error from vst:
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 #    function: y = a/x + b, and a local regression fit was automatically substituted.
@@ -345,21 +345,24 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 ```{r}
 ofav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_ofav <- round(100*attr(ofav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
+
 ofav_DEGPCAplot <- ggplot(ofav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_ofav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_ofav[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
-  coord_fixed() +
+  #coord_fixed() +
   ggtitle(label = "O. favelota") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=18), 
+  theme(legend.text = element_text(size=8), 
         #legend.position="none",
         plot.background = element_blank(),
-        legend.title = element_text(size=18, face="bold"), 
-        axis.text = element_text(size=18), 
-        axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        #legend.title = element_text(size=18, face="bold"), 
+        legend.title=element_blank(),
+        axis.text = element_text(size=8), 
+        axis.title = element_text(size=10,  face="bold", hjust = 0.5), 
+        axis.title.y = element_text(vjust=-1.5),
+        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
 ofav_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcav_DEG_PCA_plot$data

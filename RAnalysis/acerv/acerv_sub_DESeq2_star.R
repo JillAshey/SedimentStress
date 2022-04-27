@@ -372,40 +372,6 @@ dim(DEGs.all) # 395 x 21
 length(unique(DEGs.all$gene_id)) # 215 unique genes between all treatments 
 #write.csv(DEGs.all, file = "~/Desktop/acerv_sub_DEGs.all_treatment_20210219.csv")
 
-## Find intersections and unique results between treatments 
-# interactions
-int1 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T2.sig.list_full$gene_id)
-length(unique(int1)) # 45 DEGs shared between CvT1 and CvT2
-int2 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
-length(unique(int2)) # 40 DEGs shared between CvT1 and CvT3
-int3 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int3)) # 37 DEGs shared between CvT1 and CvT2
-int4 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T1_vs_T2.sig.list_full$gene_id)
-length(unique(int4)) # 3 DEGs shared between CvT1 and T1vT2
-int5 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int5)) # 0 DEGs shared between CvT1 and T2vT3
-int6 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
-length(unique(int6)) # 50 DEGs shared between CvT2 and CvT3
-int7 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int7)) # 67 DEGs shared between CvT2 and CvT4
-int8 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T1_vs_T2.sig.list_full$gene_id)
-length(unique(int8)) # 7 DEGs shared between CvT2 and T1vT2
-int9 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int9)) # 3 DEGs shared between CvT2 and T2vT3
-int10 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int10)) # 43 DEGs shared between CvT3 and T2vT4
-int11 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T1_vs_T2.sig.list_full$gene_id)
-length(unique(int11)) # 0 DEGs shared between CvT3 and T1vT2
-int12 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int12)) # 0 DEGs shared between CvT3 and T2vT3
-int13 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T1_vs_T2.sig.list_full$gene_id)
-length(unique(int13)) # 0 DEGs shared between CvT4 and T1vT2
-int14 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int14)) # 0 DEGs shared between CvT4 and T1vT2
-int15 <- intersect(DEG_T1_vs_T2.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int15)) # 3 DEGs shared between T1vT2 and T3vT4
-
-
 ##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT2, T2vsT3
 DEGs.all_acerv_sub <- DEGs.all$gene_id
 DEGs.all_acerv_sub <- unique(DEGs.all_acerv_sub)
@@ -423,27 +389,33 @@ acerv_sub_DEG_PCA <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnDa
 percentVar_pca_acerv_sub <- round(100*attr(acerv_sub_DEG_PCA, "percentVar")) #plot PCA of samples with all data
 
 acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color = Treatment)) +
-  geom_point(size=10) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_acerv_sub[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_acerv_sub[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
-  coord_fixed() +
+  #coord_fixed() +
   ggtitle(label = "A. cervicornis") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=18), 
+  theme(legend.text = element_text(size=8), 
         #legend.position="none",
         plot.background = element_blank(),
-        legend.title = element_text(size=18, face="bold"), 
-        axis.text = element_text(size=20), 
-        axis.title = element_text(size=20,  face="bold"), 
-        plot.title = element_text(size = 27, face = "italic", hjust = 0.5))
-acerv_sub_DEG_PCA_plot
-# PCA plot is of differentially expressed genes only
+        #legend.title = element_text(size=18, face="bold"), 
+        legend.title=element_blank(),
+        axis.text = element_text(size=8), 
+        axis.title = element_text(size=10,  face="bold"), 
+        axis.title.y = element_text(vjust=-1.5),
+        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
+acerv_sub_DEG_PCA_plot # PCA plot is of differentially expressed genes only
 PC.info <- acerv_sub_DEG_PCA_plot$data
 ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.jpeg", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.pdf", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 
 
+
+save <- acerv_sub_DEG_PCA_plot
+
+test <- recordPlot(acerv_sub_DEG_PCA_plot)        # Save plot in data object
+test
 
 ## Heatmap of DEGs
 # This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side

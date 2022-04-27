@@ -169,15 +169,6 @@ dim(DEGs.all) # 219 x 20
 length(unique(DEGs.all$gene_id)) # 153 unique genes between all treatments 
 #write.csv(DEGs.all, file = "~/Desktop/plob_DEGs.all_treatment_20210326.csv")
 
-## Find intersections and unique results between treatments 
-# interactions
-int1 <- intersect(DEG_control_vs_mid.sig.list_full$gene_id, DEG_control_vs_high.sig.list_full$gene_id)
-length(unique(int1)) # 56 DEGs shared between CvMid and CvHigh
-int2 <- intersect(DEG_control_vs_mid.sig.list_full$gene_id, DEG_mid_vs_high.sig.list_full$gene_id)
-length(unique(int2)) # 7 DEGs shared between CvMid and MidvHigh
-int3 <- intersect(DEG_control_vs_high.sig.list_full$gene_id, DEG_mid_vs_high.sig.list_full$gene_id)
-length(unique(int3)) # 3 DEGs shared between CvHigh and MidvHigh
-
 ##### Unique genes from intersections of DEG in CvsMid, CvsHigh, MidvsHigh
 DEGs.all_plob <- DEGs.all$gene_id
 DEGs.all_plob <- unique(DEGs.all_plob)
@@ -199,26 +190,28 @@ plob_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData
 percentVar_pca_plob <- round(100*attr(plob_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
 plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_plob[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_plob[2],"% variance")) +
   scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
-  coord_fixed() +
+  #coord_fixed() +
   ggtitle(label = "P. lobata") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=18), 
+  theme(legend.text = element_text(size=8), 
         #legend.position="none",
         plot.background = element_blank(),
-        legend.title = element_text(size=18, face="bold"), 
-        axis.text = element_text(size=18), 
-        axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        #legend.title = element_text(size=18, face="bold"), 
+        legend.title=element_blank(),
+        axis.text = element_text(size=8), 
+        axis.title = element_text(size=10,  face="bold"), 
+        axis.title.y = element_text(vjust=-1.5),
+        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
 plob_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- plob_DEGPCAplot$data
-ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.jpeg", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
-ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.pdf", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.jpeg", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.pdf", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
 
 
 

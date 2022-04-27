@@ -219,26 +219,32 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 mcap_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_mcap <- round(100*attr(mcap_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 mcap_DEGPCAplot <- ggplot(mcap_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_mcap[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcap[2],"% variance")) +
   scale_color_manual(values = c(control="gray", mid = "darksalmon", high = "darkred")) +
-  coord_fixed() +
+  #coord_fixed() +
   ggtitle(label = "M. capitata") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=18), 
+  theme(legend.text = element_text(size=8), 
         #legend.position="none",
         plot.background = element_blank(),
-        legend.title = element_text(size=18, face="bold"), 
-        axis.text = element_text(size=18), 
-        axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5)) +
+        #legend.title = element_text(size=18, face="bold"),
+        legend.title=element_blank(),
+        axis.text = element_text(size=8), 
+        axis.title = element_text(size=10,  face="bold"), 
+        axis.title.y = element_text(vjust=-1.5),
+        plot.title = element_text(size = 15, face = "italic", hjust = 0.5)) +
   coord_equal(ratio = 2)
 mcap_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcap_DEGPCAplot$data
-ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.jpeg", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
-ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.pdf", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
+#ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.jpeg", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
+#ggsave("Output/Figs/mcap/mcap_DEGs_PCA_20220328.pdf", mcap_DEGPCAplot, width = 20, height = 20, units = "cm")
+
+
+
+
 ```
 
 

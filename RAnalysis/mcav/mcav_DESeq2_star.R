@@ -112,8 +112,10 @@ pheatmap(sampleDistMatrix, # plot matrix
          clustering_distance_rows = sampleDists, # cluster rows
          clustering_distance_cols = sampleDists, # cluster cols
          col=colors) # set colors
-plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
-# Treatment2 has a weird outlier, may remove?
+plotPCA(vst, intgroup = c("Treatment")) + geom_text(aes(label=vst$SampleID),vjust=2)
+
+# plot PCA of samples with all data 
+# Treatment2 has a weird outlier, may remove? nah keep--add justification
 
 # Differential gene expression analysis 
 DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
@@ -278,7 +280,6 @@ DEG_T3_vs_T4.sig.num <- sum(DEG_T3_vs_T4$padj <0.05, na.rm = T) # identify # of 
 DEG_T3_vs_T4.sig.num
 # 0 DEG
 
-
 # Make full list of genes and treatments: CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
 DEG_control_vs_T1.sig.list_full$gene_id <- rownames(DEG_control_vs_T1.sig.list_full)
 rownames(DEG_control_vs_T1.sig.list_full) <- NULL
@@ -298,44 +299,15 @@ DEGs.all <- rbind(DEG_control_vs_T1.sig.list_full,
                   DEG_control_vs_T3.sig.list_full, 
                   DEG_control_vs_T4.sig.list_full,
                   DEG_T1_vs_T3.sig.list_full,
-                  DEG_T2_vs_T3.sig.list_full)
+                  DEG_T2_vs_T3.sig.list_full
+                  )
 
 dim(DEGs.all) # 108 x 23
 length(unique(DEGs.all$gene_id)) # 62 unique genes between all treatments 
 #write.csv(DEGs.all, file = "~/Desktop/mcav_DEGs.all_treatment_20210208.csv")
 
 ## Find intersections and unique results between treatments 
-# interactions
-int1 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T2.sig.list_full$gene_id)
-length(unique(int1)) # 15 DEGs shared between CvT1 and CvT2
-int2 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
-length(unique(int2)) # 16 DEGs shared between CvT1 and CvT3
-int3 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int3)) # 8 DEGs shared between CvT1 and CvT2
-int4 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
-length(unique(int4)) # 0 DEGs shared between CvT1 and T1vT3
-int5 <- intersect(DEG_control_vs_T1.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int5)) # 0 DEGs shared between CvT1 and T2vT3
-int6 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T3.sig.list_full$gene_id)
-length(unique(int6)) # 15 DEGs shared between CvT2 and CvT3
-int7 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int7)) # 10 DEGs shared between CvT2 and CvT4
-int8 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
-length(unique(int8)) # 0 DEGs shared between CvT2 and T1vT3
-int9 <- intersect(DEG_control_vs_T2.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int9)) # 1 DEGs shared between CvT2 and T2vT3
-int10 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_control_vs_T4.sig.list_full$gene_id)
-length(unique(int10)) # 11 DEGs shared between CvT3 and T2vT4
-int11 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
-length(unique(int11)) # 0 DEGs shared between CvT3 and T1vT3
-int12 <- intersect(DEG_control_vs_T3.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int12)) # 0 DEGs shared between CvT3 and T2vT3
-int13 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T1_vs_T3.sig.list_full$gene_id)
-length(unique(int13)) # 0 DEGs shared between CvT4 and T1vT3
-int14 <- intersect(DEG_control_vs_T4.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int14)) # 0 DEGs shared between CvT4 and T2vT3
-int15 <- intersect(DEG_T1_vs_T3.sig.list_full$gene_id, DEG_T2_vs_T3.sig.list_full$gene_id)
-length(unique(int15)) # 0 DEGs shared between T1vT3 and T2vT3
+
 
 
 ##### Unique genes from intersections of DEG in CvsT1, CvsT2, CvsT3, CvsT4, T1vsT3, T2vsT3
@@ -362,20 +334,22 @@ mcav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData
 percentVar_pca_mcav <- round(100*attr(mcav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
 mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
-  geom_point(size=8) +
+  geom_point(size=6) +
   xlab(paste0("PC1: ",percentVar_pca_mcav[1],"% variance")) +
   ylab(paste0("PC2: ",percentVar_pca_mcav[2],"% variance")) +
   scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
-  coord_fixed() +
+  #coord_fixed() +
   ggtitle(label = "M. cavernosa") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=18), 
+  theme(legend.text = element_text(size=8), 
         #legend.position="none",
         plot.background = element_blank(),
-        legend.title = element_text(size=18, face="bold"), 
-        axis.text = element_text(size=18), 
-        axis.title = element_text(size=18,  face="bold"), 
-        plot.title = element_text(size = 25, face = "italic", hjust = 0.5))
+        #legend.title = element_text(size=18, face="bold"), 
+        legend.title=element_blank(),
+        axis.text = element_text(size=8), 
+        axis.title = element_text(size=10,  face="bold", hjust = 0.5), 
+        axis.title.y = element_text(vjust=-1.5),
+        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
 mcav_DEG_PCA_plot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcav_DEG_PCA_plot$data
