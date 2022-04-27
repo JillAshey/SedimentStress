@@ -261,7 +261,7 @@ write.csv(plob_all.go.slim.BP_uniq, "Output/GOSeq/plob/plob_all.go.slim.BP_uniq_
 
 plob_all.go.slim.CC <- subset(plob.go.slim, ontology == "CC")
 plob_all.go.slim.CC <- unique(plob_all.go.slim.CC)
-length(unique(plob_all.go.slim.CC$GO.IDs)) # 31 unique BP GO terms 
+length(unique(plob_all.go.slim.CC$GO.IDs)) # 31 unique CC GO terms 
 #write.csv(plob_all.go.slim.CC, "Output/GOSeq/plob/plob.go.slim.CC_20220208.csv")
 plob_all.go.slim.CC_uniq <- plob_all.go.slim.CC %>% select("GO.IDs")
 plob_all.go.slim.CC_uniq <- unique(plob_all.go.slim.CC_uniq)
@@ -269,7 +269,7 @@ write.csv(plob_all.go.slim.CC_uniq, "Output/GOSeq/plob/plob_all.go.slim.CC_uniq_
 
 plob_all.go.slim.MF <- subset(plob.go.slim, ontology == "MF")
 plob_all.go.slim.MF <- unique(plob_all.go.slim.MF)
-length(unique(plob_all.go.slim.MF$GO.IDs)) # 50 unique BP GO terms 
+length(unique(plob_all.go.slim.MF$GO.IDs)) # 50 unique MF GO terms 
 #write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
 plob_all.go.slim.MF_uniq <- plob_all.go.slim.MF %>% select("GO.IDs")
 plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
