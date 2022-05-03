@@ -1,7 +1,7 @@
-﻿Species,Location,add morph type?,SampleNumber,TotalRawReads,AverageRawReads,AverageCleanReads,AverageReadsRemoved,Average %Mapped (aligned to species specific genome),SE %Mapped
-A.cervicornis,FL,,13,216198078,16630621,16499909,130712,70.62,1.41
-M.cavernosa,FL,,15,238829391,15921959,15740195,181765,50.18,2.37
-O.faveolata,FL,,14,197565998,14111857,13905076,206781,65.54,1.36
-M.capitata,HI,,11,179967370,16360670,16280212,80459,63.75,1.24
-P.acuta,HI,,12,173295109,14441259,14359654,81605,68.94,1.39
-P.lobata,HI,,12,167944712,13995393,13858883,136510,52.83,1.92
+﻿Species,Location,Morphology,SampleNumber,TotalRawReads,AverageRawReads,AverageCleanReads,AverageReadsRemoved,Average %Mapped (aligned to species specific genome),SE %Mapped
+A.cervicornis,FL,Branching,13,216198078,16630621,16499909,130712,70.62,1.41
+M.cavernosa,FL,Massive,15,238829391,15921959,15740195,181765,50.18,2.37
+O.faveolata,FL,Massive,14,197565998,14111857,13905076,206781,65.54,1.36
+M.capitata,HI,Intermediate,11,179967370,16360670,16280212,80459,63.75,1.24
+P.acuta,HI,Branching,12,173295109,14441259,14359654,81605,68.94,1.39
+P.lobata,HI,Massive,12,167944712,13995393,13858883,136510,52.83,1.92

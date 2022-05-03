@@ -21,6 +21,11 @@ ran OrthoFinder on bluewaves, got lots of output. One file (xxx) has the Orthogr
 ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 #ortho <- na.omit(ortho)
 colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Mcapitata", "Pacuta", "Plobata")
+length(unique(ortho$Orthogroup)) # 21688 total orthogroups
+
+# Remove blanks from dataset, so all that remained were orthogroups shared by all species. 
+ortho <- na.omit(ortho)
+length(unique(ortho$Orthogroup)) # 9216 'filtered' orthogroups
 ```
 
 ```{r}
@@ -83,12 +88,12 @@ acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
 
 # Merge dfs by gene_id
 acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
-length(unique(acerv$gene_id)) # 179 DEGs found in orthogroups 
-length(unique(acerv$Orthogroup)) # 159 orthogroups ? should they be the same?
-write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(acerv$gene_id)) # 119 DEGs found in orthogroups 
+length(unique(acerv$Orthogroup)) # 102 orthogroups
+#write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20220502.csv")
+#write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20220502.csv")
 ```
 
 ### Mcav 
@@ -104,12 +109,12 @@ mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
-length(unique(mcav$gene_id)) # 53 DEGs found in orthogroups 
-length(unique(mcav$Orthogroup)) # 48 orthogroups 
-write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(mcav$gene_id)) # 31 DEGs found in orthogroups 
+length(unique(mcav$Orthogroup)) # 28 orthogroups 
+#write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20220502.csv")
+#write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20220502.csv")
 ```
 
 ### Ofav 
@@ -148,11 +153,11 @@ merge <- unique(merge)
 # Merge dfs by gene_id
 ofav <- merge(merge, ofav_DEG, by = "gene_id")
 length(unique(ofav$gene_id)) # 2 DEGs found in orthogroups 
-length(unique(ofav$Orthogroup)) # 2 orthogroups ? should they be the same?
-write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(ofav$Orthogroup)) # 2 orthogroups 
+#write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20220502.csv")
+#write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20220502.csv")
 ```
 
 ### Mcap
@@ -168,12 +173,12 @@ mcap_ortho$gene_id <- gsub(" ", "", mcap_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcap <- merge(mcap_ortho, mcap_DEG, by = "gene_id")
-length(unique(mcap$gene_id)) # 118 DEGs found in orthogroups 
-length(unique(mcap$Orthogroup)) # 110 orthogroups 
-write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(mcap$gene_id)) # 87 DEGs found in orthogroups 
+length(unique(mcap$Orthogroup)) # 80 orthogroups 
+#write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20220502.csv")
+#write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20220502.csv")
 ```
 
 ### Pacuta 
@@ -188,12 +193,12 @@ pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
 
 # Merge dfs by gene_id
 pacuta <- merge(pacuta_ortho, pacuta_DEG, by = "gene_id")
-length(unique(pacuta$gene_id)) # 199 DEGs found in orthogroups 
-length(unique(pacuta$Orthogroup)) # 159 orthogroups 
-write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(pacuta$gene_id)) # 123 DEGs found in orthogroups 
+length(unique(pacuta$Orthogroup)) # 100 orthogroups 
+#write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20220502.csv")
+#write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20220502.csv")
 ```
 
 ### Plob 
@@ -210,13 +215,12 @@ plob_ortho$gene_id <- gsub(" ", "", plob_ortho$gene_id)
 
 # Merge dfs by gene_id
 plob <- merge(plob_ortho, plob_DEG, by = "gene_id")
-length(unique(plob$gene_id)) # 122 DEGs found in orthogroups 
-length(unique(plob$Orthogroup)) # 101 orthogroups 
-write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(plob$gene_id)) # 66 DEGs found in orthogroups 
+length(unique(plob$Orthogroup)) # 56 orthogroups 
+#write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20220502.csv") 
-
+#write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20220502.csv") 
 ```
 
 And then make one df with all species info for orthogroups?
