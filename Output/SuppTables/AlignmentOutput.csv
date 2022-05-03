@@ -1,4 +1,4 @@
-﻿SampleName,Site,Species,RawReads,CleanReads,ReadsRemoved,%Mapped (aligned to species specific genome)
+﻿SampleName,Location,Species,RawReads,CleanReads,ReadsRemoved,%Mapped (aligned to species specific genome)
 19_T33_Ac_WK,FL,Acerv,19665420,19493135,172285,75.57
 25_ctl1_Ac_GF_1,FL,Acerv,14630151,14537136,93015,75.11
 27_ctl2_Ac_YG_1,FL,Acerv,15708593,15618761,89832,71.02
