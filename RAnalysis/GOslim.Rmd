@@ -63,7 +63,7 @@ acerv.go.slim.MF_uniq <- acerv.go.slim.MF %>% select("GO.IDs")
 acerv.go.slim.MF_uniq <- unique(acerv.go.slim.MF_uniq)
 write.csv(acerv.go.slim.MF_uniq, "Output/GOSeq/acerv/acerv.go.slim.MF_unique_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 ### Mcav
@@ -105,7 +105,7 @@ mcav_all.go.slim.MF_uniq <- mcav_all.go.slim.MF %>% select("GO.IDs")
 mcav_all.go.slim.MF_uniq <- unique(mcav_all.go.slim.MF_uniq)
 write.csv(mcav_all.go.slim.MF_uniq, "Output/GOSeq/mcav/mcav.go.slim.MF_unique_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 ### Ofav
@@ -147,7 +147,7 @@ ofav_all.go.slim.MF_uniq <- ofav_all.go.slim.MF %>% select("GO.IDs")
 ofav_all.go.slim.MF_uniq <- unique(ofav_all.go.slim.CC_uniq)
 write.csv(ofav_all.go.slim.MF_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.MF_uniq_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 ## Hawaii
@@ -191,7 +191,7 @@ mcap_all.go.slim.MF_uniq <- mcap_all.go.slim.MF %>% select("GO.IDs")
 mcap_all.go.slim.MF_uniq <- unique(mcap_all.go.slim.MF_uniq)
 write.csv(mcap_all.go.slim.MF_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.MF_uniq_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 ### Pacuta 
@@ -233,7 +233,7 @@ pacuta_all.go.slim.MF_uniq <- pacuta_all.go.slim.MF %>% select("GO.IDs")
 pacuta_all.go.slim.MF_uniq <- unique(pacuta_all.go.slim.MF_uniq)
 write.csv(pacuta_all.go.slim.MF_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.MF_uniq_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 ### Plob 
@@ -275,7 +275,7 @@ plob_all.go.slim.MF_uniq <- plob_all.go.slim.MF %>% select("GO.IDs")
 plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
 write.csv(plob_all.go.slim.MF_uniq, "Output/GOSeq/plob/plob_all.go.slim.MF_uniq_20220418.csv")
 
-## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. 
+## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
 
 I used the unique docs for all the species to make 6-way venn diagram with this [website](https://bioinformatics.psb.ugent.be/webtools/Venn/).

@@ -36,26 +36,33 @@ plob_ortho <- select(ortho, c("Orthogroup", "Plobata"))
 acerv_ortho <- acerv_ortho %>% mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
     unnest(Acervicornis)
 acerv_ortho <- na.omit(acerv_ortho)
+acerv_ortho$Acervicornis <- gsub(" ", "", acerv_ortho$Acervicornis)
 
 mcav_ortho <- mcav_ortho %>% mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
     unnest(Mcavernosa)
 mcav_ortho <- na.omit(mcav_ortho)
+mcav_ortho$Mcavernosa <- gsub(" ", "", mcav_ortho$Mcavernosa)
 
 ofav_ortho <- ofav_ortho %>% mutate(Ofaveolata = strsplit(as.character(Ofaveolata), ",")) %>% 
     unnest(Ofaveolata)
 ofav_ortho <- na.omit(ofav_ortho)
+ofav_ortho$Ofaveolata <- gsub(" ", "", ofav_ortho$Ofaveolata)
 
 mcap_ortho <- mcap_ortho %>% mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
     unnest(Mcapitata)
 mcap_ortho <- na.omit(mcap_ortho)
+mcap_ortho$Mcapitata <- gsub(" ", "", mcap_ortho$Mcapitata)
 
 pacuta_ortho <- pacuta_ortho %>% mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
     unnest(Pacuta)
 pacuta_ortho <- na.omit(pacuta_ortho)
+pacuta_ortho$Pacuta <- gsub(" ", "", pacuta_ortho$Pacuta)
 
 plob_ortho <- plob_ortho %>% mutate(Plobata = strsplit(as.character(Plobata), ",")) %>% 
     unnest(Plobata)
 plob_ortho <- na.omit(plob_ortho)
+plob_ortho$Plobata <- gsub(" ", "", plob_ortho$Plobata)
+
 ```
 
 Figure out how to make upset plots for these so that it does frequency counts of each orthogroup for each species and shows shared ones? 
@@ -65,8 +72,9 @@ Figure out how to make upset plots for these so that it does frequency counts of
 Read DEGs in and merge w/ orthogroup by gene for each species 
 ### Acerv 
 ```{r}
-acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)
-colnames(acerv_DEG)[1] <- "gene_id"
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
 
 # name gene id col in acerv_ortho
 colnames(acerv_ortho)[2] <- "gene_id"
@@ -75,13 +83,18 @@ acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
 
 # Merge dfs by gene_id
 acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
-length(unique(acerv$gene_id)) # 167 DEGs found in orthogroups 
-length(unique(acerv$Orthogroup)) # 148 orthogroups ? should they be the same?
+length(unique(acerv$gene_id)) # 179 DEGs found in orthogroups 
+length(unique(acerv$Orthogroup)) # 159 orthogroups ? should they be the same?
+write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20220502.csv")
 ```
 
 ### Mcav 
 ```{r}
-mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- as.data.frame(mcav_DEG)
 colnames(mcav_DEG)[1] <- "gene_id"
 
 # name gene id col in acerv_ortho
@@ -91,13 +104,18 @@ mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
-length(unique(mcav$gene_id)) # 50 DEGs found in orthogroups 
-length(unique(mcav$Orthogroup)) # 45 orthogroups 
+length(unique(mcav$gene_id)) # 53 DEGs found in orthogroups 
+length(unique(mcav$Orthogroup)) # 48 orthogroups 
+write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20220502.csv")
 ```
 
 ### Ofav 
 ```{r}
-ofav_DEG <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)
+ofav_DEG <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)[,1]
+ofav_DEG <- as.data.frame(ofav_DEG)
 colnames(ofav_DEG)[1] <- "gene_id"
 
 # ofav is so annoying bc it has its prot seqs labeled with XP_xxx but when running STAR, the LOC term was used for gene id. Now I have to read in original gff file and merge original gff with ofav_ortho df to get LOC term
@@ -131,11 +149,37 @@ merge <- unique(merge)
 ofav <- merge(merge, ofav_DEG, by = "gene_id")
 length(unique(ofav$gene_id)) # 2 DEGs found in orthogroups 
 length(unique(ofav$Orthogroup)) # 2 orthogroups ? should they be the same?
+write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20220502.csv")
+```
+
+### Mcap
+```{r}
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# name gene id col in mcap_ortho
+colnames(mcap_ortho)[2] <- "gene_id"
+mcap_ortho$gene_id <- gsub(".t1", "", mcap_ortho$gene_id)
+mcap_ortho$gene_id <- gsub(" ", "", mcap_ortho$gene_id)
+
+# Merge dfs by gene_id
+mcap <- merge(mcap_ortho, mcap_DEG, by = "gene_id")
+length(unique(mcap$gene_id)) # 118 DEGs found in orthogroups 
+length(unique(mcap$Orthogroup)) # 110 orthogroups 
+write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20220502.csv")
 ```
 
 ### Pacuta 
 ```{r}
-pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)
+pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
+pacuta_DEG <- as.data.frame(pacuta_DEG)
 colnames(pacuta_DEG)[1] <- "gene_id"
 
 # name gene id col in acerv_ortho
@@ -144,13 +188,18 @@ pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
 
 # Merge dfs by gene_id
 pacuta <- merge(pacuta_ortho, pacuta_DEG, by = "gene_id")
-length(unique(pacuta$gene_id)) # 125 DEGs found in orthogroups 
-length(unique(pacuta$Orthogroup)) # 99 orthogroups 
+length(unique(pacuta$gene_id)) # 199 DEGs found in orthogroups 
+length(unique(pacuta$Orthogroup)) # 159 orthogroups 
+write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20220502.csv")
 ```
 
-### Pacuta 
+### Plob 
 ```{r}
-plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)
+plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
+plob_DEG <- as.data.frame(plob_DEG)
 colnames(plob_DEG)[1] <- "gene_id"
 
 # name gene id col in acerv_ortho
@@ -161,10 +210,44 @@ plob_ortho$gene_id <- gsub(" ", "", plob_ortho$gene_id)
 
 # Merge dfs by gene_id
 plob <- merge(plob_ortho, plob_DEG, by = "gene_id")
-length(unique(plob$gene_id)) # 67 DEGs found in orthogroups 
-length(unique(plob$Orthogroup)) # 58 orthogroups 
+length(unique(plob$gene_id)) # 122 DEGs found in orthogroups 
+length(unique(plob$Orthogroup)) # 101 orthogroups 
+write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+
+# Write to csv 
+write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20220502.csv") 
+
 ```
 
+And then make one df with all species info for orthogroups?
+```{r}
+acerv$Species <- "A.cervicornis"
+mcav$Species <- "M.cavernosa"
+ofav$Species <- "O.faveolata"
+mcap$Species <- "M.capitata"
+pacuta$Species <- "P.acuta"
+plob$Species <- "P.lobata"
+
+test <- rbind(acerv, mcav, ofav, mcap, pacuta, plob)
+length(unique(test$Orthogroup))
+
+# plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### attempting to plot 
 ```{r}
 ## Plot shared orthogroups 
 venn.plot <- venn.diagram(
@@ -225,6 +308,7 @@ all <- subset(all, select = -gene_id)
 all <- unique(all)
 
 upset(all, nsets = 6)
+# Error in start_col:end_col : argument of length 0
 ```
 
 
