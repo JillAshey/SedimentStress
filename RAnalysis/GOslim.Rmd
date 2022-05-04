@@ -45,7 +45,7 @@ length(unique(acerv.go.slim.BP$GO.IDs)) # 278 unique BP GO terms
 #write.csv(acerv.go.slim.BP, "Output/GOSeq/acerv/acerv.go.slim.BP_20220208.csv")
 acerv.go.slim.BP_uniq <- acerv.go.slim.BP %>% select("GO.IDs")
 acerv.go.slim.BP_uniq <- unique(acerv.go.slim.BP_uniq)
-write.csv(acerv.go.slim.BP_uniq, "Output/GOSeq/acerv/acerv.go.slim.BP_unique_20220418.csv")
+#write.csv(acerv.go.slim.BP_uniq, "Output/GOSeq/acerv/acerv.go.slim.BP_unique_20220418.csv")
 
 acerv.go.slim.CC <- subset(acerv.go.slim, ontology == "CC")
 acerv.go.slim.CC <- unique(acerv.go.slim.CC)
@@ -53,7 +53,7 @@ length(unique(acerv.go.slim.CC$GO.IDs)) # 34 unique CC GO terms
 #write.csv(acerv.go.slim.CC, "Output/GOSeq/acerv/acerv.go.slim.CC_20220208.csv")
 acerv.go.slim.CC_uniq <- acerv.go.slim.CC %>% select("GO.IDs")
 acerv.go.slim.CC_uniq <- unique(acerv.go.slim.CC_uniq)
-write.csv(acerv.go.slim.CC_uniq, "Output/GOSeq/acerv/acerv.go.slim.CC_unique_20220418.csv")
+#write.csv(acerv.go.slim.CC_uniq, "Output/GOSeq/acerv/acerv.go.slim.CC_unique_20220418.csv")
 
 acerv.go.slim.MF <- subset(acerv.go.slim, ontology == "MF")
 acerv.go.slim.MF <- unique(acerv.go.slim.MF)
@@ -61,7 +61,7 @@ length(unique(acerv.go.slim.MF$GO.IDs)) # 54 unique MF GO terms
 #write.csv(acerv.go.slim.MF, "Output/GOSeq/acerv/acerv.go.slim.MF_20220208.csv")
 acerv.go.slim.MF_uniq <- acerv.go.slim.MF %>% select("GO.IDs")
 acerv.go.slim.MF_uniq <- unique(acerv.go.slim.MF_uniq)
-write.csv(acerv.go.slim.MF_uniq, "Output/GOSeq/acerv/acerv.go.slim.MF_unique_20220418.csv")
+#write.csv(acerv.go.slim.MF_uniq, "Output/GOSeq/acerv/acerv.go.slim.MF_unique_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
