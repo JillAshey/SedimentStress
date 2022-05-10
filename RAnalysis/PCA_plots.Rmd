@@ -1,0 +1,90 @@
+---
+title: "PCA plots"
+author: "jillashey"
+date: "5/9/2022"
+output: html_document
+---
+
+This code is SO JANKY/convoluted and I am sure there is a better way to it. Regardless, this code is for PCA figure formatting for the manuscript. I am putting all 6 PCAs in one figure 
+
+## Load packages 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+library(cowplot)
+library(tidyverse)
+```
+
+# Florida 
+
+To get the necessary PCA objects, run the following scripts
+- Acerv [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/acerv/acerv_sub_DESeq2.Rmd). Use the PCA object (acerv_sub_DEG_PCA_plot) created in lines 393-419 in this script.
+- Mcav [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/mcav/mcav_DESeq2.Rmd). Use the PCA object (mcav_DEG_PCA_plot) created in lines 351-378 in this script.
+- Ofav [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/ofav/ofav_DESeq2.Rmd). Use the PCA object (ofav_DEGPCAplot) created in lines 344-371 in this script.
+
+## Make grid plot of Acerv, Mcav, and Ofav PCAs
+```{r}
+prow1 <- plot_grid( acerv_sub_DEG_PCA_plot + theme(legend.position="none"),
+                   mcav_DEG_PCA_plot + theme(legend.position="none"),
+                   ofav_DEGPCAplot + theme(legend.position="none"),
+                   align = 'vh',
+                   labels = c("A", "B", "C"),
+                   hjust = -5,
+                   nrow = 1
+)
+```
+
+## Make legend for FL treatments
+```{r}
+legend_b1 <- get_legend(acerv_sub_DEG_PCA_plot + theme(legend.position="right"))
+```
+
+## Add the legend to plot
+```{r}
+p1 <- plot_grid( prow1, legend_b1, ncol = 2, rel_heights = c(1, .05), rel_widths = c(1, 0.1))
+p1
+#ggsave("Output/Figs/PCA_FL.png", p1, width = 15, height = 5)
+```
+
+
+
+# Hawaii
+
+To get the necessary PCA objects, run the following scripts
+- Mcap [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/mcap/mcap_DESeq2.Rmd). Use the PCA object (mcap_DEGPCAplot) created in lines 218-244 in this script.
+- Pacuta [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pacuta/pacuta_DESeq2.Rmd). Use the PCA object (pacuta_DEGPCAplot) created in lines 241-270 in this script.
+- Plob [DESeq2](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/plob/plob_DESeq2.Rmd). Use the PCA object (plob_DEGPCAplot) created in lines 191-219 in this script.
+
+## Make grid plot of Mcap, Pacuta, and Plob PCAs
+```{r}
+prow2 <- plot_grid( mcap_DEGPCAplot + theme(legend.position="none"),
+                    pacuta_DEGPCAplot + theme(legend.position="none"),
+                    plob_DEGPCAplot + theme(legend.position="none"),
+                    align = 'vh',
+                    labels = c("D", "E", "F"),
+                    hjust = -5,
+                    nrow = 1
+)
+```
+
+## Make legend for HI treatments
+```{r}
+legend_b2 <- get_legend(mcap_DEGPCAplot + theme(legend.position="right"))
+```
+
+## Add the legend to plot
+```{r}
+p2 <- plot_grid( prow2, legend_b2, ncol = 2, rel_heights = c(1, .05), rel_widths = c(1, 0.1))
+p2
+#ggsave("Output/Figs/PCA_HI.png", p2, width = 15, height = 5)
+```
+
+## Join FL and HI PCAs into final figure and save 
+```{r}
+full <- plot_grid(p1, p2, nrow = 2)
+full
+#ggsave("Output/Figs/PCA_all.png", full, width = 15, height = 10)
+```
+
+
+
