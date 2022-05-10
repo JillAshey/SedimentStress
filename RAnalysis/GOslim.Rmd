@@ -22,6 +22,8 @@ go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
 colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
 ```
 
+The specific csv I used was obtained from HP's Geoduck_Meth [repo](https://github.com/hputnam/Geoduck_Meth/blob/master/RAnalysis/Data/20210407_map2MGIslim.csv). It was used in this [script](https://github.com/hputnam/Geoduck_Meth/blob/master/RAnalysis/Scripts/GM.Rmd#L1648) and was accessed on 20210407 from [here](http://www.informatics.jax.org/gotools/data/input/map2MGIslim.txt). 
+
 ## Florida 
 
 ### Acerv

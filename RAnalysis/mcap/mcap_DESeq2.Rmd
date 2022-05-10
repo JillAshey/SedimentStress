@@ -5,7 +5,8 @@ date: "3/15/2022"
 output: html_document
 ---
 
-#### Code for Francois sedimentation data. Mcap only samples analyzed here aligned against Mcap V2. STAR was read aligner.
+#### Code for Francois sedimentation data. Mcap only samples analyzed here aligned against Mcap STAR was read aligner and Mcap genomic info can be found [here](http://cyanophora.rutgers.edu/montipora/)
+
 
 ## Load packages
 ```{r setup, include=FALSE}
@@ -205,7 +206,7 @@ DEGs.all_mcap <- as.data.frame(DEGs.all_mcap)
 dim(DEGs.all_mcap) # 157 unique DEGs among treatment comparisons 
 ```
 
-## 
+## Look at size factors and run vst normalization
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcap$DEGs), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv")

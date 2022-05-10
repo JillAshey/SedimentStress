@@ -115,7 +115,7 @@ plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data
 
 # pretty clear control outlier in PCA. going to proceed w/ outlier included, but will come back later to rerun w/o outlier 
 ```
-
+## Run DESeq2
 ```{r}
 DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
 # estimating size factors
@@ -321,7 +321,7 @@ gene.all <- rbind(DEG_control_vs_T1,
 #write.csv(gene.all, "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20220111.csv")
 ```
 
-## Identify unique genes from DEGs in CvsMid, CvsHigh, MidvsHigh
+## Identify unique genes from DEGs in treatment comparisons
 ```{r}
 DEGs.all_ofav <- DEGs.all$gene_id
 DEGs.all_ofav <- unique(DEGs.all_ofav)
@@ -329,7 +329,7 @@ DEGs.all_ofav <- as.data.frame(DEGs.all_ofav)
 dim(DEGs.all_ofav) # 8 unique DEGs among treatment comparisons 
 ```
 
-## 
+## Look at size factors and run vst normalization
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_ofav$DEGs), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv")
@@ -341,7 +341,7 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 # specify fitType='local' or 'mean' to avoid this message next time.
 ```
 
-# PCA plot of diff-expressed genes 
+# PCA plot of DEGs
 ```{r}
 ofav_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_ofav <- round(100*attr(ofav_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
@@ -375,12 +375,12 @@ ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220326.pdf", ofav_DEGPCAplot, width = 2
 
 
 # Volcano plots w/ DEGs
-I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R starting on line 239. 
-In these plots, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html). 
+I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R starting on line 239.
+In these plots, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html).
 
-## Read in data and set cutoffs 
+## Read in data and set cutoffs
 ```{r}
-# Read in data 
+# Read in data
 ofav.DEG <- read_csv("Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20211104.csv")
 ofav.DEG <- select(ofav.DEG, -X1)
 ofav.DEG$diffexpressed <- "NA"
@@ -392,36 +392,38 @@ lfc.cutoff <- 0.5
 threshold <- ofav.DEG$padj < padj.cutoff & abs(ofav.DEG$log2FoldChange) > lfc.cutoff
 length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
 # Add vector to df
-ofav.DEG$threshold <- threshold 
-# Write name of gene beside points 
+ofav.DEG$threshold <- threshold
+# Write name of gene beside points
 ofav.DEG$delabel <- "NA"
 ofav.DEG$delabel[ofav.DEG$diffexpressed != "NO"] <- ofav.DEG$gene_id[ofav.DEG$diffexpressed != "NO"]
 ```
 
-## Make volcano plot with DEGs
+
+
+
+
+
+### old code 
 ```{r}
 # Volcano plot w/ DEGs
 ofav.volcano <- ggplot(data=ofav.DEG, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
  geom_point() +
- xlab("log2 fold change") + 
+ xlab("log2 fold change") +
  ylab("-log10 adjusted p-value") +
  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.text = element_text(size = 200),
         axis.title = element_text(size=250)) +
   theme_minimal() +
-  #geom_text_repel() + # use this argument to add labels to points on plot 
+  #geom_text_repel() + # use this argument to add labels to points on plot
   scale_color_manual(values=c("blue", "red")) +
   geom_vline(xintercept=c(-0.6, 0.6), col="red") +
   geom_hline(yintercept=-log10(0.05), col="red")
 ofav.volcano
-# Save plots 
+# Save plots
 ggsave("Output/Figs/ofav/ofav_DEG_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
 #ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
-```
 
-## Volcano plot with all genes 
-In order to make plot with all genes, must create and save dfs above that include DESeq2 results for all genes, not just DEGs
-```{r}
+## Volcano plot
 # Read in df with all expressed genes
 ofav_counts_filt <- read_csv( "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20211104.csv")
 colnames(ofav_counts_filt)[1] <- "gene_id"
@@ -434,25 +436,24 @@ ofav_counts_filt$diffexpressed[ofav_counts_filt$log2FoldChange < 0] <- "Down"
 padj.cutoff <- 0.05
 lfc.cutoff <- 0.5
 threshold <- ofav_counts_filt$padj < padj.cutoff & abs(ofav_counts_filt$log2FoldChange) > lfc.cutoff
-length(which(threshold)) 
+length(which(threshold))
 # Add vector to df
-ofav_counts_filt$threshold <- threshold 
-# Volcano plot w/ all genes 
+ofav_counts_filt$threshold <- threshold
+# Volcano plot w/ all genes
 ofav.full.volcano <- ggplot(data=ofav_counts_filt, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
  geom_point() +
- xlab("log2 fold change") + 
+ xlab("log2 fold change") +
  ylab("-log10 adjusted p-value") +
  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
         axis.title = element_text(size = rel(1.25))) +
   theme_minimal() +
-  #geom_text_repel() + # use this argument to add labels to points on plot 
+  #geom_text_repel() + # use this argument to add labels to points on plot
   scale_color_manual(values=c("blue", "red")) +
   geom_vline(xintercept=c(-0.6, 0.6), col="red") +
   geom_hline(yintercept=-log10(0.05), col="red")
 ofav.volcano
-# Save plots 
+# Save plots
 ggsave("Output/Figs/ofav/ofav_AllGenes_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
 #ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
 ```
 
-Both volcano plots (DEG and all genes) look the same...need to look into this more

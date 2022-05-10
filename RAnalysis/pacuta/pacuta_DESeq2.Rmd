@@ -5,8 +5,7 @@ date: "1/13/2022"
 output: html_document
 ---
 
-
-#### Code for Francois sedimentation data. Pacuta only samples analyzed here aligned against Pacuta. STAR was read aligner.
+#### Code for Francois sedimentation data. Pacuta only samples analyzed here aligned against Pacuta STAR was read aligner and Pacuta genomic info can be found [here](http://cyanophora.rutgers.edu/Pocillopora_acuta/)
 
 ## Load packages
 ```{r setup, include=FALSE}
@@ -230,7 +229,7 @@ DEGs.all_pacuta <- as.data.frame(DEGs.all_pacuta)
 dim(DEGs.all_pacuta) # 263 unique DEGs among treatment comparisons 
 ```
 
-## 
+## Look at size factors and run vst normalization
 ```{r}
 unique.sig.list <- data[which(rownames(data) %in% DEGs.all_pacuta$DEGs), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv")
