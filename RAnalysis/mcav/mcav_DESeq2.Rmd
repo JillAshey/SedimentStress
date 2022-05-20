@@ -144,8 +144,8 @@ mcav_PCAplot
 
 # save plots 
 mcav_heatmap_PCA <- grid.arrange(mcav_PCAplot, mcav_heatmap[[4]], nrow=1, ncol = 2, clip="off")
-ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.jpeg", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
-ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.pdf", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.jpeg", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.pdf", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
 ```
 
 ## Run DESeq2
