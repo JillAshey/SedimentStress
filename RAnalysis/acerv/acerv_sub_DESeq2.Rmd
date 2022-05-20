@@ -34,7 +34,7 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-acerv_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
+acerv_counts <- read.csv("Output/DESeq2/acerv/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(acerv_counts) # 33715 x 15
 for ( col in 1:ncol(acerv_counts)){
   colnames(acerv_counts)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(acerv_counts)[col]) # removing excess from col names
@@ -52,7 +52,7 @@ dim(acerv_counts) # 18958 x 15
 
 ## Load metadata file 
 ```{r}
-metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/FL_sediment_metadata.csv", header = TRUE)
+metadata <- read.csv("Data/FL_sediment_metadata.csv", header = TRUE)
 dim(metadata) # 45 by 12
 head(metadata)
 # Select only the columns I need for analyses 
@@ -120,26 +120,51 @@ data <- DESeqDataSetFromMatrix(countData = acerv_counts_sub_filt, colData = acer
 ## Expression visualization
 First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects. To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
 ```{r}
-SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+# Estimate size factors to determine if we can use vst to transform our data. Size factors should be less than 4 to use vst
+SF.data <- estimateSizeFactors(data) 
 SF.data
 print(sizeFactors(SF.data)) #view size factors
 # size factors all less than 4, can use VST
 
-# do variance stabilizing transforamtion
+# apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
 vst <- vst(data, blind = FALSE) 
-
-# Visualize filtered data with heatmaps and PCA
 head(assay(vst), 3) # view data
+
+# Using vst object, plot heat-map of sample-to-sample distances
 sampleDists <- dist(t(assay(vst))) # calculate distance matrix
 sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
 rownames(sampleDistMatrix) <- colnames(vst) # assign row names
 colnames(sampleDistMatrix) <- NULL # assign col names 
 colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
-pheatmap(sampleDistMatrix, # plot distance matrix
+acerv_heatmap <- pheatmap(sampleDistMatrix, # plot distance matrix
          clustering_distance_rows = sampleDists, # cluster rows
          clustering_distance_cols = sampleDists, # cluster cols
          col=colors) # set colors
-plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
+acerv_heatmap
+
+# Using vst object, make PCA plot of samples 
+vst_PCAdata <- plotPCA(vst, intgroup = c("Treatment"), returnData=TRUE) # create PCA loadings 
+percentVar <- round(100*attr(vst_PCAdata, "percentVar")) #plot PCA of samples with all data
+acerv_PCAplot <- ggplot(vst_PCAdata, aes(PC1, PC2, color=Treatment)) + 
+   geom_point(size=3) +
+   geom_text(aes(label=name),hjust=0, vjust=0) +
+   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+   ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+   coord_fixed() +
+   ggtitle("A. cervicornis - all genes") +
+   theme_bw() + #Set background color
+   theme(panel.border = element_blank(), # Set border
+         #panel.grid.major = element_blank(), #Set major gridlines
+         #panel.grid.minor = element_blank(), #Set minor gridlines
+         axis.line = element_line(colour = "black"), #Set axes color
+         plot.background=element_blank()) #Set the plot background
+acerv_PCAplot 
+
+# save plots 
+acerv_heatmap_PCA <- grid.arrange(acerv_PCAplot, acerv_heatmap[[4]], nrow=1, ncol = 2, clip="off")
+#ggsave("Output/Figs/acerv/acerv_heatmap_PCA_AllGenes_20220520.jpeg", acerv_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/acerv/acerv_heatmap_PCA_AllGenes_20220520.pdf", acerv_heatmap_PCA, width = 20, height = 25, units = "cm")
 ```
 
 ## Run DESeq2

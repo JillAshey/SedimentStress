@@ -102,26 +102,55 @@ data <- DESeqDataSetFromMatrix(countData = pacuta_counts_filt, colData = metadat
 ## Expression visualization
 First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects. To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
 ```{r}
-SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+# Estimate size factors to determine if we can use vst to transform our data. Size factors should be less than 4 to use vst
+SF.data <- estimateSizeFactors(data) 
 SF.data
 print(sizeFactors(SF.data)) #view size factors
 # size factors all less than 4, can use VST
+
+# apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
 vst <- vst(data, blind = FALSE) 
 # -- note: fitType='parametric', but the dispersion trend was not well captured by the
 #    function: y = a/x + b, and a local regression fit was automatically substituted.
 #    specify fitType='local' or 'mean' to avoid this message next time.
 ## Should I specify a fitType?
 head(assay(vst), 3) # view data
+
+# Using vst object, plot heat-map of sample-to-sample distances
 sampleDists <- dist(t(assay(vst))) # calculate distance matrix
 sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
 rownames(sampleDistMatrix) <- colnames(vst) # assign row names
 colnames(sampleDistMatrix) <- NULL # assign col names 
 colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
-pheatmap(sampleDistMatrix, # plot matrix
+pacuta_heatmap <- pheatmap(sampleDistMatrix, # plot matrix
          clustering_distance_rows = sampleDists, # cluster rows
          clustering_distance_cols = sampleDists, # cluster cols
          col=colors) # set colors
-plotPCA(vst, intgroup = c("Treatment")) # plot PCA of samples with all data 
+pacuta_heatmap
+
+# Using vst object, make PCA plot of samples 
+vst_PCAdata <- plotPCA(vst, intgroup = c("Treatment", "Days"), returnData=TRUE) # create PCA loadings 
+percentVar <- round(100*attr(vst_PCAdata, "percentVar")) #plot PCA of samples with all data
+pacuta_PCAplot <- ggplot(vst_PCAdata, aes(PC1, PC2, color=Treatment, shape =Days)) + 
+   geom_point(size=3) +
+   geom_text(aes(label=name),hjust=0, vjust=0) +
+   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+   ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+   scale_color_manual(values = c(control="cadetblue3", mid="palevioletred", high="darkgreen", unknown="black")) +
+   coord_fixed() +
+   ggtitle("P. acuta - all genes") +
+   theme_bw() + #Set background color
+   theme(panel.border = element_blank(), # Set border
+         #panel.grid.major = element_blank(), #Set major gridlines
+         #panel.grid.minor = element_blank(), #Set minor gridlines
+         axis.line = element_line(colour = "black"), #Set axes color
+         plot.background=element_blank()) #Set the plot background
+pacuta_PCAplot # there is no clear grouping of Days, so I will not be moving forward with Treatment only as an independent variable in my analysis 
+
+# save plots 
+pacuta_heatmap_PCA <- grid.arrange(pacuta_PCAplot, pacuta_heatmap[[4]], nrow=1, ncol = 2, clip="off")
+#ggsave("Output/Figs/plob/pacuta_heatmap_PCA_AllGenes_20220520.jpeg", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/plob/pacuta_heatmap_PCA_AllGenes_20220520.pdf", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
 ```
 
 ## Run DESeq2

@@ -34,7 +34,7 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-mcav_counts <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
+mcav_counts <- read.csv("Output/DESeq2/mcav/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -47,7 +47,7 @@ for ( col in 1:ncol(mcav_counts)){
 
 ## Load metadata file 
 ```{r}
-metadata <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Data/FL_sediment_metadata.csv", header = TRUE)
+metadata <- read.csv("Data/FL_sediment_metadata.csv", header = TRUE)
 dim(metadata) # 45 by 15
 head(metadata)
 # Selecting only the columns I need for analyses 
@@ -68,6 +68,8 @@ mcav_metadata$SampleID <- gsub(".txt.gz", "", mcav_metadata$SampleID)
 mcav_metadata$SampleID <- gsub(";.*", "", mcav_metadata$SampleID)
 mcav_metadata$SampleID <- gsub(".fastq.gz", "", mcav_metadata$SampleID)
 mcav_metadata$SampleID <- sub("\\.", "", mcav_metadata$SampleID)
+# Make row names to be SampleID 
+rownames(mcav_metadata) <- mcav_metadata$SampleID
 ```
 
 ## Subset count data for only mcav samples based on SampleID and make sure rows of metadata = cols of count data
@@ -99,27 +101,56 @@ data <- DESeqDataSetFromMatrix(countData = mcav_counts_filt, colData = mcav_meta
 ## Expression visualization
 First we are going to log-transform the data using a variance stabilizing transforamtion (vst). This is only for visualization purposes. Essentially, this is roughly similar to putting the data on the log2 scale. It will deal with the sampling variability of low counts by calculating within-group variability (if blind=FALSE). Importantly, it does not use the design to remove variation in the data, and so can be used to examine if there may be any variability do to technical factors such as extraction batch effects. To do this we first need to calculate the size factors of our samples. This is a rough estimate of how many reads each sample contains compared to the others. In order to use VST (the faster log2 transforming process) to log-transform our data, the size factors need to be less than 4. Otherwise, there could be artefacts in our results.
 ```{r}
-SF.data <- estimateSizeFactors(data) #estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+# Estimate size factors to determine if we can use vst  to transform our data. Size factors should be less than 4 to use vst
+SF.data <- estimateSizeFactors(data) 
 SF.data
 print(sizeFactors(SF.data)) #view size factors
+# size factors all less than 4, can use VST
 
+# apply a variance stabilizing transforamtion to minimize effects of small counts and normalize wrt library size
 vst <- vst(data, blind = FALSE) 
-
 head(assay(vst), 3) # view data
+
+# Using vst object, plot heat-map of sample-to-sample distances
 sampleDists <- dist(t(assay(vst))) # calculate distance matrix
 sampleDistMatrix <- as.matrix(sampleDists) # create distance matrix
 rownames(sampleDistMatrix) <- colnames(vst) # assign row names
 colnames(sampleDistMatrix) <- NULL # assign col names 
 colors <- colorRampPalette(rev(brewer.pal(9, "Blues")))(255) # assign colors 
-pheatmap(sampleDistMatrix, # plot matrix
+mcav_heatmap <- pheatmap(sampleDistMatrix, # plot matrix
          clustering_distance_rows = sampleDists, # cluster rows
          clustering_distance_cols = sampleDists, # cluster cols
          col=colors) # set colors
-plotPCA(vst, intgroup = c("Treatment")) + geom_text(aes(label=vst$SampleID),vjust=2)
+mcav_heatmap
+
+# Using vst object, make PCA plot of samples 
+vst_PCAdata <- plotPCA(vst, intgroup = c("Treatment"), returnData=TRUE) # create PCA loadings 
+percentVar <- round(100*attr(vst_PCAdata, "percentVar")) #plot PCA of samples with all data
+mcav_PCAplot <- ggplot(vst_PCAdata, aes(PC1, PC2, color=Treatment)) + 
+   geom_point(size=3) +
+   geom_text(aes(label=name),hjust=0, vjust=0) +
+   xlab(paste0("PC1: ",percentVar[1],"% variance")) +
+   ylab(paste0("PC2: ",percentVar[2],"% variance")) +
+  scale_color_manual(values = c(control="gray", Treatment1="darkslategray2", Treatment2="darkslategray3", Treatment3="darkslategray4", Treatment4="darkslategray")) +
+   coord_fixed() +
+   ggtitle("M. cavernosa - all genes") +
+   theme_bw() + #Set background color
+   theme(panel.border = element_blank(), # Set border
+         #panel.grid.major = element_blank(), #Set major gridlines
+         #panel.grid.minor = element_blank(), #Set minor gridlines
+         axis.line = element_line(colour = "black"), #Set axes color
+         plot.background=element_blank()) #Set the plot background
+mcav_PCAplot 
+
+# save plots 
+mcav_heatmap_PCA <- grid.arrange(mcav_PCAplot, mcav_heatmap[[4]], nrow=1, ncol = 2, clip="off")
+ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.jpeg", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
+ggsave("Output/Figs/mcav/mcav_heatmap_PCA_AllGenes_20220520.pdf", mcav_heatmap_PCA, width = 20, height = 25, units = "cm")
 ```
 
 ## Run DESeq2
 ```{r}
+# Differential gene expression analysis 
 DEG.int <- DESeq(data) # run differential expression test by treatment (?) using wald test 
 # estimating size factors
 # estimating dispersions
