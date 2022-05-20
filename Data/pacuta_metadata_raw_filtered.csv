@@ -1,4 +1,4 @@
-﻿Time,Sample.ID,Sample name: #1_T#_nn_#2_day# = RNA-extraction-nb_tank-nb_species_sample-nb_day-collected,Rep,Species,Treatment in mg/L of sediment,Time point in days,Location,SampleID
+﻿Time,Sample.ID,Sample name: #1_T#_nn_#2_day# = RNA-extraction-nb_tank-nb_species_sample-nb_day-collected,Rep,Species,Treatment,Days,Location,SampleID
 Morning,11698X33,1_T2_Pd_4_day7,1,Pocillopora acuta,mid,seven,HIMB,1_2.fastq.gz
 Morning,11698X35,2_T7_Pd_13_day4,1,Pocillopora acuta,high,four,HIMB,2_2.fastq.gz
 NA,NA,NA,NA,Pocillopora acuta,unknown,unknown,HIMB,4_1.fastq.gz
