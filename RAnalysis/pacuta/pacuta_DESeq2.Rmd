@@ -149,8 +149,8 @@ pacuta_PCAplot # there is no clear grouping of Days, so I will not be moving for
 
 # save plots 
 pacuta_heatmap_PCA <- grid.arrange(pacuta_PCAplot, pacuta_heatmap[[4]], nrow=1, ncol = 2, clip="off")
-#ggsave("Output/Figs/plob/pacuta_heatmap_PCA_AllGenes_20220520.jpeg", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
-#ggsave("Output/Figs/plob/pacuta_heatmap_PCA_AllGenes_20220520.pdf", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/pacuta/pacuta_heatmap_PCA_AllGenes_20220520.jpeg", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
+#ggsave("Output/Figs/pacuta/pacuta_heatmap_PCA_AllGenes_20220520.pdf", pacuta_heatmap_PCA, width = 20, height = 25, units = "cm")
 ```
 
 ## Run DESeq2
