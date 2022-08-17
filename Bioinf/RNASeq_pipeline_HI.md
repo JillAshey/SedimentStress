@@ -1,14 +1,22 @@
-## Pipeline for HI species - sediment stress 
+## Pipeline for Hawai'i species - sediment stress 
 
-Species: _Pocillopora acuta_ and _Porites lobata_
+Species: _Montipora capitata_, _Pocillopora acuta_ and _Porites lobata_
 
-Note: some of the paths may not be correct, as I have made new directories and moved files around since running this pipeline.
+Note: some of the paths may not be correct, as I have made new directories and moved files around since running this pipeline. Anaylsis done on Bluewaves.
+
+#### Location of files/scripts
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Hawaii
+```
 
 ### 1) Check file integrity 
 
 a) Count all files to make sure all downloaded
 
 ```
+cd data/raw
+
 ls -1 | wc -l
 ```
 
@@ -22,6 +30,8 @@ Should output 'OK' next to each file name
 
 c) Count number of reads per file 
 
+Number of reads can be counted by counting the number of '@__' terms there are in the file, as each one corresponds to one read. 
+
 Some files have different @___. There are: HISEQ, HWI
 
 ```
@@ -29,7 +39,7 @@ zgrep -c "HISEQ" *.fastq
 zgrep -c "HWI" *.fastq
 ```
 
-xxxxxxxxxx
+ADD READ COUNTS 
 
 ### 2) Run FastQC
 
@@ -41,7 +51,7 @@ mkdir scripts
 cd scripts
 ```
 
-b) Write script for checking quality with FastQC and submit as job on bluewaves
+b) Check quality with FastQC 
 
 ```
 nano fastqc_raw.sh 
@@ -58,7 +68,7 @@ nano fastqc_raw.sh
 #SBATCH --error="fastqc_out_raw_error"
 #SBATCH --output="fastqc_out_raw"
 
-module load FastQC/0.11.8-Java-1.8 #another version in Bluewaves if this one doesn't work
+module load FastQC/0.11.8-Java-1.8 
 
 for file in /data/putnamlab/jillashey/Francois_data/Hawaii/data/raw/*.fastq.gz
 do
@@ -68,6 +78,22 @@ done
 sbatch fastqc_raw.sh 
 ```
 
+c) Make sure all files were processed
+
+```
+cd fastqc_results/raw
+ls -1 | wc -l 
+```
+
+### 3) Run MultiQC
+
+a) Make folders for raw MultiQC results
+
+```
+cd Francois_data/Hawaii
+mkdir multiqc_results/raw
+```
+
 b) Run MultiQC. Pretty fast, so don't need to submit job for it 
 
 ```
@@ -75,9 +101,15 @@ module load MultiQC/1.7-foss-2018b-Python-2.7.15
 multiqc /data/putnamlab/jillashey/Francois_data/Hawaii/fastqc_results/raw/*fastqc.zip -o /data/putnamlab/jillashey/Francois_data/Hawaii/multiqc_results/raw
 ```
 
+Add multiQC plots here 
+
 c) Copy MultiQC files to local computer
 
-Add multiQC plots here 
+```
+scp -r jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/multiqc_results/raw/multiqc_data /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/raw
+
+scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/multiqc_results/raw/multiqc_report.html /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/QC/raw
+```
 
 ### 4) Trim reads with Trimmomatic 
 
@@ -88,7 +120,9 @@ cd Francois_data/Hawaii
 mkdir data/trimmed fastqc_results/trimmed multiqc_results/trimmed
 ```
 
-b) If necessary, unzip fastqc files, as Trimmomatic can't process zipped files
+b) If necessary, unzip fastqc files, as Trimmomatic can't process zipped files (not necessary for these files)
+
+c) Run Trimmomatic 
 
 ```
 nano trimmomatic.sh
@@ -126,6 +160,8 @@ mv *trim.fq /data/putnamlab/jillashey/Francois_data/Hawaii/data/trimmed
 a) In trimmed read folder, check number of files 
 
 ```
+cd data/trimmed
+
 ls -1 | wc -l
 ```
 
@@ -135,6 +171,8 @@ b) Check number of reads
 zgrep -c "HISEQ" *trim.fq
 zgrep -c "HWI" *trim.fq
 ```
+
+Add read counts there 
 
 c) Run FastQC on trimmed data
 
@@ -174,7 +212,7 @@ Add multiQC plots here
 
 ### 6) Align reads with STAR
 
-Before running STAR, I added the identifier 'transcript_id=' to the last column of the gff file in R. STAR needs this identifier to run and most of the gffs I used don't have it. Code to edit gff files herexxxxxxx
+Before running STAR, I added the identifier 'transcript_id=' to the last column of the gff file in R. STAR needs this identifier to run and most of the gffs I used don't have it. Code to edit and add identifier to gff files herexxxxxxx
 
 #### P. acuta
 
@@ -223,8 +261,6 @@ sbatch star_index_pacuta.sh
 Submitted batch job 1960631. Worked! Took ~45 mins
 
 b) Align reads to genome 
-
-Link to trimmed files 
 
 ```
 mkdir AlignReads_pacuta
@@ -372,8 +408,10 @@ module load STAR/2.5.3a-foss-2016b
 
 STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/Plutea/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Plutea/plut2v1.1.genes.gff3 
 ```
+
 not working at the moment, may be something to do with fasta/gff file labels in the files themselves 
 error:
+
 ```
 Jul 30 16:41:17 ..... started STAR run
 Jul 30 16:41:17 ... starting to generate Genome files
@@ -391,30 +429,6 @@ Aborted (core dumped)
 Copied the files from the tufts server to Desktop to Bluewaves to see if they will work
 
 Attempt 2
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/plut2v1.1.genes.gff3 
-```
-
-Attempt 3
-STAR needs transcript ID to generate genome index. In R, I replaced ID with transcript_id in 9th row and generated an updated gff file. 
-
-```
-# getting new gff file from local computer
-scp /Users/jillashey/Desktop/Plut.GFFannotation.fixed.gff jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/genome/Plutea/
-```
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Plutea/Plut.GFFannotation.fixed.gff
-```
-
-This worked!!
-
-Attempt 4
 STAR needs transcript ID to generate genome index. In R, we removed some info from ID and added it to transcript id, which was added to gene column
 
 ```
@@ -431,119 +445,6 @@ STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillas
 Worked!
 
 b) Align reads to genome 
-
-#### P. lobata (using P. lutea genome)
-
-a) make directories for STAR output
-```
-```
-
-
-b) Obtain reference genome (.fasta or .fna) and reference annotation (.gtf or .gff). Unzip these files
-
-```
-# P.lutea genome info
-/data/putnamlab/REFS/Plutea
-# plut_final_2.1.fasta.gz -- genome file 
-# plut2v1.1.genes.gff3.gz -- annotation file 
-# Move to my own genome folder because REFS isn't allowing me to work with files 
-
-# Plutea unzip
-gunzip plut_final_2.1.fasta.gz
-gunzip plut2v1.1.genes.gff3.gz
-```
-
-c) Unzip fastq files so they can properly analyzed by STAR
-
-```
-#!/bin/bash
-#SBATCH -t 12:00:00
-#SBATCH --nodes=1 --ntasks-per-node=1
-#SBATCH --export=NONE
-#SBATCH --mem=100GB
-#SBATCH --mail-type=BEGIN,END,FAIL
-#SBATCH --mail-user=jillashey@my.uri.edu
-#SBATCH --account=putnamlab
-#SBATCH -D /data/putnamlab/jillashey/Francois_data/scripts
-#SBATCH --error="gunzip_trim_out_error"
-#SBATCH --output="gunzip_trim_out"
-
-for file in /data/putnamlab/jillashey/Francois_data/data/trimmed/*.fq.gz
-do
-gunzip $file 
-done
-```
-
-d) Generate genome index 
-For p.lobata (using P.lutea genome)
-
-Attempt 1
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/Plutea/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Plutea/plut2v1.1.genes.gff3 
-```
-not working at the moment, may be something to do with fasta/gff file labels in the files themselves 
-error:
-```
-Jul 30 16:41:17 ..... started STAR run
-Jul 30 16:41:17 ... starting to generate Genome files
-Jul 30 16:41:31 ... starting to sort Suffix Array. This may take a long time...
-Jul 30 16:41:35 ... sorting Suffix Array chunks and saving them to disk...
-Jul 30 16:43:54 ... loading chunks from disk, packing SA...
-Jul 30 16:45:54 ... finished generating suffix array
-Jul 30 16:45:54 ... generating Suffix Array index
-Jul 30 16:47:54 ... completed Suffix Array index
-Jul 30 16:47:54 ..... processing annotations GTF
-terminate called after throwing an instance of 'std::out_of_range'
-  what():  vector::_M_range_check: __n (which is 0) >= this->size() (which is 0)
-Aborted (core dumped)
-```
-Copied the files from the tufts server to Desktop to Bluewaves to see if they will work
-
-Attempt 2
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/plut2v1.1.genes.gff3 
-```
-
-Attempt 3
-STAR needs transcript ID to generate genome index. In R, I replaced ID with transcript_id in 9th row and generated an updated gff file. 
-
-```
-# getting new gff file from local computer
-scp /Users/jillashey/Desktop/Plut.GFFannotation.fixed.gff jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/genome/Plutea/
-```
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Plutea/Plut.GFFannotation.fixed.gff
-```
-
-This worked!!
-
-Attempt 4
-STAR needs transcript ID to generate genome index. In R, we removed some info from ID and added it to transcript id, which was added to gene column
-
-```
-# getting new gff file from local computer
-scp /Users/jillashey/Desktop/Plut.GFFannotation.fixed_transcript.gff jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/genome/Plutea/
-```
-
-```
-module load STAR/2.5.3a-foss-2016b
-
-STAR --runThreadN 10 --runMode genomeGenerate --genomeDir /data/putnamlab/jillashey/Francois_data/Hawaii/output/STAR/GenomeIndex_plob/ --genomeFastaFiles /data/putnamlab/jillashey/genome/Plutea/plut_final_2.1.fasta --sjdbGTFfile /data/putnamlab/jillashey/genome/Plutea/Plut.GFFannotation.fixed_transcript.gff
-```
-
-Worked!
-
-
-e) Align reads
 
 For P.lob (using p.lutea genome)
 
@@ -632,7 +533,7 @@ STAR --runMode alignReads --quantMode TranscriptomeSAM --outTmpDir /data/putnaml
 Submitted batch job 1668262
 
 
-Running without the gff and all other gff commands 
+Running without the gff and all other gff commands. Look at STAR documentation here xxxxx
 
 ```
 nano star_align_6_1_test_noGFF.sh
@@ -738,7 +639,7 @@ Submitted batch job 1669051
 
 38_2 never finished, running again 
 
-### xxxx) Perform gene counts with stringTie
+### 7) Perform gene counts with stringTie
 
 #### P. acuta
 
@@ -1120,11 +1021,11 @@ Because of the number of MSTRG/STRG gene ids that are generated, I am going to u
 
 #### P. lobata
 
-TAR was run without GFF file included 
+STAR was run without GFF file included 
 
 a) Move reads (aligned by Coordinate) from output to stringTie folder 
 
-For some reason, 38_2 not running. That's okay for now, as its a Pdam sample.
+For some reason, 38_2 not running. That's okay for now, as its a Pacuta sample.
 
 ```
 mv *Aligned.sortedByCoord.out.bam ../../../stringTie_star/plob/
@@ -1255,3 +1156,6 @@ g) Secure-copy gene counts onto local computer
 ```
 scp jillashey@bluewaves.uri.edu:/data/putnamlab/jillashey/Francois_data/Hawaii/stringTie_star/plob/GTF_merge/gene_count_plob_only_matrix.csv /Users/jillashey/Desktop/Putnamlab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/
 ```
+
+See Mcap full analysis here
+

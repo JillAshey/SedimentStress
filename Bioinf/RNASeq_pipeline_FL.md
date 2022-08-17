@@ -1,14 +1,22 @@
-## Pipeline for FL species - sediment stress 
+## Pipeline for Florida species - sediment stress 
 
 Species: _Acropora cervicornis_, _Montestraea cavernosa_, and _Orbicella faveolata_
 
-Note: some of the paths may not be correct, as I have made new directories and moved files around since running this pipeline.
+Note: some of the paths may not be correct, as I have made new directories and moved files around since running this pipeline. Anaylsis done on Bluewaves.
+
+#### Location of files/scripts
+
+```
+cd /data/putnamlab/jillashey/Francois_data/Florida
+```
 
 ### 1) Check file integrity 
 
 a) Count all files to make sure all downloaded
 
 ```
+cd /data/raw
+
 ls -1 | wc -l
 ```
 
@@ -21,6 +29,8 @@ md5sum -c checkmd5.md5
 Should output 'OK' next to each file name 
 
 c) Count number of reads per file 
+
+Number of reads can be counted by counting the number of '@__' terms there are in the file, as each one corresponds to one read. 
 
 Some files have different @___. There are: HISEQ, HWI
 
@@ -115,7 +125,7 @@ mkdir scripts
 cd scripts
 ```
 
-b) Write script for checking quality with FastQC and submit as job on bluewaves
+b) Check quality with FastQC 
 
 The fastqc code was not working with files as .txt.gz, so changed them to .fastq.gz files
 
@@ -154,7 +164,7 @@ ls -1 | wc -l
 
 ### 3) Run MultiQC
 
-a) Make folders for raw MultiWC results
+a) Make folders for raw MultiQC results
 
 ```
 cd Francois_data/Florida
@@ -205,13 +215,13 @@ cd data/raw
 sbatch gunzip *fastq.gz
 ```
 
-Unable to gunzip 43_ctl3_Of_JVP_2 because the file ends abruptly in the middle of a line
+Unable to gunzip 43_ctl3_Of_JVP_2 because the file ends abruptly in the middle of a line. Going to leave this sample out of further analysis. 
 
 ```
 gzip: 43_ctl3_Of_JVP_2.fastq.gz: unexpected end of file
 ```
 
-c) Write script for Trimmomatic and run on bluewaves
+c) Run Trimmomatic 
 
 ```
 cd scripts
@@ -251,6 +261,7 @@ mv *trim.fq ../trimmed
 a) Check number of files 
 
 ```
+cd data/trimmed
 ls -1 | wc -l
 ```
 
@@ -385,7 +396,7 @@ Adapter content looks kinda weird...maybe because Francois may have already trim
 
 ### 6) Align reads with STAR
 
-Before running STAR, I added the identifier 'transcript_id=' to the last column of the gff file in R. STAR needs this identifier to run and most of the gffs I used don't have it. Code to edit gff files herexxxxxxx
+Before running STAR, I added the identifier 'transcript_id=' to the last column of the gff file in R. STAR needs this identifier to run and most of the gffs I used don't have it. Code to edit and add identifier to gff files herexxxxxxx
 
 #### O. fav
 

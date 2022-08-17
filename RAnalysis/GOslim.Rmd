@@ -89,7 +89,7 @@ length(unique(mcav_all.go.slim.BP$GO.IDs)) # 158 unique BP GO terms
 #write.csv(mcav_all.go.slim.BP, "Output/GOSeq/mcav/mcav.go.slim.BP_20220208.csv")
 mcav_all.go.slim.BP_uniq <- mcav_all.go.slim.BP %>% select("GO.IDs")
 mcav_all.go.slim.BP_uniq <- unique(mcav_all.go.slim.BP_uniq)
-write.csv(mcav_all.go.slim.BP_uniq, "Output/GOSeq/mcav/mcav.go.slim.BP_unique_20220418.csv")
+#write.csv(mcav_all.go.slim.BP_uniq, "Output/GOSeq/mcav/mcav.go.slim.BP_unique_20220418.csv")
 
 mcav_all.go.slim.CC <- subset(mcav.go.slim, ontology == "CC")
 mcav_all.go.slim.CC <- unique(mcav_all.go.slim.CC)
@@ -97,7 +97,7 @@ length(unique(mcav_all.go.slim.CC$GO.IDs)) # 21 unique BP GO terms
 #write.csv(mcav_all.go.slim.CC, "Output/GOSeq/mcav/mcav.go.slim.CC_20220208.csv")
 mcav_all.go.slim.CC_uniq <- mcav_all.go.slim.CC %>% select("GO.IDs")
 mcav_all.go.slim.CC_uniq <- unique(mcav_all.go.slim.CC_uniq)
-write.csv(mcav_all.go.slim.CC_uniq, "Output/GOSeq/mcav/mcav.go.slim.CC_unique_20220418.csv")
+#write.csv(mcav_all.go.slim.CC_uniq, "Output/GOSeq/mcav/mcav.go.slim.CC_unique_20220418.csv")
 
 mcav_all.go.slim.MF <- subset(mcav.go.slim, ontology == "MF")
 mcav_all.go.slim.MF <- unique(mcav_all.go.slim.MF)
@@ -105,7 +105,7 @@ length(unique(mcav_all.go.slim.MF$GO.IDs)) # 39 unique BP GO terms
 #write.csv(mcav_all.go.slim.MF, "Output/GOSeq/mcav/mcav.go.slim.MF_20220208.csv")
 mcav_all.go.slim.MF_uniq <- mcav_all.go.slim.MF %>% select("GO.IDs")
 mcav_all.go.slim.MF_uniq <- unique(mcav_all.go.slim.MF_uniq)
-write.csv(mcav_all.go.slim.MF_uniq, "Output/GOSeq/mcav/mcav.go.slim.MF_unique_20220418.csv")
+#write.csv(mcav_all.go.slim.MF_uniq, "Output/GOSeq/mcav/mcav.go.slim.MF_unique_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
@@ -131,7 +131,7 @@ length(unique(ofav_all.go.slim.BP$GO.IDs)) # 27 unique BP GO terms
 #write.csv(ofav_all.go.slim.BP, "Output/GOSeq/ofav/ofav.go.slim.BP_20220208.csv")
 ofav_all.go.slim.BP_uniq <- ofav_all.go.slim.BP %>% select("GO.IDs")
 ofav_all.go.slim.BP_uniq <- unique(ofav_all.go.slim.BP_uniq)
-write.csv(ofav_all.go.slim.BP_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.BP_uniq_20220418.csv")
+#write.csv(ofav_all.go.slim.BP_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.BP_uniq_20220418.csv")
 
 ofav_all.go.slim.CC <- subset(ofav.go.slim, ontology == "CC")
 ofav_all.go.slim.CC <- unique(ofav_all.go.slim.CC)
@@ -139,7 +139,7 @@ length(unique(ofav_all.go.slim.CC$GO.IDs)) # 3 unique BP GO terms
 #write.csv(ofav_all.go.slim.CC, "Output/GOSeq/ofav/ofav.go.slim.CC_20220208.csv")
 ofav_all.go.slim.CC_uniq <- ofav_all.go.slim.CC %>% select("GO.IDs")
 ofav_all.go.slim.CC_uniq <- unique(ofav_all.go.slim.CC_uniq)
-write.csv(ofav_all.go.slim.CC_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.CC_uniq_20220418.csv")
+#write.csv(ofav_all.go.slim.CC_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.CC_uniq_20220418.csv")
 
 ofav_all.go.slim.MF <- subset(ofav.go.slim, ontology == "MF")
 ofav_all.go.slim.MF <- unique(ofav_all.go.slim.MF)
@@ -147,7 +147,7 @@ length(unique(ofav_all.go.slim.MF$GO.IDs)) # 9 unique BP GO terms
 #write.csv(ofav_all.go.slim.MF, "Output/GOSeq/ofav/ofav.go.slim.MF_20220208.csv")
 ofav_all.go.slim.MF_uniq <- ofav_all.go.slim.MF %>% select("GO.IDs")
 ofav_all.go.slim.MF_uniq <- unique(ofav_all.go.slim.CC_uniq)
-write.csv(ofav_all.go.slim.MF_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.MF_uniq_20220418.csv")
+#write.csv(ofav_all.go.slim.MF_uniq, "Output/GOSeq/ofav/ofav_all.go.slim.MF_uniq_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
@@ -175,7 +175,7 @@ length(unique(mcap_all.go.slim.BP$GO.IDs)) # 237 unique BP GO terms
 #write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/mcap/mcap.go.slim.BP_20220417.csv")
 mcap_all.go.slim.BP_uniq <- mcap_all.go.slim.BP %>% select("GO.IDs")
 mcap_all.go.slim.BP_uniq <- unique(mcap_all.go.slim.BP_uniq)
-write.csv(mcap_all.go.slim.BP_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.BP_uniq_20220418.csv")
+#write.csv(mcap_all.go.slim.BP_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.BP_uniq_20220418.csv")
 
 mcap_all.go.slim.CC <- subset(mcap.go.slim, ontology == "CC")
 mcap_all.go.slim.CC <- unique(mcap_all.go.slim.CC)
@@ -183,7 +183,7 @@ length(unique(mcap_all.go.slim.CC$GO.IDs)) # 40 unique BP GO terms
 #write.csv(mcap_all.go.slim.CC, "Output/GOSeq/mcap/mcap.go.slim.CC_20220417.csv")
 mcap_all.go.slim.CC_uniq <- mcap_all.go.slim.CC %>% select("GO.IDs")
 mcap_all.go.slim.CC_uniq <- unique(mcap_all.go.slim.CC_uniq)
-write.csv(mcap_all.go.slim.CC_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.CC_uniq_20220418.csv")
+#write.csv(mcap_all.go.slim.CC_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.CC_uniq_20220418.csv")
 
 mcap_all.go.slim.MF <- subset(mcap.go.slim, ontology == "MF")
 mcap_all.go.slim.MF <- unique(mcap_all.go.slim.MF)
@@ -191,7 +191,7 @@ length(unique(mcap_all.go.slim.MF$GO.IDs)) # 65 unique BP GO terms
 #write.csv(mcap_all.go.slim.MF, "Output/GOSeq/mcap/mcap.go.slim.MF_20220417.csv")
 mcap_all.go.slim.MF_uniq <- mcap_all.go.slim.MF %>% select("GO.IDs")
 mcap_all.go.slim.MF_uniq <- unique(mcap_all.go.slim.MF_uniq)
-write.csv(mcap_all.go.slim.MF_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.MF_uniq_20220418.csv")
+#write.csv(mcap_all.go.slim.MF_uniq, "Output/GOSeq/mcap/mcap_all.go.slim.MF_uniq_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
@@ -217,7 +217,7 @@ length(unique(pacuta_all.go.slim.BP$GO.IDs)) # 380 unique BP GO terms
 #write.csv(pacuta_all.go.slim.BP, "Output/GOSeq/pacuta/pacuta.go.slim.BP_20220208.csv")
 pacuta_all.go.slim.BP_uniq <- pacuta_all.go.slim.BP %>% select("GO.IDs")
 pacuta_all.go.slim.BP_uniq <- unique(pacuta_all.go.slim.BP_uniq)
-write.csv(pacuta_all.go.slim.BP_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.BP_uniq_20220418.csv")
+#write.csv(pacuta_all.go.slim.BP_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.BP_uniq_20220418.csv")
 
 pacuta_all.go.slim.CC <- subset(pacuta.go.slim, ontology == "CC")
 pacuta_all.go.slim.CC <- unique(pacuta_all.go.slim.CC)
@@ -225,7 +225,7 @@ length(unique(pacuta_all.go.slim.CC$GO.IDs)) # 25 unique CC GO terms
 #write.csv(pacuta_all.go.slim.CC, "Output/GOSeq/pacuta/pacuta.go.slim.CC_20220208.csv")
 pacuta_all.go.slim.CC_uniq <- pacuta_all.go.slim.CC %>% select("GO.IDs")
 pacuta_all.go.slim.CC_uniq <- unique(pacuta_all.go.slim.CC_uniq)
-write.csv(pacuta_all.go.slim.CC_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.CC_uniq_20220418.csv")
+#write.csv(pacuta_all.go.slim.CC_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.CC_uniq_20220418.csv")
 
 pacuta_all.go.slim.MF <- subset(pacuta.go.slim, ontology == "MF")
 pacuta_all.go.slim.MF <- unique(pacuta_all.go.slim.MF)
@@ -233,7 +233,7 @@ length(unique(pacuta_all.go.slim.MF$GO.IDs)) # 126 unique MF GO terms
 #write.csv(pacuta_all.go.slim.MF, "Output/GOSeq/pacuta/pacuta.go.slim.MF_20220208.csv")
 pacuta_all.go.slim.MF_uniq <- pacuta_all.go.slim.MF %>% select("GO.IDs")
 pacuta_all.go.slim.MF_uniq <- unique(pacuta_all.go.slim.MF_uniq)
-write.csv(pacuta_all.go.slim.MF_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.MF_uniq_20220418.csv")
+#write.csv(pacuta_all.go.slim.MF_uniq, "Output/GOSeq/pacuta/pacuta_all.go.slim.MF_uniq_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
@@ -259,7 +259,7 @@ length(unique(plob_all.go.slim.BP$GO.IDs)) # 198 unique BP GO terms
 #write.csv(plob_all.go.slim.BP, "Output/GOSeq/plob/plob.go.slim.BP_20220208.csv")
 plob_all.go.slim.BP_uniq <- plob_all.go.slim.BP %>% select("GO.IDs")
 plob_all.go.slim.BP_uniq <- unique(plob_all.go.slim.BP_uniq)
-write.csv(plob_all.go.slim.BP_uniq, "Output/GOSeq/plob/plob_all.go.slim.BP_uniq_20220418.csv")
+#write.csv(plob_all.go.slim.BP_uniq, "Output/GOSeq/plob/plob_all.go.slim.BP_uniq_20220418.csv")
 
 plob_all.go.slim.CC <- subset(plob.go.slim, ontology == "CC")
 plob_all.go.slim.CC <- unique(plob_all.go.slim.CC)
@@ -267,7 +267,7 @@ length(unique(plob_all.go.slim.CC$GO.IDs)) # 31 unique CC GO terms
 #write.csv(plob_all.go.slim.CC, "Output/GOSeq/plob/plob.go.slim.CC_20220208.csv")
 plob_all.go.slim.CC_uniq <- plob_all.go.slim.CC %>% select("GO.IDs")
 plob_all.go.slim.CC_uniq <- unique(plob_all.go.slim.CC_uniq)
-write.csv(plob_all.go.slim.CC_uniq, "Output/GOSeq/plob/plob_all.go.slim.CC_uniq_20220418.csv")
+#write.csv(plob_all.go.slim.CC_uniq, "Output/GOSeq/plob/plob_all.go.slim.CC_uniq_20220418.csv")
 
 plob_all.go.slim.MF <- subset(plob.go.slim, ontology == "MF")
 plob_all.go.slim.MF <- unique(plob_all.go.slim.MF)
@@ -275,7 +275,7 @@ length(unique(plob_all.go.slim.MF$GO.IDs)) # 50 unique MF GO terms
 #write.csv(plob_all.go.slim.MF, "Output/GOSeq/plob/plob.go.slim.MF_20220208.csv")
 plob_all.go.slim.MF_uniq <- plob_all.go.slim.MF %>% select("GO.IDs")
 plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
-write.csv(plob_all.go.slim.MF_uniq, "Output/GOSeq/plob/plob_all.go.slim.MF_uniq_20220418.csv")
+#write.csv(plob_all.go.slim.MF_uniq, "Output/GOSeq/plob/plob_all.go.slim.MF_uniq_20220418.csv")
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
@@ -292,7 +292,7 @@ all.go.slim <- rbind(acerv.go.slim,
                      mcap.go.slim,
                      pacuta.go.slim, 
                      plob.go.slim)
-write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220417.csv")
+#write.csv(all.go.slim, "Output/GOSeq/all.go.slim_20220417.csv")
 
 # Plot 
 all.go.slim <- na.omit(all.go.slim)
@@ -305,7 +305,8 @@ GO.all <- ggplot(all.go.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.all
-ggsave("Output/Figs/all_GOslim_20220417.pdf", GO.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/all_GOslim_20220417.pdf", GO.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/all_GOslim_20220417.png", GO.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for BP GO slim plot 
@@ -315,7 +316,7 @@ all.go.BP.slim <- rbind(acerv.go.slim.BP,
                      mcap_all.go.slim.BP,
                      pacuta_all.go.slim.BP, 
                      plob_all.go.slim.BP)
-write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220417.csv")
+#write.csv(all.go.BP.slim, "Output/GOSeq/all.go.BP.slim_20220417.csv")
 
 # Plot 
 all.go.BP.slim <- na.omit(all.go.BP.slim)
@@ -328,7 +329,8 @@ GO.BP.all <- ggplot(all.go.BP.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.BP.all
-ggsave("Output/Figs/all_GOslim.BP_20220417.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/all_GOslim.BP_20220417.pdf", GO.BP.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/all_GOslim.BP_20220417.png", GO.BP.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for CC GO slim plot 
@@ -338,7 +340,7 @@ all.go.CC.slim <- rbind(acerv.go.slim.CC,
                      mcap_all.go.slim.CC,
                      pacuta_all.go.slim.CC, 
                      plob_all.go.slim.CC)
-write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220417.csv")
+#write.csv(all.go.CC.slim, "Output/GOSeq/all.go.CC.slim_20220417.csv")
 
 # Plot 
 all.go.CC.slim <- na.omit(all.go.CC.slim)
@@ -351,7 +353,8 @@ GO.CC.all <- ggplot(all.go.CC.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.CC.all
-ggsave("Output/Figs/all_GOslim.CC_20220417.pdf", GO.CC.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/all_GOslim.CC_20220417.pdf", GO.CC.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/all_GOslim.CC_20220417.png", GO.CC.all, width = 40, height = 40, units = c("in"))
 
 
 # Bind all species df together for MF GO slim plot and merge w/ GO slim terms
@@ -360,7 +363,7 @@ all.go.MF.slim <- rbind(acerv.go.slim.MF,
                      ofav_all.go.slim.MF,
                      pacuta_all.go.slim.MF, 
                      plob_all.go.slim.MF)
-write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220417.csv")
+#write.csv(all.go.MF.slim, "Output/GOSeq/all.go.MF.slim_20220417.csv")
 
 # Plot 
 all.go.MF.slim <- na.omit(all.go.MF.slim)
@@ -373,7 +376,8 @@ GO.MF.all <- ggplot(all.go.MF.slim, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 8),
                      axis.text = element_text(size = 8))
 GO.MF.all
-ggsave("Output/Figs/all_GOslim.MF_20220417.pdf", GO.MF.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/all_GOslim.MF_20220417.pdf", GO.MF.all, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/all_GOslim.MF_20220417.png", GO.MF.all, width = 40, height = 40, units = c("in"))
 ```
 
 Make bar charts for go slim term counts for species, locations, and morphologies - BP only
@@ -428,8 +432,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220417.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.BP_20220417.png", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/SpeciesCounts_GOslim.BP_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/SpeciesCounts_GOslim.BP_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Location = 
@@ -481,15 +485,15 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/LocationsCounts_GOslim.BP_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology = 
                                               case_when(Species == "A.cervicornis" ~ "Branching", 
                                                         Species == "M.cavernosa" ~ "Massive",
                                                         Species == "O.faveolata" ~ "Massive",
-                                                        Species == "M.capitata" ~ "Branching",
+                                                        Species == "M.capitata" ~ "Intermediate", # branching or intermediate?
                                                         Species == "P.acuta" ~ "Branching",
                                                         Species == "P.lobata" ~ "Massive"))
 
@@ -532,10 +536,10 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.just = "right",
         legend.background = element_rect(fill = "white", color = "black"),
         legend.box.background = element_rect(color="black", size=2)) +
-        scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+        scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
 count_morph_plot
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 ## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
@@ -697,7 +701,8 @@ GO.CA.subset <- ggplot(go.slim.CA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CA.subset
-ggsave("Output/Figs/CA.Subset_GOslim.BP_20220417.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.png", GO.CA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -714,7 +719,8 @@ GO.CCP.subset <- ggplot(go.slim.CCP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCP.subset
-ggsave("Output/Figs/CCP.Subset_GOslim.BP_20220417.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.png", GO.CCP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -731,7 +737,8 @@ GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.COB.subset
-ggsave("Output/Figs/COB.Subset_GOslim.BP_20220417.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.png", GO.COB.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -748,7 +755,8 @@ GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCS.subset
-ggsave("Output/Figs/CCS.Subset_GOslim.BP_20220417.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.png", GO.CCS.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -765,7 +773,8 @@ GO.death.subset <- ggplot(go.slim.Death.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.death.subset
-ggsave("Output/Figs/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.png", GO.death.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) "developmental processes"
@@ -773,15 +782,19 @@ ggsave("Output/Figs/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width
 go.slim.DP.subset <- all.go.BP.slim %>% filter(GO.Slim.Term=="developmental processes")
 
 GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) + 
-  geom_tile(aes(fill =over_represented_pvalue)) + 
-  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE))+
+  geom_tile(aes(fill =over_represented_pvalue), size = 100) + 
+  facet_grid(GO.Slim.Term ~ ., scales = "free_y", labeller = label_wrap_gen(width = 5, multi_line = TRUE)) +
   theme_bw() + theme(panel.border = element_blank(), panel.grid.major = element_blank(),
                      panel.grid.minor = element_blank(), axis.line = element_line(colour = "black"),
-                     strip.text.y = element_text(angle=0, size = 25),
+                     strip.text.y = element_text(angle=0, size = 25), 
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DP.subset
-ggsave("Output/Figs/DP.Subset_GOslim.BP_20220417.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/DP.test_20220812.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+
+
+#ggsave("Output/Figs/GOslim/BP/DP.Subset_GOslim.BP_20220417.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/DP.Subset_GOslim.BP_20220417.png", GO.DP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -798,7 +811,8 @@ GO.DNAM.subset <- ggplot(go.slim.DNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DNAM.subset
-ggsave("Output/Figs/DNAM.Subset_GOslim.BP_20220417.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.png", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) "other biological processes"
@@ -814,7 +828,8 @@ GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OBP.subset
-ggsave("Output/Figs/OBP.Subset_GOslim.BP_20220417.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.png", GO.OBP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (9) "other metabolic processes"
@@ -830,7 +845,8 @@ GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMP.subset
-ggsave("Output/Figs/OMP.Subset_GOslim.BP_20220417.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.png", GO.OMP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (10) "protein metabolism"
@@ -846,7 +862,8 @@ GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PM.subset
-ggsave("Output/Figs/PM.Subset_GOslim.BP_20220417.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.png", GO.PM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (11) "RNA metabolism"
@@ -862,7 +879,8 @@ GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.RNAM.subset
-ggsave("Output/Figs/RNAM.Subset_GOslim.BP_20220417.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.png", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (12) "signal transduction"
@@ -878,7 +896,9 @@ GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ST.subset
-ggsave("Output/Figs/ST.Subset_GOslim.BP_20220417.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.png", GO.ST.subset, width = 40, height = 40, units = c("in"))
+
 ```
 
 (13) "stress response"
@@ -894,7 +914,8 @@ GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.SR.subset
-ggsave("Output/Figs/SR.Subset_GOslim.BP_20220417.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.png", GO.SR.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (14) "transport"
@@ -910,7 +931,8 @@ GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.T.subset
-ggsave("Output/Figs/Transport.Subset_GOslim.BP_20220417.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.png", GO.T.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -1004,8 +1026,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.CC_20220417.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.CC_20220417.png", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.CC.slim <- all.go.CC.slim %>% mutate(Location = 
@@ -1057,8 +1079,8 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/LocationsCounts_GOslim.CC_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/LocationsCounts_GOslim.CC_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.CC.slim <- all.go.CC.slim %>% mutate(Morphology = 
@@ -1110,8 +1132,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/MorphologyCounts_GOslim.CC_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/MorphologyCounts_GOslim.CC_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 Make bar charts for go slim term counts for species, locations, and morphologies - MF only
@@ -1165,8 +1187,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/SpeciesCounts_GOslim.MF_20220417.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/SpeciesCounts_GOslim.MF_20220417.png", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.MF.slim <- all.go.MF.slim %>% mutate(Location = 
@@ -1218,8 +1240,8 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/LocationsCounts_GOslim.MF_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/LocationsCounts_GOslim.MF_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.MF.slim <- all.go.MF.slim %>% mutate(Morphology = 
@@ -1271,8 +1293,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/MorphologyCounts_GOslim.MF_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/MorphologyCounts_GOslim.MF_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 
@@ -1319,7 +1341,8 @@ GO.Cytoskeleton.subset <- ggplot(go.slim.Cytoskeleton.subset, aes(x = Species, y
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Cytoskeleton.subset
-ggsave("Output/Figs/Cytoskeleton.Subset_GOslim.CC_20220419.pdf", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.pdf", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.png", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (2) "ER/Golgi"
@@ -1335,7 +1358,8 @@ GO.EG.subset <- ggplot(go.slim.EG.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.EG.subset
-ggsave("Output/Figs/EG.Subset_GOslim.CC_20220419.pdf", GO.EG.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.pdf", GO.EG.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.png", GO.EG.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (3) "plasma membrane"
@@ -1351,7 +1375,8 @@ GO.PMem.subset <- ggplot(go.slim.PMem.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PMem.subset
-ggsave("Output/Figs/PMem.Subset_GOslim.CC_20220419.pdf", GO.PMem.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.pdf", GO.PMem.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.png", GO.PMem.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (4) 'mitochondrion'
@@ -1367,7 +1392,8 @@ GO.Mito.subset <- ggplot(go.slim.Mito.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Mito.subset
-ggsave("Output/Figs/Mito.Subset_GOslim.CC_20220419.pdf", GO.Mito.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.pdf", GO.Mito.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.png", GO.Mito.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (5) 'non-structural extracellular'
@@ -1383,7 +1409,8 @@ GO.NSE.subset <- ggplot(go.slim.NSE.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.NSE.subset
-ggsave("Output/Figs/NSE.Subset_GOslim.CC_20220419.pdf", GO.NSE.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.pdf", GO.NSE.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.png", GO.NSE.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) 'nucleus'
@@ -1399,7 +1426,8 @@ GO.Nucleus.subset <- ggplot(go.slim.Nucleus.subset, aes(x = Species, y = term)) 
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Nucleus.subset
-ggsave("Output/Figs/Nucleus.Subset_GOslim.CC_20220419.pdf", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.pdf", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.png", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (7) 'other cellular component'
@@ -1415,7 +1443,8 @@ GO.OCC.subset <- ggplot(go.slim.OCC.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OCC.subset
-ggsave("Output/Figs/OCC.Subset_GOslim.CC_20220419.pdf", GO.OCC.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.pdf", GO.OCC.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.png", GO.OCC.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) 'other cytoplasmic organelle'
@@ -1431,7 +1460,8 @@ GO.OCO.subset <- ggplot(go.slim.OCO.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OCO.subset
-ggsave("Output/Figs/OCO.Subset_GOslim.CC_20220419.pdf", GO.OCO.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.pdf", GO.OCO.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.png", GO.OCO.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (9) 'other membranes'
@@ -1447,7 +1477,8 @@ GO.OM.subset <- ggplot(go.slim.OM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OM.subset
-ggsave("Output/Figs/OM.Subset_GOslim.CC_20220419.pdf", GO.OM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.pdf", GO.OM.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.png", GO.OM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (10) 'cytosol'
@@ -1463,7 +1494,8 @@ GO.Cytosol.subset <- ggplot(go.slim.Cytosol.subset, aes(x = Species, y = term)) 
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Cytosol.subset
-ggsave("Output/Figs/Cytosol.Subset_GOslim.CC_20220419.pdf", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.pdf", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.png", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (11) 'translational apparatus'
@@ -1479,7 +1511,8 @@ GO.TA.subset <- ggplot(go.slim.TA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TA.subset
-ggsave("Output/Figs/TA.Subset_GOslim.CC_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -1519,7 +1552,8 @@ GO.CtyoA.subset <- ggplot(go.slim.CytoA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CtyoA.subset
-ggsave("Output/Figs/CytoA.Subset_GOslim.MF_20220419.pdf", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.pdf", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.png", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (2) 'enzyme regulator activity'
@@ -1535,7 +1569,8 @@ GO.ERA.subset <- ggplot(go.slim.ERA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ERA.subset
-ggsave("Output/Figs/ERA.Subset_GOslim.MF_20220419.pdf", GO.ERA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.pdf", GO.ERA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.png", GO.ERA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (3) 'kinase activity'
@@ -1551,7 +1586,8 @@ GO.KA.subset <- ggplot(go.slim.KA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.KA.subset
-ggsave("Output/Figs/KA.Subset_GOslim.MF_20220419.pdf", GO.KA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.pdf", GO.KA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.png", GO.KA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (4) 'nucleic acid binding activity'
@@ -1567,7 +1603,8 @@ GO.NABA.subset <- ggplot(go.slim.NABA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.NABA.subset
-ggsave("Output/Figs/NABA.Subset_GOslim.MF_20220419.pdf", GO.NABA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.pdf", GO.NABA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.png", GO.NABA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (5) 'other molecular function'
@@ -1583,7 +1620,8 @@ GO.OMF.subset <- ggplot(go.slim.OMF.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMF.subset
-ggsave("Output/Figs/OMG.Subset_GOslim.MF_20220419.pdf", GO.OMF.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.pdf", GO.OMF.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.png", GO.OMF.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) 'signal transduction activity'
@@ -1599,7 +1637,8 @@ GO.STA.subset <- ggplot(go.slim.STA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.STA.subset
-ggsave("Output/Figs/STA.Subset_GOslim.MF_20220419.pdf", GO.STA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.pdf", GO.STA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.png", GO.STA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (7) 'transcription regulatory activity'
@@ -1615,7 +1654,8 @@ GO.TRA.subset <- ggplot(go.slim.TRA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TRA.subset
-ggsave("Output/Figs/TRA.Subset_GOslim.MF_20220419.pdf", GO.TRA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.pdf", GO.TRA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.png", GO.TRA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) 'transporter activity'
@@ -1631,5 +1671,6 @@ GO.TA.subset <- ggplot(go.slim.TA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TA.subset
-ggsave("Output/Figs/TA.Subset_GOslim.MF_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
 ```
