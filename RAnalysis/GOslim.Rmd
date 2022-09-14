@@ -701,8 +701,8 @@ GO.CA.subset <- ggplot(go.slim.CA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CA.subset
-ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.png", GO.CA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.pdf", GO.CA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CA.Subset_GOslim.BP_20220417.png", GO.CA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -719,8 +719,8 @@ GO.CCP.subset <- ggplot(go.slim.CCP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCP.subset
-ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.png", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.pdf", GO.CCP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CCP.Subset_GOslim.BP_20220417.png", GO.CCP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -737,8 +737,8 @@ GO.COB.subset <- ggplot(go.slim.COB.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.COB.subset
-ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.png", GO.COB.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.pdf", GO.COB.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/COB.Subset_GOslim.BP_20220417.png", GO.COB.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -755,8 +755,8 @@ GO.CCS.subset <- ggplot(go.slim.CCS.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CCS.subset
-ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.png", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.pdf", GO.CCS.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/CCS.Subset_GOslim.BP_20220417.png", GO.CCS.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -773,8 +773,8 @@ GO.death.subset <- ggplot(go.slim.Death.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.death.subset
-ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.png", GO.death.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.pdf", GO.death.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/Death.Subset_GOslim.BP_20220417.png", GO.death.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) "developmental processes"
@@ -790,9 +790,6 @@ GO.DP.subset <- ggplot(go.slim.DP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DP.subset
-ggsave("Output/Figs/GOslim/BP/DP.test_20220812.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
-
-
 #ggsave("Output/Figs/GOslim/BP/DP.Subset_GOslim.BP_20220417.pdf", GO.DP.subset, width = 40, height = 40, units = c("in"))
 #ggsave("Output/Figs/GOslim/BP/DP.Subset_GOslim.BP_20220417.png", GO.DP.subset, width = 40, height = 40, units = c("in"))
 ```
@@ -811,8 +808,8 @@ GO.DNAM.subset <- ggplot(go.slim.DNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.DNAM.subset
-ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.png", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.pdf", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/DNAM.Subset_GOslim.BP_20220417.png", GO.DNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) "other biological processes"
@@ -828,8 +825,8 @@ GO.OBP.subset <- ggplot(go.slim.OBP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OBP.subset
-ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.png", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.pdf", GO.OBP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/OBP.Subset_GOslim.BP_20220417.png", GO.OBP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (9) "other metabolic processes"
@@ -845,8 +842,8 @@ GO.OMP.subset <- ggplot(go.slim.OMP.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMP.subset
-ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.png", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.pdf", GO.OMP.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/OMP.Subset_GOslim.BP_20220417.png", GO.OMP.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (10) "protein metabolism"
@@ -862,8 +859,8 @@ GO.PM.subset <- ggplot(go.slim.PM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PM.subset
-ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.png", GO.PM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.pdf", GO.PM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/PM.Subset_GOslim.BP_20220417.png", GO.PM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (11) "RNA metabolism"
@@ -879,8 +876,8 @@ GO.RNAM.subset <- ggplot(go.slim.RNAM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.RNAM.subset
-ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.png", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.pdf", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/RNAM.Subset_GOslim.BP_20220417.png", GO.RNAM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (12) "signal transduction"
@@ -896,8 +893,8 @@ GO.ST.subset <- ggplot(go.slim.ST.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ST.subset
-ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.png", GO.ST.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.pdf", GO.ST.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/ST.Subset_GOslim.BP_20220417.png", GO.ST.subset, width = 40, height = 40, units = c("in"))
 
 ```
 
@@ -914,8 +911,8 @@ GO.SR.subset <- ggplot(go.slim.SR.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.SR.subset
-ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.png", GO.SR.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.pdf", GO.SR.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/SR.Subset_GOslim.BP_20220417.png", GO.SR.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (14) "transport"
@@ -931,8 +928,8 @@ GO.T.subset <- ggplot(go.slim.T.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.T.subset
-ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.png", GO.T.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.pdf", GO.T.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/Transport.Subset_GOslim.BP_20220417.png", GO.T.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -1026,8 +1023,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.png", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/SpeciesCounts_GOslim.CC_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.CC.slim <- all.go.CC.slim %>% mutate(Location = 
@@ -1079,8 +1076,8 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.CC.slim <- all.go.CC.slim %>% mutate(Morphology = 
@@ -1132,8 +1129,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 Make bar charts for go slim term counts for species, locations, and morphologies - MF only
@@ -1187,8 +1184,8 @@ count <- ggplot(count_by_group, aes(fill = Species, y = n, x = GO.Slim.Term)) +
         legend.background = element_rect(fill = "white", color = "black")) + 
   scale_fill_manual(values = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "grey"))
 count
-ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.pdf", count, width = 40, height = 30, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.png", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.pdf", count, width = 40, height = 30, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/SpeciesCounts_GOslim.MF_20220417.png", count, width = 40, height = 30, units = c("in"))
 
 # plot by location/sediment type
 all.go.MF.slim <- all.go.MF.slim %>% mutate(Location = 
@@ -1240,8 +1237,8 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.MF.slim <- all.go.MF.slim %>% mutate(Morphology = 
@@ -1293,8 +1290,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
 count_morph_plot
-ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 
@@ -1341,8 +1338,8 @@ GO.Cytoskeleton.subset <- ggplot(go.slim.Cytoskeleton.subset, aes(x = Species, y
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Cytoskeleton.subset
-ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.pdf", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.png", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.pdf", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Cytoskeleton.Subset_GOslim.CC_20220419.png", GO.Cytoskeleton.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (2) "ER/Golgi"
@@ -1358,8 +1355,8 @@ GO.EG.subset <- ggplot(go.slim.EG.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.EG.subset
-ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.pdf", GO.EG.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.png", GO.EG.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.pdf", GO.EG.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/EG.Subset_GOslim.CC_20220419.png", GO.EG.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (3) "plasma membrane"
@@ -1375,8 +1372,8 @@ GO.PMem.subset <- ggplot(go.slim.PMem.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.PMem.subset
-ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.pdf", GO.PMem.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.png", GO.PMem.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.pdf", GO.PMem.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/PMem.Subset_GOslim.CC_20220419.png", GO.PMem.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (4) 'mitochondrion'
@@ -1392,8 +1389,8 @@ GO.Mito.subset <- ggplot(go.slim.Mito.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Mito.subset
-ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.pdf", GO.Mito.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.png", GO.Mito.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.pdf", GO.Mito.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Mito.Subset_GOslim.CC_20220419.png", GO.Mito.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (5) 'non-structural extracellular'
@@ -1409,8 +1406,8 @@ GO.NSE.subset <- ggplot(go.slim.NSE.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.NSE.subset
-ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.pdf", GO.NSE.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.png", GO.NSE.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.pdf", GO.NSE.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/NSE.Subset_GOslim.CC_20220419.png", GO.NSE.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) 'nucleus'
@@ -1426,8 +1423,8 @@ GO.Nucleus.subset <- ggplot(go.slim.Nucleus.subset, aes(x = Species, y = term)) 
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Nucleus.subset
-ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.pdf", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.png", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.pdf", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Nucleus.Subset_GOslim.CC_20220419.png", GO.Nucleus.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (7) 'other cellular component'
@@ -1443,8 +1440,8 @@ GO.OCC.subset <- ggplot(go.slim.OCC.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OCC.subset
-ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.pdf", GO.OCC.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.png", GO.OCC.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.pdf", GO.OCC.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OCC.Subset_GOslim.CC_20220419.png", GO.OCC.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) 'other cytoplasmic organelle'
@@ -1460,8 +1457,8 @@ GO.OCO.subset <- ggplot(go.slim.OCO.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OCO.subset
-ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.pdf", GO.OCO.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.png", GO.OCO.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.pdf", GO.OCO.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OCO.Subset_GOslim.CC_20220419.png", GO.OCO.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (9) 'other membranes'
@@ -1477,8 +1474,8 @@ GO.OM.subset <- ggplot(go.slim.OM.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OM.subset
-ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.pdf", GO.OM.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.png", GO.OM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.pdf", GO.OM.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/OM.Subset_GOslim.CC_20220419.png", GO.OM.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (10) 'cytosol'
@@ -1494,8 +1491,8 @@ GO.Cytosol.subset <- ggplot(go.slim.Cytosol.subset, aes(x = Species, y = term)) 
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.Cytosol.subset
-ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.pdf", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.png", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.pdf", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/Cytosol.Subset_GOslim.CC_20220419.png", GO.Cytosol.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (11) 'translational apparatus'
@@ -1511,8 +1508,8 @@ GO.TA.subset <- ggplot(go.slim.TA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TA.subset
-ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/CC/TA.Subset_GOslim.CC_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 
@@ -1552,8 +1549,8 @@ GO.CtyoA.subset <- ggplot(go.slim.CytoA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.CtyoA.subset
-ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.pdf", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.png", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.pdf", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/CytoA.Subset_GOslim.MF_20220419.png", GO.CtyoA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (2) 'enzyme regulator activity'
@@ -1569,8 +1566,8 @@ GO.ERA.subset <- ggplot(go.slim.ERA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.ERA.subset
-ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.pdf", GO.ERA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.png", GO.ERA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.pdf", GO.ERA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/ERA.Subset_GOslim.MF_20220419.png", GO.ERA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (3) 'kinase activity'
@@ -1586,8 +1583,8 @@ GO.KA.subset <- ggplot(go.slim.KA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.KA.subset
-ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.pdf", GO.KA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.png", GO.KA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.pdf", GO.KA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/KA.Subset_GOslim.MF_20220419.png", GO.KA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (4) 'nucleic acid binding activity'
@@ -1603,8 +1600,8 @@ GO.NABA.subset <- ggplot(go.slim.NABA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.NABA.subset
-ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.pdf", GO.NABA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.png", GO.NABA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.pdf", GO.NABA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/NABA.Subset_GOslim.MF_20220419.png", GO.NABA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (5) 'other molecular function'
@@ -1620,8 +1617,8 @@ GO.OMF.subset <- ggplot(go.slim.OMF.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.OMF.subset
-ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.pdf", GO.OMF.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.png", GO.OMF.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.pdf", GO.OMF.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/OMF.Subset_GOslim.MF_20220419.png", GO.OMF.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (6) 'signal transduction activity'
@@ -1637,8 +1634,8 @@ GO.STA.subset <- ggplot(go.slim.STA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.STA.subset
-ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.pdf", GO.STA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.png", GO.STA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.pdf", GO.STA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/STA.Subset_GOslim.MF_20220419.png", GO.STA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (7) 'transcription regulatory activity'
@@ -1654,8 +1651,8 @@ GO.TRA.subset <- ggplot(go.slim.TRA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TRA.subset
-ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.pdf", GO.TRA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.png", GO.TRA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.pdf", GO.TRA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/TRA.Subset_GOslim.MF_20220419.png", GO.TRA.subset, width = 40, height = 40, units = c("in"))
 ```
 
 (8) 'transporter activity'
@@ -1671,6 +1668,6 @@ GO.TA.subset <- ggplot(go.slim.TA.subset, aes(x = Species, y = term)) +
                      strip.text.x = element_text(size = 25),
                      axis.text = element_text(size = 30))
 GO.TA.subset
-ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.pdf", GO.TA.subset, width = 40, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/MF/TA.Subset_GOslim.MF_20220419.png", GO.TA.subset, width = 40, height = 40, units = c("in"))
 ```
