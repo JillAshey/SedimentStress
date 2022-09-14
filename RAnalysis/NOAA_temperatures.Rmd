@@ -38,7 +38,6 @@ HI_temp$Date <- paste0(HI_temp$X.YY, sep = "-", HI_temp$MM, sep = "-", HI_temp$D
 HI_temp$Time <- paste0(HI_temp$hh, sep = ":", HI_temp$mm)
 HI_temp$Date.Time <- paste0(HI_temp$Date, sep=" ", HI_temp$Time)
 HI_temp <- HI_temp %>% naniar::replace_with_na(HI_temp, replace = list(WTMP=c("9   9.", ".0 999", "999", "0 999."))) # replace all weird enteries with NAs
-range(HI_temp$WTMP) # 23.4C to 29.6C
 ```
 
 ### Parse date & time 
@@ -73,7 +72,7 @@ HI_plot
 
 # save plot
 ggsave("Output/Figs/Temperature/HI_temperature_2015.pdf", HI_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/Temperature/HI_temperature_2015.pdf", HI_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/Temperature/HI_temperature_2015.png", HI_plot, width = 49, height = 40, units = c("in"))
 ```
 
 
@@ -89,7 +88,6 @@ FL_temp$Time <- paste0(FL_temp$hh, sep = ":", FL_temp$mm)
 FL_temp$Date.Time <- paste0(FL_temp$Date, sep=" ", FL_temp$Time)
 FL_temp <- FL_temp %>% naniar::replace_with_na(FL_temp, replace = list(WTMP=c("999"))) # replace all weird enteries with NAs
 FL_temp <- na.omit(FL_temp)
-mean(FL_temp$WTMP) # being weird, NAs 
 ```
 
 ### Parse date and time
@@ -124,7 +122,7 @@ FL_plot
 
 # save plot
 ggsave("Output/Figs/Temperature/FL_temperature_2016.pdf", FL_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/Temperature/FL_temperature_2016.pdf", FL_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/Temperature/FL_temperature_2016.png", FL_plot, width = 49, height = 40, units = c("in"))
 ```
 
 
