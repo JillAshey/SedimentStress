@@ -538,8 +538,8 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="black", size=2)) +
         scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
 count_morph_plot
-ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+#ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 ## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
