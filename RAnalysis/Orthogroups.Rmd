@@ -5,16 +5,21 @@ date: "1/28/2022"
 output: html_document
 ---
 
+
+
+20220920 note to self - try this link https://sfirke.github.io/janitor/reference/get_dupes.htmlhttps://sfirke.github.io/janitor/reference/get_dupes.html to identify duplicates in dataset 
+
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 
 library(tidyverse)
 library(VennDiagram)
+library(arsenal) # comparedf function
 ```
 
 Why did we run OrthoFinder? 
 
-ran OrthoFinder on bluewaves, got lots of output. One file (xxx) has the Orthogroups listed with all the genes found in that orthogroup for each species. I'm going to first remove any orthogroups that have blank cells (ie no protein from a species in that orthogroup). Then I'll read in my DEG info and filter the protein names from each species. With that info, I'll make a Venn diagram showing shared orthogroups among species 
+ran OrthoFinder on bluewaves, got lots of output. One file ('Output/OrthoFinder/Orthogroups.tsv') has the Orthogroups listed with all the genes found in that orthogroup for each species. I'm going to first remove any orthogroups that have blank cells (ie no protein from a species in that orthogroup). Then I'll read in my DEG info and filter the protein names from each species. With that info, I'll make a Venn diagram showing shared orthogroups among species 
 
 ```{r}
 # Read in orthofinder data 
@@ -24,8 +29,8 @@ colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "
 length(unique(ortho$Orthogroup)) # 21688 total orthogroups
 
 # Remove blanks from dataset, so all that remained were orthogroups shared by all species. 
-ortho <- na.omit(ortho)
-length(unique(ortho$Orthogroup)) # 9216 'filtered' orthogroups
+#ortho <- na.omit(ortho)
+#length(unique(ortho$Orthogroup)) # 9216 'filtered' orthogroups
 ```
 
 ```{r}
@@ -88,12 +93,12 @@ acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
 
 # Merge dfs by gene_id
 acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
-length(unique(acerv$gene_id)) # 119 DEGs found in orthogroups 
-length(unique(acerv$Orthogroup)) # 102 orthogroups
-#write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(acerv$gene_id)) # 179 DEGs found in orthogroups 
+length(unique(acerv$Orthogroup)) # 159 orthogroups
+write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20220502.csv")
+write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20221020.csv")
 ```
 
 ### Mcav 
@@ -109,12 +114,12 @@ mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
-length(unique(mcav$gene_id)) # 31 DEGs found in orthogroups 
-length(unique(mcav$Orthogroup)) # 28 orthogroups 
-#write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(mcav$gene_id)) # 53 DEGs found in orthogroups 
+length(unique(mcav$Orthogroup)) # 48 orthogroups 
+write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20220502.csv")
+write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20221020.csv")
 ```
 
 ### Ofav 
@@ -154,10 +159,10 @@ merge <- unique(merge)
 ofav <- merge(merge, ofav_DEG, by = "gene_id")
 length(unique(ofav$gene_id)) # 2 DEGs found in orthogroups 
 length(unique(ofav$Orthogroup)) # 2 orthogroups 
-#write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20220502.csv")
+write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20221020.csv")
 ```
 
 ### Mcap
@@ -173,12 +178,12 @@ mcap_ortho$gene_id <- gsub(" ", "", mcap_ortho$gene_id)
 
 # Merge dfs by gene_id
 mcap <- merge(mcap_ortho, mcap_DEG, by = "gene_id")
-length(unique(mcap$gene_id)) # 87 DEGs found in orthogroups 
-length(unique(mcap$Orthogroup)) # 80 orthogroups 
-#write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(mcap$gene_id)) # 118 DEGs found in orthogroups 
+length(unique(mcap$Orthogroup)) # 110 orthogroups 
+write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20220502.csv")
+write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20221020.csv")
 ```
 
 ### Pacuta 
@@ -193,12 +198,12 @@ pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
 
 # Merge dfs by gene_id
 pacuta <- merge(pacuta_ortho, pacuta_DEG, by = "gene_id")
-length(unique(pacuta$gene_id)) # 123 DEGs found in orthogroups 
-length(unique(pacuta$Orthogroup)) # 100 orthogroups 
-#write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(pacuta$gene_id)) # 199 DEGs found in orthogroups 
+length(unique(pacuta$Orthogroup)) # 159 orthogroups 
+write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20220502.csv")
+write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20221020.csv")
 ```
 
 ### Plob 
@@ -215,13 +220,56 @@ plob_ortho$gene_id <- gsub(" ", "", plob_ortho$gene_id)
 
 # Merge dfs by gene_id
 plob <- merge(plob_ortho, plob_DEG, by = "gene_id")
-length(unique(plob$gene_id)) # 66 DEGs found in orthogroups 
-length(unique(plob$Orthogroup)) # 56 orthogroups 
-#write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20220502.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+length(unique(plob$gene_id)) # 122 DEGs found in orthogroups 
+length(unique(plob$Orthogroup)) # 101 orthogroups 
+write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20221020.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-#write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20220502.csv") 
+write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20221020.csv") 
 ```
+
+Plotted Venn Diagram using this website: https://bioinformatics.psb.ugent.be/webtools/Venn/. can't figure out how to do it in R
+
+How to plot using the above website^^^^. It will not be the most beautiful thing but thats okay
+- In excel, from the xxxx_uniq_ortho file, remove all columns except the one that has orthogroups. Delete the column name as well 
+- Go to the website. It will have places to upload files and name the files. Upload each file and write the species name for the name of the file in the website. 
+- Scroll down to OUTPUT control. Select Venn Shape as Non-symmetric and Fill as Colored
+- Click submit. may take like 30 secs
+- It will provide the list names, number of elements in each list, and number of unique elements
+- Download the image result and text results
+- The image will not look great. Since I'm comparing 6 species, it looks pretty rough. But it will show the # of orthogroups shared between lists
+- The text result will give the text version of the image. It shows the lists that overlap and which specific element is a part of that overlap. Yay! 
+- QC BELOW
+
+20221020
+Doing ortho stuff again. This time, I did not omit NAs from the data set when I read it in (lines 23-33). 
+This is the QC step to make sure the website didn't mess anything up. Intersect 2 of the lists and compare the intersection results in R and the results from the website. Everything SHOULD match!
+```{r}
+
+## Acerv & Pacuta
+## remove the species col
+test_pa <- pacuta[,-c(1)]
+test_ac <- acerv[,-c(1)]
+intersect(test_ac, test_pa)
+# [1] "OG0000414" "OG0011284" "OG0000989" "OG0000127" "OG0012176" "OG0000487" "OG0000469" "OG0003466" "OG0007132"
+
+## Acerv & Plob
+## remove the species col
+test_pl <- plob[,-c(1)]
+test_ac <- acerv[,-c(1)]
+intersect(test_ac, test_pl)
+#[1] "OG0000414" "OG0011284" "OG0000989" "OG0000127" "OG0012176" "OG0000487" "OG0000469" "OG0003466" "OG0007132"
+#[1] "OG0000000" "OG0000414" "OG0000308" "OG0000221" "OG0000487" "OG0000469" "OG0000008" "OG0000491"
+
+## Acerv & Ofav
+## remove the species col
+test_of <- ofav[,-c(1)]
+test_ac <- acerv[,-c(1)]
+intersect(test_ac, test_of)
+#[1] "OG0000000"
+```
+
+
 
 And then make one df with all species info for orthogroups?
 ```{r}
@@ -235,85 +283,148 @@ plob$Species <- "P.lobata"
 test <- rbind(acerv, mcav, ofav, mcap, pacuta, plob)
 length(unique(test$Orthogroup))
 
-# plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
+# Write to csv 
+write.csv(test, "Output/OrthoFinder/AllSpecies_DEGs_ortho_20221020.csv") 
 ```
 
+20221021
+I'm going to try to merge the DEGs & GO terms with the orthogroups. Let's try with acerv first 
 
-
-
-
-
-
-
-
-
-
-
-
-
-#### attempting to plot 
+### Acerv
 ```{r}
-## Plot shared orthogroups 
-venn.plot <- venn.diagram(
-	x = list(
-		A.cervicornis = acerv_ortho$Orthogroup,
-		M.cavernosa = mcav_ortho$Orthogroup,
-		O.faveolata = ofav_ortho$Orthogroup,
-		M.capitata = mcap_ortho$Orthogroup,
-		P.acuta = pacuta_ortho$Orthogroup,
-		P.lobata = plob_ortho$Orthogroup
-		),
-	filename = "Output/Figs/Venn/venn_Orthogroup_20220316.png",
-	col = "black",
-	fill = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "gray28"),
-	alpha = 0.50,
-	cex = c(1.5, 1.5, 1.5, 1.5, 1.5, 1, 0.8, 1, 0.8, 1, 0.8, 1, 0.8,
-	 1, 0.8, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 0.55, 1, 1, 1, 1, 1, 1.5),
-	cat.col = c("dodgerblue", "goldenrod1", "darkorange1", "seagreen3", "orchid3", "gray28"),
-	cat.cex = 1.5,
-	cat.fontface = "bold",
-	margin = 0.1
-	)
+# using acerv 
 
-# easy way to find some way to list overlap?
-intersect(acerv$Orthogroup, pacuta$Orthogroup)
+# rename gene id in acerv so that there is 'model' instead of 'TU' in the name 
+acerv$gene_id <- gsub("TU", "model", acerv$gene_id)
+
+# read in DEG & GO data
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+
+# Merge by gene id with orthogroup data 
+acerv_all <- merge(acerv_go, acerv, by = "gene_id", all = T)
+
+acerv_all <- acerv_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
+
+# looking at #s of genes and orthogroups left 
+length(unique(acerv_all$gene_id)) # 83 - not all genes had an orthogroup
+length(unique(acerv_all$Orthogroup)) # 66 - not all orthogroups were assigned a gene 
+
+##This file now has it all! 
+
+# Write to csv
+write.csv(test, "Output/OrthoFinder/acerv_DEGs_GO_ortho_20221020.csv") 
 ```
 
+Why not just merge the orthogroups with "acerv_sub_ByTreatment_GO.terms_20211104.csv" first instead of "acerv_sub_unique.sig.list_20210219.csv"?
+- The GO terms df only has the gene ids for those genes that received GO annotations, so it left out many of the other DEGs in the dataset that were not annotated
 
+Now do with the rest of species 
 
-
-
+### Mcav 
 ```{r}
-library(UpSetR)
-movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
-    header = T, sep = ";")
+# read in DEG & GO data
+mcav_go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)[,-1]
 
-upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
-    mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
-    text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
+# Merge by gene id with orthogroup data 
+mcav_all <- merge(mcav_go, mcav, by = "gene_id", all = T)
 
-# my data 
-# adding species names 
-colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
-acerv_ortho$Species <- "Acerv"
-colnames(mcav_ortho) <- c("Orthogroup", "gene_id")
-mcav_ortho$Species <- "Mcav"
-colnames(ofav_ortho) <- c("Orthogroup", "gene_id")
-ofav_ortho$Species <- "Ofav"
-colnames(mcap_ortho) <- c("Orthogroup", "gene_id")
-mcap_ortho$Species <- "Mcap"
-colnames(pacuta_ortho) <- c("Orthogroup", "gene_id")
-pacuta_ortho$Species <- "Pacuta"
-colnames(plob_ortho) <- c("Orthogroup", "gene_id")
-plob_ortho$Species <- "Plob"
+mcav_all <- mcav_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
 
-all <- rbind(acerv_ortho, mcav_ortho, ofav_ortho, mcap_ortho, pacuta_ortho, plob_ortho)
-all <- subset(all, select = -gene_id)
-all <- unique(all)
+# looking at #s of genes and orthogroups left 
+length(unique(mcav_all$gene_id)) # 35 - not all genes had an orthogroup
+length(unique(mcav_all$Orthogroup)) # 28 - not all orthogroups were assigned a gene 
 
-upset(all, nsets = 6)
-# Error in start_col:end_col : argument of length 0
+##This file now has it all! 
+
+# Write to csv
+write.csv(mcav_all, "Output/OrthoFinder/mcav_DEGs_GO_ortho_20221020.csv")    
 ```
+
+### Ofav 
+```{r}
+# read in DEG & GO data
+ofav_go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)[,-1]
+
+# Merge by gene id with orthogroup data 
+ofav_all <- merge(ofav_go, ofav, by = "gene_id", all = T)
+
+ofav_all <- ofav_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
+
+# looking at #s of genes and orthogroups left 
+length(unique(ofav_all$gene_id)) # 4 - not all genes had an orthogroup
+length(unique(ofav_all$Orthogroup)) # 2 - not all orthogroups were assigned a gene 
+
+##This file now has it all! 
+
+# Write to csv
+write.csv(ofav_all, "Output/OrthoFinder/ofav_DEGs_GO_ortho_20221020.csv") 
+```
+
+### Mcap
+```{r}
+# read in DEG & GO data
+mcap_go <- read.csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", header = T)[,-1]
+
+# Merge by gene id with orthogroup data 
+mcap_all <- merge(mcap_go, mcap, by = "gene_id", all = T)
+
+mcap_all <- mcap_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
+
+# looking at #s of genes and orthogroups left 
+length(unique(mcap_all$gene_id)) # 85 - not all genes had an orthogroup
+length(unique(mcap_all$Orthogroup)) # 73 - not all orthogroups were assigned a gene 
+
+##This file now has it all! 
+
+# Write to csv
+write.csv(mcap_all, "Output/OrthoFinder/mcap_DEGs_GO_ortho_20221020.csv")    
+```
+
+### Pacuta 
+```{r}
+# read in DEG & GO data
+pact_go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)[,-1]
+
+# Merge by gene id with orthogroup data 
+pact_all <- merge(pact_go, pacuta, by = "gene_id", all = T)
+
+pact_all <- pact_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
+
+# looking at #s of genes and orthogroups left 
+length(unique(pact_all$gene_id)) # 147 - not all genes had an orthogroup
+length(unique(pact_all$Orthogroup)) # 100 - not all orthogroups were assigned a gene 
+
+##This file now has it all! 
+
+# Write to csv
+write.csv(pact_all, "Output/OrthoFinder/pacuta_DEGs_GO_ortho_20221020.csv")    
+```
+
+### Plob 
+```{r}
+# read in DEG & GO data
+plob_go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)[,-1]
+
+# Merge by gene id with orthogroup data 
+plob_all <- merge(plob_go, plob, by = "gene_id", all = T)
+
+plob_all <- plob_all %>% drop_na(category) # dropping NAs if they don't have a GO term associated 
+
+# looking at #s of genes and orthogroups left 
+length(unique(plob_all$gene_id)) # 83 - not all genes had an orthogroup
+length(unique(plob_all$Orthogroup)) # 49 - not all orthogroups were assigned a gene 
+
+##This file now has it all! 
+
+# Write to csv
+write.csv(plob_all, "Output/OrthoFinder/plob_DEGs_GO_ortho_20221020.csv")    
+```
+
+
+20221021
+Still need to make changes to orthogroup info in most of the figures/tables/supp info
+
+
 
 
 

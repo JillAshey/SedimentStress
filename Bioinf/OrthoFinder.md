@@ -299,3 +299,104 @@ From [OrthoFinder Tutorial: Exploring OrthoFinder results](https://davidemms.git
 So if we want to do a comparison of the ‘equivalent’ genes in a set of species, we need to do the comparison across the genes in an othogroup. The orthogroups are in the file Orthogroups/Orthogroups.tsv. This table has one orthogroup per line and one spcies per column and is ordered from largest orthogroup to smallest. There is also a file in the legacy OrthoMCL format: Orthogroups/Orthogroups.txt."
 
 Going to copy `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthogroups/Orthogroups.tsv` onto local computer and look at it in R (code [here](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd))
+
+20221101
+
+Downloading all species comparison files from bluewaves
+
+In local terminal: 
+
+```
+cd /Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/OrthoFinder/species_compare
+```
+
+Secure-copy all files (seems like this must be done one at a time)
+
+##### Acerv
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_Acerv_assembly_v1.0.protein`, copy these files onto local computer:
+
+```
+Acerv_assembly_v1.0.protein__v__GCF_002042975.1_ofav_dov_v1_protein.tsv  Acerv_assembly_v1.0.protein__v__plut2v1.1.proteins.tsv
+Acerv_assembly_v1.0.protein__v__Mcavernosa.maker.proteins.tsv            Acerv_assembly_v1.0.protein__v__Pocillopora_acuta_HIv1.genes.pep.tsv
+Acerv_assembly_v1.0.protein__v__Montipora_capitata_HIv2.genes.pep.tsv
+```
+
+##### Mcap
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_Montipora_capitata_HIv2.genes.pep`, copy these files onto local computer:
+
+
+```
+Montipora_capitata_HIv2.genes.pep__v__Acerv_assembly_v1.0.protein.tsv          Montipora_capitata_HIv2.genes.pep__v__plut2v1.1.proteins.tsv
+Montipora_capitata_HIv2.genes.pep__v__GCF_002042975.1_ofav_dov_v1_protein.tsv  Montipora_capitata_HIv2.genes.pep__v__Pocillopora_acuta_HIv1.genes.pep.tsv
+Montipora_capitata_HIv2.genes.pep__v__Mcavernosa.maker.proteins.tsv
+```
+
+##### Mcav
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_Mcavernosa.maker.proteins`, copy these files onto local computer:
+
+
+```
+Mcavernosa.maker.proteins__v__Acerv_assembly_v1.0.protein.tsv          Mcavernosa.maker.proteins__v__plut2v1.1.proteins.tsv
+Mcavernosa.maker.proteins__v__GCF_002042975.1_ofav_dov_v1_protein.tsv  Mcavernosa.maker.proteins__v__Pocillopora_acuta_HIv1.genes.pep.tsv
+Mcavernosa.maker.proteins__v__Montipora_capitata_HIv2.genes.pep.tsv
+```
+
+##### Ofav
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_GCF_002042975.1_ofav_dov_v1_protein`, copy these files onto local computer:
+
+
+```
+GCF_002042975.1_ofav_dov_v1_protein__v__Acerv_assembly_v1.0.protein.tsv        GCF_002042975.1_ofav_dov_v1_protein__v__plut2v1.1.proteins.tsv
+GCF_002042975.1_ofav_dov_v1_protein__v__Mcavernosa.maker.proteins.tsv          GCF_002042975.1_ofav_dov_v1_protein__v__Pocillopora_acuta_HIv1.genes.pep.tsv
+GCF_002042975.1_ofav_dov_v1_protein__v__Montipora_capitata_HIv2.genes.pep.tsv
+```
+
+##### Pacuta
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_Pocillopora_acuta_HIv1.genes.pep`, copy these files onto local computer:
+
+
+```
+Pocillopora_acuta_HIv1.genes.pep__v__Acerv_assembly_v1.0.protein.tsv          Pocillopora_acuta_HIv1.genes.pep__v__Montipora_capitata_HIv2.genes.pep.tsv
+Pocillopora_acuta_HIv1.genes.pep__v__GCF_002042975.1_ofav_dov_v1_protein.tsv  Pocillopora_acuta_HIv1.genes.pep__v__plut2v1.1.proteins.tsv
+Pocillopora_acuta_HIv1.genes.pep__v__Mcavernosa.maker.proteins.tsv
+```
+
+##### Plob
+
+Under `/data/putnamlab/jillashey/OrthoFinder/protein_seqs/OrthoFinder/Results_Mar15/Orthologues/Orthologues_plut2v1.1.proteins`, copy these files onto local computer:
+
+
+```
+plut2v1.1.proteins__v__Acerv_assembly_v1.0.protein.tsv          plut2v1.1.proteins__v__Mcavernosa.maker.proteins.tsv          plut2v1.1.proteins__v__Pocillopora_acuta_HIv1.genes.pep.tsv
+plut2v1.1.proteins__v__GCF_002042975.1_ofav_dov_v1_protein.tsv  plut2v1.1.proteins__v__Montipora_capitata_HIv2.genes.pep.tsv
+```
+
+
+Sanity check (looking at same Orthogroup in the file for each species): 
+
+```
+OG0000000	Mcavernosa18524-RA, Mcavernosa18526-RA	Acerv_evm.model.Segkk142_pilon.1
+
+OG0000000	Acerv_evm.model.Segkk142_pilon.1	Mcavernosa18524-RA, Mcavernosa18526-RA
+
+
+
+OG0000014	Acerv_evm.model.Segkk971_pilon.61	Mcavernosa04969-RA
+
+OG0000014	Mcavernosa04969-RA	Acerv_evm.model.Segkk971_pilon.61
+```
+
+
+In acerv v mcav file: 12086 rows 
+
+In mcav v acerv file: 12086 rows 
+
+
+merge these files with DEG files and turn the genes that are also DEG to 1 and NA to 0 aka that gene was not assigned to an orthogroup. then compare across groups 
+
+and then merge all groups???????

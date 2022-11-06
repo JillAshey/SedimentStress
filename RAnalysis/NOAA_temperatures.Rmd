@@ -33,7 +33,7 @@ Hawaii 2015 temperature data was obtained from NOAA buoy (Station 51207 - Kaneoh
 
 ### Load and organize data 
 ```{r}
-HI_temp <- read.csv("Data/KaneoheBay_2015.txt", sep="\t", skip=c(0), header=TRUE, na.strings = "NA")[,c(1:5,15)]
+HI_temp <- read.csv("Data/noaa_buoy/KaneoheBay_2015.txt", sep="\t", skip=c(0), header=TRUE, na.strings = "NA")[,c(1:5,15)]
 HI_temp$Date <- paste0(HI_temp$X.YY, sep = "-", HI_temp$MM, sep = "-", HI_temp$DD)
 HI_temp$Time <- paste0(HI_temp$hh, sep = ":", HI_temp$mm)
 HI_temp$Date.Time <- paste0(HI_temp$Date, sep=" ", HI_temp$Time)
@@ -55,9 +55,14 @@ HI_temp_sub <- HI_temp %>%
 
 ### Plot Hawaii temps during experimental period 
 ```{r}
+#date_range <- c("2015-06-08 12:00:00", "2015-06-12 12:00:00", "2015-06-15 12:00:00")
+
 HI_plot <- ggplot(HI_temp_sub, aes(x=Date.Time, y=WTMP)) +
   geom_line(size = 9) + 
+  #geom_vline(xintercept = c("2015-06-08 12:00:00"), linetype = "dotted", color = "blue", size = 1.5) +
+  #geom_vline(xintercept = as.numeric(date_range), linetype = "dotted", color = "blue", size = 1.5) +
   theme_bw() +
+  theme(plot.margin = margin(3,3,3,3, "cm")) +
   scale_x_datetime(date_breaks = "1 day", labels = date_format("%b %d")) + 
   ylab("Temperature (°C)") + 
   xlab("") + 
@@ -69,6 +74,7 @@ HI_plot <- ggplot(HI_temp_sub, aes(x=Date.Time, y=WTMP)) +
   theme(axis.text.y = element_text(size = 80)) +
   theme(axis.title.y = element_text(size = 80)) +
   theme(axis.text.x = element_text(size = 80)) 
+
 HI_plot
 
 # save plot
@@ -79,11 +85,11 @@ ggsave("Output/Figs/Temperature/HI_temperature_2015.png", HI_plot, width = 49, h
 
 ## Florida temperature 
 
-Florida 2016 temperature data was obtained from NOAA buoy (Station KYWF1 - 8724580 - Key West, FL). 
+Florida 2016 temperature data was obtained from NOAA buoy (Station KYWF1 - 8724580 - Key West, FL). This data is from the location where the corals were collected. 
 
 ### Load and organize data 
 ```{r}
-FL_temp <- read.csv("Data/KeyWest_2016.txt", sep="\t", skip=c(0), header=TRUE, na.strings = "NA")[,c(1:5,15)]
+FL_temp <- read.csv("Data/noaa_buoy/KeyWest_2016.txt", sep="\t", skip=c(0), header=TRUE, na.strings = "NA")[,c(1:5,15)]
 FL_temp$Date <- paste0(FL_temp$X.YY, sep = "-", FL_temp$MM, sep = "-", FL_temp$DD)
 FL_temp$Time <- paste0(FL_temp$hh, sep = ":", FL_temp$mm)
 FL_temp$Date.Time <- paste0(FL_temp$Date, sep=" ", FL_temp$Time)
@@ -96,12 +102,10 @@ FL_temp <- na.omit(FL_temp)
 FL_temp$Date.Time <- as.POSIXct(paste(FL_temp$Date, FL_temp$Time), format="%Y-%m-%d %H:%M", tz = "EST")
 ```
 
-### Subset for July to October
-
-Need to figure out dates of FL experiment
+### Subset for March 20 - June 15
 ```{r}
 FL_temp_sub <- FL_temp %>% 
-  filter(Date.Time > as.POSIXct("2016-07-01 00:03:00"), Date.Time < as.POSIXct("2016-10-31 23:00:00"))
+  filter(Date.Time > as.POSIXct("2016-03-20 00:03:00"), Date.Time < as.POSIXct("2016-06-15 23:00:00"))
 ```
 
 ### Plot Florida temps during experimental period 
@@ -112,7 +116,8 @@ FL_plot <- ggplot(FL_temp_sub, aes(x=Date.Time, y=WTMP)) +
   scale_x_datetime(date_breaks = "7 day", labels = date_format("%b %d")) + 
   ylab("Temperature (°C)") + 
   xlab("") + 
-    theme_bw() +
+  theme_bw() +
+  theme(plot.margin = margin(3,3,3,3, "cm")) +
   theme(axis.text.x = element_text(angle = 45, 
                                    #vjust = 0.5, 
                                    hjust= 1, 
@@ -125,6 +130,75 @@ FL_plot
 # save plot
 ggsave("Output/Figs/Temperature/FL_temperature_2016.pdf", FL_plot, width = 49, height = 40, units = c("in"))
 ggsave("Output/Figs/Temperature/FL_temperature_2016.png", FL_plot, width = 49, height = 40, units = c("in"))
+```
+
+
+In the FL experiment, the corals were collected in Key West in March and then transported up to Fort Pierce. Exposures started on May 23. I'm going to plot the Fort Pierce temps against the Key West temps.
+
+
+Fort Pierce (where experiment took place) 2016 temperature data was obtained from NOAA buoy (Station KYWF1 - 8724580 - Key West, FL). 
+
+### Load and organize data 
+```{r}
+FP_temp <- read.csv("Data/noaa_buoy/FortPierce_2016.txt", sep="\t", skip=c(0), header=TRUE, na.strings = "NA")[,c(1:5,15)]
+FP_temp$Date <- paste0(FP_temp$X.YY, sep = "-", FP_temp$MM, sep = "-", FP_temp$DD)
+FP_temp$Time <- paste0(FP_temp$hh, sep = ":", FP_temp$mm)
+FP_temp$Date.Time <- paste0(FP_temp$Date, sep=" ", FP_temp$Time)
+FP_temp <- FP_temp %>% naniar::replace_with_na(FP_temp, replace = list(WTMP=c("999"))) # replace all weird enteries with NAs
+FP_temp <- na.omit(FP_temp)
+```
+
+### Parse date and time
+```{r}
+FP_temp$Date.Time <- as.POSIXct(paste(FP_temp$Date, FP_temp$Time), format="%Y-%m-%d %H:%M", tz = "EST")
+```
+
+### Subset for March 20 - June 15
+```{r}
+FP_temp_sub <- FP_temp %>% 
+  filter(Date.Time > as.POSIXct("2016-03-20 00:03:00"), Date.Time < as.POSIXct("2016-06-15 23:00:00"))
+```
+
+### Plot BOTH Key West and Fort Pierce temps
+```{r}
+# Add location as a column to FL_temp_sub and FP_temp_sub
+FL_temp_sub$Location <- "Key West"
+FP_temp_sub$Location <- "Fort Pierce"
+
+# Make into single data frame 
+temps <- rbind(FL_temp_sub, FP_temp_sub)
+
+
+plot <- ggplot(temps, aes(x=Date.Time, y=WTMP, color = Location)) +
+  geom_line(size = 9) + 
+  theme_bw() +
+  #scale_x_datetime(date_breaks = "7 day", labels = date_format("%b %d")) + 
+  ylab("Temperature (°C)") + 
+  xlab("") + 
+  theme_bw() +
+  theme(plot.margin = margin(3,3,3,3, "cm")) +
+  theme(axis.text.x = element_text(angle = 45, 
+                                   #vjust = 0.5, 
+                                   hjust= 1, 
+                                   size = 80)) + 
+  theme(axis.text.y = element_text(size = 80)) +
+  theme(axis.title.y = element_text(size = 80)) +
+  theme(axis.text.x = element_text(size = 80)) + 
+    theme(legend.title = element_text(size = 80), 
+        legend.key.size = unit(2, "cm"),
+        legend.text = element_text(size=80), 
+        #legend.position = c(0.85, 0.85), 
+        legend.justification = c("left", "top"),
+        legend.box.just = "left",
+        legend.background = element_rect(fill = "white", color = "black"),
+        legend.box.background = element_rect(color="black", size=2)) +
+        scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+plot
+
+
+# save plot
+ggsave("Output/Figs/Temperature/test.pdf", plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/Temperature/test.png", plot, width = 49, height = 40, units = c("in"))
 ```
 
 
