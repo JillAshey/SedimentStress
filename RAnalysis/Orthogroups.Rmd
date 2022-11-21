@@ -424,7 +424,475 @@ write.csv(plob_all, "Output/OrthoFinder/plob_DEGs_GO_ortho_20221020.csv")
 20221021
 Still need to make changes to orthogroup info in most of the figures/tables/supp info
 
+20221115
 
+Trying to somehow merge the DEGs and the comparison files???
+
+Acerv v. Mcav 
+```{r}
+# Read in comparison file for Acerv & Mcav
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Mcavernosa.maker.proteins.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Acervicornis", "Mcavernosa")
+
+# Isolate Acerv genes and orthogroups
+acerv_test <- compare[,1:2]
+acerv_test <- acerv_test %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(acerv_test) <- c("Orthogroup", "gene_id")
+acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
+acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+
+# Read in Acerv DEGs
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
+
+# Merge Acerv orthogroup & DEG info
+blah <- merge(acerv_DEG, acerv_test, by = "gene_id")
+
+
+# Isolate Mcav genes and orthogroups
+mcav_test <- compare[, c(1,3)]
+mcav_test <- mcav_test %>% 
+    mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
+    unnest(Mcavernosa)
+colnames(mcav_test) <- c("Orthogroup", "gene_id")
+mcav_test$gene_id <- gsub("-RA", "", mcav_test$gene_id)
+mcav_test$gene_id <- gsub(" ", "", mcav_test$gene_id)
+
+# Read in Mcav DEGs
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- as.data.frame(mcav_DEG)
+colnames(mcav_DEG)[1] <- "gene_id"
+
+# Merge Mcav orthogroup & DEG info
+blah2 <- merge(mcav_DEG, mcav_test, by = "gene_id")
+
+# Merge Acerv orthogroup/DEG info and Mcav orthogroup/DEG info
+all <- merge(blah, blah2, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 2 orthogroups shared between Acerv & Mcav
+length(unique(all$gene_id.x)) # 2 DEGs from Acerv in orthogroup comparison between Acerv & Mcav
+length(unique(all$gene_id.y)) # 4 DEGs from Mcav in orthogroup comparison between Acerv & Mcav
+
+# save as csv? ^^ 
+```
+
+Acerv v. Mcap
+```{r}
+# Read in comparison file for Acerv & Mcap
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Montipora_capitata_HIv2.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Acervicornis", "Mcapitata")
+
+# Isolate Acerv genes and orthogroups
+acerv_test <- compare[,1:2]
+acerv_test <- acerv_test %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(acerv_test) <- c("Orthogroup", "gene_id")
+acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
+acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+
+# Read in Acerv DEGs
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
+
+# Merge Acerv orthogroup & DEG info
+acerv_merge <- merge(acerv_DEG, acerv_test, by = "gene_id")
+
+
+# Isolate Mcap genes and orthogroups
+mcap_test <- compare[, c(1,3)]
+mcap_test <- mcap_test %>% 
+    mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
+    unnest(Mcapitata)
+colnames(mcap_test) <- c("Orthogroup", "gene_id")
+mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
+mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+
+# Read in Mcap DEGs
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# Merge Mcap orthogroup & DEG info
+mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+
+# Merge Acerv orthogroup/DEG info and Mcap orthogroup/DEG info
+all <- merge(acerv_merge, mcap_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 8 orthogroups shared between Acerv & Mcap
+length(unique(all$gene_id.x)) # 10 DEGs from Acerv in orthogroup comparison between Acerv & Mcap
+length(unique(all$gene_id.y)) # 10 DEGs from Mcap in orthogroup comparison between Acerv & Mcap
+
+# save as csv? ^^ 
+```
+
+Acerv v. Ofav
+DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+
+Acerv v. Pacuta
+```{r}
+# Read in comparison file for Acerv & Pacuta
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Pocillopora_acuta_HIv1.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Acervicornis", "Pacuta")
+
+# Isolate Acerv genes and orthogroups
+acerv_test <- compare[,1:2]
+acerv_test <- acerv_test %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(acerv_test) <- c("Orthogroup", "gene_id")
+acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
+acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+
+# Read in Acerv DEGs
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
+
+# Merge Acerv orthogroup & DEG info
+acerv_merge <- merge(acerv_DEG, acerv_test, by = "gene_id")
+
+
+# Isolate Pacuta genes and orthogroups
+pacuta_test <- compare[, c(1,3)]
+pacuta_test <- pacuta_test %>% 
+    mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
+    unnest(Pacuta)
+colnames(pacuta_test) <- c("Orthogroup", "gene_id")
+pacuta_test$gene_id <- gsub(" ", "", pacuta_test$gene_id)
+
+# Read in Pacuta DEGs
+pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
+pacuta_DEG <- as.data.frame(pacuta_DEG)
+colnames(pacuta_DEG)[1] <- "gene_id"
+
+# Merge Pacuta orthogroup & DEG info
+pacuta_merge <- merge(pacuta_DEG, pacuta_test, by = "gene_id")
+
+# Merge Acerv orthogroup/DEG info and Pacuta orthogroup/DEG info
+all <- merge(acerv_merge, pacuta, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 9 orthogroups shared between Acerv & Pacuta
+length(unique(all$gene_id.x)) # 11 DEGs from Acerv in orthogroup comparison between Acerv & Pacuta
+length(unique(all$gene_id.y)) # 14 DEGs from Pacuta in orthogroup comparison between Acerv & Pacuta
+
+# save as csv? ^^ 
+```
+
+Acerv v. Plob
+```{r}
+# Read in comparison file for Acerv & Plob
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__plut2v1.1.proteins.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Acervicornis", "Plob")
+
+# Isolate Acerv genes and orthogroups
+acerv_test <- compare[,1:2]
+acerv_test <- acerv_test %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(acerv_test) <- c("Orthogroup", "gene_id")
+acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
+acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+
+# Read in Acerv DEGs
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
+
+# Merge Acerv orthogroup & DEG info
+acerv_merge <- merge(acerv_DEG, acerv_test, by = "gene_id")
+
+
+# Isolate Plob genes and orthogroups
+plob_test <- compare[, c(1,3)]
+plob_test <- plob_test %>% 
+    mutate(Plob = strsplit(as.character(Plob), ",")) %>% 
+    unnest(Plob)
+colnames(plob_test) <- c("Orthogroup", "gene_id")
+plob_test$gene_id <- gsub(".m1", "", plob_test$gene_id)
+plob_test$gene_id <- gsub(" ", "", plob_test$gene_id)
+
+# Read in Plob DEGs
+plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
+plob_DEG <- as.data.frame(plob_DEG)
+colnames(plob_DEG)[1] <- "gene_id"
+
+# Merge Plob orthogroup & DEG info
+plob_merge <- merge(plob_DEG, plob_test, by = "gene_id")
+
+# Merge Acerv orthogroup/DEG info and Plob orthogroup/DEG info
+all <- merge(acerv_merge, plob_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 6 orthogroups shared between Acerv & Plob
+length(unique(all$gene_id.x)) # 14 DEGs from Acerv in orthogroup comparison between Acerv & Plob
+length(unique(all$gene_id.y)) # 7 DEGs from Pacuta in orthogroup comparison between Acerv & Plob
+
+# save as csv? ^^ 
+```
+
+Mcav v. Mcap
+```{r}
+# Read in comparison file for Mcav & Mcap
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Mcavernosa.maker.proteins__v__Montipora_capitata_HIv2.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Mcavernosa", "Mcapitata")
+
+# Isolate Mcav genes and orthogroups
+mcav_test <- compare[, c(1,2)]
+mcav_test <- mcav_test %>% 
+    mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
+    unnest(Mcavernosa)
+colnames(mcav_test) <- c("Orthogroup", "gene_id")
+mcav_test$gene_id <- gsub("-RA", "", mcav_test$gene_id)
+mcav_test$gene_id <- gsub(" ", "", mcav_test$gene_id)
+
+# Read in Mcav DEGs
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- as.data.frame(mcav_DEG)
+colnames(mcav_DEG)[1] <- "gene_id"
+
+# Merge Mcav orthogroup & DEG info
+mcav_merge <- merge(mcav_DEG, mcav_test, by = "gene_id")
+
+
+
+# Isolate Mcap genes and orthogroups
+mcap_test <- compare[,1:3]
+mcap_test <- mcap_test %>% 
+    mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
+    unnest(Mcapitata)
+colnames(mcap_test) <- c("Orthogroup", "gene_id")
+mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
+mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+
+# Read in Mcap DEGs
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# Merge Mcap orthogroup & DEG info
+mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+
+# Merge Mcav orthogroup/DEG info and Mcap orthogroup/DEG info
+all <- merge(mcav_merge, mcap_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 0 orthogroups shared between Mcav & Mcap
+length(unique(all$gene_id.x)) # 0 DEGs from Acerv in orthogroup comparison between Mcav & Mcap
+length(unique(all$gene_id.y)) # 0 DEGs from Pacuta in orthogroup comparison between Mcav & Mcap
+
+# save as csv? ^^ 
+```
+
+Mcav v. Ofav
+DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+
+Mcav v. Pacuta
+```{r}
+# Read in comparison file for Mcav & Pacuta
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Mcavernosa.maker.proteins__v__Montipora_capitata_HIv2.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Mcavernosa", "Mcapitata")
+
+# Isolate Mcav genes and orthogroups
+mcav_test <- compare[, c(1,2)]
+mcav_test <- mcav_test %>% 
+    mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
+    unnest(Mcavernosa)
+colnames(mcav_test) <- c("Orthogroup", "gene_id")
+mcav_test$gene_id <- gsub("-RA", "", mcav_test$gene_id)
+mcav_test$gene_id <- gsub(" ", "", mcav_test$gene_id)
+
+# Read in Mcav DEGs
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- as.data.frame(mcav_DEG)
+colnames(mcav_DEG)[1] <- "gene_id"
+
+# Merge Mcav orthogroup & DEG info
+mcav_merge <- merge(mcav_DEG, mcav_test, by = "gene_id")
+
+
+
+# Isolate Mcap genes and orthogroups
+mcap_test <- compare[,1:3]
+mcap_test <- mcap_test %>% 
+    mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
+    unnest(Mcapitata)
+colnames(mcap_test) <- c("Orthogroup", "gene_id")
+mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
+mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+
+# Read in Mcap DEGs
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# Merge Mcap orthogroup & DEG info
+mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+
+# Merge Mcav orthogroup/DEG info and Mcap orthogroup/DEG info
+all <- merge(mcav_merge, mcap_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 0 orthogroups shared between Mcav & Mcap
+length(unique(all$gene_id.x)) # 0 DEGs from Acerv in orthogroup comparison between Mcav & Mcap
+length(unique(all$gene_id.y)) # 0 DEGs from Pacuta in orthogroup comparison between Mcav & Mcap
+
+# save as csv? ^^ 
+```
+
+Mcav v. Plob
+
+Ofav v. Mcap
+DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+
+Ofav v. Pacuta
+DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+
+Ofav v. Plob
+DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+
+Mcap v. Pacuta 
+```{r}
+# Read in comparison file for Mcap & Pacuta
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Montipora_capitata_HIv2.genes.pep__v__Pocillopora_acuta_HIv1.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Mcap", "Pacuta")
+
+# Isolate Mcap genes and orthogroups
+mcap_test <- compare[,1:2]
+mcap_test <- mcap_test %>% 
+    mutate(Mcap = strsplit(as.character(Mcap), ",")) %>% 
+    unnest(Mcap)
+colnames(mcap_test) <- c("Orthogroup", "gene_id")
+mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
+mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+
+# Read in Mcap DEGs
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# Merge Mcap orthogroup & DEG info
+mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+
+
+# Isolate Pacuta genes and orthogroups
+pacuta_test <- compare[, c(1,3)]
+pacuta_test <- pacuta_test %>% 
+    mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
+    unnest(Pacuta)
+colnames(pacuta_test) <- c("Orthogroup", "gene_id")
+pacuta_test$gene_id <- gsub(" ", "", pacuta_test$gene_id)
+
+# Read in Pacuta DEGs
+pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
+pacuta_DEG <- as.data.frame(pacuta_DEG)
+colnames(pacuta_DEG)[1] <- "gene_id"
+
+# Merge Pacuta orthogroup & DEG info
+pacuta_merge <- merge(pacuta_DEG, pacuta_test, by = "gene_id")
+
+# Merge Mcap orthogroup/DEG info and Pacuta orthogroup/DEG info
+all <- merge(mcap_merge, pacuta_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 7 orthogroups shared between Mcap & Pacuta
+length(unique(all$gene_id.x)) # 8 DEGs from Pacuta in orthogroup comparison between Mcap & Pacuta
+length(unique(all$gene_id.y)) # 9 DEGs from Plob in orthogroup comparison between Mcap & Pacuta
+
+# save as csv? ^^ 
+```
+
+Mcap v. Plob 
+```{r}
+# Read in comparison file for Mcap & Plob
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Montipora_capitata_HIv2.genes.pep__v__plut2v1.1.proteins.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Mcap", "Plob")
+
+# Isolate Mcap genes and orthogroups
+mcap_test <- compare[,1:2]
+mcap_test <- mcap_test %>% 
+    mutate(Mcap = strsplit(as.character(Mcap), ",")) %>% 
+    unnest(Mcap)
+colnames(mcap_test) <- c("Orthogroup", "gene_id")
+mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
+mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+
+# Read in Mcap DEGs
+mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- as.data.frame(mcap_DEG)
+colnames(mcap_DEG)[1] <- "gene_id"
+
+# Merge Mcap orthogroup & DEG info
+mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+
+
+# Isolate Plob genes and orthogroups
+plob_test <- compare[, c(1,3)]
+plob_test <- plob_test %>% 
+    mutate(Plob = strsplit(as.character(Plob), ",")) %>% 
+    unnest(Plob)
+colnames(plob_test) <- c("Orthogroup", "gene_id")
+plob_test$gene_id <- gsub(".m1", "", plob_test$gene_id)
+plob_test$gene_id <- gsub(" ", "", plob_test$gene_id)
+
+# Read in Plob DEGs
+plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
+plob_DEG <- as.data.frame(plob_DEG)
+colnames(plob_DEG)[1] <- "gene_id"
+
+# Merge Plob orthogroup & DEG info
+plob_merge <- merge(plob_DEG, plob_test, by = "gene_id")
+
+# Merge Mcap orthogroup/DEG info and Plob orthogroup/DEG info
+all <- merge(mcap_merge, plob_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 8 orthogroups shared between Pacuta & Plob
+length(unique(all$gene_id.x)) # 10 DEGs from Pacuta in orthogroup comparison between Pacuta & Plob
+length(unique(all$gene_id.y)) # 10 DEGs from Plob in orthogroup comparison between Pacuta & Plob
+
+# save as csv? ^^ 
+```
+
+Pacuta v. Plob 
+```{r}
+# Read in comparison file for Pacuta & Plob
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Pocillopora_acuta_HIv1.genes.pep__v__plut2v1.1.proteins.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Pacuta", "Plob")
+
+# Isolate Pacuta genes and orthogroups
+pacuta_test <- compare[,1:2]
+pacuta_test <- pacuta_test %>% 
+    mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
+    unnest(Pacuta)
+colnames(pacuta_test) <- c("Orthogroup", "gene_id")
+pacuta_test$gene_id <- gsub(" ", "", pacuta_test$gene_id)
+
+# Read in Pacuta DEGs
+pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
+pacuta_DEG <- as.data.frame(pacuta_DEG)
+colnames(pacuta_DEG)[1] <- "gene_id"
+
+# Merge Pacuta orthogroup & DEG info
+pacuta_merge <- merge(pacuta_DEG, pacuta_test, by = "gene_id")
+
+
+# Isolate Plob genes and orthogroups
+plob_test <- compare[, c(1,3)]
+plob_test <- plob_test %>% 
+    mutate(Plob = strsplit(as.character(Plob), ",")) %>% 
+    unnest(Plob)
+colnames(plob_test) <- c("Orthogroup", "gene_id")
+plob_test$gene_id <- gsub(".m1", "", plob_test$gene_id)
+plob_test$gene_id <- gsub(" ", "", plob_test$gene_id)
+
+# Read in Plob DEGs
+plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
+plob_DEG <- as.data.frame(plob_DEG)
+colnames(plob_DEG)[1] <- "gene_id"
+
+# Merge Plob orthogroup & DEG info
+plob_merge <- merge(plob_DEG, plob_test, by = "gene_id")
+
+# Merge Pacuta orthogroup/DEG info and Plob orthogroup/DEG info
+all <- merge(pacuta_merge, plob_merge, by = "Orthogroup")
+length(unique(all$Orthogroup)) # 6 orthogroups shared between Pacuta & Plob
+length(unique(all$gene_id.x)) # 8 DEGs from Pacuta in orthogroup comparison between Pacuta & Plob
+length(unique(all$gene_id.y)) # 6 DEGs from Plob in orthogroup comparison between Pacuta & Plob
+
+# save as csv? ^^ 
+```
 
 
 
