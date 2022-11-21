@@ -428,28 +428,96 @@ Still need to make changes to orthogroup info in most of the figures/tables/supp
 
 Trying to somehow merge the DEGs and the comparison files???
 
-Acerv v. Mcav 
+Acerv v. Mcav - for this section, I read in the orthogroups comparison file for Acerv and Mcav. Then I isolated the Acerv gene ids and orthogroups from this file. I read in the Acerv DEG file and merged it with the Acerv gene id/orthogroup dataframe. I did the same with the Mcav info. Then I merged the Acerv orthogroup/DEG info and Mcav orthogroup/DEG info into a single df to get the orthogroups that were shared between the DEGs of both Mcav and Acerv. Then I isolated the shared Acerv/DEG info into a separate df and renamed the gene id column to "gene_id" instead of gene_id.x. I read in the Acerv GO term file and I merged the GO term file with the shared Acerv orthogroup/DEG info to get the functional info for Acerv's shared orthogroup w/ Mcav. I repeated the above process for Mcav (this time subsetting Mcav columns, reading in Mcav data, etc). 
 ```{r}
 # Read in comparison file for Acerv & Mcav
 compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Mcavernosa.maker.proteins.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 colnames(compare) <- c("Orthogroup", "Acervicornis", "Mcavernosa")
 
+
+############# Acerv #############
+
 # Isolate Acerv genes and orthogroups
-acerv_test <- compare[,1:2]
-acerv_test <- acerv_test %>% 
+acerv_ortho <- compare[,1:2]
+acerv_ortho <- acerv_ortho %>% 
     mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
     unnest(Acervicornis)
-colnames(acerv_test) <- c("Orthogroup", "gene_id")
-acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
-acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
+acerv_ortho$gene_id <- gsub("model", "TU", acerv_ortho$gene_id)
+acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
+length(unique(acerv_ortho$Orthogroup)) # 11413 orthogroups
+length(unique(acerv_ortho$gene_id)) # 15638 genes
 
 # Read in Acerv DEGs
 acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
 acerv_DEG <- as.data.frame(acerv_DEG)
 colnames(acerv_DEG) <- "gene_id"
 
-# Merge Acerv orthogroup & DEG info
-blah <- merge(acerv_DEG, acerv_test, by = "gene_id")
+# Merge Acerv shared orthogroup & DEG info
+acerv_DEG_ortho <- merge(acerv_DEG, acerv_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho$gene_id)) # 2 DEGs
+length(unique(acerv_DEG_ortho$Orthogroups)) # 1 orthogroup
+length(unique(acerv_DEG_ortho$category)) # 7 GO terms
+
+# Read in GO term file for Acerv and merge GO terms w/ Acerv orthogroup and DEG info
+acerv_DEG_ortho <- acerv_DEG_ortho[,c(1,2)] # separate orthogroups and gene id for acerv
+colnames(acerv_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
+acerv_DEG_ortho_GO <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_DEG_ortho_GO$gene_id <- gsub("model", "TU", acerv_DEG_ortho_GO$gene_id)
+
+# Merge df w/ DEGs & GO terms with the orthogroup df
+acerv_all <- merge(acerv_DEG_ortho_GO, acerv_ortho, by = "gene_id")
+
+
+############# Mcav #############
+# Isolate Mcav genes and orthogroups
+mcav_ortho <- compare[,1:3]
+mcav_ortho <- mcav_ortho %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(mcav_ortho) <- c("Orthogroup", "gene_id")
+mcav_ortho$gene_id <- gsub("-RA", "", mcav_ortho$gene_id)
+mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
+length(unique(mcav_ortho$Orthogroup)) # xxxxx orthogroups
+length(unique(mcav_ortho$gene_id)) # xxxx genes
+
+# Read in Mcav DEGs
+mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- as.data.frame(mcav_DEG)
+colnames(mcav_DEG)[1] <- "gene_id"
+
+# Merge Mcav orthogroup & DEG info
+mcav_DEG_ortho <- merge(mcav_DEG, mcav_ortho, by = "gene_id")
+length(unique(mcav_DEG_ortho$gene_id)) # 2 DEGs
+length(unique(mcav_DEG_ortho$Orthogroups)) # 1 orthogroup
+length(unique(mcav_DEG_ortho$category)) # 7 GO terms
+
+# Read in GO term file for Mcav and merge GO terms w/ Mcav orthogroup and DEG info
+mcav_DEG_ortho <- mcav_DEG_ortho[,c(1,3)] # separate orthogroups and gene id for mcav
+colnames(mcav_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 # Isolate Mcav genes and orthogroups
@@ -475,7 +543,34 @@ length(unique(all$Orthogroup)) # 2 orthogroups shared between Acerv & Mcav
 length(unique(all$gene_id.x)) # 2 DEGs from Acerv in orthogroup comparison between Acerv & Mcav
 length(unique(all$gene_id.y)) # 4 DEGs from Mcav in orthogroup comparison between Acerv & Mcav
 
-# save as csv? ^^ 
+
+# merge GO terms 
+## Acerv
+acerv_all <- all[,c(1,2)] # separate orthogroups and gene id for acerv
+colnames(acerv_all) <- c("Orthogroups", "gene_id") # renamed col names
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
+
+blah2 <- merge(acerv_all, acerv_go, by = "gene_id")
+
+
+
+mcav_all <- all[,c(1,3)] # separate orthogroups and gene id for mcav
+colnames(mcav_all) <- c("Orthogroups", "gene_id") # renamed col names
+mcav_go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)[,-1] # read in GO terms 
+blah <- merge(mcav_all, mcav_go, by = "gene_id")
+
+
+
+## Mcav
+mcav_all <- all[,c(1,3)] # separate orthogroups and gene id for mcav
+colnames(mcav_all) <- c("Orthogroups", "gene_id") # renamed col names
+mcav_go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)[,-1] # read in GO terms 
+blah <- merge(mcav_all, mcav_go, by = "gene_id")
+
+
+
+
 ```
 
 Acerv v. Mcap
@@ -687,6 +782,21 @@ DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
 Mcav v. Pacuta
 ```{r}
 # Read in comparison file for Mcav & Pacuta
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 compare <- read.table(file = 'Output/OrthoFinder/species_compare/Mcavernosa.maker.proteins__v__Montipora_capitata_HIv2.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 colnames(compare) <- c("Orthogroup", "Mcavernosa", "Mcapitata")
 
