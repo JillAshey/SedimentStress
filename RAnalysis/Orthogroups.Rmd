@@ -426,7 +426,7 @@ Still need to make changes to orthogroup info in most of the figures/tables/supp
 
 20221115
 
-Trying to somehow merge the DEGs and the comparison files???
+Trying to somehow merge the DEGs and the comparison files
 
 Acerv v. Mcav - for this section, I read in the orthogroups comparison file for Acerv and Mcav. Then I isolated the Acerv gene ids and orthogroups from this file. I read in the Acerv DEG file and merged it with the Acerv gene id/orthogroup dataframe. I did the same with the Mcav info. Then I merged the Acerv orthogroup/DEG info and Mcav orthogroup/DEG info into a single df to get the orthogroups that were shared between the DEGs of both Mcav and Acerv. Then I isolated the shared Acerv/DEG info into a separate df and renamed the gene id column to "gene_id" instead of gene_id.x. I read in the Acerv GO term file and I merged the GO term file with the shared Acerv orthogroup/DEG info to get the functional info for Acerv's shared orthogroup w/ Mcav. I repeated the above process for Mcav (this time subsetting Mcav columns, reading in Mcav data, etc). 
 ```{r}
@@ -435,7 +435,7 @@ compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_
 colnames(compare) <- c("Orthogroup", "Acervicornis", "Mcavernosa")
 
 
-############# Acerv #############
+############# ACERV #############
 
 # Isolate Acerv genes and orthogroups
 acerv_ortho <- compare[,1:2]
@@ -455,31 +455,37 @@ colnames(acerv_DEG) <- "gene_id"
 
 # Merge Acerv shared orthogroup & DEG info
 acerv_DEG_ortho <- merge(acerv_DEG, acerv_ortho, by = "gene_id")
-length(unique(acerv_DEG_ortho$gene_id)) # 2 DEGs
-length(unique(acerv_DEG_ortho$Orthogroups)) # 1 orthogroup
-length(unique(acerv_DEG_ortho$category)) # 7 GO terms
+length(unique(acerv_DEG_ortho$gene_id)) # 112 DEGs
+length(unique(acerv_DEG_ortho$Orthogroup)) # 107 orthogroups ?
+# okay what this result is saying to me is that there are 112 DEGs of Acerv that fit into the Acerv orthogroup df. There are 107 orthogroups (shared between Acerv and Mcav) that have Acerv DEGs
 
 # Read in GO term file for Acerv and merge GO terms w/ Acerv orthogroup and DEG info
-acerv_DEG_ortho <- acerv_DEG_ortho[,c(1,2)] # separate orthogroups and gene id for acerv
-colnames(acerv_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
-acerv_DEG_ortho_GO <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
-acerv_DEG_ortho_GO$gene_id <- gsub("model", "TU", acerv_DEG_ortho_GO$gene_id)
+#acerv_DEG_ortho <- acerv_DEG_ortho[,c(1,2)] # separate orthogroups and gene id for acerv
+#colnames(acerv_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
 
-# Merge df w/ DEGs & GO terms with the orthogroup df
-acerv_all <- merge(acerv_DEG_ortho_GO, acerv_ortho, by = "gene_id")
+# Merge GO terms w/ Acerv orthogroup and DEG info
+acerv_DEG_ortho_go <- merge(acerv_go, acerv_DEG_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho_go$gene_id)) # 46 DEGs
+length(unique(acerv_DEG_ortho_go$Orthogroup)) # 46 orthogroups
 
 
-############# Mcav #############
+
+
+
+############# MCAV #############
+
 # Isolate Mcav genes and orthogroups
-mcav_ortho <- compare[,1:3]
+mcav_ortho <- compare[,c(1,3)]
 mcav_ortho <- mcav_ortho %>% 
-    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
-    unnest(Acervicornis)
+    mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
+    unnest(Mcavernosa)
 colnames(mcav_ortho) <- c("Orthogroup", "gene_id")
 mcav_ortho$gene_id <- gsub("-RA", "", mcav_ortho$gene_id)
 mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
-length(unique(mcav_ortho$Orthogroup)) # xxxxx orthogroups
-length(unique(mcav_ortho$gene_id)) # xxxx genes
+length(unique(mcav_ortho$Orthogroup)) # 11413 shared orthogroups
+length(unique(mcav_ortho$gene_id)) # 15280 genes
 
 # Read in Mcav DEGs
 mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
@@ -488,89 +494,34 @@ colnames(mcav_DEG)[1] <- "gene_id"
 
 # Merge Mcav orthogroup & DEG info
 mcav_DEG_ortho <- merge(mcav_DEG, mcav_ortho, by = "gene_id")
-length(unique(mcav_DEG_ortho$gene_id)) # 2 DEGs
-length(unique(mcav_DEG_ortho$Orthogroups)) # 1 orthogroup
-length(unique(mcav_DEG_ortho$category)) # 7 GO terms
+length(unique(mcav_DEG_ortho$gene_id)) # 30 DEGs
+length(unique(mcav_DEG_ortho$Orthogroup)) # 28 shared orthogroups
 
-# Read in GO term file for Mcav and merge GO terms w/ Mcav orthogroup and DEG info
-mcav_DEG_ortho <- mcav_DEG_ortho[,c(1,3)] # separate orthogroups and gene id for mcav
-colnames(mcav_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
-acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
-acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# Isolate Mcav genes and orthogroups
-mcav_test <- compare[, c(1,3)]
-mcav_test <- mcav_test %>% 
-    mutate(Mcavernosa = strsplit(as.character(Mcavernosa), ",")) %>% 
-    unnest(Mcavernosa)
-colnames(mcav_test) <- c("Orthogroup", "gene_id")
-mcav_test$gene_id <- gsub("-RA", "", mcav_test$gene_id)
-mcav_test$gene_id <- gsub(" ", "", mcav_test$gene_id)
-
-# Read in Mcav DEGs
-mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
-mcav_DEG <- as.data.frame(mcav_DEG)
-colnames(mcav_DEG)[1] <- "gene_id"
-
-# Merge Mcav orthogroup & DEG info
-blah2 <- merge(mcav_DEG, mcav_test, by = "gene_id")
-
-# Merge Acerv orthogroup/DEG info and Mcav orthogroup/DEG info
-all <- merge(blah, blah2, by = "Orthogroup")
-length(unique(all$Orthogroup)) # 2 orthogroups shared between Acerv & Mcav
-length(unique(all$gene_id.x)) # 2 DEGs from Acerv in orthogroup comparison between Acerv & Mcav
-length(unique(all$gene_id.y)) # 4 DEGs from Mcav in orthogroup comparison between Acerv & Mcav
-
-
-# merge GO terms 
-## Acerv
-acerv_all <- all[,c(1,2)] # separate orthogroups and gene id for acerv
-colnames(acerv_all) <- c("Orthogroups", "gene_id") # renamed col names
-acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
-acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
-
-blah2 <- merge(acerv_all, acerv_go, by = "gene_id")
-
-
-
-mcav_all <- all[,c(1,3)] # separate orthogroups and gene id for mcav
-colnames(mcav_all) <- c("Orthogroups", "gene_id") # renamed col names
+# Read in GO term file for Mcav 
+#mcav_DEG_ortho <- mcav_DEG_ortho[,c(1,3)] # separate orthogroups and gene id for mcav
+#colnames(mcav_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
 mcav_go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)[,-1] # read in GO terms 
-blah <- merge(mcav_all, mcav_go, by = "gene_id")
+
+# Merge GO terms w/ Mcav orthogroup and DEG info
+mcav_DEG_ortho_go <- merge(mcav_go, mcav_DEG_ortho, by = "gene_id")
+length(unique(mcav_DEG_ortho_go$gene_id)) # 16 DEGs
+length(unique(mcav_DEG_ortho_go$Orthogroup)) # 15 orthogroups
 
 
 
-## Mcav
-mcav_all <- all[,c(1,3)] # separate orthogroups and gene id for mcav
-colnames(mcav_all) <- c("Orthogroups", "gene_id") # renamed col names
-mcav_go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)[,-1] # read in GO terms 
-blah <- merge(mcav_all, mcav_go, by = "gene_id")
+############# SHARED #############
 
+# Merge dfs of both species by Orthogroup. The dfs contain orthogroups, DEGs and functional annotation
+acerv_DEG_ortho_go$Species <- "Acervicornis"
+mcav_DEG_ortho_go$Species <- "Mcavernosa"
+DEG_ortho_go <- merge(acerv_DEG_ortho_go, mcav_DEG_ortho_go, by = "Orthogroup") 
+# there are no annotated DEGs that share orthogroups by species 
 
-
-
+# merge DEG and orthogroup dfs for both species - this will have no functional annotation, which increases the number of DEGs/orthogroups
+DEG_ortho <- merge(acerv_DEG_ortho, mcav_DEG_ortho, by = "Orthogroup")
+length(unique(DEG_ortho$Orthogroup)) # 2 orthogroups shared between DEGs between these species
+length(unique(DEG_ortho$gene_id.x)) # 2 Acerv DEGs in the shared orthogroups 
+length(unique(DEG_ortho$gene_id.y)) # 4 Mcav DEGs in the shared orthogroups 
 ```
 
 Acerv v. Mcap
@@ -579,32 +530,57 @@ Acerv v. Mcap
 compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Montipora_capitata_HIv2.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 colnames(compare) <- c("Orthogroup", "Acervicornis", "Mcapitata")
 
+
+############# ACERV #############
+
 # Isolate Acerv genes and orthogroups
-acerv_test <- compare[,1:2]
-acerv_test <- acerv_test %>% 
+acerv_ortho <- compare[,1:2]
+acerv_ortho <- acerv_ortho %>% 
     mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
     unnest(Acervicornis)
-colnames(acerv_test) <- c("Orthogroup", "gene_id")
-acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
-acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
+acerv_ortho$gene_id <- gsub("model", "TU", acerv_ortho$gene_id)
+acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
+length(unique(acerv_ortho$Orthogroup)) # 15008 orthogroups
+length(unique(acerv_ortho$gene_id)) # 23524 genes
 
 # Read in Acerv DEGs
 acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
 acerv_DEG <- as.data.frame(acerv_DEG)
 colnames(acerv_DEG) <- "gene_id"
 
-# Merge Acerv orthogroup & DEG info
-acerv_merge <- merge(acerv_DEG, acerv_test, by = "gene_id")
+# Merge Acerv shared orthogroup & DEG info
+acerv_DEG_ortho <- merge(acerv_DEG, acerv_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho$gene_id)) # 159 DEGs
+length(unique(acerv_DEG_ortho$Orthogroup)) # 139 orthogroups 
 
+# Read in GO term file for Acerv and merge GO terms w/ Acerv orthogroup and DEG info
+#acerv_DEG_ortho <- acerv_DEG_ortho[,c(1,2)] # separate orthogroups and gene id for acerv
+#colnames(acerv_DEG_ortho) <- c("Orthogroups", "gene_id") # renamed col names
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
+
+# Merge GO terms w/ Acerv orthogroup and DEG info
+acerv_DEG_ortho_go <- merge(acerv_go, acerv_DEG_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho_go$gene_id)) # 66 DEGs
+length(unique(acerv_DEG_ortho_go$Orthogroup)) # 60 orthogroups
+length(unique(acerv_DEG_ortho_go$term)) # 284 GO terms
+
+
+
+
+############# MCAP #############
 
 # Isolate Mcap genes and orthogroups
-mcap_test <- compare[, c(1,3)]
-mcap_test <- mcap_test %>% 
+mcap_ortho <- compare[, c(1,3)]
+mcap_ortho <- mcap_ortho %>% 
     mutate(Mcapitata = strsplit(as.character(Mcapitata), ",")) %>% 
     unnest(Mcapitata)
-colnames(mcap_test) <- c("Orthogroup", "gene_id")
-mcap_test$gene_id <- gsub(".t1", "", mcap_test$gene_id)
-mcap_test$gene_id <- gsub(" ", "", mcap_test$gene_id)
+colnames(mcap_ortho) <- c("Orthogroup", "gene_id")
+mcap_ortho$gene_id <- gsub(".t1", "", mcap_ortho$gene_id)
+mcap_ortho$gene_id <- gsub(" ", "", mcap_ortho$gene_id)
+length(unique(mcap_ortho$Orthogroup)) # 15008 orthogroups
+length(unique(mcap_ortho$gene_id)) # 27686 genes
 
 # Read in Mcap DEGs
 mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
@@ -612,19 +588,177 @@ mcap_DEG <- as.data.frame(mcap_DEG)
 colnames(mcap_DEG)[1] <- "gene_id"
 
 # Merge Mcap orthogroup & DEG info
-mcap_merge <- merge(mcap_DEG, mcap_test, by = "gene_id")
+mcap_DEG_ortho <- merge(mcap_DEG, mcap_ortho, by = "gene_id")
+length(unique(mcap_DEG_ortho$gene_id)) # 101 DEGs
+length(unique(mcap_DEG_ortho$Orthogroup)) # 97 orthogroups 
 
-# Merge Acerv orthogroup/DEG info and Mcap orthogroup/DEG info
-all <- merge(acerv_merge, mcap_merge, by = "Orthogroup")
-length(unique(all$Orthogroup)) # 8 orthogroups shared between Acerv & Mcap
-length(unique(all$gene_id.x)) # 10 DEGs from Acerv in orthogroup comparison between Acerv & Mcap
-length(unique(all$gene_id.y)) # 10 DEGs from Mcap in orthogroup comparison between Acerv & Mcap
+# Read in GO term file for Mcap and merge GO terms w/ Mcap orthogroup and DEG info
+mcap_go <- read.csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", header = T)[,-1]
 
-# save as csv? ^^ 
+# Merge GO terms w/ Mcap orthogroup and DEG info
+mcap_DEG_ortho_go <- merge(mcap_go, mcap_DEG_ortho, by = "gene_id")
+length(unique(mcap_DEG_ortho_go$gene_id)) # 69 DEGs
+length(unique(mcap_DEG_ortho_go$Orthogroup)) # 66 orthogroups
+length(unique(mcap_DEG_ortho_go$term)) # 240 GO terms
+
+
+
+
+############# SHARED #############
+
+# Merge dfs of both species by Orthogroup. The dfs contain orthogroups, DEGs and functional annotation
+acerv_DEG_ortho_go$Species <- "Acervicornis"
+mcap_DEG_ortho_go$Species <- "Mcapitata"
+DEG_ortho_go <- merge(acerv_DEG_ortho_go, mcap_DEG_ortho_go, by = "Orthogroup") 
+length(unique(DEG_ortho_go$Orthogroup)) # 2 orthogroups shared between DEGs of this species 
+length(unique(DEG_ortho_go$gene_id.x)) # 2 Acerv DEGs in the shared orthogroups 
+length(unique(DEG_ortho_go$gene_id.y)) # 3 Mcap DEGs in the shared orthogroups 
+length(unique(DEG_ortho_go$term.x)) # 5 Acerv GO terms in the shared orthogroups 
+length(unique(DEG_ortho_go$term.y)) # 19 Mcap GO terms in the shared orthogroups 
+
+
+# merge DEG and orthogroup dfs for both species - this will have no functional annotation, which increases the number of DEGs/orthogroups
+DEG_ortho <- merge(acerv_DEG_ortho, mcap_DEG_ortho, by = "Orthogroup")
+length(unique(DEG_ortho$Orthogroup)) # 8 orthogroups shared between DEGs between these species
+length(unique(DEG_ortho$gene_id.x)) # 10 Acerv DEGs in the shared orthogroups
+length(unique(DEG_ortho$gene_id.y)) # 10 Mcap DEGs in the shared orthogroups
 ```
 
 Acerv v. Ofav
-DO THIS!!!!!!!!!!!!!!!!!!!!!!!!******************
+```{r}
+# Read in comparison file for Acerv & Ofav
+compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__GCF_002042975.1_ofav_dov_v1_protein.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+colnames(compare) <- c("Orthogroup", "Acervicornis", "Ofaveolata")
+
+############# ACERV #############
+
+# Isolate Acerv genes and orthogroups
+acerv_ortho <- compare[,1:2]
+acerv_ortho <- acerv_ortho %>% 
+    mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
+    unnest(Acervicornis)
+colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
+acerv_ortho$gene_id <- gsub("model", "TU", acerv_ortho$gene_id)
+acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
+length(unique(acerv_ortho$Orthogroup)) # 12604 orthogroups
+length(unique(acerv_ortho$gene_id)) # 17762 genes
+
+# Read in Acerv DEGs
+acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- as.data.frame(acerv_DEG)
+colnames(acerv_DEG) <- "gene_id"
+
+# Merge Acerv shared orthogroup & DEG info
+acerv_DEG_ortho <- merge(acerv_DEG, acerv_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho$gene_id)) # 138 DEGs
+length(unique(acerv_DEG_ortho$Orthogroup)) # 123 orthogroups 
+
+# Read in GO term file for Acerv and merge GO terms w/ Acerv orthogroup and DEG info
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
+
+# Merge GO terms w/ Acerv orthogroup and DEG info
+acerv_DEG_ortho_go <- merge(acerv_go, acerv_DEG_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho_go$gene_id)) # 59 DEGs
+length(unique(acerv_DEG_ortho_go$Orthogroup)) # 54 orthogroups
+length(unique(acerv_DEG_ortho_go$term)) # 283 GO terms
+
+
+
+
+############# OFAV #############
+
+# Isolate Ofav genes and orthogroups
+ofav_ortho <- compare[,c(1,3)]
+ofav_ortho <- ofav_ortho %>% 
+    mutate(Ofaveolata = strsplit(as.character(Ofaveolata), ",")) %>% 
+    unnest(Ofaveolata)
+colnames(ofav_ortho) <- c("Orthogroup", "gene_id")
+ofav_ortho$gene_id <- gsub(" ", "", ofav_ortho$gene_id)
+length(unique(ofav_ortho$Orthogroup)) # 12604 orthogroups
+length(unique(ofav_ortho$gene_id)) # 21127 genes
+
+# SPECIFIC TO OFAV - ofav is so annoying bc it has its prot seqs labeled with XP_xxx but when running STAR, the LOC term was used for gene id. Now I have to read in original gff file and merge original gff with ofav_ortho df to get LOC term
+ofav <- read.csv("~/Desktop/GFFs/ofav/GCF_002042975.1_ofav_dov_v1_genomic.gff", header=FALSE, sep="\t", skip=6) # read in gff from NCBI
+colnames(ofav) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene") # name cols
+ofav <- na.omit(ofav)
+ofav <- subset(ofav, id == "CDS")
+ofav$prot_id <- gsub(".*cds-","", ofav$gene) # remove everything before -cds
+ofav$prot_id <- gsub(";.*","", ofav$prot_id) # remove everything after ;
+ofav$gene_id <- gsub(".*LOC","", ofav$gene) # remove everything before LOC
+ofav$gene_id <- gsub(";.*","", ofav$gene_id) # remove everything after ;
+ofav$gene_id <- gsub("iso.*","", ofav$gene_id) # remove everything after iso
+ofav$gene_id <- paste0("LOC", ofav$gene_id)
+write.csv(ofav, "~/Desktop/GFFs/ofav/ofav_gff_LOCTerm.csv") # writing gff file so that it always has LOC term already isolated
+# select cols with XP- and LOC info
+ofav_sub <- ofav[,c("prot_id", "gene_id")]
+ofav_sub<- unique(ofav_sub)
+# temporarily change names of ofav_ortho to match ofav_sub
+colnames(ofav_ortho)[2] <- "prot_id"
+ofav_ortho$prot_id <- gsub(" ", "", ofav_ortho$prot_id)
+# Merge gff info / ortho results and remove prot_id
+ofav_ortho_LOC <- merge(ofav_ortho, ofav_sub, by = "prot_id")
+ofav_ortho_LOC <- select(ofav_ortho_LOC, c(Orthogroup, gene_id))
+
+# Read in Ofav DEGs
+ofav_DEG <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)[,1]
+ofav_DEG <- as.data.frame(ofav_DEG)
+colnames(ofav_DEG)[1] <- "gene_id"
+
+# Merge Ofav shared orthogroup & DEG info
+ofav_DEG_ortho <- merge(ofav_DEG, ofav_ortho_LOC, by = "gene_id")
+length(unique(ofav_DEG_ortho$gene_id)) # 1 DEGs
+length(unique(ofav_DEG_ortho$Orthogroup)) # 1 orthogroups 
+
+# Read in GO term file for Ofav and merge GO terms w/ Ofav orthogroup and DEG info
+ofav_go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)[,-1]
+
+# Merge GO terms w/ Ofav orthogroup and DEG info
+ofav_DEG_ortho_go <- merge(ofav_go, ofav_DEG_ortho, by = "gene_id")
+## No associated GO terms 
+
+
+
+
+
+
+
+############# SHARED #############
+
+# Merge dfs of both species by Orthogroup. The dfs contain orthogroups, DEGs and functional annotation
+## Not relevant, as Ofav did not have any GO terms associated w/ DEGs in its orthogroups
+
+# merge DEG and orthogroup dfs for both species - this will have no functional annotation, which increases the number of DEGs/orthogroups
+DEG_ortho <- merge(acerv_DEG_ortho, ofav_DEG_ortho, by = "Orthogroup")
+## Nothing shared betweeen the 2 species? Doesn't make sense, they should be sharing OG0000000 (according to Venn diagram maker) 
+
+## I am confused. According to this spreadsheet (Tables S11 & S12; https://docs.google.com/spreadsheets/d/1sfCekpJ9ErJElHVwRCdkQn420je_HvOOaPZCVpKxfwU/edit#gid=632142905), Acerv & Ofav should share OG0000000 as an orthogroup. The associated gene id for Ofav is LOC11004532, which is a DEG for Ofav and has functional annotation info. But when I look for LOC110045321 under the Ofav gff, the associated protein IDs are XP_020606575.1, XP_020606576.1, & XP_020606577.1. None of these correspond to the Ofav protein IDs for OG0000000 (XP_020624579.1, XP_020624580.1, XP_020624578.1, XP_020615354.1, XP_020615355.1, XP_020615398.1, XP_020603602.1, XP_020603603.1, XP_020603601.1, XP_020603604.1). 
+
+## I may have to do the Ofav ones manually? Aka use the spreadsheet to find the gene id and its associated GO terms. Idk I think something is getting lost in translation when I change the XP_xxxx terms to the LOC terms. 
+
+## According to the spreadsheet (Tables S11 & S12; https://docs.google.com/spreadsheets/d/1sfCekpJ9ErJElHVwRCdkQn420je_HvOOaPZCVpKxfwU/edit#gid=632142905), Acerv & Ofav should share OG0000000 as an orthogroup. The associated gene id for Ofav is LOC11004532; the associated gene ids for Acerv are Acerv_evm.TU.Segkk1078_pilon.63, Acerv_evm.TU.Segkk1851_pilon.3, Acerv_evm.TU.Segkk20_pilon.1, Acerv_evm.TU.Segkk2725_pilon.8, Acerv_evm.TU.Segkk3087_pilon.2, Acerv_evm.TU.Segkk3096_pilon.7, Acerv_evm.TU.Segkk3387_pilon.12, Acerv_evm.TU.Segkk3618_pilon.7 & Acerv_evm.TU.Segkk3996_pilon.1. 
+
+## GO terms for LOC11004532: 
+# 
+
+
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Acerv v. Pacuta
 ```{r}
@@ -632,31 +766,53 @@ Acerv v. Pacuta
 compare <- read.table(file = 'Output/OrthoFinder/species_compare/Acerv_assembly_v1.0.protein__v__Pocillopora_acuta_HIv1.genes.pep.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 colnames(compare) <- c("Orthogroup", "Acervicornis", "Pacuta")
 
+############# ACERV #############
+
 # Isolate Acerv genes and orthogroups
-acerv_test <- compare[,1:2]
-acerv_test <- acerv_test %>% 
+acerv_ortho <- compare[,1:2]
+acerv_ortho <- acerv_ortho %>% 
     mutate(Acervicornis = strsplit(as.character(Acervicornis), ",")) %>% 
     unnest(Acervicornis)
-colnames(acerv_test) <- c("Orthogroup", "gene_id")
-acerv_test$gene_id <- gsub("model", "TU", acerv_test$gene_id)
-acerv_test$gene_id <- gsub(" ", "", acerv_test$gene_id)
+colnames(acerv_ortho) <- c("Orthogroup", "gene_id")
+acerv_ortho$gene_id <- gsub("model", "TU", acerv_ortho$gene_id)
+acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
+length(unique(acerv_ortho$Orthogroup)) # 13209 orthogroups
+length(unique(acerv_ortho$gene_id)) # 18779 genes
 
 # Read in Acerv DEGs
 acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
 acerv_DEG <- as.data.frame(acerv_DEG)
 colnames(acerv_DEG) <- "gene_id"
 
-# Merge Acerv orthogroup & DEG info
-acerv_merge <- merge(acerv_DEG, acerv_test, by = "gene_id")
+# Merge Acerv shared orthogroup & DEG info
+acerv_DEG_ortho <- merge(acerv_DEG, acerv_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho$gene_id)) # 127 DEGs
+length(unique(acerv_DEG_ortho$Orthogroup)) # 118 orthogroups 
 
+# Read in GO term file for Acerv and merge GO terms w/ Acerv orthogroup and DEG info
+acerv_go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)[,-1]
+acerv_go$gene_id <- gsub("model", "TU", acerv_go$gene_id)
+
+# Merge GO terms w/ Acerv orthogroup and DEG info
+acerv_DEG_ortho_go <- merge(acerv_go, acerv_DEG_ortho, by = "gene_id")
+length(unique(acerv_DEG_ortho_go$gene_id)) # 49 DEGs
+length(unique(acerv_DEG_ortho_go$Orthogroup)) # 48 orthogroups
+length(unique(acerv_DEG_ortho_go$term)) # 244 GO terms
+
+
+
+
+############# PACUTA #############
 
 # Isolate Pacuta genes and orthogroups
-pacuta_test <- compare[, c(1,3)]
-pacuta_test <- pacuta_test %>% 
+pacuta_ortho <- compare[, c(1,3)]
+pacuta_ortho <- pacuta_ortho %>% 
     mutate(Pacuta = strsplit(as.character(Pacuta), ",")) %>% 
     unnest(Pacuta)
-colnames(pacuta_test) <- c("Orthogroup", "gene_id")
-pacuta_test$gene_id <- gsub(" ", "", pacuta_test$gene_id)
+colnames(pacuta_ortho) <- c("Orthogroup", "gene_id")
+pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
+length(unique(pacuta_ortho$Orthogroup)) # 13209 orthogroups
+length(unique(pacuta_ortho$gene_id)) # 23303 genes
 
 # Read in Pacuta DEGs
 pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
@@ -664,15 +820,40 @@ pacuta_DEG <- as.data.frame(pacuta_DEG)
 colnames(pacuta_DEG)[1] <- "gene_id"
 
 # Merge Pacuta orthogroup & DEG info
-pacuta_merge <- merge(pacuta_DEG, pacuta_test, by = "gene_id")
+pacuta_DEG_ortho <- merge(pacuta_DEG, pacuta_ortho, by = "gene_id")
+length(unique(pacuta_DEG_ortho$gene_id)) # 145 DEGs
+length(unique(pacuta_DEG_ortho$Orthogroup)) # 118 orthogroups 
 
-# Merge Acerv orthogroup/DEG info and Pacuta orthogroup/DEG info
-all <- merge(acerv_merge, pacuta, by = "Orthogroup")
-length(unique(all$Orthogroup)) # 9 orthogroups shared between Acerv & Pacuta
-length(unique(all$gene_id.x)) # 11 DEGs from Acerv in orthogroup comparison between Acerv & Pacuta
-length(unique(all$gene_id.y)) # 14 DEGs from Pacuta in orthogroup comparison between Acerv & Pacuta
+# Read in GO term file for Pacuta and merge GO terms w/ Pacuta orthogroup and DEG info
+pacuta_go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)[,-1]
 
-# save as csv? ^^ 
+# Merge GO terms w/ Pacuta orthogroup and DEG info
+pacuta_DEG_ortho_go <- merge(pacuta_go, pacuta_DEG_ortho, by = "gene_id")
+length(unique(pacuta_DEG_ortho_go$gene_id)) # 104 DEGs
+length(unique(pacuta_DEG_ortho_go$Orthogroup)) # 84 orthogroups
+length(unique(pacuta_DEG_ortho_go$term)) # 369 GO terms
+
+
+
+
+############# SHARED #############
+
+# Merge dfs of both species by Orthogroup. The dfs contain orthogroups, DEGs and functional annotation
+acerv_DEG_ortho_go$Species <- "Acervicornis"
+pacuta_DEG_ortho_go$Species <- "Pacuta"
+DEG_ortho_go <- merge(acerv_DEG_ortho_go, pacuta_DEG_ortho_go, by = "Orthogroup") 
+length(unique(DEG_ortho_go$Orthogroup)) # 1 orthogroups shared between DEGs of this species 
+length(unique(DEG_ortho_go$gene_id.x)) # 1 Acerv DEGs in the shared orthogroups 
+length(unique(DEG_ortho_go$gene_id.y)) # 1 Pacuta DEGs in the shared orthogroups 
+length(unique(DEG_ortho_go$term.x)) # 3 Acerv GO terms in the shared orthogroups 
+length(unique(DEG_ortho_go$term.y)) # 1 Pacuta GO term in the shared orthogroups 
+
+
+# merge DEG and orthogroup dfs for both species - this will have no functional annotation, which increases the number of DEGs/orthogroups
+DEG_ortho <- merge(acerv_DEG_ortho, pacuta_DEG_ortho, by = "Orthogroup")
+length(unique(DEG_ortho$Orthogroup)) # 9 orthogroups shared between DEGs between these species
+length(unique(DEG_ortho$gene_id.x)) # 11 Acerv DEGs in the shared orthogroups
+length(unique(DEG_ortho$gene_id.y)) # 13 Pacuta DEGs in the shared orthogroups
 ```
 
 Acerv v. Plob
