@@ -15,24 +15,44 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(VennDiagram)
 library(arsenal) # comparedf function
+library(UpSetR)
+library(ComplexUpset)
 ```
 
 Why did we run OrthoFinder? 
 
 ran OrthoFinder on bluewaves, got lots of output. One file ('Output/OrthoFinder/Orthogroups.tsv') has the Orthogroups listed with all the genes found in that orthogroup for each species. I'm going to first remove any orthogroups that have blank cells (ie no protein from a species in that orthogroup). Then I'll read in my DEG info and filter the protein names from each species. With that info, I'll make a Venn diagram showing shared orthogroups among species 
 
+
+20221125
+Null Hypothesis: There are no differences in the genes that are differentially expressed across species within the orthologous gene sets
+
+Step 1 - load Otrhogroups.tsv 
+Step 2 - filter to those orthogroups found only in all species 
+Step 3 - expand table to show each gene as a row and the gene ID and orthogroup ID as the 2 columns
+Step 4 - merge the table with the DEG table by gene name and repeat this for each species
+Step 5 - merge all DEGs within orthogroups tables for all 6 species into one table that will be used to generate the Upset Plot
+Color code by FL or HI
+Symbol code by morphology
+Step 6 - figure out stats tests for location and for morphology
+
+*Step 1*: Load Orthogroup data 
 ```{r}
 # Read in orthofinder data 
 ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 #ortho <- na.omit(ortho)
 colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Mcapitata", "Pacuta", "Plobata")
 length(unique(ortho$Orthogroup)) # 21688 total orthogroups
+```
 
+*Step 2*: Filter to those orthogroups found only in all species 
+```{r}
 # Remove blanks from dataset, so all that remained were orthogroups shared by all species. 
 ortho <- na.omit(ortho)
 length(unique(ortho$Orthogroup)) # 9216 'filtered' orthogroups
 ```
 
+*Step 3*: Expand table to show each gene as a row and the gene ID and orthogroup ID as the 2 columns
 ```{r}
 # Split by species (probably easier/cleaner way to do this)
 acerv_ortho <- select(ortho, c("Orthogroup", "Acervicornis"))
@@ -72,14 +92,13 @@ plob_ortho <- plob_ortho %>% mutate(Plobata = strsplit(as.character(Plobata), ",
     unnest(Plobata)
 plob_ortho <- na.omit(plob_ortho)
 plob_ortho$Plobata <- gsub(" ", "", plob_ortho$Plobata)
-
 ```
 
 Figure out how to make upset plots for these so that it does frequency counts of each orthogroup for each species and shows shared ones? 
 
 
 
-Read DEGs in and merge w/ orthogroup by gene for each species 
+*Step 4*: Merge the table with the DEG table by gene name and repeat this for each species
 ### Acerv 
 ```{r}
 acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
@@ -228,17 +247,81 @@ write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20221125.
 write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20221125.csv") 
 ```
 
-20221125
-Null Hypothesis: There are no differences in the genes that are differentially expressed across species within the orthologous gene sets
+*Step 5*: Merge all DEGs within orthogroups tables for all 6 species into one table that will be used to generate the Upset Plot
 
-Step 1 - load Otrhogroups.tsv
-Step 2 - filter to those orthogroups found only in all species
-Step 3 - expand table to show each gene as a row and the gene ID and orthogroup ID as the 2 columns
-Step 4 - merge the table with the DEG table by gene name and repeat this for each species
-Step 5 - merge all DEGs within orthogroups tables for all 6 species into one table that will be used to generate the Upset Plot
-Color code by FL or HI
-Symbol code by morphology
-Step 6 - figure out stats tests for location and for morphology
+This [website](https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti) has nice explanations of the different dplyr joining functions 
+```{r}
+full1 <- full_join(acerv, mcav, by = "Orthogroup")
+full2 <- full_join(full1, ofav, by = "Orthogroup")
+full3 <- full_join(full2, mcap, by = "Orthogroup")
+full4 <- full_join(full3, pacuta, by = "Orthogroup")
+full5 <- full_join(full4, plob, by = "Orthogroup")
+
+# Reorganize table & rename columns 
+full <- full5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
+colnames(full) <- c("Orthogroup", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+
+# Replacing NAs with 0 and other values to 1 
+full$Acervicornis <- ifelse(is.na(full$Acervicornis),0,1)
+full$Mcavernosa <- ifelse(is.na(full$Mcavernosa),0,1)
+full$Ofaveolata <- ifelse(is.na(full$Ofaveolata),0,1)
+full$Mcapitata <- ifelse(is.na(full$Mcapitata),0,1)
+full$Pacuta <- ifelse(is.na(full$Pacuta),0,1)
+full$Plobata <- ifelse(is.na(full$Plobata),0,1)
+```
+
+Make upset plot 
+```{r}
+## doing example first (https://cran.r-project.org/web/packages/UpSetR/vignettes/basic.usage.html)
+movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
+    header = T, sep = ";")
+
+upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
+    mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
+    text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
+
+upset(
+    movies, c("Action", "Comedy", "Drama"),
+    width_ratio=0.2,
+    group_by='sets',
+    queries=list(
+        upset_query(group='Drama', color='maroon'),
+        upset_query(group='Comedy', color='blue'),
+        upset_query(group='Action', color='orange'),
+        upset_query(set='Drama', fill='maroon'),
+        upset_query(set='Comedy', fill='blue'),
+        upset_query(set='Action', fill='orange')
+    )
+)
+
+## using my data 
+upset(
+    full,
+    colnames(full)[2:7],
+    #name='genre',
+    width_ratio=0.1,
+    matrix=(
+        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
+        + scale_color_manual(
+            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
+            guide=guide_legend(override.aes=list(shape='circle'))
+        )
+    ),
+    queries=list(
+        upset_query(set='Acervicornis', fill='green'),
+        upset_query(set='Mcavernosa', fill='green'),
+        upset_query(set='Ofaveolata', fill='green'),
+        upset_query(set='Mcapitata', fill='orange'),
+        upset_query(set='Pacuta', fill='orange'),
+        upset_query(set='Plobata', fill='orange')
+    )
+)
+
+
+```
+
+
+
 
 
 

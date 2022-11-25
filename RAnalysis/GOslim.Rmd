@@ -285,6 +285,23 @@ plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
 
 I used the unique docs for all the species to make 6-way venn diagram with this [website](https://bioinformatics.psb.ugent.be/webtools/Venn/).
 
+```{r}
+## this chunk was written 20221125
+# Making upset plot w/ GO terms 
+
+### BP 
+# Subset into GO ID and gene ID for each species 
+blah <- acerv.go.slim.BP[,1:2]
+blah <- unique(blah)
+
+blah2 <- mcav_all.go.slim.BP[,1:2]
+blah2 <- unique(blah2)
+
+test <- full_join(blah, blah2, by = "GO.IDs")
+```
+
+
+
 
 ## Combine GO slim terms with all species in single df 
 ```{r}
