@@ -285,19 +285,360 @@ plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
 
 I used the unique docs for all the species to make 6-way venn diagram with this [website](https://bioinformatics.psb.ugent.be/webtools/Venn/).
 
+## Upset plots w/ GO terms (written on 20221125)
 ```{r}
-## this chunk was written 20221125
-# Making upset plot w/ GO terms 
+### All 
+# Subset so each species df contains only gene ID and GO ID columns 
+acerv.go_upset <- acerv.go[,1:2]
+mcav.go_upset <- mcav.go[,1:2]
+ofav.go_upset <- ofav.go[,1:2]
+mcap.go_upset <- mcap.go[,1:2]
+pacuta.go_upset <- pacuta.go[,1:2]
+plob.go_upset <- plob.go[,1:2]
+
+# Replace NAs with 0 and other values to 1 - may need to do this first to avoid duplicates bc some genes have multiple orthogroups or vice versa 
+acerv.go_upset <- unique(acerv.go_upset)
+acerv.go_upset$gene_id <- ifelse(is.na(acerv.go_upset$gene_id),0,1)
+acerv.go_upset <- unique(acerv.go_upset)
+
+mcav.go_upset <- unique(mcav.go_upset)
+mcav.go_upset$gene_id <- ifelse(is.na(mcav.go_upset$gene_id),0,1)
+mcav.go_upset <- unique(mcav.go_upset)
+
+ofav.go_upset <- unique(ofav.go_upset)
+ofav.go_upset$gene_id <- ifelse(is.na(ofav.go_upset$gene_id),0,1)
+ofav.go_upset <- unique(ofav.go_upset)
+
+mcap.go_upset <- unique(mcap.go_upset)
+mcap.go_upset$gene_id <- ifelse(is.na(mcap.go_upset$gene_id),0,1)
+mcap.go_upset <- unique(mcap.go_upset)
+
+pacuta.go_upset <- unique(pacuta.go_upset)
+pacuta.go_upset$gene_id <- ifelse(is.na(pacuta.go_upset$gene_id),0,1)
+pacuta.go_upset <- unique(pacuta.go_upset)
+
+plob.go_upset <- unique(plob.go_upset)
+plob.go_upset$gene_id <- ifelse(is.na(plob.go_upset$gene_id),0,1)
+plob.go_upset <- unique(plob.go_upset)
+
+# Merge all GO tables
+go1 <- full_join(acerv.go_upset, mcav.go_upset, by = "GO.IDs")
+go2 <- full_join(go1, ofav.go_upset, by = "GO.IDs")
+go3 <- full_join(go2, mcap.go_upset, by = "GO.IDs")
+go4 <- full_join(go3, pacuta.go_upset, by = "GO.IDs")
+go5 <- full_join(go4, plob.go_upset, by = "GO.IDs")
+
+# Reorganize table & rename columns 
+go <- go5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
+colnames(go) <- c("GO.IDs", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+go <- unique(go) # remove duplicate rows
+
+# Replacing NAs with 0 and other values to 1 
+go$Acervicornis <- ifelse(is.na(go$Acervicornis),0,1)
+go$Mcavernosa <- ifelse(is.na(go$Mcavernosa),0,1)
+go$Ofaveolata <- ifelse(is.na(go$Ofaveolata),0,1)
+go$Mcapitata <- ifelse(is.na(go$Mcapitata),0,1)
+go$Pacuta <- ifelse(is.na(go$Pacuta),0,1)
+go$Plobata <- ifelse(is.na(go$Plobata),0,1)
+
+# Upset plot w/ ALL GO terms 
+upset_all <- upset(
+    go,
+    colnames(go)[2:7],
+    width_ratio=0.1,
+    matrix=(
+        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
+        + scale_color_manual(
+            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
+            guide=guide_legend(override.aes=list(shape='circle'))
+        )
+    ),
+    queries=list(
+        upset_query(set='Acervicornis', fill='green'),
+        upset_query(set='Mcavernosa', fill='green'),
+        upset_query(set='Ofaveolata', fill='green'),
+        upset_query(set='Mcapitata', fill='orange'),
+        upset_query(set='Pacuta', fill='orange'),
+        upset_query(set='Plobata', fill='orange')
+    )
+)
+upset_all
+ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_all, width = 40, height = 40, units = c("in"))
+
+
+
 
 ### BP 
-# Subset into GO ID and gene ID for each species 
-blah <- acerv.go.slim.BP[,1:2]
-blah <- unique(blah)
+# Subset for BP
+acerv.go.bp <- subset(acerv.go, ontology == "BP")
+mcav.go.bp <- subset(mcav.go, ontology == "BP")
+ofav.go.bp <- subset(ofav.go, ontology == "BP")
+mcap.go.bp <- subset(mcap.go, ontology == "BP")
+pacuta.go.bp <- subset(pacuta.go, ontology == "BP")
+plob.go.bp <- subset(plob.go, ontology == "BP")
 
-blah2 <- mcav_all.go.slim.BP[,1:2]
-blah2 <- unique(blah2)
+# Subset so each species df contains only gene ID and BP GO ID columns 
+acerv.go.bp_upset <- acerv.go.bp[,1:2]
+mcav.go.bp_upset <- mcav.go.bp[,1:2]
+ofav.go.bp_upset <- ofav.go.bp[,1:2]
+mcap.go.bp_upset <- mcap.go.bp[,1:2]
+pacuta.go.bp_upset <- pacuta.go.bp[,1:2]
+plob.go.bp_upset <- plob.go.bp[,1:2]
 
-test <- full_join(blah, blah2, by = "GO.IDs")
+# Replace NAs with 0 and other values to 1 - may need to do this first to avoid duplicates bc some genes have multiple orthogroups or vice versa 
+acerv.go.bp_upset <- unique(acerv.go.bp_upset)
+acerv.go.bp_upset$gene_id <- ifelse(is.na(acerv.go.bp_upset$gene_id),0,1)
+acerv.go.bp_upset <- unique(acerv.go.bp_upset)
+
+mcav.go.bp_upset <- unique(mcav.go.bp_upset)
+mcav.go.bp_upset$gene_id <- ifelse(is.na(mcav.go.bp_upset$gene_id),0,1)
+mcav.go.bp_upset <- unique(mcav.go.bp_upset)
+
+ofav.go.bp_upset <- unique(ofav.go.bp_upset)
+ofav.go.bp_upset$gene_id <- ifelse(is.na(ofav.go.bp_upset$gene_id),0,1)
+ofav.go.bp_upset <- unique(ofav.go.bp_upset)
+
+mcap.go.bp_upset <- unique(mcap.go.bp_upset)
+mcap.go.bp_upset$gene_id <- ifelse(is.na(mcap.go.bp_upset$gene_id),0,1)
+mcap.go.bp_upset <- unique(mcap.go.bp_upset)
+
+pacuta.go.bp_upset <- unique(pacuta.go.bp_upset)
+pacuta.go.bp_upset$gene_id <- ifelse(is.na(pacuta.go.bp_upset$gene_id),0,1)
+pacuta.go.bp_upset <- unique(pacuta.go.bp_upset)
+
+plob.go.bp_upset <- unique(plob.go.bp_upset)
+plob.go.bp_upset$gene_id <- ifelse(is.na(plob.go.bp_upset$gene_id),0,1)
+plob.go.bp_upset <- unique(plob.go.bp_upset)
+
+# Merge BP GO tables
+go.bp1 <- full_join(acerv.go.bp_upset, mcav.go.bp_upset, by = "GO.IDs")
+go.bp2 <- full_join(go.bp1, ofav.go.bp_upset, by = "GO.IDs")
+go.bp3 <- full_join(go.bp2, mcap.go.bp_upset, by = "GO.IDs")
+go.bp4 <- full_join(go.bp3, pacuta.go.bp_upset, by = "GO.IDs")
+go.bp5 <- full_join(go.bp4, plob.go.bp_upset, by = "GO.IDs")
+
+# Reorganize table & rename columns 
+go.bp <- go.bp5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
+colnames(go.bp) <- c("GO.IDs", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+go.bp <- unique(go.bp) # remove duplicate rows
+
+# Replacing NAs with 0 and other values to 1 
+go.bp$Acervicornis <- ifelse(is.na(go.bp$Acervicornis),0,1)
+go.bp$Mcavernosa <- ifelse(is.na(go.bp$Mcavernosa),0,1)
+go.bp$Ofaveolata <- ifelse(is.na(go.bp$Ofaveolata),0,1)
+go.bp$Mcapitata <- ifelse(is.na(go.bp$Mcapitata),0,1)
+go.bp$Pacuta <- ifelse(is.na(go.bp$Pacuta),0,1)
+go.bp$Plobata <- ifelse(is.na(go.bp$Plobata),0,1)
+
+# Upset plot w/ BP GO terms 
+upset_BP <- upset(
+    go.bp,
+    colnames(go.bp)[2:7],
+    width_ratio=0.1,
+    matrix=(
+        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
+        + scale_color_manual(
+            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
+            guide=guide_legend(override.aes=list(shape='circle'))
+        )
+    ),
+    queries=list(
+        upset_query(set='Acervicornis', fill='green'),
+        upset_query(set='Mcavernosa', fill='green'),
+        upset_query(set='Ofaveolata', fill='green'),
+        upset_query(set='Mcapitata', fill='orange'),
+        upset_query(set='Pacuta', fill='orange'),
+        upset_query(set='Plobata', fill='orange')
+    )
+)
+upset_BP
+ggsave("Output/Figs/upset/upset_GO.BP_20221125.pdf", upset_BP, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.BP_20221125.png", upset_BP, width = 40, height = 40, units = c("in"))
+
+
+
+
+### CC 
+# Subset for CC
+acerv.go.cc <- subset(acerv.go, ontology == "CC")
+mcav.go.cc <- subset(mcav.go, ontology == "CC")
+ofav.go.cc <- subset(ofav.go, ontology == "CC")
+mcap.go.cc <- subset(mcap.go, ontology == "CC")
+pacuta.go.cc <- subset(pacuta.go, ontology == "CC")
+plob.go.cc <- subset(plob.go, ontology == "CC")
+
+# Subset so each species df contains only gene ID and CC GO ID columns 
+acerv.go.cc_upset <- acerv.go.cc[,1:2]
+mcav.go.cc_upset <- mcav.go.cc[,1:2]
+ofav.go.cc_upset <- ofav.go.cc[,1:2]
+mcap.go.cc_upset <- mcap.go.cc[,1:2]
+pacuta.go.cc_upset <- pacuta.go.cc[,1:2]
+plob.go.cc_upset <- plob.go.cc[,1:2]
+
+# Replace NAs with 0 and other values to 1 - may need to do this first to avoid duplicates bc some genes have multiple orthogroups or vice versa 
+acerv.go.cc_upset <- unique(acerv.go.cc_upset)
+acerv.go.cc_upset$gene_id <- ifelse(is.na(acerv.go.cc_upset$gene_id),0,1)
+acerv.go.cc_upset <- unique(acerv.go.cc_upset)
+
+mcav.go.cc_upset <- unique(mcav.go.cc_upset)
+mcav.go.cc_upset$gene_id <- ifelse(is.na(mcav.go.cc_upset$gene_id),0,1)
+mcav.go.cc_upset <- unique(mcav.go.cc_upset)
+
+ofav.go.cc_upset <- unique(ofav.go.cc_upset)
+ofav.go.cc_upset$gene_id <- ifelse(is.na(ofav.go.cc_upset$gene_id),0,1)
+ofav.go.cc_upset <- unique(ofav.go.cc_upset)
+
+mcap.go.cc_upset <- unique(mcap.go.cc_upset)
+mcap.go.cc_upset$gene_id <- ifelse(is.na(mcap.go.cc_upset$gene_id),0,1)
+mcap.go.cc_upset <- unique(mcap.go.cc_upset)
+
+pacuta.go.cc_upset <- unique(pacuta.go.cc_upset)
+pacuta.go.cc_upset$gene_id <- ifelse(is.na(pacuta.go.cc_upset$gene_id),0,1)
+pacuta.go.cc_upset <- unique(pacuta.go.cc_upset)
+
+plob.go.cc_upset <- unique(plob.go.cc_upset)
+plob.go.cc_upset$gene_id <- ifelse(is.na(plob.go.cc_upset$gene_id),0,1)
+plob.go.cc_upset <- unique(plob.go.cc_upset)
+
+# Merge CC GO tables
+go.cc1 <- full_join(acerv.go.cc_upset, mcav.go.cc_upset, by = "GO.IDs")
+go.cc2 <- full_join(go.cc1, ofav.go.cc_upset, by = "GO.IDs")
+go.cc3 <- full_join(go.cc2, mcap.go.cc_upset, by = "GO.IDs")
+go.cc4 <- full_join(go.cc3, pacuta.go.cc_upset, by = "GO.IDs")
+go.cc5 <- full_join(go.cc4, plob.go.cc_upset, by = "GO.IDs")
+
+# Reorganize table & rename columns 
+go.cc <- go.cc5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
+colnames(go.cc) <- c("GO.IDs", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+go.cc <- unique(go.cc) # remove duplicate rows
+
+# Replacing NAs with 0 and other values to 1 
+go.cc$Acervicornis <- ifelse(is.na(go.cc$Acervicornis),0,1)
+go.cc$Mcavernosa <- ifelse(is.na(go.cc$Mcavernosa),0,1)
+go.cc$Ofaveolata <- ifelse(is.na(go.cc$Ofaveolata),0,1)
+go.cc$Mcapitata <- ifelse(is.na(go.cc$Mcapitata),0,1)
+go.cc$Pacuta <- ifelse(is.na(go.cc$Pacuta),0,1)
+go.cc$Plobata <- ifelse(is.na(go.cc$Plobata),0,1)
+
+# Upset plot w/ CC GO terms 
+upset_CC <- upset(
+    go.cc,
+    colnames(go.cc)[2:7],
+    width_ratio=0.1,
+    matrix=(
+        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
+        + scale_color_manual(
+            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
+            guide=guide_legend(override.aes=list(shape='circle'))
+        )
+    ),
+    queries=list(
+        upset_query(set='Acervicornis', fill='green'),
+        upset_query(set='Mcavernosa', fill='green'),
+        upset_query(set='Ofaveolata', fill='green'),
+        upset_query(set='Mcapitata', fill='orange'),
+        upset_query(set='Pacuta', fill='orange'),
+        upset_query(set='Plobata', fill='orange')
+    )
+)
+upset_CC
+ggsave("Output/Figs/upset/upset_GO.CC_20221125.pdf", upset_CC, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.CC_20221125.png", upset_CC, width = 40, height = 40, units = c("in"))
+
+
+
+
+### MF
+# Subset for MF
+acerv.go.mf <- subset(acerv.go, ontology == "MF")
+mcav.go.mf <- subset(mcav.go, ontology == "MF")
+ofav.go.mf <- subset(ofav.go, ontology == "MF")
+mcap.go.mf <- subset(mcap.go, ontology == "MF")
+pacuta.go.mf <- subset(pacuta.go, ontology == "MF")
+plob.go.mf <- subset(plob.go, ontology == "MF")
+
+# Subset so each species df contains only gene ID and MF GO ID columns 
+acerv.go.mf_upset <- acerv.go.mf[,1:2]
+mcav.go.mf_upset <- mcav.go.mf[,1:2]
+ofav.go.mf_upset <- ofav.go.mf[,1:2]
+mcap.go.mf_upset <- mcap.go.mf[,1:2]
+pacuta.go.mf_upset <- pacuta.go.mf[,1:2]
+plob.go.mf_upset <- plob.go.mf[,1:2]
+
+# Replace NAs with 0 and other values to 1 - may need to do this first to avoid duplicates bc some genes have multiple orthogroups or vice versa 
+acerv.go.mf_upset <- unique(acerv.go.mf_upset)
+acerv.go.mf_upset$gene_id <- ifelse(is.na(acerv.go.mf_upset$gene_id),0,1)
+acerv.go.mf_upset <- unique(acerv.go.mf_upset)
+
+mcav.go.mf_upset <- unique(mcav.go.mf_upset)
+mcav.go.mf_upset$gene_id <- ifelse(is.na(mcav.go.mf_upset$gene_id),0,1)
+mcav.go.mf_upset <- unique(mcav.go.mf_upset)
+
+ofav.go.mf_upset <- unique(ofav.go.mf_upset)
+ofav.go.mf_upset$gene_id <- ifelse(is.na(ofav.go.mf_upset$gene_id),0,1)
+ofav.go.mf_upset <- unique(ofav.go.mf_upset)
+
+mcap.go.mf_upset <- unique(mcap.go.mf_upset)
+mcap.go.mf_upset$gene_id <- ifelse(is.na(mcap.go.mf_upset$gene_id),0,1)
+mcap.go.mf_upset <- unique(mcap.go.mf_upset)
+
+pacuta.go.mf_upset <- unique(pacuta.go.mf_upset)
+pacuta.go.mf_upset$gene_id <- ifelse(is.na(pacuta.go.mf_upset$gene_id),0,1)
+pacuta.go.mf_upset <- unique(pacuta.go.mf_upset)
+
+plob.go.mf_upset <- unique(plob.go.mf_upset)
+plob.go.mf_upset$gene_id <- ifelse(is.na(plob.go.mf_upset$gene_id),0,1)
+plob.go.mf_upset <- unique(plob.go.mf_upset)
+
+# Merge MF GO tables
+go.mf1 <- full_join(acerv.go.mf_upset, mcav.go.mf_upset, by = "GO.IDs")
+go.mf2 <- full_join(go.mf1, ofav.go.mf_upset, by = "GO.IDs")
+go.mf3 <- full_join(go.mf2, mcap.go.mf_upset, by = "GO.IDs")
+go.mf4 <- full_join(go.mf3, pacuta.go.mf_upset, by = "GO.IDs")
+go.mf5 <- full_join(go.mf4, plob.go.mf_upset, by = "GO.IDs")
+
+# Reorganize table & rename columns 
+go.mf <- go.mf5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
+colnames(go.mf) <- c("GO.IDs", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+go.mf <- unique(go.mf) # remove duplicate rows
+
+# Replacing NAs with 0 and other values to 1 
+go.mf$Acervicornis <- ifelse(is.na(go.mf$Acervicornis),0,1)
+go.mf$Mcavernosa <- ifelse(is.na(go.mf$Mcavernosa),0,1)
+go.mf$Ofaveolata <- ifelse(is.na(go.mf$Ofaveolata),0,1)
+go.mf$Mcapitata <- ifelse(is.na(go.mf$Mcapitata),0,1)
+go.mf$Pacuta <- ifelse(is.na(go.mf$Pacuta),0,1)
+go.mf$Plobata <- ifelse(is.na(go.mf$Plobata),0,1)
+
+# Upset plot w/ MF GO terms 
+upset_MF <- upset(
+    go.mf,
+    colnames(go.mf)[2:7],
+    width_ratio=0.1,
+    matrix=(
+        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
+        + scale_color_manual(
+            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
+            guide=guide_legend(override.aes=list(shape='circle'))
+        )
+    ),
+    queries=list(
+        upset_query(set='Acervicornis', fill='green'),
+        upset_query(set='Mcavernosa', fill='green'),
+        upset_query(set='Ofaveolata', fill='green'),
+        upset_query(set='Mcapitata', fill='orange'),
+        upset_query(set='Pacuta', fill='orange'),
+        upset_query(set='Plobata', fill='orange')
+    )
+)
+upset_MF
+ggsave("Output/Figs/upset/upset_GO.MF_20221125.pdf", upset_MF, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.MF_20221125.png", upset_MF, width = 40, height = 40, units = c("in"))
+
+
+## I think there are duplicates or something in the dataset so the values on the plots are inflated. When I join the datasets, sometimes there is a gene that has many GO IDs and it gets 'joined' w/ a gene that is only attached to one of those GO IDs from another species. 
+## Do I care about # of genes? no, just # of GO terms??
 ```
 
 

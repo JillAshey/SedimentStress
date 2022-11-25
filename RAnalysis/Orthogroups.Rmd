@@ -251,6 +251,33 @@ write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20221125.csv")
 
 This [website](https://statisticsglobe.com/r-dplyr-join-inner-left-right-full-semi-anti) has nice explanations of the different dplyr joining functions 
 ```{r}
+# Replace NAs with 0 and other values to 1 - may need to do this first to avoid duplicates bc some genes have multiple orthogroups or vice versa 
+acerv <- unique(acerv)
+acerv$gene_id <- ifelse(is.na(acerv$gene_id),0,1)
+acerv <- unique(acerv)
+
+mcav <- unique(mcav)
+mcav$gene_id <- ifelse(is.na(mcav$gene_id),0,1)
+mcav <- unique(mcav)
+
+ofav <- unique(ofav)
+ofav$gene_id <- ifelse(is.na(ofav$gene_id),0,1)
+ofav <- unique(ofav)
+
+mcap <- unique(mcap)
+mcap$gene_id <- ifelse(is.na(mcap$gene_id),0,1)
+mcap <- unique(mcap)
+
+pacuta <- unique(pacuta)
+pacuta$gene_id <- ifelse(is.na(pacuta$gene_id),0,1)
+pacuta <- unique(pacuta)
+
+plob <- unique(plob)
+plob$gene_id <- ifelse(is.na(plob$gene_id),0,1)
+plob <- unique(plob)
+
+
+# Merge all orthogroup tables
 full1 <- full_join(acerv, mcav, by = "Orthogroup")
 full2 <- full_join(full1, ofav, by = "Orthogroup")
 full3 <- full_join(full2, mcap, by = "Orthogroup")
@@ -260,8 +287,9 @@ full5 <- full_join(full4, plob, by = "Orthogroup")
 # Reorganize table & rename columns 
 full <- full5[,c(2,1,3,4,5,6,7)] # moved orthogroup column to be first column 
 colnames(full) <- c("Orthogroup", "Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata")
+full <- unique(full) # remove duplicate rows
 
-# Replacing NAs with 0 and other values to 1 
+# Replace NAs with 0 and other values to 1 
 full$Acervicornis <- ifelse(is.na(full$Acervicornis),0,1)
 full$Mcavernosa <- ifelse(is.na(full$Mcavernosa),0,1)
 full$Ofaveolata <- ifelse(is.na(full$Ofaveolata),0,1)
@@ -273,29 +301,29 @@ full$Plobata <- ifelse(is.na(full$Plobata),0,1)
 Make upset plot 
 ```{r}
 ## doing example first (https://cran.r-project.org/web/packages/UpSetR/vignettes/basic.usage.html)
-movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
-    header = T, sep = ";")
-
-upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
-    mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
-    text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
-
-upset(
-    movies, c("Action", "Comedy", "Drama"),
-    width_ratio=0.2,
-    group_by='sets',
-    queries=list(
-        upset_query(group='Drama', color='maroon'),
-        upset_query(group='Comedy', color='blue'),
-        upset_query(group='Action', color='orange'),
-        upset_query(set='Drama', fill='maroon'),
-        upset_query(set='Comedy', fill='blue'),
-        upset_query(set='Action', fill='orange')
-    )
-)
+# movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
+#     header = T, sep = ";")
+# 
+# upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
+#     mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
+#     text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
+# 
+# upset(
+#     movies, c("Action", "Comedy", "Drama"),
+#     width_ratio=0.2,
+#     group_by='sets',
+#     queries=list(
+#         upset_query(group='Drama', color='maroon'),
+#         upset_query(group='Comedy', color='blue'),
+#         upset_query(group='Action', color='orange'),
+#         upset_query(set='Drama', fill='maroon'),
+#         upset_query(set='Comedy', fill='blue'),
+#         upset_query(set='Action', fill='orange')
+#     )
+# )
 
 ## using my data 
-upset(
+upset_ortho <- upset(
     full,
     colnames(full)[2:7],
     #name='genre',
@@ -316,8 +344,9 @@ upset(
         upset_query(set='Plobata', fill='orange')
     )
 )
-
-
+upset_ortho
+ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221125.png", upset_ortho, width = 40, height = 40, units = c("in"))
 ```
 
 
