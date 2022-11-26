@@ -16,7 +16,9 @@ library(tidyverse)
 library(VennDiagram)
 library(arsenal) # comparedf function
 library(UpSetR)
-library(ComplexUpset)
+#library(ComplexUpset)
+
+## NOTE: cannot use UpSetR and ComplexUpset at the same time
 ```
 
 Why did we run OrthoFinder? 
@@ -299,56 +301,117 @@ full$Plobata <- ifelse(is.na(full$Plobata),0,1)
 ```
 
 Make upset plot 
+
+Trying the code from this stackover flow post: https://stackoverflow.com/questions/67094573/upsetr-sets-bar-interacting-different-color-and-its-sets-intersections
 ```{r}
-## doing example first (https://cran.r-project.org/web/packages/UpSetR/vignettes/basic.usage.html)
-# movies <- read.csv(system.file("extdata", "movies.csv", package = "UpSetR"), 
-#     header = T, sep = ";")
-# 
-# upset(movies, nsets = 6, number.angles = 30, point.size = 3.5, line.size = 2, 
-#     mainbar.y.label = "Genre Intersections", sets.x.label = "Movies Per Genre", 
-#     text.scale = c(1.3, 1.3, 1, 1, 2, 0.75))
-# 
-# upset(
-#     movies, c("Action", "Comedy", "Drama"),
-#     width_ratio=0.2,
-#     group_by='sets',
-#     queries=list(
-#         upset_query(group='Drama', color='maroon'),
-#         upset_query(group='Comedy', color='blue'),
-#         upset_query(group='Action', color='orange'),
-#         upset_query(set='Drama', fill='maroon'),
-#         upset_query(set='Comedy', fill='blue'),
-#         upset_query(set='Action', fill='orange')
-#     )
-# )
+library(ComplexUpset)
 
-## using my data 
 upset_ortho <- upset(
-    full,
-    colnames(full)[2:7],
-    #name='genre',
-    width_ratio=0.1,
-    matrix=(
-        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
-        + scale_color_manual(
-            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
-            guide=guide_legend(override.aes=list(shape='circle'))
-        )
-    ),
-    queries=list(
-        upset_query(set='Acervicornis', fill='green'),
-        upset_query(set='Mcavernosa', fill='green'),
-        upset_query(set='Ofaveolata', fill='green'),
-        upset_query(set='Mcapitata', fill='orange'),
-        upset_query(set='Pacuta', fill='orange'),
-        upset_query(set='Plobata', fill='orange')
+  full,
+  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  queries=list(
+    upset_query(set='Acervicornis', fill='chartreuse3'),
+    upset_query(set='Mcavernosa', fill='chartreuse3'),
+    upset_query(set='Ofaveolata', fill='chartreuse3'),
+    upset_query(set='Mcapitata', fill='chocolate2'),
+    upset_query(set='Pacuta', fill='chocolate2'),
+    upset_query(set='Plobata', fill='chocolate2')
+  ),
+  base_annotations=list(
+    'Intersection size'=(
+        intersection_size(
+        bar_number_threshold=1,  # show all numbers on top of bars
+        width=0.5,   # reduce width of the bars
+      )
+      # add some space on the top of the bars
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + theme(
+          # hide grid lines
+          panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          # show axis lines
+          axis.line=element_line(colour='black')
+      )
     )
+  ),
+  stripes=upset_stripes(
+    geom=geom_segment(size=12),  # make the stripes larger
+    colors=c("#0066CC", # Acerv - branching 
+             "#E4E408",  # Mcav - massive 
+             "#E4E408",  # Ofav - massive 
+             "#A0A0A0", # Mcap - intermediate 
+             "#0066CC", # Pacuta - branching
+             "#E4E408")  # Plobata - massive
+  ), #         scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
+  # to prevent connectors from getting the colorured
+  # use `fill` instead of `color`, together with `shape='circle filled'`
+  matrix=intersection_matrix(
+      geom=geom_point(
+        shape='circle filled',
+        size=3.5,
+        stroke=0.45
+      )
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=0.4))
+    + theme(
+      axis.line.x=element_line(colour='black'),
+      axis.ticks.x=element_line()
+    )
+  ),
+  sort_sets='descending',
+  sort_intersections='descending'
 )
-upset_ortho
-ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_ortho_20221125.png", upset_ortho, width = 40, height = 40, units = c("in"))
-```
 
+ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
+```
+This is different code than what I used in the GO upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/GOslim.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
+
+
+
+```{r}
+## more upset plot stuff 
+movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=TRUE, sep=";" )
+
+require(ggplot2); require(plyr); require(gridExtra); require(grid);
+
+between <- function(row, min, max){
+  newData <- (row["ReleaseDate"] < max) & (row["ReleaseDate"] > min)
+}
+
+plot1 <- function(mydata, x){
+  myplot <- (ggplot(mydata, aes_string(x= x, fill = "color"))
+            + geom_histogram() + scale_fill_identity()
+            + theme(plot.margin = unit(c(0,0,0,0), "cm")))
+}
+
+plot2 <- function(mydata, x, y){
+  myplot <- (ggplot(data = mydata, aes_string(x=x, y=y, colour = "color"), alpha = 0.5)
+            + geom_point() + scale_color_identity()
+            + theme_bw() + theme(plot.margin = unit(c(0,0,0,0), "cm")))
+}
+
+attributeplots <- list(gridrows = 55,
+                  plots = list(list(plot = plot1, x= "ReleaseDate",  queries = FALSE),
+                         list(plot = plot1, x= "ReleaseDate", queries = TRUE),
+                         list(plot = plot2, x = "ReleaseDate", y = "AvgRating", queries = FALSE),
+                         list(plot = plot2, x = "ReleaseDate", y = "AvgRating", queries = TRUE)),
+                   ncols = 3)
+
+upset(movies, nsets = 7, nintersects = 30, mb.ratio = c(0.5, 0.5),
+      order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE))
+
+upset(movies, sets = c("Drama", "Comedy", "Action", "Thriller", "Western", "Documentary"),
+      queries = list(list(query = intersects, params = list("Drama", "Action")),
+                list(query = between, params = list(1970, 1980), color = "red", active = TRUE)))
+
+upset(movies, attribute.plots = attributeplots,
+     queries = list(list(query = between, params = list(1920, 1940)),
+                    list(query = intersects, params = list("Drama"), color= "red"),
+                    list(query = elements, params = list("ReleaseDate", 1990, 1991, 1992))),
+      main.bar.color = "yellow")
+```
 
 
 

@@ -342,29 +342,65 @@ go$Pacuta <- ifelse(is.na(go$Pacuta),0,1)
 go$Plobata <- ifelse(is.na(go$Plobata),0,1)
 
 # Upset plot w/ ALL GO terms 
-upset_all <- upset(
-    go,
-    colnames(go)[2:7],
-    width_ratio=0.1,
-    matrix=(
-        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
-        + scale_color_manual(
-            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
-            guide=guide_legend(override.aes=list(shape='circle'))
-        )
-    ),
-    queries=list(
-        upset_query(set='Acervicornis', fill='green'),
-        upset_query(set='Mcavernosa', fill='green'),
-        upset_query(set='Ofaveolata', fill='green'),
-        upset_query(set='Mcapitata', fill='orange'),
-        upset_query(set='Pacuta', fill='orange'),
-        upset_query(set='Plobata', fill='orange')
+upset_go.all <- upset(
+  go,
+  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  queries=list(
+    upset_query(set='Acervicornis', fill='chartreuse3'),
+    upset_query(set='Mcavernosa', fill='chartreuse3'),
+    upset_query(set='Ofaveolata', fill='chartreuse3'),
+    upset_query(set='Mcapitata', fill='chocolate2'),
+    upset_query(set='Pacuta', fill='chocolate2'),
+    upset_query(set='Plobata', fill='chocolate2')
+  ),
+  base_annotations=list(
+    'Intersection size'=(
+        intersection_size(
+        bar_number_threshold=1,  # show all numbers on top of bars
+        width=0.5,   # reduce width of the bars
+      )
+      # add some space on the top of the bars
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + theme(
+          # hide grid lines
+          panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          # show axis lines
+          axis.line=element_line(colour='black')
+      )
     )
+  ),
+  stripes=upset_stripes(
+    geom=geom_segment(size=12),  # make the stripes larger
+    colors=c("#0066CC", # Pacuta - branching      REMEMBER to check color order for all species
+              "#0066CC", # Acerv - branching 
+             "#A0A0A0", # Mcap - intermediate
+             "#E4E408",  # Plobata - massive
+             "#E4E408",  # Mcav - massive 
+             "#E4E408")  # Ofav - massive 
+  ), 
+  # to prevent connectors from getting the colorured
+  # use `fill` instead of `color`, together with `shape='circle filled'`
+  matrix=intersection_matrix(
+      geom=geom_point(
+        shape='circle filled',
+        size=3.5,
+        stroke=0.45
+      )
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=0.4))
+    + theme(
+      axis.line.x=element_line(colour='black'),
+      axis.ticks.x=element_line()
+    )
+  ),
+  sort_sets='descending',
+  sort_intersections='descending'
 )
-upset_all
-ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_all, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_all, width = 40, height = 40, units = c("in"))
+#upset_go.all
+ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_go.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_go.all, width = 40, height = 40, units = c("in"))
 
 
 
@@ -432,29 +468,66 @@ go.bp$Pacuta <- ifelse(is.na(go.bp$Pacuta),0,1)
 go.bp$Plobata <- ifelse(is.na(go.bp$Plobata),0,1)
 
 # Upset plot w/ BP GO terms 
-upset_BP <- upset(
-    go.bp,
-    colnames(go.bp)[2:7],
-    width_ratio=0.1,
-    matrix=(
-        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
-        + scale_color_manual(
-            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
-            guide=guide_legend(override.aes=list(shape='circle'))
-        )
-    ),
-    queries=list(
-        upset_query(set='Acervicornis', fill='green'),
-        upset_query(set='Mcavernosa', fill='green'),
-        upset_query(set='Ofaveolata', fill='green'),
-        upset_query(set='Mcapitata', fill='orange'),
-        upset_query(set='Pacuta', fill='orange'),
-        upset_query(set='Plobata', fill='orange')
+upset_go.bp <- upset(
+  go.bp,
+  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  queries=list(
+    upset_query(set='Acervicornis', fill='chartreuse3'),
+    upset_query(set='Mcavernosa', fill='chartreuse3'),
+    upset_query(set='Ofaveolata', fill='chartreuse3'),
+    upset_query(set='Mcapitata', fill='chocolate2'),
+    upset_query(set='Pacuta', fill='chocolate2'),
+    upset_query(set='Plobata', fill='chocolate2')
+  ),
+  base_annotations=list(
+    'Intersection size'=(
+        intersection_size(
+        bar_number_threshold=1,  # show all numbers on top of bars
+        width=0.5,   # reduce width of the bars
+      )
+      # add some space on the top of the bars
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + theme(
+          # hide grid lines
+          panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          # show axis lines
+          axis.line=element_line(colour='black')
+      )
     )
+  ),
+  stripes=upset_stripes(
+    geom=geom_segment(size=12),  # make the stripes larger
+    # REMEMBER to check color order for all species
+    colors=c("#0066CC", # Pacuta - branching  
+              "#0066CC", # Acerv - branching 
+             "#E4E408",  # Plobata - massive
+              "#A0A0A0", # Mcap - intermediate
+              "#E4E408",  # Mcav - massive 
+              "#E4E408")  # Ofav - massive 
+  ), 
+  # to prevent connectors from getting the colorured
+  # use `fill` instead of `color`, together with `shape='circle filled'`
+  matrix=intersection_matrix(
+      geom=geom_point(
+        shape='circle filled',
+        size=3.5,
+        stroke=0.45
+      )
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=0.4))
+    + theme(
+      axis.line.x=element_line(colour='black'),
+      axis.ticks.x=element_line()
+    )
+  ),
+  sort_sets='descending',
+  sort_intersections='descending'
 )
-upset_BP
-ggsave("Output/Figs/upset/upset_GO.BP_20221125.pdf", upset_BP, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.BP_20221125.png", upset_BP, width = 40, height = 40, units = c("in"))
+#upset_go.bp
+ggsave("Output/Figs/upset/upset_GO.BP_20221125.pdf", upset_go.bp, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.BP_20221125.png", upset_go.bp, width = 40, height = 40, units = c("in"))
 
 
 
@@ -522,29 +595,66 @@ go.cc$Pacuta <- ifelse(is.na(go.cc$Pacuta),0,1)
 go.cc$Plobata <- ifelse(is.na(go.cc$Plobata),0,1)
 
 # Upset plot w/ CC GO terms 
-upset_CC <- upset(
-    go.cc,
-    colnames(go.cc)[2:7],
-    width_ratio=0.1,
-    matrix=(
-        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
-        + scale_color_manual(
-            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
-            guide=guide_legend(override.aes=list(shape='circle'))
-        )
-    ),
-    queries=list(
-        upset_query(set='Acervicornis', fill='green'),
-        upset_query(set='Mcavernosa', fill='green'),
-        upset_query(set='Ofaveolata', fill='green'),
-        upset_query(set='Mcapitata', fill='orange'),
-        upset_query(set='Pacuta', fill='orange'),
-        upset_query(set='Plobata', fill='orange')
+upset_go.cc <- upset(
+  go.cc,
+  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  queries=list(
+    upset_query(set='Acervicornis', fill='chartreuse3'),
+    upset_query(set='Mcavernosa', fill='chartreuse3'),
+    upset_query(set='Ofaveolata', fill='chartreuse3'),
+    upset_query(set='Mcapitata', fill='chocolate2'),
+    upset_query(set='Pacuta', fill='chocolate2'),
+    upset_query(set='Plobata', fill='chocolate2')
+  ),
+  base_annotations=list(
+    'Intersection size'=(
+        intersection_size(
+        bar_number_threshold=1,  # show all numbers on top of bars
+        width=0.5,   # reduce width of the bars
+      )
+      # add some space on the top of the bars
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + theme(
+          # hide grid lines
+          panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          # show axis lines
+          axis.line=element_line(colour='black')
+      )
     )
+  ),
+  stripes=upset_stripes(
+    geom=geom_segment(size=12),  # make the stripes larger
+    # REMEMBER to check color order for all species
+    colors=c( "#E4E408",  # Ofav - massive 
+             "#E4E408",  # Mcav - massive 
+            "#0066CC", # Pacuta - branching  
+             "#E4E408",  # Plobata - massive
+            "#0066CC", # Acerv - branching 
+            "#A0A0A0") # Mcap - intermediate
+  ), 
+  # to prevent connectors from getting the colorured
+  # use `fill` instead of `color`, together with `shape='circle filled'`
+  matrix=intersection_matrix(
+      geom=geom_point(
+        shape='circle filled',
+        size=3.5,
+        stroke=0.45
+      )
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=0.4))
+    + theme(
+      axis.line.x=element_line(colour='black'),
+      axis.ticks.x=element_line()
+    )
+  ),
+  sort_sets='descending',
+  sort_intersections='descending'
 )
-upset_CC
-ggsave("Output/Figs/upset/upset_GO.CC_20221125.pdf", upset_CC, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.CC_20221125.png", upset_CC, width = 40, height = 40, units = c("in"))
+#upset_go.cc
+ggsave("Output/Figs/upset/upset_GO.CC_20221125.pdf", upset_go.cc, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.CC_20221125.png", upset_go.cc, width = 40, height = 40, units = c("in"))
 
 
 
@@ -612,35 +722,69 @@ go.mf$Pacuta <- ifelse(is.na(go.mf$Pacuta),0,1)
 go.mf$Plobata <- ifelse(is.na(go.mf$Plobata),0,1)
 
 # Upset plot w/ MF GO terms 
-upset_MF <- upset(
-    go.mf,
-    colnames(go.mf)[2:7],
-    width_ratio=0.1,
-    matrix=(
-        intersection_matrix(geom=geom_point(shape='circle filled', size=3))
-        + scale_color_manual(
-            values=c('Acervicornis'='green', 'Mcavernosa'='green', 'Ofaveolata'='green', 'Mcapitata'='orange', 'Pacuta'='orange', 'Plobata'='orange'),
-            guide=guide_legend(override.aes=list(shape='circle'))
-        )
-    ),
-    queries=list(
-        upset_query(set='Acervicornis', fill='green'),
-        upset_query(set='Mcavernosa', fill='green'),
-        upset_query(set='Ofaveolata', fill='green'),
-        upset_query(set='Mcapitata', fill='orange'),
-        upset_query(set='Pacuta', fill='orange'),
-        upset_query(set='Plobata', fill='orange')
+upset_go.mf <- upset(
+  go.mf,
+  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  queries=list(
+    upset_query(set='Acervicornis', fill='chartreuse3'),
+    upset_query(set='Mcavernosa', fill='chartreuse3'),
+    upset_query(set='Ofaveolata', fill='chartreuse3'),
+    upset_query(set='Mcapitata', fill='chocolate2'),
+    upset_query(set='Pacuta', fill='chocolate2'),
+    upset_query(set='Plobata', fill='chocolate2')
+  ),
+  base_annotations=list(
+    'Intersection size'=(
+        intersection_size(
+        bar_number_threshold=1,  # show all numbers on top of bars
+        width=0.5,   # reduce width of the bars
+      )
+      # add some space on the top of the bars
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + theme(
+          # hide grid lines
+          panel.grid.major=element_blank(),
+          panel.grid.minor=element_blank(),
+          # show axis lines
+          axis.line=element_line(colour='black')
+      )
     )
+  ),
+  stripes=upset_stripes(
+    geom=geom_segment(size=12),  # make the stripes larger
+    # REMEMBER to check color order for all species
+    colors=c( "#E4E408",  # Ofav - massive 
+              "#E4E408",  # Mcav - massive 
+              "#E4E408",  # Plobata - massive
+              "#0066CC", # Acerv - branching 
+              "#A0A0A0", # Mcap - intermediate
+              "#0066CC") # Pacuta - branching
+  ), 
+  # to prevent connectors from getting the colorured
+  # use `fill` instead of `color`, together with `shape='circle filled'`
+  matrix=intersection_matrix(
+      geom=geom_point(
+        shape='circle filled',
+        size=3.5,
+        stroke=0.45
+      )
+  ),
+  set_sizes=(
+    upset_set_size(geom=geom_bar(width=0.4))
+    + theme(
+      axis.line.x=element_line(colour='black'),
+      axis.ticks.x=element_line()
+    )
+  ),
+  sort_sets='descending',
+  sort_intersections='descending'
 )
-upset_MF
-ggsave("Output/Figs/upset/upset_GO.MF_20221125.pdf", upset_MF, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.MF_20221125.png", upset_MF, width = 40, height = 40, units = c("in"))
-
-
-## I think there are duplicates or something in the dataset so the values on the plots are inflated. When I join the datasets, sometimes there is a gene that has many GO IDs and it gets 'joined' w/ a gene that is only attached to one of those GO IDs from another species. 
-## Do I care about # of genes? no, just # of GO terms??
+#upset_go.mf
+ggsave("Output/Figs/upset/upset_GO.MF_20221125.pdf", upset_go.mf, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.MF_20221125.png", upset_go.mf, width = 40, height = 40, units = c("in"))
 ```
 
+This is different code than what I used in the Orthogroup upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
 
 
 
