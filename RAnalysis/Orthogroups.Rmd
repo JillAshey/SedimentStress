@@ -366,8 +366,8 @@ upset_ortho <- upset(
   sort_intersections='descending'
 )
 
-ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221125.png", upset_ortho, width = 40, height = 20, units = c("in"))
 ```
 This is different code than what I used in the GO upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/GOslim.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
 

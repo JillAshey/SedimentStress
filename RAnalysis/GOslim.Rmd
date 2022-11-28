@@ -356,7 +356,7 @@ upset_go.all <- upset(
   base_annotations=list(
     'Intersection size'=(
         intersection_size(
-        bar_number_threshold=1,  # show all numbers on top of bars
+        bar_number_threshold=5,  # show all numbers on top of bars
         width=0.5,   # reduce width of the bars
       )
       # add some space on the top of the bars
@@ -379,30 +379,31 @@ upset_go.all <- upset(
              "#0066CC",  # Acerv - branching 
              "#0066CC")  # Pacuta - branching 
   ), 
-    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+      #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
   
   # to prevent connectors from getting the colorured
   # use `fill` instead of `color`, together with `shape='circle filled'`
   matrix=intersection_matrix(
       geom=geom_point(
         shape='circle filled',
-        size=3.5,
+        size=5,
         stroke=0.45
       )
   ),
   set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4))
+    upset_set_size(geom=geom_bar(width=0.4, color = "black", fill = "black"))
     + theme(
       axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line()
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 30, colour = "black"),
     )
   ),
   sort_sets='descending',
   sort_intersections='descending'
 )
 #upset_go.all
-ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_go.all, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_go.all, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_go.all, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_go.all, width = 40, height = 20, units = c("in"))
 
 
 
