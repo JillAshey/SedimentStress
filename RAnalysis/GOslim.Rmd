@@ -372,13 +372,15 @@ upset_go.all <- upset(
   ),
   stripes=upset_stripes(
     geom=geom_segment(size=12),  # make the stripes larger
-    colors=c("#0066CC", # Pacuta - branching      REMEMBER to check color order for all species
-              "#0066CC", # Acerv - branching 
-             "#A0A0A0", # Mcap - intermediate
+    colors=c("#E4E408", # Ofav - massive      REMEMBER to check color order for all species
+              "#E4E408", # Mcav - massive 
              "#E4E408",  # Plobata - massive
-             "#E4E408",  # Mcav - massive 
-             "#E4E408")  # Ofav - massive 
+              "#A0A0A0", # Mcap - intermediate
+             "#0066CC",  # Acerv - branching 
+             "#0066CC")  # Pacuta - branching 
   ), 
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  
   # to prevent connectors from getting the colorured
   # use `fill` instead of `color`, together with `shape='circle filled'`
   matrix=intersection_matrix(
@@ -499,13 +501,15 @@ upset_go.bp <- upset(
   stripes=upset_stripes(
     geom=geom_segment(size=12),  # make the stripes larger
     # REMEMBER to check color order for all species
-    colors=c("#0066CC", # Pacuta - branching  
-              "#0066CC", # Acerv - branching 
+    colors=c("#E4E408", # Ofav - massive  
+              "#E4E408", # Mcav - massive 
              "#E4E408",  # Plobata - massive
               "#A0A0A0", # Mcap - intermediate
-              "#E4E408",  # Mcav - massive 
-              "#E4E408")  # Ofav - massive 
+              "#0066CC",  # Acerv - branching 
+              "#0066CC")  # Pacuta - branching 
   ), 
+  #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  
   # to prevent connectors from getting the colorured
   # use `fill` instead of `color`, together with `shape='circle filled'`
   matrix=intersection_matrix(
@@ -525,7 +529,7 @@ upset_go.bp <- upset(
   sort_sets='descending',
   sort_intersections='descending'
 )
-#upset_go.bp
+upset_go.bp
 ggsave("Output/Figs/upset/upset_GO.BP_20221125.pdf", upset_go.bp, width = 40, height = 40, units = c("in"))
 ggsave("Output/Figs/upset/upset_GO.BP_20221125.png", upset_go.bp, width = 40, height = 40, units = c("in"))
 

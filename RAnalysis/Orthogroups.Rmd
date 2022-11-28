@@ -336,14 +336,17 @@ upset_ortho <- upset(
   ),
   stripes=upset_stripes(
     geom=geom_segment(size=12),  # make the stripes larger
-    colors=c("#0066CC", # Acerv - branching 
+    colors=c("#E4E408", # Ofav - massive 
              "#E4E408",  # Mcav - massive 
-             "#E4E408",  # Ofav - massive 
+             "#E4E408",  # Plob - massive 
              "#A0A0A0", # Mcap - intermediate 
              "#0066CC", # Pacuta - branching
-             "#E4E408")  # Plobata - massive
-  ), #         scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
-  # to prevent connectors from getting the colorured
+             "#0066CC")  # Acerv - branching
+  ),
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+
+    
+      # to prevent connectors from getting the colorured
   # use `fill` instead of `color`, together with `shape='circle filled'`
   matrix=intersection_matrix(
       geom=geom_point(
