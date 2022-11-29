@@ -345,34 +345,36 @@ go$Plobata <- ifelse(is.na(go$Plobata),0,1)
 upset_go.all <- upset(
   go,
   c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
-  queries=list(
-    upset_query(set='Acervicornis', fill='chartreuse3'),
-    upset_query(set='Mcavernosa', fill='chartreuse3'),
-    upset_query(set='Ofaveolata', fill='chartreuse3'),
-    upset_query(set='Mcapitata', fill='chocolate2'),
-    upset_query(set='Pacuta', fill='chocolate2'),
-    upset_query(set='Plobata', fill='chocolate2')
+  queries= list(
+    upset_query(set = 'Acervicornis', fill = 'chartreuse3'),
+    upset_query(set = 'Mcavernosa', fill = 'chartreuse3'),
+    upset_query(set = 'Ofaveolata', fill = 'chartreuse3'),
+    upset_query(set = 'Mcapitata', fill = 'chocolate2'),
+    upset_query(set = 'Pacuta', fill = 'chocolate2'),
+    upset_query(set = 'Plobata', fill = 'chocolate2')
   ),
-  base_annotations=list(
+  base_annotations = list(
     'Intersection size'=(
         intersection_size(
-        bar_number_threshold=5,  # show all numbers on top of bars
-        width=0.5,   # reduce width of the bars
+        bar_number_threshold = 0.85,  # show all numbers on top of bars
+        width = 0.9,   # width of the bars
       )
       # add some space on the top of the bars
-      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
       + theme(
           # hide grid lines
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
+          panel.grid.major = element_blank(),
+          panel.grid.minor = element_blank(),
           # show axis lines
-          axis.line=element_line(colour='black')
+          axis.line = element_line(colour = 'black'), 
+          axis.title.y = element_text(size = 30, colour = "black"),
+          axis.text.y = element_text(size = 25, colour = "black")
       )
     )
   ),
-  stripes=upset_stripes(
-    geom=geom_segment(size=12),  # make the stripes larger
-    colors=c("#E4E408", # Ofav - massive      REMEMBER to check color order for all species
+  stripes = upset_stripes(
+    geom = geom_segment(size = 35),  # make the stripes larger
+    colors = c("#E4E408", # Ofav - massive      REMEMBER to check color order for all species
               "#E4E408", # Mcav - massive 
              "#E4E408",  # Plobata - massive
               "#A0A0A0", # Mcap - intermediate
@@ -383,23 +385,31 @@ upset_go.all <- upset(
   
   # to prevent connectors from getting the colorured
   # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix=intersection_matrix(
-      geom=geom_point(
-        shape='circle filled',
-        size=5,
-        stroke=0.45
-      )
+  matrix = intersection_matrix(
+      geom = geom_point(
+        shape = 'circle filled',
+        size = 10,
+        stroke = 0.5
+      ) 
   ),
-  set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4, color = "black", fill = "black"))
+  set_sizes = (
+    upset_set_size(geom = geom_bar(width = 0.4, color = "black"))
     + theme(
-      axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line(),
-      axis.text.x = element_text(size = 30, colour = "black"),
+      axis.line.x = element_line(colour = 'black'),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x = element_line(),
+      axis.text.x = element_text(size = 25, colour = "black"),
+      axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
-  sort_sets='descending',
-  sort_intersections='descending'
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 50, colour = "black")),
+           'overall_sizes' = theme(axis.text.x = element_text(angle = 45))
+       )),
+ # themes=upset_default_themes(text=element_text(size=30),
+  sort_sets = 'descending',
+  sort_intersections = 'descending'
 )
 #upset_go.all
 ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_go.all, width = 40, height = 20, units = c("in"))
@@ -790,6 +800,10 @@ ggsave("Output/Figs/upset/upset_GO.MF_20221125.png", upset_go.mf, width = 40, he
 ```
 
 This is different code than what I used in the Orthogroup upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
+
+
+
+
 
 
 

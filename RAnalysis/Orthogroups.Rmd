@@ -15,8 +15,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(VennDiagram)
 library(arsenal) # comparedf function
-library(UpSetR)
-#library(ComplexUpset)
+#library(UpSetR)
+library(ComplexUpset)
 
 ## NOTE: cannot use UpSetR and ComplexUpset at the same time
 ```
@@ -416,7 +416,28 @@ upset(movies, attribute.plots = attributeplots,
       main.bar.color = "yellow")
 ```
 
+20221129
+Statistical tests for upset plots - This [post](https://krassowski.github.io/complex-upset/articles/Examples_R.html#running-statistical-tests) has lots of good examples for using Complex Upset package. It has a statistical test section as well (section 2). I'm going to see if I can run a statistical test with my data following the code from the post.
+```{r}
+## First do w/ movie dataset
+movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=TRUE, sep=";" )
+head(movies)
 
+genres <-colnames(movies)[3:19]
+genres
+
+#movies[genres] = movies[genres] == 1
+#t(head(movies[genres], 3))
+
+# stat test 
+blah <- upset_test(movies, genres)
+
+
+## with my data 
+species <- colnames(full)[2:3]
+
+upset_test(full, species)
+```
 
 
 
