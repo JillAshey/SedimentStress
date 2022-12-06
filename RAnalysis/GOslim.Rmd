@@ -15,6 +15,10 @@ knitr::opts_chunk$set(echo = TRUE)
 library(readr)
 library(arsenal)
 library(tidyverse)
+#library(UpSetR)
+library(ComplexUpset)
+
+## NOTE: cannot use UpSetR and ComplexUpset at the same time
 ```
 
 This code uses GO term annotation generated in Nov-Dec 2021 and Jan 2022
@@ -164,7 +168,7 @@ mcap.go <- read.csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", 
 mcap.go <- select(mcap.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(mcap.go)[2] <-"GO.IDs"
 mcap.go$Species <- "M.capitata"
-mcap.go$Site <- "Hawaii"
+mcap.go$Site <- "Hawai'i"
 mcap.go <- unique(mcap.go)
 length(unique(mcap.go$GO.IDs)) # 343 unique GO terms 
 
@@ -206,7 +210,7 @@ pacuta.go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.
 pacuta.go <- select(pacuta.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(pacuta.go)[2] <-"GO.IDs"
 pacuta.go$Species <- "P.acuta"
-pacuta.go$Site <- "Hawaii"
+pacuta.go$Site <- "Hawai'i"
 pacuta.go <- unique(pacuta.go)
 length(unique(pacuta.go$GO.IDs)) # 532 unique GO terms 
 
@@ -248,7 +252,7 @@ plob.go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", 
 plob.go <- select(plob.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(plob.go)[2] <-"GO.IDs"
 plob.go$Species <- "P.lobata"
-plob.go$Site <- "Hawaii"
+plob.go$Site <- "Hawai'i"
 plob.go <- unique(plob.go)
 length(unique(plob.go$GO.IDs)) # 279 unique GO terms 
 
@@ -341,79 +345,79 @@ go$Mcapitata <- ifelse(is.na(go$Mcapitata),0,1)
 go$Pacuta <- ifelse(is.na(go$Pacuta),0,1)
 go$Plobata <- ifelse(is.na(go$Plobata),0,1)
 
+## change column/species names so that they will look nice in the plot (i.e. change Acervicornis to A. cervicornis and make italic in plot). I guess I could do it in the above step
+colnames(go) <- c("Orthogroup", "A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata")
+
 # Upset plot w/ ALL GO terms 
 upset_go.all <- upset(
   go,
-  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
-  queries= list(
-    upset_query(set = 'Acervicornis', fill = 'chartreuse3'),
-    upset_query(set = 'Mcavernosa', fill = 'chartreuse3'),
-    upset_query(set = 'Ofaveolata', fill = 'chartreuse3'),
-    upset_query(set = 'Mcapitata', fill = 'chocolate2'),
-    upset_query(set = 'Pacuta', fill = 'chocolate2'),
-    upset_query(set = 'Plobata', fill = 'chocolate2')
+  c("A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata"),
+  queries=list(
+    upset_query(set='A. cervicornis', fill='chartreuse3'),
+    upset_query(set='M. cavernosa', fill='chartreuse3'),
+    upset_query(set='O. faveolata', fill='chartreuse3'),
+    upset_query(set='M. capitata', fill='chocolate2'),
+    upset_query(set='P. acuta', fill='chocolate2'),
+    upset_query(set='P. lobata', fill='chocolate2')
   ),
-  base_annotations = list(
-    'Intersection size'=(
+  base_annotations=list(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
         intersection_size(
-        bar_number_threshold = 0.85,  # show all numbers on top of bars
-        width = 0.9,   # width of the bars
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
-      # add some space on the top of the bars
-      + scale_y_continuous(expand = expansion(mult = c(0, 0.05)))
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
       + theme(
-          # hide grid lines
-          panel.grid.major = element_blank(),
-          panel.grid.minor = element_blank(),
-          # show axis lines
-          axis.line = element_line(colour = 'black'), 
-          axis.title.y = element_text(size = 30, colour = "black"),
-          axis.text.y = element_text(size = 25, colour = "black")
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 35, colour = "black"), 
+          axis.text.y = element_text(size = 30, colour = "black")
       )
     )
   ),
-  stripes = upset_stripes(
-    geom = geom_segment(size = 35),  # make the stripes larger
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=35),  # make the stripes larger  ---  REMEMBER to check color order for all species
     colors = c("#E4E408", # Ofav - massive      REMEMBER to check color order for all species
               "#E4E408", # Mcav - massive 
              "#E4E408",  # Plobata - massive
               "#A0A0A0", # Mcap - intermediate
              "#0066CC",  # Acerv - branching 
              "#0066CC")  # Pacuta - branching 
-  ), 
-      #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
-  
-  # to prevent connectors from getting the colorured
-  # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix = intersection_matrix(
-      geom = geom_point(
-        shape = 'circle filled',
-        size = 10,
-        stroke = 0.5
-      ) 
   ),
-  set_sizes = (
-    upset_set_size(geom = geom_bar(width = 0.4, color = "black"))
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
+      geom=geom_point(
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.5
+      ), 
+      segment=geom_segment(size=2)
+  ),
+  set_sizes=( # this changes the set size bar plot (in the bottom left corner)
+    upset_set_size(geom=geom_bar(width=0.5, colour = "black"))
     + theme(
-      axis.line.x = element_line(colour = 'black'),
+      axis.line.x=element_line(colour='black', size = 2),
       axis.line.y = element_line(colour = 'black'),
-      axis.ticks.x = element_line(),
+      axis.ticks.x=element_line(),
       axis.text.x = element_text(size = 25, colour = "black"),
       axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
   themes = upset_modify_themes(
        list(
-           'intersections_matrix' = theme(text = element_text(size = 50, colour = "black")),
-           'overall_sizes' = theme(axis.text.x = element_text(angle = 45))
+           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
        )),
- # themes=upset_default_themes(text=element_text(size=30),
-  sort_sets = 'descending',
-  sort_intersections = 'descending'
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
 )
 #upset_go.all
-ggsave("Output/Figs/upset/upset_all_GO_20221125.pdf", upset_go.all, width = 40, height = 20, units = c("in"))
-ggsave("Output/Figs/upset/upset_all_GO_20221125.png", upset_go.all, width = 40, height = 20, units = c("in"))
+
+ggsave("Output/Figs/upset/upset_all_GO_20221205.pdf", upset_go.all, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_all_GO_20221205.png", upset_go.all, width = 40, height = 20, units = c("in"))
 
 
 
@@ -480,69 +484,78 @@ go.bp$Mcapitata <- ifelse(is.na(go.bp$Mcapitata),0,1)
 go.bp$Pacuta <- ifelse(is.na(go.bp$Pacuta),0,1)
 go.bp$Plobata <- ifelse(is.na(go.bp$Plobata),0,1)
 
+## change column/species names so that they will look nice in the plot (i.e. change Acervicornis to A. cervicornis and make italic in plot). I guess I could do it in the above step
+colnames(go.bp) <- c("Orthogroup", "A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata")
+
 # Upset plot w/ BP GO terms 
 upset_go.bp <- upset(
   go.bp,
-  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  c("A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata"),
   queries=list(
-    upset_query(set='Acervicornis', fill='chartreuse3'),
-    upset_query(set='Mcavernosa', fill='chartreuse3'),
-    upset_query(set='Ofaveolata', fill='chartreuse3'),
-    upset_query(set='Mcapitata', fill='chocolate2'),
-    upset_query(set='Pacuta', fill='chocolate2'),
-    upset_query(set='Plobata', fill='chocolate2')
+    upset_query(set='A. cervicornis', fill='chartreuse3'),
+    upset_query(set='M. cavernosa', fill='chartreuse3'),
+    upset_query(set='O. faveolata', fill='chartreuse3'),
+    upset_query(set='M. capitata', fill='chocolate2'),
+    upset_query(set='P. acuta', fill='chocolate2'),
+    upset_query(set='P. lobata', fill='chocolate2')
   ),
   base_annotations=list(
-    'Intersection size'=(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
         intersection_size(
-        bar_number_threshold=1,  # show all numbers on top of bars
-        width=0.5,   # reduce width of the bars
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
-      # add some space on the top of the bars
-      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
       + theme(
-          # hide grid lines
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          # show axis lines
-          axis.line=element_line(colour='black')
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 35, colour = "black"), 
+          axis.text.y = element_text(size = 30, colour = "black")
       )
     )
   ),
-  stripes=upset_stripes(
-    geom=geom_segment(size=12),  # make the stripes larger
-    # REMEMBER to check color order for all species
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=35),  # make the stripes larger  ---  REMEMBER to check color order for all species
     colors=c("#E4E408", # Ofav - massive  
               "#E4E408", # Mcav - massive 
              "#E4E408",  # Plobata - massive
               "#A0A0A0", # Mcap - intermediate
               "#0066CC",  # Acerv - branching 
               "#0066CC")  # Pacuta - branching 
-  ), 
-  #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
-  
-  # to prevent connectors from getting the colorured
-  # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix=intersection_matrix(
-      geom=geom_point(
-        shape='circle filled',
-        size=3.5,
-        stroke=0.45
-      )
   ),
-  set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4))
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
+      geom=geom_point(
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.5
+      ), 
+      segment=geom_segment(size=2)
+  ),
+  set_sizes=( # this changes the set size bar plot (in the bottom left corner)
+    upset_set_size(geom=geom_bar(width=0.5, colour = "black"))
     + theme(
-      axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line()
+      axis.line.x=element_line(colour='black', size = 2),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 25, colour = "black"),
+      axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
-  sort_sets='descending',
-  sort_intersections='descending'
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
+       )),
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
 )
 upset_go.bp
-ggsave("Output/Figs/upset/upset_GO.BP_20221125.pdf", upset_go.bp, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.BP_20221125.png", upset_go.bp, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.BP_20221205.pdf", upset_go.bp, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.BP_20221205.png", upset_go.bp, width = 40, height = 20, units = c("in"))
 
 
 
@@ -609,67 +622,79 @@ go.cc$Mcapitata <- ifelse(is.na(go.cc$Mcapitata),0,1)
 go.cc$Pacuta <- ifelse(is.na(go.cc$Pacuta),0,1)
 go.cc$Plobata <- ifelse(is.na(go.cc$Plobata),0,1)
 
+## change column/species names so that they will look nice in the plot (i.e. change Acervicornis to A. cervicornis and make italic in plot). I guess I could do it in the above step
+colnames(go.cc) <- c("Orthogroup", "A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata")
+
 # Upset plot w/ CC GO terms 
 upset_go.cc <- upset(
   go.cc,
-  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  c("A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata"),
   queries=list(
-    upset_query(set='Acervicornis', fill='chartreuse3'),
-    upset_query(set='Mcavernosa', fill='chartreuse3'),
-    upset_query(set='Ofaveolata', fill='chartreuse3'),
-    upset_query(set='Mcapitata', fill='chocolate2'),
-    upset_query(set='Pacuta', fill='chocolate2'),
-    upset_query(set='Plobata', fill='chocolate2')
+    upset_query(set='A. cervicornis', fill='chartreuse3'),
+    upset_query(set='M. cavernosa', fill='chartreuse3'),
+    upset_query(set='O. faveolata', fill='chartreuse3'),
+    upset_query(set='M. capitata', fill='chocolate2'),
+    upset_query(set='P. acuta', fill='chocolate2'),
+    upset_query(set='P. lobata', fill='chocolate2')
   ),
   base_annotations=list(
-    'Intersection size'=(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
         intersection_size(
-        bar_number_threshold=1,  # show all numbers on top of bars
-        width=0.5,   # reduce width of the bars
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
-      # add some space on the top of the bars
-      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
       + theme(
-          # hide grid lines
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          # show axis lines
-          axis.line=element_line(colour='black')
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 35, colour = "black"), 
+          axis.text.y = element_text(size = 30, colour = "black")
       )
     )
   ),
-  stripes=upset_stripes(
-    geom=geom_segment(size=12),  # make the stripes larger
-    # REMEMBER to check color order for all species
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=35),  # make the stripes larger  ---  REMEMBER to check color order for all species
     colors=c( "#E4E408",  # Ofav - massive 
              "#E4E408",  # Mcav - massive 
             "#0066CC", # Pacuta - branching  
              "#E4E408",  # Plobata - massive
             "#0066CC", # Acerv - branching 
             "#A0A0A0") # Mcap - intermediate
-  ), 
-  # to prevent connectors from getting the colorured
-  # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix=intersection_matrix(
-      geom=geom_point(
-        shape='circle filled',
-        size=3.5,
-        stroke=0.45
-      )
   ),
-  set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4))
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
+      geom=geom_point(
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.5
+      ), 
+      segment=geom_segment(size=2)
+  ),
+  set_sizes=( # this changes the set size bar plot (in the bottom left corner)
+    upset_set_size(geom=geom_bar(width=0.5, colour = "black"))
     + theme(
-      axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line()
+      axis.line.x=element_line(colour='black', size = 2),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 25, colour = "black"),
+      axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
-  sort_sets='descending',
-  sort_intersections='descending'
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
+       )),
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
 )
+
 #upset_go.cc
-ggsave("Output/Figs/upset/upset_GO.CC_20221125.pdf", upset_go.cc, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.CC_20221125.png", upset_go.cc, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.CC_20221205.pdf", upset_go.cc, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.CC_20221205.png", upset_go.cc, width = 40, height = 20, units = c("in"))
 
 
 
@@ -736,70 +761,80 @@ go.mf$Mcapitata <- ifelse(is.na(go.mf$Mcapitata),0,1)
 go.mf$Pacuta <- ifelse(is.na(go.mf$Pacuta),0,1)
 go.mf$Plobata <- ifelse(is.na(go.mf$Plobata),0,1)
 
-# Upset plot w/ MF GO terms 
+## change column/species names so that they will look nice in the plot (i.e. change Acervicornis to A. cervicornis and make italic in plot). I guess I could do it in the above step
+colnames(go.mf) <- c("Orthogroup", "A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata")
+
+# Upset plot w/ BP GO terms 
 upset_go.mf <- upset(
   go.mf,
-  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  c("A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata"),
   queries=list(
-    upset_query(set='Acervicornis', fill='chartreuse3'),
-    upset_query(set='Mcavernosa', fill='chartreuse3'),
-    upset_query(set='Ofaveolata', fill='chartreuse3'),
-    upset_query(set='Mcapitata', fill='chocolate2'),
-    upset_query(set='Pacuta', fill='chocolate2'),
-    upset_query(set='Plobata', fill='chocolate2')
+    upset_query(set='A. cervicornis', fill='chartreuse3'),
+    upset_query(set='M. cavernosa', fill='chartreuse3'),
+    upset_query(set='O. faveolata', fill='chartreuse3'),
+    upset_query(set='M. capitata', fill='chocolate2'),
+    upset_query(set='P. acuta', fill='chocolate2'),
+    upset_query(set='P. lobata', fill='chocolate2')
   ),
   base_annotations=list(
-    'Intersection size'=(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
         intersection_size(
-        bar_number_threshold=1,  # show all numbers on top of bars
-        width=0.5,   # reduce width of the bars
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
-      # add some space on the top of the bars
-      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
       + theme(
-          # hide grid lines
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          # show axis lines
-          axis.line=element_line(colour='black')
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 35, colour = "black"), 
+          axis.text.y = element_text(size = 30, colour = "black")
       )
     )
   ),
-  stripes=upset_stripes(
-    geom=geom_segment(size=12),  # make the stripes larger
-    # REMEMBER to check color order for all species
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=35),  # make the stripes larger  ---  REMEMBER to check color order for all species
     colors=c( "#E4E408",  # Ofav - massive 
               "#E4E408",  # Mcav - massive 
               "#E4E408",  # Plobata - massive
               "#0066CC", # Acerv - branching 
               "#A0A0A0", # Mcap - intermediate
               "#0066CC") # Pacuta - branching
-  ), 
-  # to prevent connectors from getting the colorured
-  # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix=intersection_matrix(
-      geom=geom_point(
-        shape='circle filled',
-        size=3.5,
-        stroke=0.45
-      )
   ),
-  set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4))
+    #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
+      geom=geom_point(
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.5
+      ), 
+      segment=geom_segment(size=2)
+  ),
+  set_sizes=( # this changes the set size bar plot (in the bottom left corner)
+    upset_set_size(geom=geom_bar(width=0.5, colour = "black"))
     + theme(
-      axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line()
+      axis.line.x=element_line(colour='black', size = 2),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 25, colour = "black"),
+      axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
-  sort_sets='descending',
-  sort_intersections='descending'
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
+       )),
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
 )
 #upset_go.mf
-ggsave("Output/Figs/upset/upset_GO.MF_20221125.pdf", upset_go.mf, width = 40, height = 40, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.MF_20221125.png", upset_go.mf, width = 40, height = 40, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.MF_20221205.pdf", upset_go.mf, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_GO.MF_20221205.png", upset_go.mf, width = 40, height = 20, units = c("in"))
 ```
 
-This is different code than what I used in the Orthogroup upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
 
 
 
@@ -964,9 +999,9 @@ all.go.BP.slim <- all.go.BP.slim %>% mutate(Location =
                                               case_when(Species == "A.cervicornis" ~ "Florida", 
                                                         Species == "M.cavernosa" ~ "Florida",
                                                         Species == "O.faveolata" ~ "Florida",
-                                                        Species == "M.capitata" ~ "Hawaii",
-                                                        Species == "P.acuta" ~ "Hawaii",
-                                                        Species == "P.lobata" ~ "Hawaii"))
+                                                        Species == "M.capitata" ~ "Hawai'i",
+                                                        Species == "P.acuta" ~ "Hawai'i",
+                                                        Species == "P.lobata" ~ "Hawai'i"))
 
 # count GOslim by location
 count_by_location <- all.go.BP.slim %>%
@@ -988,36 +1023,40 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
   #ggtitle(label = "Counts of GO Slim Categories by Location") +
   #coord_flip() +
   theme_bw() +
+  #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
+        plot.margin = margin(3,3,3,3, "cm")) + 
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 750)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-#ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20221205.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/LocationsCounts_GOslim.BP_20221205.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.BP.slim <- all.go.BP.slim %>% mutate(Morphology = 
                                               case_when(Species == "A.cervicornis" ~ "Branching", 
                                                         Species == "M.cavernosa" ~ "Massive",
                                                         Species == "O.faveolata" ~ "Massive",
-                                                        Species == "M.capitata" ~ "Intermediate", # branching or intermediate?
+                                                        Species == "M.capitata" ~ "Intermediate", 
                                                         Species == "P.acuta" ~ "Branching",
                                                         Species == "P.lobata" ~ "Massive"))
 
@@ -1041,29 +1080,33 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
   #ggtitle(label = "Counts of GO Slim Categories by Morphology") +
   #coord_flip() +
   theme_bw() +
+    #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 775)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+        plot.margin = margin(3,3,3,3, "cm")) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 425)) + 
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
 count_morph_plot
-#ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221205.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221205.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 ## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
@@ -1555,9 +1598,9 @@ all.go.CC.slim <- all.go.CC.slim %>% mutate(Location =
                                               case_when(Species == "A.cervicornis" ~ "Florida", 
                                                         Species == "M.cavernosa" ~ "Florida",
                                                         Species == "O.faveolata" ~ "Florida",
-                                                        Species == "M.capitata" ~ "Hawaii",
-                                                        Species == "P.acuta" ~ "Hawaii",
-                                                        Species == "P.lobata" ~ "Hawaii"))
+                                                        Species == "M.capitata" ~ "Hawai'i",
+                                                        Species == "P.acuta" ~ "Hawai'i",
+                                                        Species == "P.lobata" ~ "Hawai'i"))
 
 # count GOslim by location
 count_by_location <- all.go.CC.slim %>%
@@ -1579,36 +1622,40 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
   #ggtitle(label = "Counts of GO Slim Categories by Location") +
   #coord_flip() +
   theme_bw() +
+    #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
+        plot.margin = margin(3,3,3,3, "cm")) + 
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 120)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-#ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20221206.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/LocationsCounts_GOslim.CC_20221206.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.CC.slim <- all.go.CC.slim %>% mutate(Morphology = 
                                               case_when(Species == "A.cervicornis" ~ "Branching", 
                                                         Species == "M.cavernosa" ~ "Massive",
                                                         Species == "O.faveolata" ~ "Massive",
-                                                        Species == "M.capitata" ~ "Branching",
+                                                        Species == "M.capitata" ~ "Intermediate",
                                                         Species == "P.acuta" ~ "Branching",
                                                         Species == "P.lobata" ~ "Massive"))
 
@@ -1631,30 +1678,34 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
   ylab("GO Term Counts\n") + 
   #ggtitle(label = "Counts of GO Slim Categories by Morphology") +
   #coord_flip() +
-  theme_bw() +
+    theme_bw() +
+    #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
+        plot.margin = margin(3,3,3,3, "cm")) + 
   scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 125)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
-        scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
+        scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
 count_morph_plot
-#ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20221206.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20221206.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 Make bar charts for go slim term counts for species, locations, and morphologies - MF only
@@ -1716,9 +1767,9 @@ all.go.MF.slim <- all.go.MF.slim %>% mutate(Location =
                                               case_when(Species == "A.cervicornis" ~ "Florida", 
                                                         Species == "M.cavernosa" ~ "Florida",
                                                         Species == "O.faveolata" ~ "Florida",
-                                                        Species == "M.capitata" ~ "Hawaii",
-                                                        Species == "P.acuta" ~ "Hawaii",
-                                                        Species == "P.lobata" ~ "Hawaii"))
+                                                        Species == "M.capitata" ~ "Hawai'i",
+                                                        Species == "P.acuta" ~ "Hawai'i",
+                                                        Species == "P.lobata" ~ "Hawai'i"))
 
 # count GOslim by location
 count_by_location <- all.go.MF.slim %>%
@@ -1739,37 +1790,41 @@ count_location_plot <- ggplot(count_by_location, aes(fill = Location, y = n, x =
   ylab("GO Term Counts\n") + 
   #ggtitle(label = "Counts of GO Slim Categories by Location") +
   #coord_flip() +
-  theme_bw() +
+    theme_bw() +
+    #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 400)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+        plot.margin = margin(3,3,3,3, "cm")) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 350)) + 
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("chartreuse3", "chocolate2"))
 count_location_plot
-#ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20220417.png", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20221206.pdf", count_location_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/LocationsCounts_GOslim.MF_20221206.png", count_location_plot, width = 49, height = 40, units = c("in"))
 
 # plot by morphology type
 all.go.MF.slim <- all.go.MF.slim %>% mutate(Morphology = 
                                               case_when(Species == "A.cervicornis" ~ "Branching", 
                                                         Species == "M.cavernosa" ~ "Massive",
                                                         Species == "O.faveolata" ~ "Massive",
-                                                        Species == "M.capitata" ~ "Branching",
+                                                        Species == "M.capitata" ~ "Intermediate",
                                                         Species == "P.acuta" ~ "Branching",
                                                         Species == "P.lobata" ~ "Massive"))
 
@@ -1792,30 +1847,34 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
   ylab("GO Term Counts\n") + 
   #ggtitle(label = "Counts of GO Slim Categories by Morphology") +
   #coord_flip() +
-  theme_bw() +
+      theme_bw() +
+    #theme_classic() +
   theme(axis.text.x = element_text(angle = 65,
                                    #vjust = 0.5, 
                                    hjust= 1, 
                                    size=80, 
                                    colour = "black"), 
+        axis.title.x = element_text(size = 0),
         axis.text.y = element_text(size = 60, colour = "black"),
         axis.title.y = element_text(size = 80, face = "bold"),
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
-        plot.margin = margin(3,3,3,3, "cm")) +
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 400)) + 
-  theme(legend.title = element_text(size = 80), 
-        legend.key.size = unit(2, "cm"),
-        legend.text = element_text(size=80), 
-        legend.position = c(0.85, 0.85), 
-        legend.justification = c("right", "top"),
+        plot.margin = margin(3,3,3,3, "cm")) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 150)) + 
+  theme(legend.title = element_text(size = 55, face = "bold"), 
+        legend.key.size = unit(5, "cm"),
+        legend.key = element_rect(fill = "white", colour = "black"),
+        legend.text = element_text(size=45), 
+        #legend.position = c(1, 1), 
+        legend.justification = c("right"),
         legend.box.just = "right",
-        legend.background = element_rect(fill = "white", color = "black"),
-        legend.box.background = element_rect(color="black", size=2)) +
-        scale_fill_manual(values = c("paleturquoise3", "rosybrown2"))
+        legend.box.margin = margin(t = 2, r = 1, b = 2, l = 1, unit = "cm"),
+        legend.background = element_rect(fill = "white"),
+        legend.box.background = element_rect(color="white", size=5)) +
+        scale_fill_manual(values = c("#0066CC", "#E4E408"))
 count_morph_plot
-#ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-#ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20220417.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221206.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221206.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
 

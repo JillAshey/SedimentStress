@@ -303,39 +303,47 @@ full$Plobata <- ifelse(is.na(full$Plobata),0,1)
 Make upset plot 
 
 Trying the code from this stackover flow post: https://stackoverflow.com/questions/67094573/upsetr-sets-bar-interacting-different-color-and-its-sets-intersections
+
+Vignette for ComplexUpset [here](https://krassowski.github.io/complex-upset/articles/Examples_R.html)
+PDF: https://cran.r-project.org/web/packages/ComplexUpset/ComplexUpset.pdf
 ```{r}
 library(ComplexUpset)
 
+## change column/species names so that they will look nice in the plot (i.e. change Acervicornis to A. cervicornis and make italic in plot). I guess I could do it in the above step
+colnames(full) <- c("Orthogroup", "A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata")
+
+# plot
 upset_ortho <- upset(
   full,
-  c("Acervicornis", "Mcavernosa", "Ofaveolata", "Mcapitata", "Pacuta", "Plobata"),
+  c("A. cervicornis", "M. cavernosa", "O. faveolata", "M. capitata", "P. acuta", "P. lobata"),
   queries=list(
-    upset_query(set='Acervicornis', fill='chartreuse3'),
-    upset_query(set='Mcavernosa', fill='chartreuse3'),
-    upset_query(set='Ofaveolata', fill='chartreuse3'),
-    upset_query(set='Mcapitata', fill='chocolate2'),
-    upset_query(set='Pacuta', fill='chocolate2'),
-    upset_query(set='Plobata', fill='chocolate2')
+    upset_query(set='A. cervicornis', fill='chartreuse3'),
+    upset_query(set='M. cavernosa', fill='chartreuse3'),
+    upset_query(set='O. faveolata', fill='chartreuse3'),
+    upset_query(set='M. capitata', fill='chocolate2'),
+    upset_query(set='P. acuta', fill='chocolate2'),
+    upset_query(set='P. lobata', fill='chocolate2')
   ),
   base_annotations=list(
-    'Intersection size'=(
+    'Intersection size'=(     # this creates the bar plot showing intersection size (top right corner)
         intersection_size(
-        bar_number_threshold=1,  # show all numbers on top of bars
-        width=0.5,   # reduce width of the bars
+        bar_number_threshold=0.85,  # show all numbers on top of bars
+        width=0.9,   # reduce width of the bars
+        text = list(size=10), # change text size over bars
+        text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
-      # add some space on the top of the bars
-      + scale_y_continuous(expand=expansion(mult=c(0, 0.05)))
+      + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
       + theme(
-          # hide grid lines
-          panel.grid.major=element_blank(),
-          panel.grid.minor=element_blank(),
-          # show axis lines
-          axis.line=element_line(colour='black')
+          panel.grid.major=element_blank(), # hide grid lines
+          panel.grid.minor=element_blank(), # hide grid lines
+          axis.line=element_line(colour='black', size = 2), # show axis lines
+          axis.title.y = element_text(size = 35, colour = "black"), 
+          axis.text.y = element_text(size = 30, colour = "black")
       )
     )
   ),
-  stripes=upset_stripes(
-    geom=geom_segment(size=12),  # make the stripes larger
+  stripes=upset_stripes(    # this changes the color of the stripes in the matrix (underneath the bar plot, bottom right corner)
+    geom=geom_segment(size=35),  # make the stripes larger  ---  REMEMBER to check color order for all species
     colors=c("#E4E408", # Ofav - massive 
              "#E4E408",  # Mcav - massive 
              "#E4E408",  # Plob - massive 
@@ -344,77 +352,43 @@ upset_ortho <- upset(
              "#0066CC")  # Acerv - branching
   ),
     #0066CC = blue; #E4E408 = yellow; #A0A0A0 = gray
-
-    
-      # to prevent connectors from getting the colorured
-  # use `fill` instead of `color`, together with `shape='circle filled'`
-  matrix=intersection_matrix(
+  matrix=intersection_matrix( # this changes the circles and connecting lines in the matrix
       geom=geom_point(
-        shape='circle filled',
-        size=3.5,
-        stroke=0.45
-      )
+        shape='circle filled', # to prevent connectors from getting the color, use `fill` instead of `color`, together with `shape='circle filled'
+        size=10,
+        stroke=0.6
+      ), 
+      segment=geom_segment(size=2)
   ),
-  set_sizes=(
-    upset_set_size(geom=geom_bar(width=0.4))
+  set_sizes=( # this changes the set size bar plot (in the bottom left corner)
+    upset_set_size(geom=geom_bar(width=0.5, colour = "black"))
     + theme(
-      axis.line.x=element_line(colour='black'),
-      axis.ticks.x=element_line()
+      axis.line.x=element_line(colour='black', size = 2),
+      axis.line.y = element_line(colour = 'black'),
+      axis.ticks.x=element_line(),
+      axis.text.x = element_text(size = 25, colour = "black"),
+      axis.title.x = element_text(size = 30, colour = "black"),
     )
   ),
-  sort_sets='descending',
-  sort_intersections='descending'
+  themes = upset_modify_themes(
+       list(
+           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+          'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
+       )),
+  sort_sets = 'descending', # sort sets in descending order
+  sort_intersections = 'descending' # sort intersections in descending order
 )
+upset_ortho 
 
-ggsave("Output/Figs/upset/upset_ortho_20221125.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
-ggsave("Output/Figs/upset/upset_ortho_20221125.png", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221205.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("Output/Figs/upset/upset_ortho_20221205.png", upset_ortho, width = 40, height = 20, units = c("in"))
 ```
+Will add legend in powerpoint real quick
+
+
 This is different code than what I used in the GO upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/GOslim.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
 
 
-
-```{r}
-## more upset plot stuff 
-movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=TRUE, sep=";" )
-
-require(ggplot2); require(plyr); require(gridExtra); require(grid);
-
-between <- function(row, min, max){
-  newData <- (row["ReleaseDate"] < max) & (row["ReleaseDate"] > min)
-}
-
-plot1 <- function(mydata, x){
-  myplot <- (ggplot(mydata, aes_string(x= x, fill = "color"))
-            + geom_histogram() + scale_fill_identity()
-            + theme(plot.margin = unit(c(0,0,0,0), "cm")))
-}
-
-plot2 <- function(mydata, x, y){
-  myplot <- (ggplot(data = mydata, aes_string(x=x, y=y, colour = "color"), alpha = 0.5)
-            + geom_point() + scale_color_identity()
-            + theme_bw() + theme(plot.margin = unit(c(0,0,0,0), "cm")))
-}
-
-attributeplots <- list(gridrows = 55,
-                  plots = list(list(plot = plot1, x= "ReleaseDate",  queries = FALSE),
-                         list(plot = plot1, x= "ReleaseDate", queries = TRUE),
-                         list(plot = plot2, x = "ReleaseDate", y = "AvgRating", queries = FALSE),
-                         list(plot = plot2, x = "ReleaseDate", y = "AvgRating", queries = TRUE)),
-                   ncols = 3)
-
-upset(movies, nsets = 7, nintersects = 30, mb.ratio = c(0.5, 0.5),
-      order.by = c("freq", "degree"), decreasing = c(TRUE,FALSE))
-
-upset(movies, sets = c("Drama", "Comedy", "Action", "Thriller", "Western", "Documentary"),
-      queries = list(list(query = intersects, params = list("Drama", "Action")),
-                list(query = between, params = list(1970, 1980), color = "red", active = TRUE)))
-
-upset(movies, attribute.plots = attributeplots,
-     queries = list(list(query = between, params = list(1920, 1940)),
-                    list(query = intersects, params = list("Drama"), color= "red"),
-                    list(query = elements, params = list("ReleaseDate", 1990, 1991, 1992))),
-      main.bar.color = "yellow")
-```
 
 20221129
 Statistical tests for upset plots - This [post](https://krassowski.github.io/complex-upset/articles/Examples_R.html#running-statistical-tests) has lots of good examples for using Complex Upset package. It has a statistical test section as well (section 2). I'm going to see if I can run a statistical test with my data following the code from the post.
@@ -434,7 +408,7 @@ blah <- upset_test(movies, genres)
 
 
 ## with my data 
-species <- colnames(full)[2:3]
+species <- colnames(full)[2:7]
 
 upset_test(full, species)
 ```
