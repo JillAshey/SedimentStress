@@ -1092,7 +1092,7 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) + 
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 425)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 25)) + 
   theme(legend.title = element_text(size = 55, face = "bold"), 
         legend.key.size = unit(5, "cm"),
         legend.key = element_rect(fill = "white", colour = "black"),
