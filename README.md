@@ -4,7 +4,7 @@ This study evaluated the transcriptomic responses of corals with different morph
 
 ### Experimental design
 
-
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/ExperimentalDesign.png)
 
 ### Bioinformatic pipeline
 
