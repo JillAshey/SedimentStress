@@ -1,0 +1,7 @@
+﻿Species,Location,Morphology,Unique DEGs,Upregulated DEGs,Downregulated DEGs,Unique GO terms assigned to DEGs,Orthogroups containing DEGs,DEGs in orthogroups
+A. cervicornis,Florida,Branching,215,67,154,278,102,119
+M. cavernosa,Florida,Massive,62,19,44,158,28,31
+O. faveolata,Florida,Massive,8,0,8,27,2,2
+M. capitata,Hawai'i,Intermediate,157,79,78,237,80,87
+P. acuta,Hawai'i,Branching,263,129,135,380,100,123
+P. lobata,Hawai'i,Massive,153,32,128,198,56,66
