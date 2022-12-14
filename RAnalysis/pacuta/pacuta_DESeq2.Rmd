@@ -299,6 +299,32 @@ PC.info <- pacuta_DEGPCAplot$data
 ```
 
 
+20221208 
+
+## Volcano plot w/ DEGs
+```{r}
+## Load data 
+DEG <- read.csv("Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220116.csv", header = T)
+head(DEG)
+
+
+## Get rid of extra columns 
+DEG <- DEG[,-c(1, 9:20)]
+
+## Plot basic scatter plot: x is log2FoldChange, y is pvalue (I'm using padj in my plots)
+ggplot(data=DEG, aes(x=log2FoldChange, y=padj)) + geom_point()
+
+## Convert the p-value into a -log10(p-value)
+p <- ggplot(data=DEG, aes(x=log2FoldChange, y=-log10(padj))) + geom_point() + theme_minimal()
+p
+
+# Add vertical lines for log2FoldChange thresholds, and one horizontal line for the p-value threshold 
+p2 <- p + geom_vline(xintercept=c(-0.6, 0.6), col="red") +
+          geom_hline(yintercept=-log10(0.05), col="red")
+p2
+
+
+```
 
 
 

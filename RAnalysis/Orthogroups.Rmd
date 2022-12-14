@@ -386,7 +386,6 @@ ggsave("Output/Figs/upset/upset_ortho_20221205.png", upset_ortho, width = 40, he
 Will add legend in powerpoint real quick
 
 
-This is different code than what I used in the GO upset [plots](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/GOslim.Rmd). As I move forward, I'll assess which version of the code is better/easier to work with. 
 
 
 
