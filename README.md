@@ -8,4 +8,4 @@ This study evaluated the transcriptomic responses of corals with different morph
 
 ### Bioinformatic pipeline
 
-![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/BioinformaticPipeline.jpeg?token=APHKO3ZVWTZNRAOJLSGSRATAU3WFC)
+![](https://raw.githubusercontent.com/JillAshey/SedimentStress/master/Images/BioinformaticPipeline.png)
