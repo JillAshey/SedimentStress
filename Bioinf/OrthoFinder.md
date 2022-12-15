@@ -6,7 +6,7 @@
 
 [OrthoFinder tutorials](https://davidemms.github.io/menu/about.html)
 
-###Running OrthoFinder 
+## Running OrthoFinder 
 
 *I did this anaylsis on Bluewaves*
 
@@ -397,6 +397,5 @@ In acerv v mcav file: 12086 rows
 In mcav v acerv file: 12086 rows 
 
 
-merge these files with DEG files and turn the genes that are also DEG to 1 and NA to 0 aka that gene was not assigned to an orthogroup. then compare across groups 
+Merge these files with DEG files and turn the genes that are also DEG to 1 and NA to 0 aka that gene was not assigned to an orthogroup. Then compare across groups. The Github for this project is linked [here](https://github.com/JillAshey/SedimentStress).
 
-and then merge all groups???????

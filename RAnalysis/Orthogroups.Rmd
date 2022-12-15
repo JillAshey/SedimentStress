@@ -6,8 +6,7 @@ output: html_document
 ---
 
 
-
-20220920 note to self - try this link https://sfirke.github.io/janitor/reference/get_dupes.htmlhttps://sfirke.github.io/janitor/reference/get_dupes.html to identify duplicates in dataset 
+[Github for this proect](https://github.com)
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
