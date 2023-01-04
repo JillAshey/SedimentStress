@@ -100,7 +100,7 @@ mcav_all.go.slim.BP_uniq <- unique(mcav_all.go.slim.BP_uniq)
 
 mcav_all.go.slim.CC <- subset(mcav.go.slim, ontology == "CC")
 mcav_all.go.slim.CC <- unique(mcav_all.go.slim.CC)
-length(unique(mcav_all.go.slim.CC$GO.IDs)) # 21 unique BP GO terms 
+length(unique(mcav_all.go.slim.CC$GO.IDs)) # 21 unique CC GO terms 
 #write.csv(mcav_all.go.slim.CC, "Output/GOSeq/mcav/mcav.go.slim.CC_20220208.csv")
 mcav_all.go.slim.CC_uniq <- mcav_all.go.slim.CC %>% select("GO.IDs")
 mcav_all.go.slim.CC_uniq <- unique(mcav_all.go.slim.CC_uniq)
@@ -108,7 +108,7 @@ mcav_all.go.slim.CC_uniq <- unique(mcav_all.go.slim.CC_uniq)
 
 mcav_all.go.slim.MF <- subset(mcav.go.slim, ontology == "MF")
 mcav_all.go.slim.MF <- unique(mcav_all.go.slim.MF)
-length(unique(mcav_all.go.slim.MF$GO.IDs)) # 39 unique BP GO terms 
+length(unique(mcav_all.go.slim.MF$GO.IDs)) # 39 unique CC GO terms 
 #write.csv(mcav_all.go.slim.MF, "Output/GOSeq/mcav/mcav.go.slim.MF_20220208.csv")
 mcav_all.go.slim.MF_uniq <- mcav_all.go.slim.MF %>% select("GO.IDs")
 mcav_all.go.slim.MF_uniq <- unique(mcav_all.go.slim.MF_uniq)
@@ -142,7 +142,7 @@ ofav_all.go.slim.BP_uniq <- unique(ofav_all.go.slim.BP_uniq)
 
 ofav_all.go.slim.CC <- subset(ofav.go.slim, ontology == "CC")
 ofav_all.go.slim.CC <- unique(ofav_all.go.slim.CC)
-length(unique(ofav_all.go.slim.CC$GO.IDs)) # 3 unique BP GO terms 
+length(unique(ofav_all.go.slim.CC$GO.IDs)) # 3 unique CC GO terms 
 #write.csv(ofav_all.go.slim.CC, "Output/GOSeq/ofav/ofav.go.slim.CC_20220208.csv")
 ofav_all.go.slim.CC_uniq <- ofav_all.go.slim.CC %>% select("GO.IDs")
 ofav_all.go.slim.CC_uniq <- unique(ofav_all.go.slim.CC_uniq)
@@ -150,7 +150,7 @@ ofav_all.go.slim.CC_uniq <- unique(ofav_all.go.slim.CC_uniq)
 
 ofav_all.go.slim.MF <- subset(ofav.go.slim, ontology == "MF")
 ofav_all.go.slim.MF <- unique(ofav_all.go.slim.MF)
-length(unique(ofav_all.go.slim.MF$GO.IDs)) # 9 unique BP GO terms 
+length(unique(ofav_all.go.slim.MF$GO.IDs)) # 9 unique MF GO terms 
 #write.csv(ofav_all.go.slim.MF, "Output/GOSeq/ofav/ofav.go.slim.MF_20220208.csv")
 ofav_all.go.slim.MF_uniq <- ofav_all.go.slim.MF %>% select("GO.IDs")
 ofav_all.go.slim.MF_uniq <- unique(ofav_all.go.slim.CC_uniq)
@@ -186,7 +186,7 @@ mcap_all.go.slim.BP_uniq <- unique(mcap_all.go.slim.BP_uniq)
 
 mcap_all.go.slim.CC <- subset(mcap.go.slim, ontology == "CC")
 mcap_all.go.slim.CC <- unique(mcap_all.go.slim.CC)
-length(unique(mcap_all.go.slim.CC$GO.IDs)) # 40 unique BP GO terms 
+length(unique(mcap_all.go.slim.CC$GO.IDs)) # 40 unique CC GO terms 
 #write.csv(mcap_all.go.slim.CC, "Output/GOSeq/mcap/mcap.go.slim.CC_20220417.csv")
 mcap_all.go.slim.CC_uniq <- mcap_all.go.slim.CC %>% select("GO.IDs")
 mcap_all.go.slim.CC_uniq <- unique(mcap_all.go.slim.CC_uniq)
@@ -194,7 +194,7 @@ mcap_all.go.slim.CC_uniq <- unique(mcap_all.go.slim.CC_uniq)
 
 mcap_all.go.slim.MF <- subset(mcap.go.slim, ontology == "MF")
 mcap_all.go.slim.MF <- unique(mcap_all.go.slim.MF)
-length(unique(mcap_all.go.slim.MF$GO.IDs)) # 65 unique BP GO terms 
+length(unique(mcap_all.go.slim.MF$GO.IDs)) # 65 unique MF GO terms 
 #write.csv(mcap_all.go.slim.MF, "Output/GOSeq/mcap/mcap.go.slim.MF_20220417.csv")
 mcap_all.go.slim.MF_uniq <- mcap_all.go.slim.MF %>% select("GO.IDs")
 mcap_all.go.slim.MF_uniq <- unique(mcap_all.go.slim.MF_uniq)
@@ -286,8 +286,6 @@ plob_all.go.slim.MF_uniq <- unique(plob_all.go.slim.MF_uniq)
 
 ## In Excel, I take the unique go term files, remove excess rows/cols so its just a list of GO terms. Then plotted using this website: https://bioinformatics.psb.ugent.be/cgi-bin/liste/Venn/calculate_venn.htpl. can't figure out how to do it in R
 ```
-
-I used the unique docs for all the species to make 6-way venn diagram with this [website](https://bioinformatics.psb.ugent.be/webtools/Venn/).
 
 ## Upset plots w/ GO terms (written on 20221125)
 ```{r}
@@ -1092,7 +1090,7 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) + 
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 25)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 750)) + 
   theme(legend.title = element_text(size = 55, face = "bold"), 
         legend.key.size = unit(5, "cm"),
         legend.key = element_rect(fill = "white", colour = "black"),
@@ -1105,11 +1103,11 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("#0066CC", "#A0A0A0", "#E4E408"))
 count_morph_plot
-ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221205.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221205.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221227.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/BP/MorphologyCounts_GOslim.BP_20221227.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
-## Make contingency tables (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
+## Make contingency tables for BP (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
 ```{r}
 # By location
 tabl1 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
@@ -1167,54 +1165,59 @@ chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Location)
 # By morphology 
 tabl2 <- table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
 tabl2
-  #                                  Branching Massive
-  # cell adhesion                           40       6
-  # cell cycle and proliferation            73      10
-  # cell organization and biogenesis       139      58
-  # cell-cell signaling                     30       6
-  # death                                   21       5
-  # developmental processes                735     134
-  # DNA metabolism                          19      22
-  # protein metabolism                     116      46
-  # RNA metabolism                         105      22
-  # signal transduction                    108      40
-  # stress response                        126      21
-  # transport                              107      22
+  #                                  Branching Intermediate Massive
+  # cell adhesion                           28           12       6
+  # cell cycle and proliferation            43           30      10
+  # cell organization and biogenesis       105           34      58
+  # cell-cell signaling                     26            4       6
+  # death                                   15            6       5
+  # developmental processes                635          100     134
+  # DNA metabolism                          17            2      22
+  # other biological processes             369           60     101
+  # other metabolic processes              152           62      54
+  # protein metabolism                      99           17      46
+  # RNA metabolism                          91           14      22
+  # signal transduction                     96           12      40
+  # stress response                        109           17      21
+  # transport                               81           26      22
 
 rowSums(tabl2)
-             #       cell adhesion     cell cycle and proliferation cell organization and biogenesis 
-             #                  46                               83                              197 
-             # cell-cell signaling                            death          developmental processes 
-             #                  36                               26                              869 
-             #      DNA metabolism               protein metabolism                   RNA metabolism 
-             #                  41                              162                              127 
-             # signal transduction                  stress response                        transport 
-             #                 148                              147                              129 
+       #             cell adhesion     cell cycle and proliferation cell organization and biogenesis              cell-cell signaling 
+       #                        46                               83                              197                               36 
+       #                     death          developmental processes                   DNA metabolism       other biological processes 
+       #                        26                              869                               41                              530 
+       # other metabolic processes               protein metabolism                   RNA metabolism              signal transduction 
+       #                       268                              162                              127                              148 
+       #           stress response                        transport 
+       #                       147                              129 
 
 colSums(tabl2)
-# Branching   Massive 
-#      1619       392
+#   Branching Intermediate      Massive 
+#        1866          396          547 
 
 prop.table(table(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)) * 100
-  #                                   Branching    Massive
-  # cell adhesion                     1.9890602  0.2983590
-  # cell cycle and proliferation      3.6300348  0.4972650
-  # cell organization and biogenesis  6.9119841  2.8841372
-  # cell-cell signaling               1.4917951  0.2983590
-  # death                             1.0442566  0.2486325
-  # developmental processes          36.5489806  6.6633516
-  # DNA metabolism                    0.9448036  1.0939831
-  # protein metabolism                5.7682745  2.2874192
-  # RNA metabolism                    5.2212829  1.0939831
-  # signal transduction               5.3704625  1.9890602
-  # stress response                   6.2655395  1.0442566
-  # transport                         5.3207360  1.0939831
+  #                                    Branching Intermediate     Massive
+  # cell adhesion                     0.99679601   0.42719829  0.21359915
+  # cell cycle and proliferation      1.53079388   1.06799573  0.35599858
+  # cell organization and biogenesis  3.73798505   1.21039516  2.06479174
+  # cell-cell signaling               0.92559630   0.14239943  0.21359915
+  # death                             0.53399786   0.21359915  0.17799929
+  # developmental processes          22.60590958   3.55998576  4.77038092
+  # DNA metabolism                    0.60519758   0.07119972  0.78319687
+  # other biological processes       13.13634745   2.13599146  3.59558562
+  # other metabolic processes         5.41117836   2.20719117  1.92239231
+  # protein metabolism                3.52438590   0.60519758  1.63759345
+  # RNA metabolism                    3.23958704   0.49839801  0.78319687
+  # signal transduction               3.41758633   0.42719829  1.42399430
+  # stress response                   3.88038448   0.60519758  0.74759701
+  # transport                         2.88358847   0.92559630  0.78319687
 
 chisq.test(all.go.BP.slim$GO.Slim.Term, all.go.BP.slim$Morphology)
-# Pearson's Chi-squared test
+# Warning: Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
 # 
 # data:  all.go.BP.slim$GO.Slim.Term and all.go.BP.slim$Morphology
-# X-squared = 73.386, df = 11, p-value = 2.762e-11
+# X-squared = 156.4, df = 26, p-value < 2.2e-16
 ```
 
 
@@ -1508,36 +1511,9 @@ GO.T.subset
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 ### CC and MF will be included in supplementary materials
+
+#### Cellular Components
 
 Make bar charts for go slim term counts for species, locations, and morphologies - CC only
 ```{r}
@@ -1691,7 +1667,7 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) + 
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 125)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 100)) + 
   theme(legend.title = element_text(size = 55, face = "bold"), 
         legend.key.size = unit(5, "cm"),
         legend.key = element_rect(fill = "white", colour = "black"),
@@ -1707,6 +1683,108 @@ count_morph_plot
 ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20221206.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
 ggsave("Output/Figs/GOslim/CC/MorphologyCounts_GOslim.CC_20221206.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
+
+## Make contingency tables for CC (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
+```{r}
+# By location
+tabl1 <- table(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Location)
+tabl1
+  #                              Florida Hawai'i
+  # cytoskeleton                       3       6
+  # cytosol                            0       6
+  # ER/Golgi                          16      14
+  # mitochondrion                      4      59
+  # non-structural extracellular       6     105
+  # nucleus                           28      28
+  # other cellular component          51      77
+  # other cytoplasmic organelle       13       9
+  # other membranes                   25      82
+  # plasma membrane                   15      40
+  # translational apparatus            0       7
+
+rowSums(tabl1)
+     #            cytoskeleton                      cytosol                     ER/Golgi                mitochondrion non-structural extracellular 
+     #                       9                            6                           30                           63                          111 
+     #                 nucleus     other cellular component  other cytoplasmic organelle              other membranes              plasma membrane 
+     #                      56                          128                           22                          107                           55 
+     # translational apparatus 
+     #                       7 
+
+colSums(tabl1)
+# Florida Hawai'i 
+#     161     433 
+    
+prop.table(table(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Location)) * 100
+  #                                 Florida    Hawai'i
+  # cytoskeleton                  0.5050505  1.0101010
+  # cytosol                       0.0000000  1.0101010
+  # ER/Golgi                      2.6936027  2.3569024
+  # mitochondrion                 0.6734007  9.9326599
+  # non-structural extracellular  1.0101010 17.6767677
+  # nucleus                       4.7138047  4.7138047
+  # other cellular component      8.5858586 12.9629630
+  # other cytoplasmic organelle   2.1885522  1.5151515
+  # other membranes               4.2087542 13.8047138
+  # plasma membrane               2.5252525  6.7340067
+  # translational apparatus       0.0000000  1.1784512
+
+chisq.test(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Location)
+# Warning: Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
+# 
+# data:  all.go.CC.slim$GO.Slim.Term and all.go.CC.slim$Location
+# X-squared = 93.166, df = 10, p-value = 1.259e-15
+
+# By morphology 
+tabl2 <- table(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Morphology)
+tabl2
+  #                              Branching Intermediate Massive
+  # cytoskeleton                         3            4       2
+  # cytosol                              0            6       0
+  # ER/Golgi                            16           13       1
+  # mitochondrion                       53            8       2
+  # non-structural extracellular        92            0      19
+  # nucleus                             28            3      25
+  # other cellular component            54           36      38
+  # other cytoplasmic organelle          9            9       4
+  # other membranes                     58           36      13
+  # plasma membrane                     33           10      12
+  # translational apparatus              0            7       0
+
+rowSums(tabl2)
+     #            cytoskeleton                      cytosol                     ER/Golgi                mitochondrion non-structural extracellular 
+     #                       9                            6                           30                           63                          111 
+     #                 nucleus     other cellular component  other cytoplasmic organelle              other membranes              plasma membrane 
+     #                      56                          128                           22                          107                           55 
+     # translational apparatus 
+     #                       7 
+                           
+colSums(tabl2)
+   # Branching Intermediate      Massive 
+   #       346          132          116 
+
+prop.table(table(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Morphology)) * 100
+  #                               Branching Intermediate    Massive
+  # cytoskeleton                  0.5050505    0.6734007  0.3367003
+  # cytosol                       0.0000000    1.0101010  0.0000000
+  # ER/Golgi                      2.6936027    2.1885522  0.1683502
+  # mitochondrion                 8.9225589    1.3468013  0.3367003
+  # non-structural extracellular 15.4882155    0.0000000  3.1986532
+  # nucleus                       4.7138047    0.5050505  4.2087542
+  # other cellular component      9.0909091    6.0606061  6.3973064
+  # other cytoplasmic organelle   1.5151515    1.5151515  0.6734007
+  # other membranes               9.7643098    6.0606061  2.1885522
+  # plasma membrane               5.5555556    1.6835017  2.0202020
+  # translational apparatus       0.0000000    1.1784512  0.0000000
+
+chisq.test(all.go.CC.slim$GO.Slim.Term, all.go.CC.slim$Morphology)
+# Warning: Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
+# 
+# data:  all.go.CC.slim$GO.Slim.Term and all.go.CC.slim$Morphology
+# X-squared = 168.77, df = 20, p-value < 2.2e-16
+```
+
 
 Make bar charts for go slim term counts for species, locations, and morphologies - MF only
 ```{r}
@@ -1860,7 +1938,7 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         axis.line = element_line(colour = 'black', size = 2),
         plot.title = element_text(size = 100, hjust = 0.5),
         plot.margin = margin(3,3,3,3, "cm")) + 
-  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 150)) + 
+  scale_y_continuous(expand = expansion(mult = c(0, 0.1)), limits = c(0, 110)) + 
   theme(legend.title = element_text(size = 55, face = "bold"), 
         legend.key.size = unit(5, "cm"),
         legend.key = element_rect(fill = "white", colour = "black"),
@@ -1873,11 +1951,94 @@ count_morph_plot <- ggplot(count_by_morph, aes(fill = Morphology, y = n, x = GO.
         legend.box.background = element_rect(color="white", size=5)) +
         scale_fill_manual(values = c("#0066CC", "#E4E408"))
 count_morph_plot
-ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221206.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
-ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221206.png", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221222.pdf", count_morph_plot, width = 49, height = 40, units = c("in"))
+ggsave("Output/Figs/GOslim/MF/MorphologyCounts_GOslim.MF_20221222.png", count_morph_plot, width = 49, height = 40, units = c("in"))
 ```
 
+## Make contingency tables for MF (info [here](https://www.datacamp.com/community/tutorials/contingency-tables-r))
+```{r}
+# By location
+tabl1 <- table(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Location)
+tabl1
+  #                                   Florida Hawai'i
+  # cytoskeletal activity                   1       5
+  # enzyme regulator activity              16       2
+  # kinase activity                        10      54
+  # nucleic acid binding activity          17      12
+  # other molecular function              123     336
+  # signal transduction activity           18     103
+  # transcription regulatory activity       5       4
+  # transporter activity                   10      22
 
+rowSums(tabl1)
+         #    cytoskeletal activity         enzyme regulator activity                   kinase activity     nucleic acid binding activity 
+         #                        6                                18                                64                                29 
+         # other molecular function      signal transduction activity transcription regulatory activity              transporter activity 
+         #                      459                               121                                 9                                32 
+
+colSums(tabl1)
+# Florida Hawai'i 
+#     200     538 
+    
+prop.table(table(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Location)) * 100
+  #                                      Florida    Hawai'i
+  # cytoskeletal activity              0.1355014  0.6775068
+  # enzyme regulator activity          2.1680217  0.2710027
+  # kinase activity                    1.3550136  7.3170732
+  # nucleic acid binding activity      2.3035230  1.6260163
+  # other molecular function          16.6666667 45.5284553
+  # signal transduction activity       2.4390244 13.9566396
+  # transcription regulatory activity  0.6775068  0.5420054
+  # transporter activity               1.3550136  2.9810298
+
+chisq.test(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Location)
+# Warning: Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
+# 
+# data:  all.go.MF.slim$GO.Slim.Term and all.go.MF.slim$Location
+# X-squared = 67.107, df = 7, p-value = 5.666e-12
+
+# By morphology 
+tabl2 <- table(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Morphology)
+tabl2
+  #                                   Branching Massive
+  # cytoskeletal activity                     5       1
+  # enzyme regulator activity                 6      12
+  # kinase activity                          24      40
+  # nucleic acid binding activity            24       5
+  # other molecular function                354     105
+  # signal transduction activity             99      22
+  # transcription regulatory activity         5       4
+  # transporter activity                     13      19
+
+rowSums(tabl2)
+         #    cytoskeletal activity         enzyme regulator activity                   kinase activity     nucleic acid binding activity 
+         #                        6                                18                                64                                29 
+         # other molecular function      signal transduction activity transcription regulatory activity              transporter activity 
+         #                      459                               121                                 9                                32 
+                              
+colSums(tabl2)
+# Branching   Massive 
+#       530       208 
+
+prop.table(table(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Morphology)) * 100
+  #                                   Branching    Massive
+  # cytoskeletal activity              0.6775068  0.1355014
+  # enzyme regulator activity          0.8130081  1.6260163
+  # kinase activity                    3.2520325  5.4200542
+  # nucleic acid binding activity      3.2520325  0.6775068
+  # other molecular function          47.9674797 14.2276423
+  # signal transduction activity      13.4146341  2.9810298
+  # transcription regulatory activity  0.6775068  0.5420054
+  # transporter activity               1.7615176  2.5745257
+
+chisq.test(all.go.MF.slim$GO.Slim.Term, all.go.MF.slim$Morphology)
+# Warning: Chi-squared approximation may be incorrect
+# 	Pearson's Chi-squared test
+# 
+# data:  all.go.MF.slim$GO.Slim.Term and all.go.MF.slim$Morphology
+# X-squared = 81.44, df = 7, p-value = 7.003e-15
+```
 
 
 

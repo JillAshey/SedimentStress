@@ -2,44 +2,43 @@
 
 ### Hawaii species
 
-#### [M. capitata](http://cyanophora.rutgers.edu/montipora/) 
+#### *[M. capitata](http://cyanophora.rutgers.edu/montipora/)* 
 
-###### Citation: Stephens, T.G., Strand, E.L., et al. Divergent life history strategies and response to stress in two sympatric Hawaiian coral species. Under Review
+###### Citation: Stephens, T.G., Strand, E.L., et al. Ploidy variation and its implications for reproduction and population dynamics in two sympatric Hawaiian coral species. bioRxiv 2021.11.21.469467; doi: https://doi.org/10.1101/2021.11.21.469467
 
 Using Version 2
 
 Genome file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.assembly.fasta.gz```
 
-Annotation file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.gff3.gz```
+GFF file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.gff3.gz```
 
 Protein file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.pep.faa.gz```
 
 Transcript file: ```wget http://cyanophora.rutgers.edu/montipora/Montipora_capitata_HIv2.genes.cds.fna.gz```
 
-#### [P. compressa](http://cyanophora.rutgers.edu/porites_compressa/) 
+#### *[P. acuta](http://cyanophora.rutgers.edu/Pocillopora_acuta/)*
 
-###### Citation: Lee et al. (2020). Coral genome size variation may be explained by isolation in the Hawaiian Archipelago.
+###### Citation: Stephens, T.G., Strand, E.L., et al. Ploidy variation and its implications for reproduction and population dynamics in two sympatric Hawaiian coral species. bioRxiv 2021.11.21.469467; doi: https://doi.org/10.1101/2021.11.21.469467
 
-New version?
+Using Version 1
 
-Genome file: ```wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_contigs.fasta.gz```
+Genome file: ```wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv1.assembly.fasta.gz```
 
-Annotation file: ```wget http://cyanophora.rutgers.edu/porites_compressa/Porites_compressa_genemodels_v1.0_201905.gff.gz```
+GFF file: ```wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv1.genes.gff3.gz```
 
+Protein file: ```wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv1.genes.pep.faa.gz```
 
-#### [P. acuta](http://cyanophora.rutgers.edu/Pocillopora_acuta/)
+Transcript file: ```wget http://cyanophora.rutgers.edu/Pocillopora_acuta/Pocillopora_acuta_HIv1.genes.cds.fna.gz```
 
-###### Citation: 
+#### *[P. lutea](http://plut.reefgenomics.org/download/)*
 
-Download genome, protein and transcript sequences, and gff files [here](http://cyanophora.rutgers.edu/Pocillopora_acuta/) and upload to server 
+###### Citation: Robbins, Steven J., Caitlin M. Singleton, Cheong Xin Chan, Lauren F. Messer, Aileen U. Geers, Hua Ying, Alexander Baker, et al. 2019. “A Genomic View of the Reef-Building Coral Porites Lutea and Its Microbial Symbionts.” Nature Microbiology 4 (12): 2090–2100. https://doi.org/10.1038/s41564-019-0532-4.
 
-#### [P. lutea](http://plut.reefgenomics.org/download/)
-
-###### Citation: Robbins et al. (2019). A genomic view of the reef-building coral Porites lutea and its microbial symbionts. 
+The *P. lutea* genome information was used to analyze *P. lobata* data in current study. Using Version 1.1
 
 Genome file: ```wget http://plut.reefgenomics.org/download/plut_final_2.1.fasta.gz```
 
-Annotation file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.genes.gff3.gz```
+GFF file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.genes.gff3.gz```
 
 Protein file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.proteins.fasta.gz```
 
@@ -48,16 +47,24 @@ Transcript file: ```wget http://plut.reefgenomics.org/download/plut2v1.1.transcr
 
 ### Florida species 
 
-#### [Acropora cervicornis](http://baumslab.org/research/data/)
+#### *[Acropora cervicornis](http://baumslab.org/research/data/)*
 ###### Baums lab (http://baumslab.org/research/data/)
 
-Download genome, protein and transcript sequences, and gff files [here](https://usegalaxy.org/u/skitch/h/acervicornis-genome) and upload to server 
+Downloaded genome, protein and transcript sequences, and gff files [here](https://usegalaxy.org/u/skitch/h/acervicornis-genome) and upload to server. Permission to use from Drs. Shelia Kitchen & Iliana Baums. Using Version v1.0_171209
 
-Permission to use from Drs. Shelia Kitchen & Iliana Baums 
+Genome file: `Acerv_assembly_v1.0_171209.fasta`
 
-#### [Orbicella faveolata](https://www.ncbi.nlm.nih.gov/genome/13173)
+GFF file: `Acerv_assembly_v1.0.gff3`
 
-###### Citation: Prada et al. (2016). Empty Niches after Extinctions Increase Population Sizes of Modern Corals. 
+Protein file: `Acerv_assembly_v1.0.protein.fa`
+
+Transcript file: `Acerv_assembly_v1.0.mRNA.fa`
+
+#### *[Orbicella faveolata](https://www.ncbi.nlm.nih.gov/genome/13173)*
+
+###### Citation: Prada, Carlos, Bishoy Hanna, Ann F. Budd, Cheryl M. Woodley, Jeremy Schmutz, Jane Grimwood, Roberto Iglesias-Prieto, et al. 2016. “Empty Niches after Extinctions Increase Population Sizes of Modern Corals.” Current Biology: CB 26 (23): 3190–94. https://doi.org/10.1016/j.cub.2016.09.039.
+
+Assembly accession GCF_002042975.1
 
 Genome File: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_genomic.fna.gz```
 
@@ -67,7 +74,15 @@ Protein file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/G
 
 Transcript file: ```wget https://ftp.ncbi.nlm.nih.gov/genomes/all/GCF/002/042/975/GCF_002042975.1_ofav_dov_v1/GCF_002042975.1_ofav_dov_v1_rna.fna.gz```
 
-#### [Montastraea cavernosa](https://www.dropbox.com/s/0inwmljv6ti643o/Mcavernosa_genome.tgz?dl=0&file_subpath=%2FMcav_genome)
+#### *[Montastraea cavernosa](https://www.dropbox.com/s/0inwmljv6ti643o/Mcavernosa_genome.tgz?dl=0&file_subpath=%2FMcav_genome)*
 ###### Matz lab (https://matzlab.weebly.com/data--code.html)
 
-Downloaded from DropBox
+July 2018 version, downloaded from DropBox
+
+Genome file: `Mcavernosa_July2018.fasta`
+
+GFF file: `Mcavernosa.maker.coding.gff3`
+
+Protein file: `Mcavernosa.maker.proteins.fasta`
+
+Transcript file: `Mcavernosa.maker.transcripts.fasta`
