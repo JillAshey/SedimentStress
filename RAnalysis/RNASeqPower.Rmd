@@ -1,0 +1,198 @@
+---
+title: "Power analysis"
+author: "jillashey"
+date: "2023-03-22"
+output: html_document
+---
+
+The sediment stress paper was submitted to PeerJ, but they requested a power analysis in the text. This script will be showing power analysis code using the package [RNASeqPower](https://bioconductor.org/packages/release/bioc/html/RNASeqPower.html).
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("RNASeqPower")
+
+library("RNASeqPower")
+library(tidyverse)
+library(matrixStats)
+library(wrMisc)
+```
+
+```{r}
+### EXAMPLES
+# What would the power be for a study with 12 per group, to detect a 2-fold change, given deep (50x) coverage?
+rnapower(50, cv=.6, effect=2, n=12, alpha=.05)
+
+# Compute a sample size for several combinations of parameters
+temp <- rnapower(10, cv=.5, effect=c(1.5, 2), alpha=c(.05, .01, .001),
+                   power=c(.8, .9))
+round(temp,1)
+```
+
+From the vignette: 
+A formal sample size calculation for comparison of two groups will involve 􏰄ve factors, each of which is an argument to the rnapower function.
+- The depth of sequencing and consequent expected count μ for a given transcript, argument depth.
+- The coefficient of variation of counts within each of the two groups, argument cv.
+- The relative expression that we wish to detect ∆, argument effect.
+- The target false positive rate α and false negative rate β desired (or power = 1 − β), arguments alpha and power.
+- The number of samples n in each group, argument n
+
+
+
+
+Test code 
+```{r}
+# just playing 
+rnapower(10, cv = 0.4, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.5, power = c(0.8, 0.9))
+```
+Calculate coefficient of variation in gene count matrix (should I do filtered or unfiltered counts?)
+
+Acerv
+```{r}
+## Metadata
+acerv_meta <- read.csv("Data/acerv_metadata_filtered.csv")
+
+# Control: 25_ctl1_Ac_GF_1, 27_ctl2_Ac_YG_1, 41_ctl3_Ac_RN_1
+# Treatment 1: 24_T12_Ac_FM, 37_T13_Ac_ML, 52_T11_Ac_II
+# Treatment 2: 31_T22_Ac_UV, 38_T23_Ac_IN, 53_T21_Ac_NH
+# Treatment 3: 19_T33_Ac_WK, 47_T31_Ac_JB, 57_T32_Ac_NM
+# Treatment 4: 35_T43_Ac_MT, 45_T41_Ac_SC_1, 54_T42_Ac_JQ
+
+## Unfiltered gene count matrix 
+acerv_unfilt <- read.csv("Output/DESeq2/acerv/acerv_gene_count_matrix.csv")
+for ( col in 1:ncol(acerv_unfilt)){
+  colnames(acerv_unfilt)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(acerv_unfilt)[col]) # removing excess from col names
+}
+for ( col in 1:ncol(acerv_unfilt)){
+  colnames(acerv_unfilt)[col] <-  gsub("X", "", colnames(acerv_unfilt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, T1, T2, T3 & T4 dfs
+acerv_unfilt_control <- acerv_unfilt[,c("gene_id","25_ctl1_Ac_GF_1", "27_ctl2_Ac_YG_1", "41_ctl3_Ac_RN_1")]
+acerv_unfilt_T1 <- acerv_unfilt[,c("gene_id","24_T12_Ac_FM", "37_T13_Ac_ML", "52_T11_Ac_II")]
+acerv_unfilt_T2 <- acerv_unfilt[,c("gene_id","31_T22_Ac_UV", "38_T23_Ac_IN", "53_T21_Ac_NH")]
+acerv_unfilt_T3 <- acerv_unfilt[,c("gene_id","19_T33_Ac_WK", "47_T31_Ac_JB", "57_T32_Ac_NM")]
+acerv_unfilt_T4 <- acerv_unfilt[,c("gene_id","35_T43_Ac_MT", "45_T41_Ac_SC_1", "54_T42_Ac_JQ")]
+
+# Calculate row mean, std dev, and coefficient of variation
+acerv_unfilt_control$mean <- rowMeans(acerv_unfilt_control[, c(2:4)], na.rm = T)
+acerv_unfilt_control$sd <- rowSds(as.matrix(acerv_unfilt_control[, c(2:4)], na.rm = T))
+acerv_unfilt_control$cv <- rowCVs(acerv_unfilt_control[,2:4])
+mean(acerv_unfilt_control$cv, na.rm = T) # 0.4978587
+
+acerv_unfilt_T1$mean <- rowMeans(acerv_unfilt_T1[, c(2:4)], na.rm = T)
+acerv_unfilt_T1$sd <- rowSds(as.matrix(acerv_unfilt_T1[, c(2:4)], na.rm = T))
+acerv_unfilt_T1$cv <- rowCVs(acerv_unfilt_T1[,2:4])
+mean(acerv_unfilt_T1$cv, na.rm = T) # 1.003905
+
+acerv_unfilt_T2$mean <- rowMeans(acerv_unfilt_T2[, c(2:4)], na.rm = T)
+acerv_unfilt_T2$sd <- rowSds(as.matrix(acerv_unfilt_T2[, c(2:4)], na.rm = T))
+acerv_unfilt_T2$cv <- rowCVs(acerv_unfilt_T2[,2:4])
+mean(acerv_unfilt_T2$cv, na.rm = T) # 0.5669627
+
+acerv_unfilt_T3$mean <- rowMeans(acerv_unfilt_T3[, c(2:4)], na.rm = T)
+acerv_unfilt_T3$sd <- rowSds(as.matrix(acerv_unfilt_T3[, c(2:4)], na.rm = T))
+acerv_unfilt_T3$cv <- rowCVs(acerv_unfilt_T3[,2:4])
+mean(acerv_unfilt_T3$cv, na.rm = T) # 0.7248654
+
+acerv_unfilt_T4$mean <- rowMeans(acerv_unfilt_T4[, c(2:4)], na.rm = T)
+acerv_unfilt_T4$sd <- rowSds(as.matrix(acerv_unfilt_T4[, c(2:4)], na.rm = T))
+acerv_unfilt_T4$cv <- rowCVs(acerv_unfilt_T4[,2:4])
+mean(acerv_unfilt_T4$cv, na.rm = T) # 0.623703
+
+
+
+
+##filtered gene count matrix 
+acerv_filt <- read.csv("Output/DESeq2/acerv/acerv_counts_sub_filt_20210327.csv")
+colnames(acerv_filt)[1] <- "gene_id"
+for ( col in 1:ncol(acerv_filt)){
+  colnames(acerv_filt)[col] <-  gsub("X", "", colnames(acerv_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, T1, T2, T3 & T4 dfs
+acerv_filt_control <- acerv_filt[,c("gene_id","25_ctl1_Ac_GF_1", "27_ctl2_Ac_YG_1", "41_ctl3_Ac_RN_1")]
+acerv_filt_T1 <- acerv_filt[,c("gene_id", "37_T13_Ac_ML", "52_T11_Ac_II")] # removed sample 24 from dataset during filtering 
+acerv_filt_T2 <- acerv_filt[,c("gene_id","31_T22_Ac_UV", "38_T23_Ac_IN", "53_T21_Ac_NH")]
+acerv_filt_T3 <- acerv_filt[,c("gene_id","19_T33_Ac_WK", "47_T31_Ac_JB", "57_T32_Ac_NM")]
+acerv_filt_T4 <- acerv_filt[,c("gene_id","35_T43_Ac_MT", "54_T42_Ac_JQ")] # removed sample 45 from dataset during filtering 
+
+# Calculate row mean, std dev, and coefficient of variation
+acerv_filt_control$mean <- rowMeans(acerv_filt_control[, c(2:4)], na.rm = T)
+acerv_filt_control$sd <- rowSds(as.matrix(acerv_filt_control[, c(2:4)], na.rm = T))
+acerv_filt_control$cv <- rowCVs(acerv_filt_control[,2:4])
+mean(acerv_filt_control$cv, na.rm = T) # 0.2569478
+
+acerv_filt_T1$mean <- rowMeans(acerv_filt_T1[, c(2:3)], na.rm = T)
+acerv_filt_T1$sd <- rowSds(as.matrix(acerv_filt_T1[, c(2:3)], na.rm = T))
+acerv_filt_T1$cv <- rowCVs(acerv_filt_T1[,2:3])
+mean(acerv_filt_T1$cv, na.rm = T) # 0.2148519
+
+acerv_filt_T2$mean <- rowMeans(acerv_filt_T2[, c(2:4)], na.rm = T)
+acerv_filt_T2$sd <- rowSds(as.matrix(acerv_filt_T2[, c(2:4)], na.rm = T))
+acerv_filt_T2$cv <- rowCVs(acerv_filt_T2[,2:4])
+mean(acerv_filt_T2$cv, na.rm = T) # 0.3396199
+
+acerv_filt_T3$mean <- rowMeans(acerv_filt_T3[, c(2:4)], na.rm = T)
+acerv_filt_T3$sd <- rowSds(as.matrix(acerv_filt_T3[, c(2:4)], na.rm = T))
+acerv_filt_T3$cv <- rowCVs(acerv_filt_T3[,2:4])
+mean(acerv_filt_T3$cv, na.rm = T) # 0.5463428
+
+acerv_unfilt_T4$mean <- rowMeans(acerv_unfilt_T4[, c(2:3)], na.rm = T)
+acerv_unfilt_T4$sd <- rowSds(as.matrix(acerv_unfilt_T4[, c(2:3)], na.rm = T))
+acerv_unfilt_T4$cv <- rowCVs(acerv_unfilt_T4[,2:3])
+mean(acerv_unfilt_T4$cv, na.rm = T) # 0.5909885
+
+
+df <- c(0.2148519, 0.3396199, 0.5463428, 0.5909885)
+mean(df) # 0.4229508 -- avg cv for T1-4
+```
+
+So now I have the CVs for each group for Acerv. It looks like w/ RNASeqPower, there can only be two groups. I'm going to pool the treatment samples. 
+Parameters: 
+- Depth = 5 (?)
+- n = 3 (control)
+- n2 = 10 (T1, T2, T3, T4 - not including outliers)
+- cv = 0.2569478
+- cv2 = 0.4229508
+- effect = 1.25, 1.5, 1.75, 2
+- alpha = 0.05
+- power = 0.8, 0.9
+
+Now lets try the code!
+```{r}
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
+## ^^ When I try to run the code above with all the info, I get this error: Exactly one of n, cv, effect, alpha, or power should be unspecified. So it looks like I need to not include one of the arguments so the function can calculate it for me. 
+
+# w/o effect size 
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, alpha = 0.05, power = c(0.8, 0.9))
+#     0.8      0.9 
+# 2.709279 3.168286 
+# What does this mean?
+
+# w/o n
+rnapower(depth = 5, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
+#            0.8       0.9
+# 1.25 101.65712 136.09004
+# 1.5   30.78928  41.21811
+# 1.75  16.16317  21.63790
+# 2     10.53551  14.10406
+# this is saying that, for instance, I need a sample size of 10 to achieve an effect size of 2 and a power of 0.8?
+
+# w/o effect
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, alpha = 0.05, power = c(0.8, 0.9))
+#  0.8      0.9 
+# 2.709279 3.168286 
+```
+
+
+
+
+
+
+
+
+
+
