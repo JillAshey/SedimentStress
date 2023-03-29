@@ -39,15 +39,7 @@ A formal sample size calculation for comparison of two groups will involve 􏰄v
 - The target false positive rate α and false negative rate β desired (or power = 1 − β), arguments alpha and power.
 - The number of samples n in each group, argument n
 
-
-
-
-Test code 
-```{r}
-# just playing 
-rnapower(10, cv = 0.4, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.5, power = c(0.8, 0.9))
-```
-Calculate coefficient of variation in gene count matrix (should I do filtered or unfiltered counts?)
+Calculate coefficient of variation in gene count matrix (filtered counts?)
 
 Acerv
 ```{r}
@@ -124,30 +116,35 @@ acerv_filt_control$mean <- rowMeans(acerv_filt_control[, c(2:4)], na.rm = T)
 acerv_filt_control$sd <- rowSds(as.matrix(acerv_filt_control[, c(2:4)], na.rm = T))
 acerv_filt_control$cv <- rowCVs(acerv_filt_control[,2:4])
 mean(acerv_filt_control$cv, na.rm = T) # 0.2569478
+median(acerv_filt_control$cv, na.rm = T) # 0.2067829
 
 acerv_filt_T1$mean <- rowMeans(acerv_filt_T1[, c(2:3)], na.rm = T)
 acerv_filt_T1$sd <- rowSds(as.matrix(acerv_filt_T1[, c(2:3)], na.rm = T))
 acerv_filt_T1$cv <- rowCVs(acerv_filt_T1[,2:3])
 mean(acerv_filt_T1$cv, na.rm = T) # 0.2148519
+median(acerv_filt_T1$cv, na.rm = T) # 0.1741535
 
 acerv_filt_T2$mean <- rowMeans(acerv_filt_T2[, c(2:4)], na.rm = T)
 acerv_filt_T2$sd <- rowSds(as.matrix(acerv_filt_T2[, c(2:4)], na.rm = T))
 acerv_filt_T2$cv <- rowCVs(acerv_filt_T2[,2:4])
 mean(acerv_filt_T2$cv, na.rm = T) # 0.3396199
+median(acerv_filt_T2$cv, na.rm = T) # 0.2994043
 
 acerv_filt_T3$mean <- rowMeans(acerv_filt_T3[, c(2:4)], na.rm = T)
 acerv_filt_T3$sd <- rowSds(as.matrix(acerv_filt_T3[, c(2:4)], na.rm = T))
 acerv_filt_T3$cv <- rowCVs(acerv_filt_T3[,2:4])
 mean(acerv_filt_T3$cv, na.rm = T) # 0.5463428
+median(acerv_filt_T3$cv, na.rm = T) # 0.5210751
 
 acerv_unfilt_T4$mean <- rowMeans(acerv_unfilt_T4[, c(2:3)], na.rm = T)
 acerv_unfilt_T4$sd <- rowSds(as.matrix(acerv_unfilt_T4[, c(2:3)], na.rm = T))
 acerv_unfilt_T4$cv <- rowCVs(acerv_unfilt_T4[,2:3])
 mean(acerv_unfilt_T4$cv, na.rm = T) # 0.5909885
+median(acerv_filt_T4$cv, na.rm = T) # Null ? 
 
-
+# Average cv for T1, T2, T3, T4
 df <- c(0.2148519, 0.3396199, 0.5463428, 0.5909885)
-mean(df) # 0.4229508 -- avg cv for T1-4
+mean(df) # 0.4229508 
 ```
 
 So now I have the CVs for each group for Acerv. It looks like w/ RNASeqPower, there can only be two groups. I'm going to pool the treatment samples. 
@@ -180,11 +177,6 @@ rnapower(depth = 5, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75,
 # 1.75  16.16317  21.63790
 # 2     10.53551  14.10406
 # this is saying that, for instance, I need a sample size of 10 to achieve an effect size of 2 and a power of 0.8?
-
-# w/o effect
-rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, alpha = 0.05, power = c(0.8, 0.9))
-#  0.8      0.9 
-# 2.709279 3.168286 
 ```
 
 
