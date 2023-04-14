@@ -13,35 +13,26 @@ if (!require("BiocManager", quietly = TRUE))
     install.packages("BiocManager")
 
 BiocManager::install("RNASeqPower")
+BiocManager::install("edgeR")
 
 library("RNASeqPower")
 library(tidyverse)
 library(matrixStats)
 library(wrMisc)
-```
-
-```{r}
-### EXAMPLES
-# What would the power be for a study with 12 per group, to detect a 2-fold change, given deep (50x) coverage?
-rnapower(50, cv=.6, effect=2, n=12, alpha=.05)
-
-# Compute a sample size for several combinations of parameters
-temp <- rnapower(10, cv=.5, effect=c(1.5, 2), alpha=c(.05, .01, .001),
-                   power=c(.8, .9))
-round(temp,1)
+library(edgeR)
 ```
 
 From the vignette: 
-A formal sample size calculation for comparison of two groups will involve 􏰄ve factors, each of which is an argument to the rnapower function.
+A formal sample size calculation for comparison of two groups will involve five factors, each of which is an argument to the rnapower function.
 - The depth of sequencing and consequent expected count μ for a given transcript, argument depth.
 - The coefficient of variation of counts within each of the two groups, argument cv.
 - The relative expression that we wish to detect ∆, argument effect.
 - The target false positive rate α and false negative rate β desired (or power = 1 − β), arguments alpha and power.
 - The number of samples n in each group, argument n
 
-Calculate coefficient of variation in gene count matrix (filtered counts?)
+Calculate coefficient of variation in gene count matrix (filtered counts)
 
-Acerv
+## Acerv
 ```{r}
 ## Metadata
 acerv_meta <- read.csv("Data/acerv_metadata_filtered.csv")
@@ -51,51 +42,6 @@ acerv_meta <- read.csv("Data/acerv_metadata_filtered.csv")
 # Treatment 2: 31_T22_Ac_UV, 38_T23_Ac_IN, 53_T21_Ac_NH
 # Treatment 3: 19_T33_Ac_WK, 47_T31_Ac_JB, 57_T32_Ac_NM
 # Treatment 4: 35_T43_Ac_MT, 45_T41_Ac_SC_1, 54_T42_Ac_JQ
-
-## Unfiltered gene count matrix 
-acerv_unfilt <- read.csv("Output/DESeq2/acerv/acerv_gene_count_matrix.csv")
-for ( col in 1:ncol(acerv_unfilt)){
-  colnames(acerv_unfilt)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(acerv_unfilt)[col]) # removing excess from col names
-}
-for ( col in 1:ncol(acerv_unfilt)){
-  colnames(acerv_unfilt)[col] <-  gsub("X", "", colnames(acerv_unfilt)[col]) # remvoing X from col names
-}
-
-# Separate into Control, T1, T2, T3 & T4 dfs
-acerv_unfilt_control <- acerv_unfilt[,c("gene_id","25_ctl1_Ac_GF_1", "27_ctl2_Ac_YG_1", "41_ctl3_Ac_RN_1")]
-acerv_unfilt_T1 <- acerv_unfilt[,c("gene_id","24_T12_Ac_FM", "37_T13_Ac_ML", "52_T11_Ac_II")]
-acerv_unfilt_T2 <- acerv_unfilt[,c("gene_id","31_T22_Ac_UV", "38_T23_Ac_IN", "53_T21_Ac_NH")]
-acerv_unfilt_T3 <- acerv_unfilt[,c("gene_id","19_T33_Ac_WK", "47_T31_Ac_JB", "57_T32_Ac_NM")]
-acerv_unfilt_T4 <- acerv_unfilt[,c("gene_id","35_T43_Ac_MT", "45_T41_Ac_SC_1", "54_T42_Ac_JQ")]
-
-# Calculate row mean, std dev, and coefficient of variation
-acerv_unfilt_control$mean <- rowMeans(acerv_unfilt_control[, c(2:4)], na.rm = T)
-acerv_unfilt_control$sd <- rowSds(as.matrix(acerv_unfilt_control[, c(2:4)], na.rm = T))
-acerv_unfilt_control$cv <- rowCVs(acerv_unfilt_control[,2:4])
-mean(acerv_unfilt_control$cv, na.rm = T) # 0.4978587
-
-acerv_unfilt_T1$mean <- rowMeans(acerv_unfilt_T1[, c(2:4)], na.rm = T)
-acerv_unfilt_T1$sd <- rowSds(as.matrix(acerv_unfilt_T1[, c(2:4)], na.rm = T))
-acerv_unfilt_T1$cv <- rowCVs(acerv_unfilt_T1[,2:4])
-mean(acerv_unfilt_T1$cv, na.rm = T) # 1.003905
-
-acerv_unfilt_T2$mean <- rowMeans(acerv_unfilt_T2[, c(2:4)], na.rm = T)
-acerv_unfilt_T2$sd <- rowSds(as.matrix(acerv_unfilt_T2[, c(2:4)], na.rm = T))
-acerv_unfilt_T2$cv <- rowCVs(acerv_unfilt_T2[,2:4])
-mean(acerv_unfilt_T2$cv, na.rm = T) # 0.5669627
-
-acerv_unfilt_T3$mean <- rowMeans(acerv_unfilt_T3[, c(2:4)], na.rm = T)
-acerv_unfilt_T3$sd <- rowSds(as.matrix(acerv_unfilt_T3[, c(2:4)], na.rm = T))
-acerv_unfilt_T3$cv <- rowCVs(acerv_unfilt_T3[,2:4])
-mean(acerv_unfilt_T3$cv, na.rm = T) # 0.7248654
-
-acerv_unfilt_T4$mean <- rowMeans(acerv_unfilt_T4[, c(2:4)], na.rm = T)
-acerv_unfilt_T4$sd <- rowSds(as.matrix(acerv_unfilt_T4[, c(2:4)], na.rm = T))
-acerv_unfilt_T4$cv <- rowCVs(acerv_unfilt_T4[,2:4])
-mean(acerv_unfilt_T4$cv, na.rm = T) # 0.623703
-
-
-
 
 ##filtered gene count matrix 
 acerv_filt <- read.csv("Output/DESeq2/acerv/acerv_counts_sub_filt_20210327.csv")
@@ -136,15 +82,15 @@ acerv_filt_T3$cv <- rowCVs(acerv_filt_T3[,2:4])
 mean(acerv_filt_T3$cv, na.rm = T) # 0.5463428
 median(acerv_filt_T3$cv, na.rm = T) # 0.5210751
 
-acerv_unfilt_T4$mean <- rowMeans(acerv_unfilt_T4[, c(2:3)], na.rm = T)
-acerv_unfilt_T4$sd <- rowSds(as.matrix(acerv_unfilt_T4[, c(2:3)], na.rm = T))
-acerv_unfilt_T4$cv <- rowCVs(acerv_unfilt_T4[,2:3])
-mean(acerv_unfilt_T4$cv, na.rm = T) # 0.5909885
-median(acerv_filt_T4$cv, na.rm = T) # Null ? 
+acerv_filt_T4$mean <- rowMeans(acerv_filt_T4[, c(2:3)], na.rm = T)
+acerv_filt_T4$sd <- rowSds(as.matrix(acerv_filt_T4[, c(2:3)], na.rm = T))
+acerv_filt_T4$cv <- rowCVs(acerv_filt_T4[,2:3])
+mean(acerv_filt_T4$cv, na.rm = T) # 0.1414061
+median(acerv_filt_T4$cv, na.rm = T) # 0.1008634
 
 # Average cv for T1, T2, T3, T4
-df <- c(0.2148519, 0.3396199, 0.5463428, 0.5909885)
-mean(df) # 0.4229508 
+df <- c(0.2148519, 0.3396199, 0.5463428, 0.1414061)
+mean(df) # 0.3105552 
 ```
 
 So now I have the CVs for each group for Acerv. It looks like w/ RNASeqPower, there can only be two groups. I'm going to pool the treatment samples. 
@@ -153,30 +99,43 @@ Parameters:
 - n = 3 (control)
 - n2 = 10 (T1, T2, T3, T4 - not including outliers)
 - cv = 0.2569478
-- cv2 = 0.4229508
+- cv2 = 0.3105552
 - effect = 1.25, 1.5, 1.75, 2
 - alpha = 0.05
 - power = 0.8, 0.9
 
 Now lets try the code!
 ```{r}
-rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.3105552, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
 ## ^^ When I try to run the code above with all the info, I get this error: Exactly one of n, cv, effect, alpha, or power should be unspecified. So it looks like I need to not include one of the arguments so the function can calculate it for me. 
 
 # w/o effect size 
-rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.4229508, alpha = 0.05, power = c(0.8, 0.9))
-#     0.8      0.9 
-# 2.709279 3.168286 
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.3105552, alpha = 0.05, power = c(0.8, 0.9))
+#      0.8      0.9 
+# 2.621310 3.049565 
 # What does this mean?
 
 # w/o n
-rnapower(depth = 5, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
+rnapower(depth = 5, cv = 0.2569478, cv2 = 0.3105552, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
 #            0.8       0.9
-# 1.25 101.65712 136.09004
-# 1.5   30.78928  41.21811
-# 1.75  16.16317  21.63790
-# 2     10.53551  14.10406
+# 1.25 88.661651 118.69279
+# 1.5  26.853291  35.94894
+# 1.75 14.096931  18.87179
+# 2     9.188689  12.30105
 # this is saying that, for instance, I need a sample size of 10 to achieve an effect size of 2 and a power of 0.8?
+
+# w/o power 
+rnapower(depth = 5, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.3105552, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+# 1.25        1.5       1.75          2 
+# 0.09488785 0.21734266 0.36954688 0.52198959 
+
+# w/o n and w/ depth of 495
+rnapower(depth = 495, cv = 0.2569478, cv2 = 0.3105552, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05, power = c(0.8, 0.9))
+# 0.8       0.9
+# 1.25 26.246523 35.136647
+# 1.5   7.949384 10.641970
+# 1.75  4.173117  5.586619
+# 2     2.720129  3.641481
 ```
 
 
@@ -186,5 +145,395 @@ rnapower(depth = 5, cv = 0.2569478, cv2 = 0.4229508, effect = c(1.25, 1.5, 1.75,
 
 
 
+20230413 
+To calculate depth, I'm going to use the Sims et al. (2014) definition, which states: "The average depth of sequencing coverage can be defined theoretically as LN/G, where L is the read length, N is the number of reads and G is the haploid genome length."
+
+Genome length will be transcriptome length since we are only looking at the protein coding regions of the genome. 
+
+For Acerv: 
+L = read length = 50 bp
+N = number of reads = 16,499,909 avg reads 
+G = transcriptome length = 40,398,211 (mRNA - calculated from the `Output/DESeq2/acerv/length.mRNA_Acerv.csv`) 
+
+```{r}
+((50 * 16499909) / 40398211)
+# 20.42158 -- this is depth for Acerv. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 20.42158, n = 3, n2 = 10, cv = 0.2569478, cv2 = 0.3105552, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+#     1.25       1.5      1.75         2 
+# 0.1612067 0.4220732 0.6821823 0.8541820 
+
+## Now we got power for a variety of effect sizes for Acerv
+```
+
+Let's do the other species now. 
+
+## Mcav
+
+#### Read in metadata & filtered counts and calculate CVs of each gene 
+```{r}
+## Metadata
+mcav_meta <- read.csv("Data/mcav_metadata_filtered.csv")
+
+# Control: 22_ctl2_Mc_TWF_1, 28_ctl1_Mc_GBM_1, 42_ctl3_Mc_MGR_1
+# Treatment 1: 20_T12_Mc_PWC, 39_T13_Mc_FJE, 61_T11_Mc_RAP
+# Treatment 2: 29_T23_Mc_PND, 34_T22_Mc_SVS, 58_T21_Mc_EAH
+# Treatment 3: 21_T33_Mc_EOU, 49_T31_Mc_SWQ, 55_T32_Mc_TWP
+# Treatment 4: 33_T43_Mc_RFV, 46_T41_Mc_QYH_1, 56_T42_Mc_JAW
+
+##filtered gene count matrix 
+mcav_filt <- read.csv("Output/DESeq2/mcav/mcav_counts_filtered.csv")
+colnames(mcav_filt)[1] <- "gene_id"
+for ( col in 1:ncol(mcav_filt)){
+  colnames(mcav_filt)[col] <-  gsub("X", "", colnames(mcav_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, T1, T2, T3 & T4 dfs
+mcav_filt_control <- mcav_filt[,c("gene_id", "22_ctl2_Mc_TWF_1", "28_ctl1_Mc_GBM_1", "42_ctl3_Mc_MGR_1")]
+mcav_filt_T1 <- mcav_filt[,c("gene_id", "20_T12_Mc_PWC", "39_T13_Mc_FJE", "61_T11_Mc_RAP")]
+mcav_filt_T2 <- mcav_filt[,c("gene_id", "29_T23_Mc_PND", "34_T22_Mc_SVS", "58_T21_Mc_EAH")]
+mcav_filt_T3 <- mcav_filt[,c("gene_id", "21_T33_Mc_EOU", "49_T31_Mc_SWQ", "55_T32_Mc_TWP")]
+mcav_filt_T4 <- mcav_filt[,c("gene_id", "33_T43_Mc_RFV", "46_T41_Mc_QYH_1", "56_T42_Mc_JAW")]
+
+# Calculate row mean, std dev, and coefficient of variation
+mcav_filt_control$mean <- rowMeans(mcav_filt_control[, c(2:4)], na.rm = T)
+mcav_filt_control$sd <- rowSds(as.matrix(mcav_filt_control[, c(2:4)], na.rm = T))
+mcav_filt_control$cv <- rowCVs(mcav_filt_control[,2:4])
+mean(mcav_filt_control$cv, na.rm = T) # 0.4595314
+median(mcav_filt_control$cv, na.rm = T) # 0.4307359
+
+mcav_filt_T1$mean <- rowMeans(mcav_filt_T1[, c(2:4)], na.rm = T)
+mcav_filt_T1$sd <- rowSds(as.matrix(mcav_filt_T1[, c(2:4)], na.rm = T))
+mcav_filt_T1$cv <- rowCVs(mcav_filt_T1[,2:4])
+mean(mcav_filt_T1$cv, na.rm = T) # 0.3328956
+median(mcav_filt_T1$cv, na.rm = T) # 0.286682
+
+mcav_filt_T2$mean <- rowMeans(mcav_filt_T2[, c(2:4)], na.rm = T)
+mcav_filt_T2$sd <- rowSds(as.matrix(mcav_filt_T2[, c(2:4)], na.rm = T))
+mcav_filt_T2$cv <- rowCVs(mcav_filt_T2[,2:4])
+mean(mcav_filt_T2$cv, na.rm = T) # 0.513919
+median(mcav_filt_T2$cv, na.rm = T) # 0.4527036
+
+mcav_filt_T3$mean <- rowMeans(mcav_filt_T3[, c(2:4)], na.rm = T)
+mcav_filt_T3$sd <- rowSds(as.matrix(mcav_filt_T3[, c(2:4)], na.rm = T))
+mcav_filt_T3$cv <- rowCVs(mcav_filt_T3[,2:4])
+mean(mcav_filt_T3$cv, na.rm = T) # 0.360403
+median(mcav_filt_T3$cv, na.rm = T) # 0.3128997
+
+mcav_filt_T4$mean <- rowMeans(mcav_filt_T4[, c(2:4)], na.rm = T)
+mcav_filt_T4$sd <- rowSds(as.matrix(mcav_filt_T4[, c(2:4)], na.rm = T))
+mcav_filt_T4$cv <- rowCVs(mcav_filt_T4[,2:4])
+mean(mcav_filt_T4$cv, na.rm = T) # 0.4001008
+median(mcav_filt_T4$cv, na.rm = T) # 0.3435456
+
+# Average cv for T1, T2, T3, T4
+df <- c(0.3328956, 0.513919, 0.360403, 0.4001008)
+mean(df) # 0.4018296 
+```
+
+#### Calculate depth (LN/G)
+
+For Mcav: 
+L = read length = 50 bp
+N = number of reads = 15,740,195 avg reads 
+G = transcriptome length = 35,692,498 (mRNA - calculated from the `Output/DESeq2/mcav/length.mRNA_Mcav.csv`) 
+
+```{r}
+((50 * 15740195) / 35692498)
+# 22.04972 - this is depth for Mcav. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 22.04972, n = 3, n2 = 12, cv = 0.4595314, cv2 = 0.4018296, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+
+#      1.25       1.5      1.75         2 
+# 0.1031506 0.2435289 0.4152433 0.5802422 
+```
+
+
+
+## Ofav
+
+#### Read in metadata & filtered counts and calculate CVs of each gene 
+```{r}
+## Metadata
+ofav_meta <- read.csv("Data/ofav_metadata_filtered.csv")
+
+# Control: 17_ctl2_Of_ZTH_1, 23_ctl1_Of_CT_1, 43_ctl3_Of_JVP_1
+# Treatment 1: 26_T12_Of_WCL, 40_T13_Of_GWS, 59_T11_Of_TQP
+# Treatment 2: 30_T23_Of_RPG, 32_T22_Of_EVR, 50_T21_Of_YZB
+# Treatment 3: 18_T33_Of_VLL, 48_T31_Of_JNO, 60_T32_Of_WY
+# Treatment 4: 36_T43_Of_JJN, 44_T41_Of_PVT_1, 51_T42_Of_UOF
+
+##filtered gene count matrix 
+ofav_filt <- read.csv("Output/DESeq2/ofav/ofav_counts_filt_20220111.csv")
+colnames(ofav_filt)[1] <- "gene_id"
+for ( col in 1:ncol(ofav_filt)){
+  colnames(ofav_filt)[col] <-  gsub("X", "", colnames(ofav_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, T1, T2, T3 & T4 dfs
+ofav_filt_control <- ofav_filt[,c("gene_id", "17_ctl2_Of_ZTH_1", "43_ctl3_Of_JVP_1")] # removed 23_ctl1_Of_CT_1 in downstream analysis 
+ofav_filt_T1 <- ofav_filt[,c("gene_id", "26_T12_Of_WCL", "40_T13_Of_GWS", "59_T11_Of_TQP")]
+ofav_filt_T2 <- ofav_filt[,c("gene_id", "30_T23_Of_RPG", "32_T22_Of_EVR", "50_T21_Of_YZB")]
+ofav_filt_T3 <- ofav_filt[,c("gene_id", "18_T33_Of_VLL", "48_T31_Of_JNO", "60_T32_Of_WY")]
+ofav_filt_T4 <- ofav_filt[,c("gene_id", "36_T43_Of_JJN", "44_T41_Of_PVT_1", "51_T42_Of_UOF")]
+
+# Calculate row mean, std dev, and coefficient of variation
+ofav_filt_control$mean <- rowMeans(ofav_filt_control[, c(2:3)], na.rm = T)
+ofav_filt_control$sd <- rowSds(as.matrix(ofav_filt_control[, c(2:3)], na.rm = T))
+ofav_filt_control$cv <- rowCVs(ofav_filt_control[,2:3])
+mean(ofav_filt_control$cv, na.rm = T) # 0.2644958
+median(ofav_filt_control$cv, na.rm = T) # 0.1965602
+
+ofav_filt_T1$mean <- rowMeans(ofav_filt_T1[, c(2:4)], na.rm = T)
+ofav_filt_T1$sd <- rowSds(as.matrix(ofav_filt_T1[, c(2:4)], na.rm = T))
+ofav_filt_T1$cv <- rowCVs(ofav_filt_T1[,2:4])
+mean(ofav_filt_T1$cv, na.rm = T) # 0.3396893
+median(ofav_filt_T1$cv, na.rm = T) # 0.2893516
+
+ofav_filt_T2$mean <- rowMeans(ofav_filt_T2[, c(2:4)], na.rm = T)
+ofav_filt_T2$sd <- rowSds(as.matrix(ofav_filt_T2[, c(2:4)], na.rm = T))
+ofav_filt_T2$cv <- rowCVs(ofav_filt_T2[,2:4])
+mean(ofav_filt_T2$cv, na.rm = T) # 0.3622144
+median(ofav_filt_T2$cv, na.rm = T) # 0.3080723
+
+ofav_filt_T3$mean <- rowMeans(ofav_filt_T3[, c(2:4)], na.rm = T)
+ofav_filt_T3$sd <- rowSds(as.matrix(ofav_filt_T3[, c(2:4)], na.rm = T))
+ofav_filt_T3$cv <- rowCVs(ofav_filt_T3[,2:4])
+mean(ofav_filt_T3$cv, na.rm = T) # 0.6279806
+median(ofav_filt_T3$cv, na.rm = T) # 0.5956678
+
+ofav_filt_T4$mean <- rowMeans(ofav_filt_T4[, c(2:4)], na.rm = T)
+ofav_filt_T4$sd <- rowSds(as.matrix(ofav_filt_T4[, c(2:4)], na.rm = T))
+ofav_filt_T4$cv <- rowCVs(ofav_filt_T4[,2:4])
+mean(ofav_filt_T4$cv, na.rm = T) # 0.5892224
+median(ofav_filt_T4$cv, na.rm = T) # 0.5742826
+
+# Average cv for T1, T2, T3, T4
+df <- c(0.3396893, 0.3622144, 0.6279806, 0.5892224)
+mean(df) # 0.4797767 
+```
+
+#### Calculate depth (LN/G)
+
+For Ofav: 
+L = read length = 50 bp
+N = number of reads = 13,905,076 avg reads 
+G = transcriptome length = 92,643,051 (mRNA - calculated from the `Output/DESeq2/ofav/length.mRNA_Ofav.csv`) 
+
+```{r}
+((50 * 13905076) / 92643051)
+# 7.504651 - this is depth for Ofav. This is much lower than Acerv and Mcav. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 7.504651, n = 2, n2 = 12, cv = 0.1965602, cv2 = 0.4797767, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+
+#      1.25       1.5      1.75         2 
+# 0.0958716 0.2204560 0.3750530 0.5291664 
+
+# with n=3 for control
+rnapower(depth = 7.504651, n = 3, n2 = 12, cv = 0.1965602, cv2 = 0.4797767, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+# 1.25       1.5      1.75         2 
+# 0.1139176 0.2776346 0.4724940 0.6488454 
+```
+
+
+
+
+
+## Mcap 
+
+#### Read in metadata & filtered counts and calculate CVs of each gene 
+```{r}
+## Metadata
+mcap_meta <- read.csv("Data/mcap_metadata_raw_filtered.csv")
+
+# Control: 5_2, 13_2, 14_2, 45_2
+# Mid: 10_2, 15_2, 19_2, 20_2
+# High: 16_2, 40_2, 48_2
+
+##filtered gene count matrix 
+mcap_filt <- read.csv("Output/DESeq2/mcap/mcap_counts_filt_20220315.csv")
+colnames(mcap_filt)[1] <- "gene_id"
+for ( col in 1:ncol(mcap_filt)){
+  colnames(mcap_filt)[col] <-  gsub("X", "", colnames(mcap_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, Mid and High dfs
+mcap_filt_control <- mcap_filt[,c("gene_id", "5_2", "13_2", "14_2", "45_2")] 
+mcap_filt_mid <- mcap_filt[,c("gene_id", "10_2", "15_2", "19_2", "20_2")] 
+mcap_filt_high <- mcap_filt[,c("gene_id", "16_2", "40_2", "48_2")] 
+
+# Calculate row mean, std dev, and coefficient of variation
+mcap_filt_control$mean <- rowMeans(mcap_filt_control[, c(2:5)], na.rm = T)
+mcap_filt_control$sd <- rowSds(as.matrix(mcap_filt_control[, c(2:5)], na.rm = T))
+mcap_filt_control$cv <- rowCVs(mcap_filt_control[,2:5])
+mean(mcap_filt_control$cv, na.rm = T) # 0.3860964
+median(mcap_filt_control$cv, na.rm = T) # 0.3443891
+
+mcap_filt_mid$mean <- rowMeans(mcap_filt_mid[, c(2:5)], na.rm = T)
+mcap_filt_mid$sd <- rowSds(as.matrix(mcap_filt_mid[, c(2:5)], na.rm = T))
+mcap_filt_mid$cv <- rowCVs(mcap_filt_mid[,2:5])
+mean(mcap_filt_mid$cv, na.rm = T) # 0.3194477
+median(mcap_filt_mid$cv, na.rm = T) # 0.2736648
+
+mcap_filt_high$mean <- rowMeans(mcap_filt_high[, c(2:4)], na.rm = T)
+mcap_filt_high$sd <- rowSds(as.matrix(mcap_filt_high[, c(2:4)], na.rm = T))
+mcap_filt_high$cv <- rowCVs(mcap_filt_high[,2:4])
+mean(mcap_filt_high$cv, na.rm = T) # 0.2538458
+median(mcap_filt_high$cv, na.rm = T) # 0.2014013
+
+# Average cv for mid and high treatments 
+df <- c(0.3194477, 0.2538458)
+mean(df) # 0.2866468 
+```
+
+#### Calculate depth (LN/G)
+
+For Mcap: 
+L = read length = 88 bp -- some reads were 50 bp, some were 125. I averaged 50 and 125 to get 88 as the read length
+N = number of reads = 16,280,211 avg reads 
+G = transcriptome length = 61,407,199 (mRNA - calculated from the `Output/DESeq2/mcap/length.mRNA_Mcap.csv`) 
+
+```{r}
+((88 * 16280211 ) / 61407199)
+# 23.33047 - this is depth for Mcap. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 23.33047, n = 4, n2 = 7, cv = 0.3860964, cv2 = 0.2866468, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+
+#      1.25       1.5      1.75         2 
+# 0.1377787 0.3520357 0.5874183 0.7707420 
+```
+
+
+## Pacuta
+
+#### Read in metadata & filtered counts and calculate CVs of each gene 
+```{r}
+## Metadata
+pacuta_meta <- read.csv("Data/pacuta_metadata_raw_filtered.csv")
+
+# Control: 4_2, 11_2, 39_2, 41_2
+# Mid: 1_2, 28_2, 42_2, 47_2
+# High: 2_2, 35_2, 36_2, 38_2
+
+##filtered gene count matrix 
+pacuta_filt <- read.csv("Output/DESeq2/pacuta/pacuta_counts_filt_20220116.csv")
+colnames(pacuta_filt)[1] <- "gene_id"
+for ( col in 1:ncol(pacuta_filt)){
+  colnames(pacuta_filt)[col] <-  gsub("X", "", colnames(pacuta_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, Mid and High dfs
+pacuta_filt_control <- pacuta_filt[,c("gene_id", "4_2", "11_2", "39_2", "41_2")] 
+pacuta_filt_mid <- pacuta_filt[,c("gene_id", "1_2", "28_2", "42_2", "47_2")] 
+pacuta_filt_high <- pacuta_filt[,c("gene_id", "2_2", "35_2", "36_2", "38_2")] 
+
+# Calculate row mean, std dev, and coefficient of variation
+pacuta_filt_control$mean <- rowMeans(pacuta_filt_control[, c(2:5)], na.rm = T)
+pacuta_filt_control$sd <- rowSds(as.matrix(pacuta_filt_control[, c(2:5)], na.rm = T))
+pacuta_filt_control$cv <- rowCVs(pacuta_filt_control[,2:5])
+mean(pacuta_filt_control$cv, na.rm = T) # 0.3024638
+median(pacuta_filt_control$cv, na.rm = T) # 0.2688538
+
+pacuta_filt_mid$mean <- rowMeans(pacuta_filt_mid[, c(2:5)], na.rm = T)
+pacuta_filt_mid$sd <- rowSds(as.matrix(pacuta_filt_mid[, c(2:5)], na.rm = T))
+pacuta_filt_mid$cv <- rowCVs(pacuta_filt_mid[,2:5])
+mean(pacuta_filt_mid$cv, na.rm = T) # 0.3413437
+median(pacuta_filt_mid$cv, na.rm = T) # 0.3228733
+
+pacuta_filt_high$mean <- rowMeans(pacuta_filt_high[, c(2:5)], na.rm = T)
+pacuta_filt_high$sd <- rowSds(as.matrix(pacuta_filt_high[, c(2:5)], na.rm = T))
+pacuta_filt_high$cv <- rowCVs(pacuta_filt_high[,2:5])
+mean(pacuta_filt_high$cv, na.rm = T) # 0.4481772
+median(pacuta_filt_high$cv, na.rm = T) # 0.4490502
+
+# Average cv for mid and high treatments 
+df <- c(0.3413437, 0.4481772)
+mean(df) # 0.3947605 
+```
+
+#### Calculate depth (LN/G)
+
+For Pacuta: 
+L = read length = 88 bp -- some reads were 50 bp, some were 125. I averaged 50 and 125 to get 88 as the read length
+N = number of reads = 14,359,654 avg reads 
+G = transcriptome length = 56,173,725 (mRNA - calculated from the `Output/DESeq2/pacuta/length.mRNA_Pacuta.csv`) 
+
+```{r}
+((88 * 14359654 ) / 56173725)
+# 22.49538 - this is depth for Pacuta. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 22.49538, n = 4, n2 = 8, cv = 0.3024638, cv2 = 0.3947605, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+
+#       1.25       1.5      1.75         2 
+# 0.1488317 0.3855323 0.6344018 0.8141192
+```
+
+
+
+
+
+## Plobata
+
+#### Read in metadata & filtered counts and calculate CVs of each gene 
+```{r}
+## Metadata
+plob_meta <- read.csv("Data/plob_metadata_raw_filtered.csv")
+
+# Control: 6_1, 9_1, 25_1, 26_1
+# Mid: 8_1, 21_1, 29_1, 34_1
+# High: 7_1, 22_1, 23_1, 27_1
+
+##filtered gene count matrix 
+plob_filt <- read.csv("Output/DESeq2/plob/plob_counts_filt.csv")
+colnames(plob_filt)[1] <- "gene_id"
+for ( col in 1:ncol(plob_filt)){
+  colnames(plob_filt)[col] <-  gsub("X", "", colnames(plob_filt)[col]) # remvoing X from col names
+}
+
+# Separate into Control, Mid and High dfs
+plob_filt_control <- plob_filt[,c("gene_id", "6_1", "9_1", "25_1", "26_1")] 
+plob_filt_mid <- plob_filt[,c("gene_id", "8_1", "21_1", "29_1", "34_1")] 
+plob_filt_high <- plob_filt[,c("gene_id", "7_1", "22_1", "23_1", "27_1")] 
+
+# Calculate row mean, std dev, and coefficient of variation
+plob_filt_control$mean <- rowMeans(plob_filt_control[, c(2:5)], na.rm = T)
+plob_filt_control$sd <- rowSds(as.matrix(plob_filt_control[, c(2:5)], na.rm = T))
+plob_filt_control$cv <- rowCVs(plob_filt_control[,2:5])
+mean(plob_filt_control$cv, na.rm = T) # 0.5550096
+median(plob_filt_control$cv, na.rm = T) # 0.538429
+
+plob_filt_mid$mean <- rowMeans(plob_filt_mid[, c(2:5)], na.rm = T)
+plob_filt_mid$sd <- rowSds(as.matrix(plob_filt_mid[, c(2:5)], na.rm = T))
+plob_filt_mid$cv <- rowCVs(plob_filt_mid[,2:5])
+mean(plob_filt_mid$cv, na.rm = T) # 0.4680898
+median(plob_filt_mid$cv, na.rm = T) # 0.4531025
+
+plob_filt_high$mean <- rowMeans(plob_filt_high[, c(2:5)], na.rm = T)
+plob_filt_high$sd <- rowSds(as.matrix(plob_filt_high[, c(2:5)], na.rm = T))
+plob_filt_high$cv <- rowCVs(plob_filt_high[,2:5])
+mean(plob_filt_high$cv, na.rm = T) # 0.2846519
+median(plob_filt_high$cv, na.rm = T) # 0.2535753
+
+# Average cv for mid and high treatments 
+df <- c(0.4680898, 0.2846519)
+mean(df) # 0.3763709 
+```
+
+#### Calculate depth (LN/G)
+
+For Plob: 
+L = read length = 88 bp -- some reads were 50 bp, some were 125. I averaged 50 and 125 to get 88 as the read length
+N = number of reads = 13,858,883 avg reads 
+G = transcriptome length = 56,249,572 (mRNA - calculated from the `Output/DESeq2/plob/length.mRNA_Plob.csv`) 
+
+```{r}
+((88 * 13858883 ) / 56249572)
+# 21.68162 - this is depth for Plob. Now that we have the correct depth, we can calculate expected power.
+
+rnapower(depth = 21.68162, n = 4, n2 = 8, cv = 0.5550096, cv2 = 0.3763709, effect = c(1.25, 1.5, 1.75, 2), alpha = 0.05)
+
+#    1.25        1.5       1.75          2 
+# 0.09796585 0.22708905 0.38671998 0.54423249 
+```
 
 
