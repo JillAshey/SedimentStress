@@ -65,5 +65,40 @@ This study evaluated the transcriptomic responses of corals with different morph
 		- [`all.go.CC.slim_20220417.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/GOSeq/all.go.CC.slim_20220417.csv) - gene ontology output for Cellular Components for all species 
 		- [`all.go.MF.slim_20220417.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/GOSeq/all.go.MF.slim_20220417.csv) - gene ontology output for Molecular Functions for all species 
 		- [`all.go.slim_20220417.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/GOSeq/all.go.slim_20220417.csv) - gene ontology output for all species 
+	- [`OrthoFinder`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder) - OrthoFinder output
+		- [`acerv`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/acerv) - orthofinder and DEG output for _A. cervicornis_ from the Florida experiment
+		- [`mcap`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/mcap) - orthofinder and DEG output for _M. capitata_ from the Hawai’i experiment
+		- [`mcav`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/mcav) - orthofinder and DEG output for _M. cavernosa_ from the Florida experiment
+		- [`ofav`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/ofav) - orthofinder and DEG output for _O. faveolata_ from the Florida experiment
+		- [`pacuta`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/pacuta) - orthofinder and DEG output for _P. acuta_ from the Hawai’i experiment
+		- [`plob`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/plob) - orthofinder and DEG output for _P. lobata_ from the Hawai’i experiment
+		- [`species_compare`](https://github.com/JillAshey/SedimentStress/tree/master/Output/OrthoFinder/species_compare) - files comparing each species against one another 
+		- [`AllSpecies_DEGs_ortho_20221020.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/OrthoFinder/AllSpecies_DEGs_ortho_20221020.csv) - DEGs and corresponding orthogroups for all species 
+		- [`Orthogroups.tsv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/OrthoFinder/Orthogroups.tsv) - raw data from orthofinder comparison for all species 
+	- [`QC`](https://github.com/JillAshey/SedimentStress/tree/master/Output/QC) - multiQC output for raw and trimmed reads 
+	- [`SuppTables`](https://github.com/JillAshey/SedimentStress/tree/master/Output/SuppTables) - supplementary tables for the associated manuscript 
+		- [`AlignmentOutput.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/AlignmentOutput.csv) - raw and clean read counts, % of reads mapped to genome 
+		- [`AlignmentOutput_Averages.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/AlignmentOutput_Averages.csv) - averages of raw and clean read counts, % of reads mapped to genome 
+		- [`DEG_GO_Orthogroup_SummaryTable.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/DEG_GO_Orthogroup_SummaryTable.csv) - summary counts of DEG, GO and orthogroups for each species 
+		- [`Orthogroups_DEGs.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/Orthogroups_DEGs.csv) - summary table with the number of orthogroups with DEGs and number of DEGs in orthogroups
+		- [`Shared_GO_terms.csv`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/Shared_GO_terms.csv) - GO terms shared between species 
+		- [`Shared_GO.xlsx`](https://github.com/JillAshey/SedimentStress/blob/master/Output/SuppTables/Shared_GO.xlsx) - GO terms shared between species in manuscript ready table 
+- [`RAnalysis`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis) - R scripts for data analyses 
+	- [`acerv`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/acerv) - DESeq2 and GOSeq scripts for _A. cervicornis_ from the Florida experiment
+	- [`gff_wrangling`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/gff_wrangling) - scripts for manipulating GFFs for use with STAR software
+	- [`mcap`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/mcap) - DESeq2 and GOSeq scripts for _M. capitata_ from the Hawai’i experiment
+	- [`mcav`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/mcav) - DESeq2 and GOSeq scripts for _M. cavernosa_ from the Florida experiment
+	- [`ofav`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/ofav) - DESeq2 and GOSeq scripts for _O. faveolata_ from the Florida experiment
+	- [`pacuta`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/pacuta) - DESeq2 and GOSeq scripts for _P. acuta_ from the Hawai’i experiment
+	- [`plob`](https://github.com/JillAshey/SedimentStress/tree/master/RAnalysis/plob) - DESeq2 and GOSeq scripts for _P. lobata_ from the Hawai’i experiment
+	- [`DEG_GO_summary.Rmd`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/DEG_GO_summary.Rmd) -  script summarizing DEG and GO information 
+	- [`GOslim.Rmd`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/GOslim.Rmd) - script assigning GO terms into GO slim bins 
+	- [`NOAA_temperatures`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/NOAA_temperatures.Rmd) - script plotting NOAA temperatures from Florida and Hawai’i
+	- [`Orthogroups.Rmd`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/Orthogroups.Rmd) - script analyzing orthogroups in the context of DEGs for each species 
+	- [`PCA_plots.Rmd`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/PCA_plots.Rmd) - script to make PCA figure for manuscript 
+	- [`RNASeqPower.Rmd`](https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/RNASeqPower.Rmd) - script to run power analysis on RNASeq data
+
+
+
 
 
