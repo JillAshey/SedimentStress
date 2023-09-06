@@ -32,7 +32,9 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-countdata <- read.csv("Output/DESeq2/ofav/ofav_gene_count_matrix.csv")
+getwd()
+
+countdata <- read.csv("../../Output/DESeq2/ofav/ofav_gene_count_matrix.csv")
 for ( col in 1:ncol(countdata)){
   colnames(countdata)[col] <-  gsub("X", "", colnames(countdata)[col]) # remove X from column names 
 } 
@@ -48,7 +50,7 @@ rownames(countdata) <- countdata$gene_id
 
 ## Load metadata file 
 ```{r}
-metadata_ofav <- read.csv("Data/ofav_metadata_filtered.csv")
+metadata_ofav <- read.csv("../../Data/ofav_metadata_filtered.csv")
 metadata_ofav$SampleID <- gsub("X", "", metadata_ofav$SampleID)
 rownames(metadata_ofav) <- metadata_ofav$SampleID
 ```
@@ -381,106 +383,18 @@ ofav_DEGPCAplot <- ggplot(ofav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   #coord_fixed() +
   ggtitle(label = "O. favelota") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=8), 
+  theme(legend.text = element_text(size=13), 
         #legend.position="none",
         plot.background = element_blank(),
         #legend.title = element_text(size=18, face="bold"), 
         legend.title=element_blank(),
-        axis.text = element_text(size=8), 
-        axis.title = element_text(size=10,  face="bold", hjust = 0.5), 
+        axis.text = element_text(size=13), 
+        axis.title = element_text(size=15,  face="bold"), 
         axis.title.y = element_text(vjust=-1.5),
-        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 20, face = "italic", hjust = 0.5))
 ofav_DEGPCAplot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcav_DEG_PCA_plot$data
-ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220326.jpeg", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
-ggsave("Output/Figs/ofav/ofav_DEGs_PCA_20220326.pdf", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/ofav/ofav_DEGs_PCA_20230906.jpeg", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/ofav/ofav_DEGs_PCA_20230906.pdf", ofav_DEGPCAplot, width = 20, height = 15, units = "cm")
 ```
-
-# Heatmap of DEGs
-
-
-
-# Volcano plots w/ DEGs
-I have potential code in old R file for volcano plots here: https://github.com/JillAshey/SedimentStress/blob/master/RAnalysis/pdam/pdam_DESeq2_star.R starting on line 239.
-In these plots, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html).
-
-## Read in data and set cutoffs
-```{r}
-# Read in data
-ofav.DEG <- read_csv("Output/DESeq2/ofav/ofav_DEGs_AllTreatments_20211104.csv")
-ofav.DEG <- select(ofav.DEG, -X1)
-ofav.DEG$diffexpressed <- "NA"
-ofav.DEG$diffexpressed[ofav.DEG$log2FoldChange > 0] <- "Up"
-ofav.DEG$diffexpressed[ofav.DEG$log2FoldChange < 0] <- "Down"
-# Set thresholds
-padj.cutoff <- 0.05
-lfc.cutoff <- 0.5
-threshold <- ofav.DEG$padj < padj.cutoff & abs(ofav.DEG$log2FoldChange) > lfc.cutoff
-length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
-# Add vector to df
-ofav.DEG$threshold <- threshold
-# Write name of gene beside points
-ofav.DEG$delabel <- "NA"
-ofav.DEG$delabel[ofav.DEG$diffexpressed != "NO"] <- ofav.DEG$gene_id[ofav.DEG$diffexpressed != "NO"]
-```
-
-
-
-
-
-
-### old code 
-```{r}
-# Volcano plot w/ DEGs
-ofav.volcano <- ggplot(data=ofav.DEG, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
- geom_point() +
- xlab("log2 fold change") +
- ylab("-log10 adjusted p-value") +
- theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.text = element_text(size = 200),
-        axis.title = element_text(size=250)) +
-  theme_minimal() +
-  #geom_text_repel() + # use this argument to add labels to points on plot
-  scale_color_manual(values=c("blue", "red")) +
-  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
-  geom_hline(yintercept=-log10(0.05), col="red")
-ofav.volcano
-# Save plots
-ggsave("Output/Figs/ofav/ofav_DEG_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
-#ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
-
-## Volcano plot
-# Read in df with all expressed genes
-ofav_counts_filt <- read_csv( "Output/DESeq2/ofav/ofav_AllGenes_AllTreatments_20211104.csv")
-colnames(ofav_counts_filt)[1] <- "gene_id"
-# Assign DEG status
-ofav_counts_filt$diffexpressed <- "NA"
-ofav_counts_filt$diffexpressed[ofav_counts_filt$log2FoldChange > 0] <- "Up"
-ofav_counts_filt$diffexpressed[ofav_counts_filt$log2FoldChange < 0] <- "Down"
-#ofav_counts_filt <- ofav_counts_filt %>% replace_na(list(diffexpressed = "No"))
-# Set thresholds
-padj.cutoff <- 0.05
-lfc.cutoff <- 0.5
-threshold <- ofav_counts_filt$padj < padj.cutoff & abs(ofav_counts_filt$log2FoldChange) > lfc.cutoff
-length(which(threshold))
-# Add vector to df
-ofav_counts_filt$threshold <- threshold
-# Volcano plot w/ all genes
-ofav.full.volcano <- ggplot(data=ofav_counts_filt, aes(x=log2FoldChange, y=-log10(padj), col=diffexpressed, shape=Treatment_Compare, label=gene_id)) +
- geom_point() +
- xlab("log2 fold change") +
- ylab("-log10 adjusted p-value") +
- theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) +
-  theme_minimal() +
-  #geom_text_repel() + # use this argument to add labels to points on plot
-  scale_color_manual(values=c("blue", "red")) +
-  geom_vline(xintercept=c(-0.6, 0.6), col="red") +
-  geom_hline(yintercept=-log10(0.05), col="red")
-ofav.volcano
-# Save plots
-ggsave("Output/Figs/ofav/ofav_AllGenes_volcano_20211104.pdf", ofav.volcano, width = 10, height = 10)
-#ggsave("~/Desktop/pdam_DEG_volcano_20211010.jpeg", pdam.volcano, width = 25, height = 25)
-```
-

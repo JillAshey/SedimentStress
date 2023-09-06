@@ -40,7 +40,7 @@ Step 6 - figure out stats tests for location and for morphology
 *Step 1*: Load Orthogroup data 
 ```{r}
 # Read in orthofinder data 
-ortho <- read.table(file = 'Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
+ortho <- read.table(file = '../Output/OrthoFinder/Orthogroups.tsv', sep = '\t', header = TRUE, na.strings=c(""," ","NA"))
 #ortho <- na.omit(ortho)
 colnames(ortho) <- c("Orthogroup", "Acervicornis", "Ofaveolata", "Mcavernosa", "Mcapitata", "Pacuta", "Plobata")
 length(unique(ortho$Orthogroup)) # 21688 total orthogroups
@@ -102,7 +102,7 @@ Figure out how to make upset plots for these so that it does frequency counts of
 *Step 4*: Merge the table with the DEG table by gene name and repeat this for each species
 ### Acerv 
 ```{r}
-acerv_DEG <- read.csv("Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
+acerv_DEG <- read.csv("../Output/DESeq2/acerv/acerv_sub_unique.sig.list_20210219.csv", header = T)[,1]
 acerv_DEG <- as.data.frame(acerv_DEG)
 colnames(acerv_DEG) <- "gene_id"
 
@@ -115,15 +115,15 @@ acerv_ortho$gene_id <- gsub(" ", "", acerv_ortho$gene_id)
 acerv <- merge(acerv_ortho, acerv_DEG, by = "gene_id")
 length(unique(acerv$gene_id)) # 119 DEGs found in orthogroups 
 length(unique(acerv$Orthogroup)) # 102 orthogroups
-write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(acerv$Orthogroup), "Output/OrthoFinder/acerv_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20221125.csv")
+#write.csv(acerv, "Output/OrthoFinder/acerv_DEGs_ortho_20221125.csv")
 ```
 
 ### Mcav 
 ```{r}
-mcav_DEG <- read.csv("Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
+mcav_DEG <- read.csv("../Output/DESeq2/mcav/mcav_unique.sig.list_20210208.csv", header = T)[,1]
 mcav_DEG <- as.data.frame(mcav_DEG)
 colnames(mcav_DEG)[1] <- "gene_id"
 
@@ -136,15 +136,15 @@ mcav_ortho$gene_id <- gsub(" ", "", mcav_ortho$gene_id)
 mcav <- merge(mcav_ortho, mcav_DEG, by = "gene_id")
 length(unique(mcav$gene_id)) # 31 DEGs found in orthogroups 
 length(unique(mcav$Orthogroup)) # 28 orthogroups 
-write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(mcav$Orthogroup), "Output/OrthoFinder/mcav_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20221125.csv")
+#write.csv(mcav, "Output/OrthoFinder/mcav_DEGs_ortho_20221125.csv")
 ```
 
 ### Ofav 
 ```{r}
-ofav_DEG <- read.csv("Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)[,1]
+ofav_DEG <- read.csv("../Output/DESeq2/ofav/ofav_unique.sig.list_20220111.csv", header = T)[,1]
 ofav_DEG <- as.data.frame(ofav_DEG)
 colnames(ofav_DEG)[1] <- "gene_id"
 
@@ -179,15 +179,15 @@ merge <- unique(merge)
 ofav <- merge(merge, ofav_DEG, by = "gene_id")
 length(unique(ofav$gene_id)) # 2 DEGs found in orthogroups 
 length(unique(ofav$Orthogroup)) # 2 orthogroups 
-write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(ofav$Orthogroup), "Output/OrthoFinder/ofav_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20221125.csv")
+#write.csv(ofav, "Output/OrthoFinder/ofav_DEGs_ortho_20221125.csv")
 ```
 
 ### Mcap
 ```{r}
-mcap_DEG <- read.csv("Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
+mcap_DEG <- read.csv("../Output/DESeq2/mcap/mcap_unique.sig.list_20220315.csv", header = T)[,1]
 mcap_DEG <- as.data.frame(mcap_DEG)
 colnames(mcap_DEG)[1] <- "gene_id"
 
@@ -200,15 +200,15 @@ mcap_ortho$gene_id <- gsub(" ", "", mcap_ortho$gene_id)
 mcap <- merge(mcap_ortho, mcap_DEG, by = "gene_id")
 length(unique(mcap$gene_id)) # 87 DEGs found in orthogroups 
 length(unique(mcap$Orthogroup)) # 80 orthogroups 
-write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(mcap$Orthogroup), "Output/OrthoFinder/mcap_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20221125.csv")
+#write.csv(mcap, "Output/OrthoFinder/mcap_DEGs_ortho_20221125.csv")
 ```
 
 ### Pacuta 
 ```{r}
-pacuta_DEG <- read.csv("Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
+pacuta_DEG <- read.csv("../Output/DESeq2/pacuta/pacuta_unique.sig.list_20220116.csv", header = T)[,1]
 pacuta_DEG <- as.data.frame(pacuta_DEG)
 colnames(pacuta_DEG)[1] <- "gene_id"
 
@@ -220,15 +220,15 @@ pacuta_ortho$gene_id <- gsub(" ", "", pacuta_ortho$gene_id)
 pacuta <- merge(pacuta_ortho, pacuta_DEG, by = "gene_id")
 length(unique(pacuta$gene_id)) # 123 DEGs found in orthogroups 
 length(unique(pacuta$Orthogroup)) # 100 orthogroups 
-write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(pacuta$Orthogroup), "Output/OrthoFinder/pacuta_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20221125.csv")
+#write.csv(pacuta, "Output/OrthoFinder/pacuta_DEGs_ortho_20221125.csv")
 ```
 
 ### Plob 
 ```{r}
-plob_DEG <- read.csv("Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
+plob_DEG <- read.csv("../Output/DESeq2/plob/plob_unique.sig.list_20210326.csv", header = T)[,1]
 plob_DEG <- as.data.frame(plob_DEG)
 colnames(plob_DEG)[1] <- "gene_id"
 
@@ -242,10 +242,10 @@ plob_ortho$gene_id <- gsub(" ", "", plob_ortho$gene_id)
 plob <- merge(plob_ortho, plob_DEG, by = "gene_id")
 length(unique(plob$gene_id)) # 66 DEGs found in orthogroups 
 length(unique(plob$Orthogroup)) # 56 orthogroups 
-write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
+#write.csv(unique(plob$Orthogroup), "Output/OrthoFinder/plob_uniq_ortho_20221125.csv") ## In Excel, I take the unique ortho files, remove excess rows/cols so its just a list of orthogroups. 
 
 # Write to csv 
-write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20221125.csv") 
+#write.csv(plob, "Output/OrthoFinder/plob_DEGs_ortho_20221125.csv") 
 ```
 
 *Step 5*: Merge all DEGs within orthogroups tables for all 6 species into one table that will be used to generate the Upset Plot
@@ -328,7 +328,7 @@ upset_ortho <- upset(
         intersection_size(
         bar_number_threshold=0.85,  # show all numbers on top of bars
         width=0.9,   # reduce width of the bars
-        text = list(size=10), # change text size over bars
+        text = list(size=15), # change text size over bars
         text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
       + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
@@ -336,8 +336,8 @@ upset_ortho <- upset(
           panel.grid.major=element_blank(), # hide grid lines
           panel.grid.minor=element_blank(), # hide grid lines
           axis.line=element_line(colour='black', size = 2), # show axis lines
-          axis.title.y = element_text(size = 35, colour = "black"), 
-          axis.text.y = element_text(size = 30, colour = "black")
+          axis.title.y = element_text(size = 40, colour = "black"), 
+          axis.text.y = element_text(size = 35, colour = "black")
       )
     )
   ),
@@ -365,13 +365,13 @@ upset_ortho <- upset(
       axis.line.x=element_line(colour='black', size = 2),
       axis.line.y = element_line(colour = 'black'),
       axis.ticks.x=element_line(),
-      axis.text.x = element_text(size = 25, colour = "black"),
-      axis.title.x = element_text(size = 30, colour = "black"),
+      axis.text.x = element_text(size = 30, colour = "black"),
+      axis.title.x = element_text(size = 35, colour = "black"),
     )
   ),
   themes = upset_modify_themes(
        list(
-           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+           'intersections_matrix' = theme(text = element_text(size = 55, face = "italic", colour = "black")), # text to the left of the matrix
           'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
        )),
   sort_sets = 'descending', # sort sets in descending order
@@ -379,8 +379,8 @@ upset_ortho <- upset(
 )
 upset_ortho 
 
-ggsave("Output/Figs/upset/upset_ortho_20221205.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
-ggsave("Output/Figs/upset/upset_ortho_20221205.png", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("../Output/Figs/upset/upset_ortho_20230906.pdf", upset_ortho, width = 40, height = 20, units = c("in"))
+ggsave("../Output/Figs/upset/upset_ortho_20230906.png", upset_ortho, width = 40, height = 20, units = c("in"))
 ```
 Will add legend in powerpoint real quick
 

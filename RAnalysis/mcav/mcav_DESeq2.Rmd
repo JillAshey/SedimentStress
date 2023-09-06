@@ -34,7 +34,9 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-mcav_counts <- read.csv("Output/DESeq2/mcav/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
+getwd()
+
+mcav_counts <- read.csv("../../Output/DESeq2/mcav/gene_count_mcav_only_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(mcav_counts) # 25142 x 15
 head(mcav_counts)
 for ( col in 1:ncol(mcav_counts)){
@@ -47,27 +49,8 @@ for ( col in 1:ncol(mcav_counts)){
 
 ## Load metadata file 
 ```{r}
-metadata <- read.csv("Data/FL_sediment_metadata.csv", header = TRUE)
-dim(metadata) # 45 by 15
-head(metadata)
-# Selecting only the columns I need for analyses 
-metadata <- select(metadata, c(Rep, Species, Treatment.in.mg.L.of.sediment, Location, File.Name.fastq))
-# Renaming cols
-colnames(metadata) <-c("Replicate","Species", "Treatment", "Location", "SampleID")
-# Select Mcav species only 
-mcav_metadata <- subset(metadata, Species=="Montastraea cavernosa")
+mcav_metadata <- read.csv("../../Data/mcav_metadata_filtered.csv", header = T)
 
-# Renaming treatments
-mcav_metadata$Treatment <- gsub("Ctl", "control", mcav_metadata$Treatment)
-mcav_metadata$Treatment <- gsub("T1", "Treatment1", mcav_metadata$Treatment)
-mcav_metadata$Treatment <- gsub("T2", "Treatment2", mcav_metadata$Treatment)
-mcav_metadata$Treatment <- gsub("T3", "Treatment3", mcav_metadata$Treatment)
-mcav_metadata$Treatment <- gsub("T4", "Treatment4", mcav_metadata$Treatment)
-# Removing unwanted text from SampleID
-mcav_metadata$SampleID <- gsub(".txt.gz", "", mcav_metadata$SampleID)
-mcav_metadata$SampleID <- gsub(";.*", "", mcav_metadata$SampleID)
-mcav_metadata$SampleID <- gsub(".fastq.gz", "", mcav_metadata$SampleID)
-mcav_metadata$SampleID <- sub("\\.", "", mcav_metadata$SampleID)
 # Make row names to be SampleID 
 rownames(mcav_metadata) <- mcav_metadata$SampleID
 ```
@@ -368,7 +351,7 @@ length(unique(DEGs.all$gene_id)) # 62 unique genes between all treatments
 
 ## Look at size factors and run vst normalization
 ```{r}
-unique.sig.list <- data[which(rownames(data) %in% DEGs.all_mcav$DEGs), ] # subset list of sig transcripts from original count data
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all$gene_id), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "~/Desktop/mcav_unique.sig.list_20210208.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
@@ -392,120 +375,22 @@ mcav_DEG_PCA_plot <- ggplot(mcav_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   #coord_fixed() +
   ggtitle(label = "M. cavernosa") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=8), 
+  theme(legend.text = element_text(size=13), 
         #legend.position="none",
         plot.background = element_blank(),
         #legend.title = element_text(size=18, face="bold"), 
         legend.title=element_blank(),
-        axis.text = element_text(size=8), 
-        axis.title = element_text(size=10,  face="bold", hjust = 0.5), 
+        axis.text = element_text(size=13), 
+        axis.title = element_text(size=15,  face="bold"), 
         axis.title.y = element_text(vjust=-1.5),
-        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 20, face = "italic", hjust = 0.5))
 mcav_DEG_PCA_plot
 # PCA plot is of differentially expressed genes only
 PC.info <- mcav_DEG_PCA_plot$data
-#ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20220326.jpeg", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
-#ggsave("Output/Figs/mcav/mcav_DEGs_PCA_20220326.pdf", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/mcav/mcav_DEGs_PCA_20230906.jpeg", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/mcav/mcav_DEGs_PCA_20230906.pdf", mcav_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 ```
 
 
 
-
-
-
-### old code 
-```{r}
-## Heatmap of DEGs
-# This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side
-# Also taking out legend 
-
-# Need a file with counts, gene names, GO IDs, term, and ontology 
-# This file is acerv genes with GO terms associated with them. One GO term per line, so multiple acerv gene names sometimes if genes have multiple GO terms
-# This file includes all gene names and GO IDs
-mcav_sig <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav_GOterms.unique.csv", header = TRUE)
-mcav_sig <- select(mcav_sig, -X)
-colnames(mcav_sig)[1] <-"gene"
-head(mcav_sig)
-
-# Getting col order to order unique counts data
-list(mcav_metadata)
-list <- mcav_metadata[order(mcav_metadata$Treatment),] # need to order them so it will group by treatment in plot
-list(list$SampleID) # look at sample IDs and use that list to make col.order
-col.order <- c("22_ctl2_Mc_TWF_1",
-               "28_ctl1_Mc_GBM_1",
-               "42_ctl3_Mc_MGR_1",
-               "20_T12_Mc_PWC",
-               "39_T13_Mc_FJE",
-               "61_T11_Mc_RAP",
-               "29_T23_Mc_PND",
-               "34_T22_Mc_SVS",
-               "58_T21_Mc_EAH",
-               "21_T33_Mc_EOU",
-               "49_T31_Mc_SWQ",
-               "55_T32_Mc_TWP",
-               "33_T43_Mc_RFV",
-               "46_T41_Mc_QYH_1",
-               "56_T42_Mc_JAW") 
-  
-
-
-
-
-
-##### Volcano plots 
-## Here, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html)
-# Read in data 
-mcav.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/mcav/mcav_DEGs.all_treatment_20210208.csv")
-mcav.DEG <- select(mcav.DEG, -X)
-mcav.DEG$diffexpressed <- "NA"
-mcav.DEG$diffexpressed[mcav.DEG$log2FoldChange > 0] <- "Up"
-mcav.DEG$diffexpressed[mcav.DEG$log2FoldChange < 0] <- "Down"
-
-# Set thresholds
-padj.cutoff <- 0.05
-lfc.cutoff <- 0.5
-
-threshold <- mcav.DEG$padj < padj.cutoff & abs(mcav.DEG$log2FoldChange) > lfc.cutoff
-length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
-
-# Add vector to df
-mcav.DEG$threshold <- threshold   
-
-# Volcano plot w/ DEGs
-mcav.volcano <- ggplot(mcav.DEG) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
-  xlab("log2 fold change") + 
-  ylab("-log10 adjusted p-value") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) 
-mcav.volcano
-ggsave("~/Desktop/mcav_volcano_20210705.pdf", mcav.volcano, width = 25, height = 25)
-ggsave("~/Desktop/mcav_volcano_20210705.jpeg", mcav.volcano, width = 25, height = 25)
-
-
-## trying volcano plot with GO.slim data 
-mcav_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20210208.csv")
-View(mcav_ByTreatment)
-names(mcav_ByTreatment)[names(mcav_ByTreatment) == "category"] <- "GO.IDs"
-mcav_ByTreatment$diffexpressed <- "NA"
-mcav_ByTreatment$diffexpressed[mcav_ByTreatment$log2FoldChange > 0] <- "Up"
-mcav_ByTreatment$diffexpressed[mcav_ByTreatment$log2FoldChange < 0] <- "Down"
-
-# Read in GO slim info
-go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-mcav_ByTreatment <- merge(mcav_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
-mcav_ByTreatment <- na.omit(mcav_ByTreatment)
-
-# Volcano plot
-mcav_go.volcano <- ggplot(mcav_ByTreatment) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
-  xlab("log2 fold change") + 
-  ylab("-log10 adjusted p-value") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) 
-mcav_go.volcano
-ggsave("~/Desktop/mcav_volcano.GOterms_20210705.pdf", mcav_go.volcano, width = 25, height = 25)
-ggsave("~/Desktop/mcav_volcano.GOterms_20210705.jpeg", mcav_go.volcano, width = 25, height = 25)
-```
 

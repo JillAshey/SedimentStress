@@ -5,6 +5,24 @@ date: "5/9/2022"
 output: html_document
 ---
 
+Make PCA plots for each species and merge them together for manuscript figure. 
+
+## Load packages 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+if (!require("BiocManager", quietly = TRUE))
+    install.packages("BiocManager")
+
+BiocManager::install("DESeq2")
+
+library(cowplot)
+library(tidyverse)
+library("gridExtra")
+library(DESeq2)
+```
+
+
 This code is SO JANKY/convoluted and I am sure there is a better way to it. Regardless, this code is for PCA figure formatting for the manuscript. I am putting all 6 PCAs in one figure 
 
 ## Load packages 
@@ -41,9 +59,12 @@ legend_b1 <- get_legend(acerv_sub_DEG_PCA_plot + theme(legend.position="right"))
 
 ## Add the legend to plot
 ```{r}
+getwd()
+
 p1 <- plot_grid( prow1, legend_b1, ncol = 2, rel_heights = c(1, .05), rel_widths = c(1, 0.1))
 p1
-#ggsave("Output/Figs/PCA_FL.png", p1, width = 15, height = 5)
+ggsave("../Output/Figs/PCA/PCA_FL.png", p1, width = 15, height = 5)
+ggsave("../Output/Figs/PCA/PCA_FL.pdf", p1, width = 15, height = 5)
 ```
 
 
@@ -74,16 +95,20 @@ legend_b2 <- get_legend(mcap_DEGPCAplot + theme(legend.position="right"))
 
 ## Add the legend to plot
 ```{r}
+getwd()
+
 p2 <- plot_grid( prow2, legend_b2, ncol = 2, rel_heights = c(1, .05), rel_widths = c(1, 0.1))
 p2
-#ggsave("Output/Figs/PCA_HI.png", p2, width = 15, height = 5)
+ggsave("../Output/Figs/PCA/PCA_HI.png", p2, width = 15, height = 5)
+ggsave("../Output/Figs/PCA/PCA_HI.pdf", p2, width = 15, height = 5)
 ```
 
 ## Join FL and HI PCAs into final figure and save 
 ```{r}
 full <- plot_grid(p1, p2, nrow = 2)
 full
-#ggsave("Output/Figs/PCA_all.png", full, width = 15, height = 10)
+ggsave("../Output/Figs/PCA/PCA_all.png", full, width = 15, height = 10)
+ggsave("../Output/Figs/PCA/PCA_all.pdf", full, width = 15, height = 10)
 ```
 
 

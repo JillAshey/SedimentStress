@@ -9,7 +9,9 @@ output: html_document
 
 ## Load packages
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(root.dir = '/Users/jillashey/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/', echo = TRUE)
+getwd()
+knitr::opts_knit$set(root.dir = '/tmp')
 
 library("DESeq2")
 library("tidyverse")
@@ -34,7 +36,9 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
-acerv_counts <- read.csv("Output/DESeq2/acerv/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
+getwd()
+
+acerv_counts <- read.csv("../../Output/DESeq2/acerv/acerv_gene_count_matrix.csv", header = TRUE, row.names = "gene_id")
 dim(acerv_counts) # 33715 x 15
 for ( col in 1:ncol(acerv_counts)){
   colnames(acerv_counts)[col] <-  sub(".fastq.trim.fq.Aligned.sortedByCoord.out.bam.merge.gtf", "", colnames(acerv_counts)[col]) # removing excess from col names
@@ -52,26 +56,10 @@ dim(acerv_counts) # 18958 x 15
 
 ## Load metadata file 
 ```{r}
-metadata <- read.csv("Data/FL_sediment_metadata.csv", header = TRUE)
-dim(metadata) # 45 by 12
-head(metadata)
-# Select only the columns I need for analyses 
-metadata <- select(metadata, c(Rep, Species, Treatment.in.mg.L.of.sediment, Location, File.Name.fastq))
-# Rename cols
-colnames(metadata) <-c("Replicate","Species", "Treatment", "Location", "SampleID")
-# Select Acerv species only 
-acerv_metadata <- subset(metadata, Species=="Acropora cervicornis")
-# Rename treatments
-acerv_metadata$Treatment <- gsub("Ctl", "control", acerv_metadata$Treatment)
-acerv_metadata$Treatment <- gsub("T1", "Treatment1", acerv_metadata$Treatment)
-acerv_metadata$Treatment <- gsub("T2", "Treatment2", acerv_metadata$Treatment)
-acerv_metadata$Treatment <- gsub("T3", "Treatment3", acerv_metadata$Treatment)
-acerv_metadata$Treatment <- gsub("T4", "Treatment4", acerv_metadata$Treatment)
-# Remove unwanted text from SampleID
-acerv_metadata$SampleID <- gsub(".txt.gz", "", acerv_metadata$SampleID)
-acerv_metadata$SampleID <- gsub(";.*", "", acerv_metadata$SampleID)
-acerv_metadata$SampleID <- gsub(".fastq.gz", "", acerv_metadata$SampleID)
-acerv_metadata$SampleID <- sub("\\.", "", acerv_metadata$SampleID)
+getwd()
+
+acerv_metadata <- read.csv("../../Data/acerv_metadata_filtered.csv", header = T)
+
 # Make row names to be SampleID 
 rownames(acerv_metadata) <- acerv_metadata$SampleID
 ```
@@ -407,7 +395,7 @@ length(unique(DEGs.all$gene_id)) # 215 unique genes between all treatments
 
 ## Look at size factors and run vst normalization
 ```{r}
-unique.sig.list <- data[which(rownames(data) %in% DEGs.all_acerv_sub$DEGs), ] # subset list of sig transcripts from original count data
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all$gene_id), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "~/Desktop/acerv_sub_unique.sig.list_20210219.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
@@ -417,6 +405,8 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 
 # PCA plot of DEGs
 ```{r}
+getwd()
+
 acerv_sub_DEG_PCA <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_acerv_sub <- round(100*attr(acerv_sub_DEG_PCA, "percentVar")) #plot PCA of samples with all data
 
@@ -428,102 +418,20 @@ acerv_sub_DEG_PCA_plot <- ggplot(acerv_sub_DEG_PCA, aes(PC1, PC2, color = Treatm
   #coord_fixed() +
   ggtitle(label = "A. cervicornis") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=8), 
+  theme(legend.text = element_text(size=13), 
         #legend.position="none",
         plot.background = element_blank(),
         #legend.title = element_text(size=18, face="bold"), 
         legend.title=element_blank(),
-        axis.text = element_text(size=8), 
-        axis.title = element_text(size=10,  face="bold"), 
+        axis.text = element_text(size=13), 
+        axis.title = element_text(size=15,  face="bold"), 
         axis.title.y = element_text(vjust=-1.5),
-        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 20, face = "italic", hjust = 0.5))
 acerv_sub_DEG_PCA_plot # PCA plot is of differentially expressed genes only
 PC.info <- acerv_sub_DEG_PCA_plot$data
-#ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.jpeg", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
-#ggsave("Output/Figs/acerv/acerv_DEGs_PCA_20220328.pdf", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/acerv/acerv_DEGs_PCA_20230906.jpeg", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
+ggsave("../../Output/Figs/acerv/acerv_DEGs_PCA_20230906.pdf", acerv_sub_DEG_PCA_plot, width = 20, height = 15, units = "cm")
 ```
-
-
-
-
-
-
-### old code 
-```{r}
-## Heatmap of DEGs
-# This heatmap is going to be wild. Grouping columns by treatment, putting gene id on left hand side and GO term on right hand side
-# Also taking out legend 
-
-# Need a file with counts, gene names, GO IDs, term, and ontology 
-# This file is acerv genes with GO terms associated with them. One GO term per line, so multiple acerv gene names sometimes if genes have multiple GO terms
-# This file includes all gene names and GO IDs
-acerv_sig <- read.csv("~/Desktop/acerv_sub_GOterms.unique.csv", header = TRUE)
-acerv_sig <- select(acerv_sig, -X)
-colnames(acerv_sig)[1] <-"gene"
-head(acerv_sig)
-
-
-##### Volcano plots 
-## Here, the log transformed adjusted p-values are plotted on the y-axis and log2 fold change values on the x-axis (https://hbctraining.github.io/Intro-to-R-with-DGE/lessons/B1_DGE_visualizing_results.html)
-# Read in data 
-acerv.DEG <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/DESeq2/acerv/acerv_sub_DEGs.all_treatment_20210219.csv")
-acerv.DEG <- select(acerv.DEG, -X)
-acerv.DEG$diffexpressed <- "NA"
-acerv.DEG$diffexpressed[acerv.DEG$log2FoldChange > 0] <- "Up"
-acerv.DEG$diffexpressed[acerv.DEG$log2FoldChange < 0] <- "Down"
-
-# Set thresholds
-padj.cutoff <- 0.05
-lfc.cutoff <- 0.5
-
-threshold <- acerv.DEG$padj < padj.cutoff & abs(acerv.DEG$log2FoldChange) > lfc.cutoff
-length(which(threshold)) # this did not reduce anything, as the df only has DEGs in it?
-
-# Add vector to df
-acerv.DEG$threshold <- threshold   
-
-# Volcano plot w/ DEGs
-acerv.volcano <- ggplot(acerv.DEG) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), shape=Treatment_Compare, colour=diffexpressed), size = 2) +
-  xlab("log2 fold change") + 
-  ylab("-log10 adjusted p-value") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) 
-acerv.volcano
-ggsave("~/Desktop/acerv_volcano_20210705.pdf", acerv.volcano, width = 25, height = 25)
-ggsave("~/Desktop/acerv_volcano_20210705.jpeg", acerv.volcano, width = 25, height = 25)
-
-
-## trying volcano plot with GO term and GO slim data 
-acerv_ByTreatment <- read.csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20210327.csv")
-names(acerv_ByTreatment)[names(acerv_ByTreatment) == "category"] <- "GO.IDs"
-acerv_ByTreatment$diffexpressed <- "NA"
-acerv_ByTreatment$diffexpressed[acerv_ByTreatment$log2FoldChange > 0] <- "Up"
-acerv_ByTreatment$diffexpressed[acerv_ByTreatment$log2FoldChange < 0] <- "Down"
-
-# Read in GO slim info
-go.slim <- read_csv("~/Desktop/PutnamLab/Repositories/SedimentStress/SedimentStress/Output/GOSeq/GO-GOslim.csv")
-colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
-acerv_ByTreatment <- merge(acerv_ByTreatment, go.slim, by="GO.IDs", all = TRUE) # merge pdam info and GOslim
-acerv_ByTreatment <- na.omit(acerv_ByTreatment)
-
-# Volcano plot
-acerv_go.volcano <- ggplot(acerv_ByTreatment) +
-  geom_point(aes(x=log2FoldChange, y=-log10(padj), colour=diffexpressed, shape=GO.Slim.Term), size = 3) +
-  xlab("log2 fold change") + 
-  ylab("-log10 adjusted p-value") +
-  theme(plot.title = element_text(size = rel(1.5), hjust = 0.5),
-        axis.title = element_text(size = rel(1.25))) 
-acerv_go.volcano
-ggsave("~/Desktop/acerv_volcano.GOterms_20210705.pdf", acerv_go.volcano, width = 25, height = 25)
-ggsave("~/Desktop/acerv_volcano.GOterms_20210705.jpeg", acerv_go.volcano, width = 25, height = 25)
-```
-
-
-
-
-
-
 
 
 

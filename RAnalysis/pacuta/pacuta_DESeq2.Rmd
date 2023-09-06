@@ -32,9 +32,11 @@ library("VennDiagram")
 
 ## Load gene count matrix
 ```{r}
+getwd()
+
 ## using gene count matrix made w/ stringtie merged gtf b/c too many MSTRG/STRG gene ids generated when using the original GFF. Here, I'm merging the count matrix and the stringtie merged gtf file to match up gene ids from original gff w/ MSTRG/STRG gene ids created by stringtie
-countdata_merge <- read.csv("~/Desktop/gene_count_pacuta_matrix_merge.csv")
-gtf <- read.csv(file="~/Desktop/stringtie_pacuta_merged.gtf", header=FALSE, sep="\t", skip = 2) 
+countdata_merge <- read.csv("../../Output/DESeq2/pacuta/gene_count_pacuta_matrix_merge.csv")
+gtf <- read.csv(file="~/Desktop/GFFs/pacuta/stringtie_pacuta_merged.gtf", header=FALSE, sep="\t", skip = 2) 
 colnames(gtf) <- c("scaffold", "Gene.Predict", "id", "gene.start","gene.stop", "pos1", "pos2","pos3", "gene")
 head(gtf)
 gtf_transcript <- subset(gtf, id == "transcript")
@@ -67,7 +69,7 @@ rownames(countdata) <- countdata$gene_id
 
 ## Load metadata 
 ```{r}
-metadata_pacuta <- read.csv("Data/pacuta_metadata_raw_filtered.csv")
+metadata_pacuta <- read.csv("../../Data/pacuta_metadata_raw_filtered.csv")
 metadata_pacuta <- na.omit(metadata_pacuta)
 metadata_pacuta$SampleID <- gsub(".fastq.gz", "", metadata_pacuta$SampleID)
 rownames(metadata_pacuta) <- metadata_pacuta$SampleID
@@ -269,6 +271,8 @@ unique.vst.sig <- varianceStabilizingTransformation(unique.sig.list, blind = FAL
 
 ## PCA plot of diff-expressed genes 
 ```{r}
+getwd()
+
 pacuta_DEGPCAdata <- plotPCA(unique.vst.sig, intgroup = c("Treatment"), returnData=TRUE)
 percentVar_pca_pacuta <- round(100*attr(pacuta_DEGPCAdata, "percentVar")) #plot PCA of samples with all data
 
@@ -280,61 +284,20 @@ pacuta_DEGPCAplot <- ggplot(pacuta_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   #coord_fixed() +
   ggtitle(label = "P. acuta") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=8), 
+  theme(legend.text = element_text(size=13), 
         #legend.position="none",
         plot.background = element_blank(),
         #legend.title = element_text(size=18, face="bold"), 
         legend.title=element_blank(),
-        axis.text = element_text(size=8), 
-        axis.title = element_text(size=10,  face="bold"), 
+        axis.text = element_text(size=13), 
+        axis.title = element_text(size=15,  face="bold"), 
         axis.title.y = element_text(vjust=-1.5),
-        plot.title = element_text(size = 15, face = "italic", hjust = 0.5)) +
+        plot.title = element_text(size = 20, face = "italic", hjust = 0.5)) +
   coord_equal(ratio = 1.3)
 pacuta_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- pacuta_DEGPCAplot$data
-#ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220328.jpeg", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
-#ggsave("Output/Figs/pacuta/pacuta_DEGs_PCA_20220328.pdf", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
+ggsave("../../Output/Figs/pacuta/pacuta_DEGs_PCA_20230906.jpeg", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
+ggsave("../../Output/Figs/pacuta/pacuta_DEGs_PCA_20230906.pdf", pacuta_DEGPCAplot, width = 20, height = 20, units = "cm")
 ```
-
-
-20221208 
-
-## Volcano plot w/ DEGs
-```{r}
-## Load data 
-DEG <- read.csv("Output/DESeq2/pacuta/pacuta_DEGs_AllTreatments_20220116.csv", header = T)
-head(DEG)
-
-
-## Get rid of extra columns 
-DEG <- DEG[,-c(1, 9:20)]
-
-## Plot basic scatter plot: x is log2FoldChange, y is pvalue (I'm using padj in my plots)
-ggplot(data=DEG, aes(x=log2FoldChange, y=padj)) + geom_point()
-
-## Convert the p-value into a -log10(p-value)
-p <- ggplot(data=DEG, aes(x=log2FoldChange, y=-log10(padj))) + geom_point() + theme_minimal()
-p
-
-# Add vertical lines for log2FoldChange thresholds, and one horizontal line for the p-value threshold 
-p2 <- p + geom_vline(xintercept=c(-0.6, 0.6), col="red") +
-          geom_hline(yintercept=-log10(0.05), col="red")
-p2
-
-
-```
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -32,7 +32,9 @@ library("VennDiagram")
 
 ## Load gene count matrix 
 ```{r}
-countdata <- read.csv("Output/DESeq2/plob/plob_gene_count_matrix.csv")
+getwd()
+
+countdata <- read.csv("../../Output/DESeq2/plob/plob_gene_count_matrix.csv")
 dim(countdata) # 31126 x 17
 for ( col in 1:ncol(countdata)){
   colnames(countdata)[col] <-  gsub("X", "", colnames(countdata)[col])
@@ -45,7 +47,7 @@ rownames(countdata) <- countdata$gene_id
 
 ## Load metadata
 ```{r}
-metadata_plob <- read.csv("Data/plob_metadata_raw_filtered.csv")
+metadata_plob <- read.csv("../../Data/plob_metadata_raw_filtered.csv")
 metadata_plob <- na.omit(metadata_plob)
 metadata_plob$SampleID <- gsub("X", "", metadata_plob$SampleID)
 rownames(metadata_plob) <- metadata_plob$SampleID
@@ -225,7 +227,7 @@ length(unique(DEGs.all$gene_id)) # 153 unique genes between all treatments
 
 ## Look at size factors and run vst normalization
 ```{r}
-unique.sig.list <- data[which(rownames(data) %in% DEGs.all_plob$DEGs), ] # subset list of sig transcripts from original count data
+unique.sig.list <- data[which(rownames(data) %in% DEGs.all$gene_id), ] # subset list of sig transcripts from original count data
 #write.csv(counts(unique.sig.list), file = "~/Desktop/plob_unique.sig.list_20210326.csv")
 SFtest <- estimateSizeFactors(unique.sig.list)
 print(sizeFactors(SFtest))
@@ -248,21 +250,22 @@ plob_DEGPCAplot <- ggplot(plob_DEGPCAdata, aes(PC1, PC2, color=Treatment)) +
   #coord_fixed() +
   ggtitle(label = "P. lobata") +
   theme_bw() + #Set background color
-  theme(legend.text = element_text(size=8), 
+  theme(legend.text = element_text(size=13), 
         #legend.position="none",
         plot.background = element_blank(),
         #legend.title = element_text(size=18, face="bold"), 
         legend.title=element_blank(),
-        axis.text = element_text(size=8), 
-        axis.title = element_text(size=10,  face="bold"), 
+        axis.text = element_text(size=13), 
+        axis.title = element_text(size=15,  face="bold"), 
         axis.title.y = element_text(vjust=-1.5),
-        plot.title = element_text(size = 15, face = "italic", hjust = 0.5))
+        plot.title = element_text(size = 20, face = "italic", hjust = 0.5)) #+
+  #coord_equal(ratio = 1.5)
 plob_DEGPCAplot
 
 # PCA plot is of differentially expressed genes only
 PC.info <- plob_DEGPCAplot$data
-#ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.jpeg", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
-#ggsave("Output/Figs/plob/plob_DEGs_PCA_20220326.pdf", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
+ggsave("../../Output/Figs/plob/plob_DEGs_PCA_20230906.jpeg", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
+ggsave("../../Output/Figs/plob/plob_DEGs_PCA_20230906.pdf", plob_DEGPCAplot, width = 20, height = 25, units = "cm")
 ```
 
 

@@ -25,7 +25,7 @@ This code uses GO term annotation generated in Nov-Dec 2021 and Jan 2022
 
 # Read in go slim info
 ```{r}
-go.slim <- read_csv("Output/GOSeq/GO-GOslim.csv")
+go.slim <- read_csv("../Output/GOSeq/GO-GOslim.csv")
 colnames(go.slim) <- c("GO.IDs", "GO.Term", "GO.Slim.Term", "Cat") #rename columns
 ```
 
@@ -36,7 +36,7 @@ The specific csv I used was obtained from HP's Geoduck_Meth [repo](https://githu
 ### Acerv
 ```{r}
 # Read in acerv DEG GO terms 
-acerv.go <- read.csv("Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)
+acerv.go <- read.csv("../Output/GOSeq/acerv/acerv_sub_ByTreatment_GO.terms_20211104.csv", header = T)
 acerv.go <- select(acerv.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(acerv.go)[2] <-"GO.IDs"
 acerv.go$Species <- "A.cervicornis"
@@ -78,7 +78,7 @@ acerv.go.slim.MF_uniq <- unique(acerv.go.slim.MF_uniq)
 ### Mcav
 ```{r}
 # Read in Mcav DEG GO terms 
-mcav.go <- read.csv("Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)
+mcav.go <- read.csv("../Output/GOSeq/mcav/mcav_ByTreatment_GO.terms_20211109.csv", header = T)
 mcav.go <- select(mcav.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(mcav.go)[2] <-"GO.IDs"
 mcav.go$Species <- "M.cavernosa"
@@ -120,7 +120,7 @@ mcav_all.go.slim.MF_uniq <- unique(mcav_all.go.slim.MF_uniq)
 ### Ofav
 ```{r}
 # Read in Ofav DEG GO terms 
-ofav.go <- read.csv("Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
+ofav.go <- read.csv("../Output/GOSeq/ofav/ofav_ByTreatment_GO.terms_20220111.csv", header = T)
 ofav.go <- select(ofav.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(ofav.go)[2] <-"GO.IDs"
 ofav.go$Species <- "O.faveolata"
@@ -164,7 +164,7 @@ ofav_all.go.slim.MF_uniq <- unique(ofav_all.go.slim.CC_uniq)
 ### Mcap 
 ```{r}
 # Read in mcap DEG GO terms
-mcap.go <- read.csv("Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", header = T)
+mcap.go <- read.csv("../Output/GOSeq/mcap/mcap_ByTreatment_GO.terms_20220417.csv", header = T)
 mcap.go <- select(mcap.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(mcap.go)[2] <-"GO.IDs"
 mcap.go$Species <- "M.capitata"
@@ -206,7 +206,7 @@ mcap_all.go.slim.MF_uniq <- unique(mcap_all.go.slim.MF_uniq)
 ### Pacuta 
 ```{r}
 # Read in pacuta DEG GO terms
-pacuta.go <- read.csv("Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)
+pacuta.go <- read.csv("../Output/GOSeq/pacuta/pacuta_ByTreatment_GO.terms_20220121.csv", header = T)
 pacuta.go <- select(pacuta.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(pacuta.go)[2] <-"GO.IDs"
 pacuta.go$Species <- "P.acuta"
@@ -248,7 +248,7 @@ pacuta_all.go.slim.MF_uniq <- unique(pacuta_all.go.slim.MF_uniq)
 ### Plob 
 ```{r}
 # Read in plob DEG GO terms
-plob.go <- read.csv("Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)
+plob.go <- read.csv("../Output/GOSeq/plob/plob_ByTreatment_GO.terms_20211106.csv", header = T)
 plob.go <- select(plob.go, c("gene_id", "category", "term", "ontology", "over_represented_pvalue", "log2FoldChange", "padj", "Treatment_Compare")) # can add treatment compare if interested 
 colnames(plob.go)[2] <-"GO.IDs"
 plob.go$Species <- "P.lobata"
@@ -502,7 +502,7 @@ upset_go.bp <- upset(
         intersection_size(
         bar_number_threshold=0.85,  # show all numbers on top of bars
         width=0.9,   # reduce width of the bars
-        text = list(size=10), # change text size over bars
+        text = list(size=15), # change text size over bars
         text_colors = c(on_background = "black", on_bar = "white"), # change text color for text over bars
       )
       + scale_y_continuous(expand=expansion(mult=c(0, 0.05))) # add some space on the top of the bars
@@ -510,8 +510,8 @@ upset_go.bp <- upset(
           panel.grid.major=element_blank(), # hide grid lines
           panel.grid.minor=element_blank(), # hide grid lines
           axis.line=element_line(colour='black', size = 2), # show axis lines
-          axis.title.y = element_text(size = 35, colour = "black"), 
-          axis.text.y = element_text(size = 30, colour = "black")
+          axis.title.y = element_text(size = 40, colour = "black"), 
+          axis.text.y = element_text(size = 35, colour = "black")
       )
     )
   ),
@@ -539,21 +539,21 @@ upset_go.bp <- upset(
       axis.line.x=element_line(colour='black', size = 2),
       axis.line.y = element_line(colour = 'black'),
       axis.ticks.x=element_line(),
-      axis.text.x = element_text(size = 25, colour = "black"),
-      axis.title.x = element_text(size = 30, colour = "black"),
+      axis.text.x = element_text(size = 30, colour = "black"),
+      axis.title.x = element_text(size = 35, colour = "black"),
     )
   ),
   themes = upset_modify_themes(
        list(
-           'intersections_matrix' = theme(text = element_text(size = 50, face = "italic", colour = "black")), # text to the left of the matrix
+           'intersections_matrix' = theme(text = element_text(size = 55, face = "italic", colour = "black")), # text to the left of the matrix
           'overall_sizes' = theme(axis.text.x = element_text(angle = 0)) # text underneath set size plot
        )),
   sort_sets = 'descending', # sort sets in descending order
   sort_intersections = 'descending' # sort intersections in descending order
 )
 upset_go.bp
-ggsave("Output/Figs/upset/upset_GO.BP_20221205.pdf", upset_go.bp, width = 40, height = 20, units = c("in"))
-ggsave("Output/Figs/upset/upset_GO.BP_20221205.png", upset_go.bp, width = 40, height = 20, units = c("in"))
+ggsave("../Output/Figs/upset/upset_GO.BP_20230906.pdf", upset_go.bp, width = 40, height = 20, units = c("in"))
+ggsave("../Output/Figs/upset/upset_GO.BP_20230906.png", upset_go.bp, width = 40, height = 20, units = c("in"))
 
 
 
